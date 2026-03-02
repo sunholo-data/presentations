@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunholo: Building AI with AI | Procurement Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Reveal.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/theme/white.css">
+
+    <!--GOOGLE-TAG-MANAGER-->
+
+    <style>
+        :root {
+            --primary-color: #e73c17;
+            --secondary-color: #314352;
+            --dark-color: #2c3e50;
+        }
+
+        .reveal {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--dark-color);
+            text-transform: none;
+        }
+
+        .reveal h1 { font-size: 2.5em; margin-bottom: 0.3em; }
+        .reveal h2 { font-size: 1.8em; margin-bottom: 0.3em; }
+        .reveal h3 { font-size: 1.3em; margin-bottom: 0.2em; }
+
+        /* Slide layout */
+        .reveal .slides section {
+            text-align: left;
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px !important;
+        }
+
+        .reveal .slides section.center {
+            text-align: center;
+            align-items: center;
+        }
+
+        /* Title slides */
+        .title-slide {
+            background: linear-gradient(135deg, var(--secondary-color), var(--dark-color));
+            color: white !important;
+            text-align: center;
+            align-items: center;
+        }
+
+        .title-slide h1, .title-slide h2, .title-slide p {
+            color: white !important;
+        }
+
+        .title-slide .logo img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 30px;
+        }
+
+        /* Big statement slides */
+        .big-statement {
+            font-size: 2.5em;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--primary-color);
+            text-align: center;
+        }
+
+        /* Icon + text slides */
+        .icon-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .icon-header i {
+            font-size: 80px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        /* Loop diagram */
+        .loop-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin: 50px 0;
+            flex-wrap: wrap;
+        }
+
+        .loop-step {
+            background: linear-gradient(135deg, var(--primary-color), #ff5722);
+            color: white;
+            padding: 30px 40px;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 600;
+            text-align: center;
+            min-width: 200px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .loop-arrow {
+            font-size: 3em;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* Three column layout */
+        .three-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .col-item {
+            text-align: center;
+            padding: 20px 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-top: 4px solid var(--primary-color);
+        }
+
+        .col-item i {
+            font-size: 32px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .col-item h3 {
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            line-height: 1.3;
+            word-wrap: break-word;
+        }
+
+        /* Two column split */
+        .split-slide {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .split-left h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .split-right {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        /* Demo slide */
+        .demo-slide {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 80px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .demo-slide i {
+            font-size: 80px;
+            margin-bottom: 30px;
+        }
+
+        .demo-slide h2 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        /* Highlight box */
+        .highlight {
+            background: #fff3e0;
+            border-left: 6px solid #ff9800;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+
+        /* List styling */
+        .reveal ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .reveal ul li {
+            padding: 12px 0 12px 60px;
+            position: relative;
+            font-size: 1.1em;
+        }
+
+        .reveal ul li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            top: 12px;
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.1em;
+            line-height: 1;
+        }
+
+        /* PDF export button */
+        .pdf-export-btn {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.8em;
+            border: 2px solid rgba(255,255,255,0.3);
+            margin-top: 30px;
+            transition: all 0.3s;
+        }
+
+        .pdf-export-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Controls */
+        .reveal .progress { background: rgba(0,0,0,0.1); }
+        .reveal .progress span { background: var(--primary-color); }
+        .reveal .controls { color: var(--primary-color); }
+
+        /* Ensure no overflow */
+        .reveal .slides { overflow: hidden !important; }
+
+        /* Demo link hover effect */
+        a:hover img {
+            transform: scale(1.02);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.25) !important;
+        }
+
+        /* SVG Loop Animations */
+        .loop-path {
+            stroke-dasharray: 20 10;
+            animation: flowLoop 2s linear infinite;
+        }
+
+        @keyframes flowLoop {
+            from { stroke-dashoffset: 30; }
+            to { stroke-dashoffset: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="reveal">
+    <div class="slides">
+
+        <!-- Slide 1: Title -->
+        <section class="title-slide">
+            <div class="logo">
+                <img src="sunholo-logo.svg" alt="Sunholo">
+            </div>
+            <h1>Building AI with AI</h1>
+            <p style="font-size: 1.2em; opacity: 0.9; margin-top: 20px;">Transforming Procurement Through Iterative Intelligence</p>
+            <a href="?print-pdf" class="pdf-export-btn">
+                <i class="fas fa-file-pdf"></i> Export to PDF
+            </a>
+        </section>
+
+        <!-- Slide 2: Origin Story -->
+        <section class="center">
+            <div class="icon-header">
+                <i class="fas fa-rocket"></i>
+                <h2>We Started AI-First</h2>
+            </div>
+            <p style="font-size: 1.5em; color: #666; max-width: 800px;">Rethinking every process from the beginning</p>
+        </section>
+
+        <!-- Slide 3: The Question -->
+        <section class="center">
+            <p class="big-statement">What does running a company look like in the post-AI era?</p>
+        </section>
+
+        <!-- Slide 4: Using AI to Build AI -->
+        <section class="center">
+            <h2 style="font-size: 2.2em; margin-bottom: 40px;">Using AI to Build AI Infrastructure</h2>
+            <p style="font-size: 1.3em; color: #666;">AI helping create AI infrastructure</p>
+        </section>
+
+        <!-- Slide 5: The Core Learning -->
+        <section>
+            <h2 style="color: var(--primary-color); font-size: 2.2em;">Our First Learning</h2>
+            <div class="highlight">
+                <strong>Iterative improvement loops create massive efficiency gains</strong>
+            </div>
+        </section>
+
+        <!-- Slide 6: Loop Examples Section Title -->
+        <section class="center">
+            <h2 style="font-size: 2.5em; color: var(--primary-color);">Loop Examples</h2>
+        </section>
+
+        <!-- Slide 7: Sprint Planning -->
+        <section class="center">
+            <h2 style="margin-bottom: 20px; font-size: 1.5em;">Sprint Planning</h2>
+            <svg width="800" height="450" viewBox="0 0 550 350" style="max-width: 100%;">
+                <!-- Circular path -->
+                <path class="loop-path" d="M 275 50 A 120 120 0 1 1 274 50" fill="none" stroke="#e73c17" stroke-width="3" />
+
+                <!-- Step boxes - evenly distributed at 72° intervals -->
+                <g>
+                    <!-- Create Design Doc (top, -90°) -->
+                    <rect x="213" y="28" width="125" height="45" rx="6" fill="#e73c17"/>
+                    <text x="275" y="55" text-anchor="middle" fill="white" font-size="13" font-weight="600">Create Design Doc</text>
+
+                    <!-- Sprint Plan (top-right, -18°) -->
+                    <rect x="340" y="110" width="100" height="45" rx="6" fill="#e73c17"/>
+                    <text x="390" y="137" text-anchor="middle" fill="white" font-size="13" font-weight="600">Sprint Plan</text>
+
+                    <!-- Execute Sprint (bottom-right, 54°) -->
+                    <rect x="295" y="254" width="115" height="45" rx="6" fill="#e73c17"/>
+                    <text x="352" y="281" text-anchor="middle" fill="white" font-size="13" font-weight="600">Execute Sprint</text>
+
+                    <!-- Evaluate Results (bottom-left, 126°) -->
+                    <rect x="135" y="254" width="125" height="45" rx="6" fill="#ff5722"/>
+                    <text x="197" y="281" text-anchor="middle" fill="white" font-size="13" font-weight="600">Evaluate Results</text>
+
+                    <!-- Identify Gaps (top-left, 198°) -->
+                    <rect x="105" y="110" width="105" height="45" rx="6" fill="#ff5722"/>
+                    <text x="157" y="137" text-anchor="middle" fill="white" font-size="13" font-weight="600">Identify Gaps</text>
+                </g>
+            </svg>
+        </section>
+
+        <!-- Slide 8: Infrastructure -->
+        <section class="center">
+            <h2 style="margin-bottom: 20px; font-size: 1.5em;">Infrastructure</h2>
+            <svg width="800" height="450" viewBox="0 0 550 350" style="max-width: 100%;">
+                <!-- Circular path -->
+                <path class="loop-path" d="M 275 50 A 120 120 0 1 1 274 50" fill="none" stroke="#e73c17" stroke-width="3" />
+
+                <!-- Step boxes - evenly distributed at 60° intervals -->
+                <g>
+                    <!-- Create Infrastructure (top, -90°) -->
+                    <rect x="198" y="28" width="155" height="45" rx="6" fill="#e73c17"/>
+                    <text x="275" y="55" text-anchor="middle" fill="white" font-size="13" font-weight="600">Create Infrastructure</text>
+
+                    <!-- Deploy (top-right, -30°) -->
+                    <rect x="332" y="88" width="100" height="45" rx="6" fill="#e73c17"/>
+                    <text x="382" y="115" text-anchor="middle" fill="white" font-size="13" font-weight="600">Deploy</text>
+
+                    <!-- Run AI (bottom-right, 30°) -->
+                    <rect x="332" y="218" width="100" height="45" rx="6" fill="#e73c17"/>
+                    <text x="382" y="245" text-anchor="middle" fill="white" font-size="13" font-weight="600">Run AI</text>
+
+                    <!-- AI Evaluates (bottom, 90°) -->
+                    <rect x="218" y="278" width="115" height="45" rx="6" fill="#ff5722"/>
+                    <text x="275" y="305" text-anchor="middle" fill="white" font-size="13" font-weight="600">AI Evaluates</text>
+
+                    <!-- Identifies Gaps (bottom-left, 150°) -->
+                    <rect x="108" y="218" width="120" height="45" rx="6" fill="#ff5722"/>
+                    <text x="168" y="245" text-anchor="middle" fill="white" font-size="13" font-weight="600">Identifies Gaps</text>
+
+                    <!-- Fix Infrastructure Code (top-left, 210°) -->
+                    <rect x="105" y="88" width="125" height="45" rx="6" fill="#ff5722"/>
+                    <text x="168" y="103" text-anchor="middle" fill="white" font-size="12" font-weight="600">Fix Infrastructure</text>
+                    <text x="168" y="121" text-anchor="middle" fill="white" font-size="12" font-weight="600">Code</text>
+                </g>
+            </svg>
+        </section>
+
+        <!-- Slide 9: Procurement -->
+        <section class="center">
+            <h2 style="margin-bottom: 20px; font-size: 1.5em;">Procurement</h2>
+            <svg width="800" height="450" viewBox="0 0 550 350" style="max-width: 100%;">
+                <!-- Circular path -->
+                <path class="loop-path" d="M 275 50 A 120 120 0 1 1 274 50" fill="none" stroke="#e73c17" stroke-width="3" />
+
+                <!-- Step boxes - evenly distributed at 60° intervals -->
+                <g>
+                    <!-- Receive Tender (top, -90°) -->
+                    <rect x="210" y="28" width="130" height="45" rx="6" fill="#e73c17"/>
+                    <text x="275" y="55" text-anchor="middle" fill="white" font-size="13" font-weight="600">Receive Tender</text>
+
+                    <!-- Extract Requirements (top-right, -30°) -->
+                    <rect x="310" y="88" width="140" height="45" rx="6" fill="#e73c17"/>
+                    <text x="380" y="115" text-anchor="middle" fill="white" font-size="13" font-weight="600">Extract Requirements</text>
+
+                    <!-- AI Validates (bottom-right, 30°) -->
+                    <rect x="332" y="218" width="100" height="45" rx="6" fill="#e73c17"/>
+                    <text x="382" y="245" text-anchor="middle" fill="white" font-size="13" font-weight="600">AI Validates</text>
+
+                    <!-- Identifies Issues (bottom, 90°) -->
+                    <rect x="208" y="278" width="135" height="45" rx="6" fill="#ff5722"/>
+                    <text x="275" y="305" text-anchor="middle" fill="white" font-size="13" font-weight="600">Identifies Issues</text>
+
+                    <!-- Refine Model (bottom-left, 150°) -->
+                    <rect x="108" y="218" width="115" height="45" rx="6" fill="#ff5722"/>
+                    <text x="165" y="245" text-anchor="middle" fill="white" font-size="13" font-weight="600">Refine Model</text>
+
+                    <!-- Next Tender (top-left, 210°) -->
+                    <rect x="108" y="88" width="110" height="45" rx="6" fill="#ff5722"/>
+                    <text x="163" y="115" text-anchor="middle" fill="white" font-size="13" font-weight="600">Next Tender</text>
+                </g>
+            </svg>
+        </section>
+
+        <!-- Slide 10: Workflow Identification -->
+        <section>
+            <h2 style="margin-bottom: 60px; font-size: 1.8em;">Identify the Right Workflows</h2>
+            <div style="display: flex; flex-direction: column; gap: 40px; max-width: 900px; margin: 0 auto;">
+                <div style="display: flex; align-items: center; gap: 30px;">
+                    <i class="fas fa-check-circle" style="font-size: 48px; color: var(--primary-color); min-width: 60px;"></i>
+                    <h3 style="font-size: 1.4em; margin: 0;">Within AI Abilities</h3>
+                </div>
+                <div style="display: flex; align-items: center; gap: 30px;">
+                    <i class="fas fa-bolt" style="font-size: 48px; color: var(--primary-color); min-width: 60px;"></i>
+                    <h3 style="font-size: 1.4em; margin: 0;">Can Be Parallelized</h3>
+                </div>
+                <div style="display: flex; align-items: center; gap: 30px;">
+                    <i class="fas fa-infinity" style="font-size: 48px; color: var(--primary-color); min-width: 60px;"></i>
+                    <h3 style="font-size: 1.4em; margin: 0;">Unbounded KPIs</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: AI Superpowers -->
+        <section>
+            <h2 style="margin-bottom: 40px; font-size: 1.6em;">AI Superpowers</h2>
+            <ul style="font-size: 1.1em;">
+                <li>Parallelization</li>
+                <li>Speed</li>
+                <li>Inexhaustible enthusiasm</li>
+            </ul>
+        </section>
+
+        <!-- Slide 10: Human Augmentation -->
+        <section class="center">
+            <h2 style="font-size: 2.2em; line-height: 1.3;">Offload Work<br>Amplify Decisions</h2>
+            <p style="font-size: 1.1em; color: #666; margin-top: 40px;">Augmenting humans, not replacing them</p>
+        </section>
+
+        <!-- Slide 11: The Boring Task -->
+        <section class="center">
+            <img src="images/boring-task.png" alt="AI never gets bored" style="max-width: 90%; max-height: 600px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.15);">
+        </section>
+
+        <!-- Slide 12: Downstream Benefits -->
+        <section>
+            <h2 style="margin-bottom: 30px; font-size: 1.6em;">Why Structured Data Matters</h2>
+            <div class="highlight" style="font-size: 1em; padding: 20px; margin: 20px 0;">
+                Downstream data pipelines thrive on structured data
+            </div>
+            <ul style="margin-top: 30px; font-size: 1em;">
+                <li>Queryable databases</li>
+                <li>Analytics dashboards</li>
+                <li>Automated workflows</li>
+                <li>Predictive insights</li>
+            </ul>
+        </section>
+
+        <!-- Slide 13: AITANA Demo -->
+        <section class="center">
+            <h2 style="margin-bottom: 30px;">AITANA Demo</h2>
+            <p style="font-size: 1.2em; color: #666; margin-bottom: 30px;">Document Processing in Action</p>
+            <a href="https://frontend-556246783252.europe-west1.run.app/assistant/a3614c76-c997-47a9-9e2d-c80b75496ee4" target="_blank" style="display: inline-block; text-decoration: none;">
+                <img src="images/case-studies/aitana-dashboard.png" alt="AITANA Dashboard" style="max-width: 90%; max-height: 500px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); transition: transform 0.2s;">
+            </a>
+            <p style="margin-top: 20px; font-size: 1em; color: var(--primary-color);">
+                <a href="https://frontend-556246783252.europe-west1.run.app/assistant/a3614c76-c997-47a9-9e2d-c80b75496ee4" target="_blank" style="color: var(--primary-color); font-weight: 600; text-decoration: none;">
+                    <i class="fas fa-external-link-alt"></i> Click to try live demo
+                </a>
+            </p>
+        </section>
+
+        <!-- Slide 14: Your Procurement Challenges -->
+        <section>
+            <h2 style="margin-bottom: 40px; font-size: 1.6em;">Your Procurement Challenges</h2>
+            <ul style="font-size: 1em;">
+                <li>Tender analysis taking weeks</li>
+                <li>Contract obligations scattered</li>
+                <li>Supplier risk buried in PDFs</li>
+                <li>Institutional knowledge walking out the door</li>
+            </ul>
+        </section>
+
+        <!-- Slide 15: The Solution -->
+        <section class="center">
+            <h2 style="font-size: 2.2em; margin-bottom: 30px;">Unstructured → Structured</h2>
+            <p style="font-size: 1.3em; color: var(--primary-color); font-weight: 600;">At machine speed, with human oversight</p>
+        </section>
+
+        <!-- Slide 16: Pilot Approach -->
+        <section>
+            <h2 style="margin-bottom: 35px; font-size: 1.6em;">Let's Prove It Together</h2>
+            <div style="background: white; padding: 35px 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border-left: 6px solid var(--primary-color);">
+                <h3 style="font-size: 1.3em; margin-bottom: 20px;">4-6 Week Pilot</h3>
+                <ul style="font-size: 1em;">
+                    <li>Your real documents</li>
+                    <li>Your specific use case</li>
+                    <li>Measurable results</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Slide 17: Q&A -->
+        <section class="title-slide">
+            <h2 style="font-size: 3em;">Questions?</h2>
+            <div style="margin-top: 60px; font-size: 1.1em;">
+                <p><i class="fas fa-envelope"></i> multivac@sunholo.com</p>
+                <p style="margin-top: 15px;"><i class="fab fa-linkedin"></i> linkedin.com/company/sunholo</p>
+            </div>
+            <a href="?print-pdf" class="pdf-export-btn">
+                <i class="fas fa-file-pdf"></i> Export to PDF
+            </a>
+        </section>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        hash: true,
+        controls: true,
+        progress: true,
+        center: false,
+        transition: 'slide',
+        width: 1280,
+        height: 720,
+        margin: 0.1,
+        pdfMaxPagesPerSlide: 1,
+        keyboard: {
+            39: 'next',
+            37: 'prev',
+            32: 'next'
+        }
+    });
+</script>
+
+</body>
+</html>
