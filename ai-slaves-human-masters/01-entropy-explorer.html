@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Space Explorer — AILANG Entropy Visualization</title>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f0f1a;
+  --surface:#1a1a2e;
+  --orange:#e73c17;
+  --orange-dim:rgba(231,60,23,.35);
+  --orange-glow:rgba(231,60,23,.6);
+  --gray:#4a5568;
+  --gray-dim:rgba(74,85,104,.4);
+  --ghost:rgba(255,255,255,.12);
+  --ghost-edge:rgba(255,255,255,.08);
+  --text:#e2e8f0;
+  --text-dim:#718096;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Montserrat',sans-serif;
+  /* Theme-aware colors used by JS */
+  --node-future:#4a5568;
+  --node-pruned:rgba(255,255,255,.25);
+  --node-pruned-stroke:rgba(255,255,255,.12);
+  --node-future-stroke:rgba(74,85,104,.5);
+  --label-pruned:rgba(255,255,255,.3);
+  --label-future:rgba(255,255,255,.5);
+  --label-chosen:#e2e8f0;
+  --edge-pruned:rgba(255,255,255,.15);
+  --edge-future:rgba(100,120,140,.3);
+  --phase-line:rgba(255,255,255,.25);
+  --phase-region-design:rgba(231,60,23,.06);
+  --phase-region-mid:rgba(100,140,180,.04);
+  --phase-region-late:rgba(180,80,80,.04);
+  --phase-label-secondary:rgba(255,255,255,.45);
+  --chart-full-fill:rgba(100,160,200,.1);
+  --chart-full-stroke:rgba(100,160,200,.15);
+  --chart-active-fill:rgba(231,60,23,.25);
+  --chart-active-stroke:rgba(231,60,23,.4);
+  --chart-ghost:rgba(150,180,210,.5);
+  --chart-grid:rgba(255,255,255,.08);
+  --chart-axis:rgba(255,255,255,.45);
+  --chart-bg:rgba(15,15,28,.7);
+  --bar-border:rgba(255,255,255,.06);
+  --bundle-decided:rgba(231,60,23,.04);
+  --bundle-decided-hi:rgba(231,60,23,.06);
+  --bundle-decided-stroke:rgba(231,60,23,.15);
+  --bundle-future:rgba(100,120,140,.04);
+  --bundle-future-stroke:rgba(100,120,140,.1);
+  --flow-full:rgba(100,120,140,.03);
+  --flow-full-stroke:rgba(100,120,140,.06);
+  --flow-active:rgba(231,60,23,.07);
+  --flow-active-stroke:rgba(231,60,23,.12);
+}
+
+/* ─── Light theme ─── */
+[data-theme="light"]{
+  --bg:#f5f5f0;
+  --surface:#ffffff;
+  --orange:#d4300f;
+  --orange-dim:rgba(212,48,15,.2);
+  --orange-glow:rgba(212,48,15,.4);
+  --gray:#8896a4;
+  --gray-dim:rgba(136,150,164,.4);
+  --ghost:rgba(0,0,0,.1);
+  --ghost-edge:rgba(0,0,0,.06);
+  --text:#1a202c;
+  --text-dim:#4a5568;
+  --node-future:#a0aec0;
+  --node-pruned:rgba(0,0,0,.18);
+  --node-pruned-stroke:rgba(0,0,0,.08);
+  --node-future-stroke:rgba(0,0,0,.12);
+  --label-pruned:rgba(0,0,0,.3);
+  --label-future:rgba(0,0,0,.55);
+  --label-chosen:#1a202c;
+  --edge-pruned:rgba(0,0,0,.12);
+  --edge-future:rgba(0,0,0,.18);
+  --phase-line:rgba(0,0,0,.18);
+  --phase-region-design:rgba(212,48,15,.06);
+  --phase-region-mid:rgba(60,100,160,.04);
+  --phase-region-late:rgba(160,60,60,.04);
+  --phase-label-secondary:rgba(0,0,0,.4);
+  --chart-full-fill:rgba(60,100,160,.08);
+  --chart-full-stroke:rgba(60,100,160,.12);
+  --chart-active-fill:rgba(212,48,15,.15);
+  --chart-active-stroke:rgba(212,48,15,.3);
+  --chart-ghost:rgba(60,100,160,.4);
+  --chart-grid:rgba(0,0,0,.06);
+  --chart-axis:rgba(0,0,0,.4);
+  --chart-bg:rgba(240,240,235,.8);
+  --bar-border:rgba(0,0,0,.08);
+  --bundle-decided:rgba(212,48,15,.04);
+  --bundle-decided-hi:rgba(212,48,15,.06);
+  --bundle-decided-stroke:rgba(212,48,15,.12);
+  --bundle-future:rgba(0,0,0,.03);
+  --bundle-future-stroke:rgba(0,0,0,.06);
+  --flow-full:rgba(0,0,0,.025);
+  --flow-full-stroke:rgba(0,0,0,.05);
+  --flow-active:rgba(212,48,15,.06);
+  --flow-active-stroke:rgba(212,48,15,.1);
+}
+[data-theme="light"] body,
+body[data-theme="light"]{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(212,48,15,.03) 0%, transparent 70%),
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+}
+[data-theme="light"] .top-bar,
+[data-theme="light"] .bottom-bar{background:rgba(255,255,255,.85);border-color:rgba(0,0,0,.08)}
+[data-theme="light"] .stage-label{background:rgba(255,255,255,.6)}
+[data-theme="light"] .tab{border-color:rgba(0,0,0,.1);color:var(--text-dim)}
+[data-theme="light"] .tab:hover{border-color:rgba(0,0,0,.25);color:var(--text)}
+[data-theme="light"] .tab.active{color:#fff}
+[data-theme="light"] .transport-btn{border-color:rgba(0,0,0,.12);color:var(--text-dim)}
+[data-theme="light"] .entropy-bar-wrap{background:rgba(0,0,0,.06)}
+[data-theme="light"] .entropy-chart{border-color:rgba(0,0,0,.08);background:var(--chart-bg)}
+[data-theme="light"] .kbd{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1);color:var(--text-dim)}
+[data-theme="light"] .legend-dot.future{background:var(--gray)}
+[data-theme="light"] .legend-dot.pruned{background:rgba(0,0,0,.15);border-color:rgba(0,0,0,.1)}
+
+/* Theme toggle */
+.theme-toggle{
+  width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.12);
+  background:transparent;color:var(--text-dim);cursor:pointer;
+  font-size:14px;transition:all .25s;display:flex;align-items:center;justify-content:center;
+}
+.theme-toggle:hover{border-color:var(--orange);color:var(--orange)}
+[data-theme="light"] .theme-toggle{border-color:rgba(0,0,0,.12)}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+
+/* Subtle grid background */
+body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(231,60,23,.03) 0%, transparent 70%),
+    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+}
+
+/* Layout */
+#app{display:flex;flex-direction:column;height:100vh}
+
+/* Top bar */
+.top-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 24px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  flex-shrink:0;
+  background:rgba(15,15,26,.8);
+  backdrop-filter:blur(8px);
+  z-index:10;
+}
+.scenario-tabs{display:flex;gap:6px}
+.tab{
+  padding:7px 16px;border-radius:20px;
+  font-size:13px;font-weight:600;letter-spacing:.02em;
+  cursor:pointer;border:1px solid rgba(255,255,255,.08);
+  background:transparent;color:var(--text-dim);
+  transition:all .25s ease;
+  font-family:var(--sans);
+}
+.tab:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
+.tab.active{background:var(--orange);border-color:var(--orange);color:#fff}
+
+/* Entropy panel */
+.entropy-panel{display:flex;align-items:center;gap:20px}
+.entropy-block{text-align:right}
+.entropy-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin-bottom:2px}
+.entropy-value{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--text);line-height:1;letter-spacing:-.02em}
+.entropy-value .total{font-size:16px;color:var(--text-dim);font-weight:400}
+.entropy-bits{font-family:var(--mono);font-size:12px;color:var(--orange);margin-top:2px}
+.entropy-bar-wrap{width:120px;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.entropy-bar{height:100%;background:var(--orange);border-radius:3px;transition:width .8s cubic-bezier(.4,0,.2,1);box-shadow:0 0 8px var(--orange-dim)}
+
+/* Stage label */
+.stage-label{
+  text-align:center;padding:6px 0;flex-shrink:0;
+  font-size:13px;font-weight:600;color:var(--text-dim);
+  letter-spacing:.03em;
+  background:rgba(15,15,26,.6);
+}
+.stage-label .highlight{color:var(--orange)}
+
+/* Graph area */
+.graph-area{flex:1;min-height:0;position:relative;overflow:hidden}
+.graph-area svg{display:block;width:100%;height:100%}
+
+/* Bottom bar */
+.bottom-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 24px;
+  border-top:1px solid rgba(255,255,255,.06);
+  flex-shrink:0;
+  background:rgba(15,15,26,.8);
+  backdrop-filter:blur(8px);
+}
+.transport{display:flex;align-items:center;gap:8px}
+.transport-btn{
+  width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.12);
+  background:transparent;color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;transition:all .2s;font-family:var(--sans);
+}
+.transport-btn:hover{border-color:var(--orange);color:var(--orange)}
+.transport-btn.play-pause{width:44px;height:44px;font-size:16px;border-color:var(--orange);color:var(--orange)}
+.transport-btn.play-pause.playing{background:var(--orange);color:#fff}
+.step-indicator{font-family:var(--mono);font-size:13px;color:var(--text-dim)}
+.step-indicator .current{color:var(--text);font-weight:700}
+
+.legend{display:flex;align-items:center;gap:16px;font-size:11px;color:var(--text-dim)}
+.legend-item{display:flex;align-items:center;gap:5px}
+.legend-dot{width:8px;height:8px;border-radius:50%}
+.legend-dot.active{background:var(--orange);box-shadow:0 0 6px var(--orange-dim)}
+.legend-dot.future{background:var(--gray)}
+.legend-dot.pruned{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.1)}
+
+.kbd{
+  display:inline-block;padding:1px 6px;border-radius:3px;
+  font-family:var(--mono);font-size:10px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:var(--text-dim);margin-left:4px;
+}
+
+/* Node labels */
+.node-label{
+  font-family:var(--sans);font-size:11px;font-weight:600;
+  fill:var(--text);pointer-events:none;
+  transition:opacity .8s ease;
+}
+.node-label.ghost{opacity:0;pointer-events:none}
+.node-label.ghost:hover{opacity:1}
+
+/* Scenario description overlay */
+.scenario-desc{
+  position:absolute;top:36px;left:24px;
+  max-width:280px;
+  font-size:11px;line-height:1.4;color:var(--text-dim);
+  opacity:.6;
+}
+.scenario-desc .title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:2px}
+
+/* Entropy area chart */
+.entropy-chart{
+  height:170px;flex-shrink:0;position:relative;
+  border-top:2px solid var(--bar-border);
+  background:var(--chart-bg);
+}
+.entropy-chart svg{display:block;width:100%;height:100%}
+.entropy-chart-title{
+  position:absolute;top:8px;left:24px;
+  font-family:var(--sans);font-size:13px;font-weight:700;color:var(--text);
+  letter-spacing:.02em;
+}
+.entropy-chart-title .dim{font-weight:400;color:var(--text-dim);font-size:11px;margin-left:8px}
+.entropy-chart-label{
+  position:absolute;top:8px;right:16px;
+  font-family:var(--mono);font-size:10px;color:var(--text-dim);
+  letter-spacing:.05em;
+}
+.entropy-chart-label .formula{color:var(--orange);font-weight:700}
+.entropy-chart-area-label{
+  position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:12px;font-weight:700;
+  color:var(--orange);letter-spacing:.03em;
+  text-shadow:0 0 12px var(--orange-dim);
+}
+
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="top-bar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="scenario-tabs" id="tabs"></div>
+    </div>
+    <div class="entropy-panel">
+      <div class="entropy-bar-wrap"><div class="entropy-bar" id="entropyBar"></div></div>
+      <div class="entropy-block">
+        <div class="entropy-label">Remaining Paths</div>
+        <div class="entropy-value"><span id="entropyNum">120</span> <span class="total">/ <span id="entropyTotal">120</span></span></div>
+        <div class="entropy-bits" id="entropyBits">6.9 bits</div>
+      </div>
+    </div>
+  </div>
+  <div class="stage-label" id="stageLabel">—</div>
+  <div class="graph-area" id="graphArea">
+    <svg id="graphSvg"></svg>
+    <div class="scenario-desc" id="scenarioDesc"></div>
+  </div>
+  <div class="entropy-chart" id="entropyChart">
+    <svg id="entropyChartSvg"></svg>
+    <div class="entropy-chart-title">Shannon Entropy <span class="dim">— area = cumulative uncertainty</span></div>
+    <div class="entropy-chart-label"><span class="formula">H = log₂(N)</span> bits</div>
+    <div class="entropy-chart-area-label" id="areaLabel"></div>
+  </div>
+  <div class="bottom-bar">
+    <div class="transport">
+      <button class="transport-btn" id="btnBack" title="Previous step">◀</button>
+      <button class="transport-btn play-pause" id="btnPlay" title="Play / Pause">▶</button>
+      <button class="transport-btn" id="btnFwd" title="Next step">▶</button>
+      <span class="step-indicator">Step <span class="current" id="stepCur">0</span> / <span id="stepMax">5</span></span>
+    </div>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot active"></span> Chosen</span>
+      <span class="legend-item"><span class="legend-dot future"></span> Available</span>
+      <span class="legend-item"><span class="legend-dot pruned"></span> Pruned</span>
+      <span style="margin-left:8px">
+        <span class="kbd">Space</span> play
+        <span class="kbd">←</span><span class="kbd">→</span> step
+      </span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── SCENARIO DATA ──────────────────────────────────────────
+const SCENARIOS = [
+  {
+    id: 'token',
+    tab: 'Token Prediction',
+    title: 'Token Prediction',
+    subtitle: '"The cat sat on the mat"',
+    desc: 'Each token position constrains the next. The full vocabulary exists — context prunes it.',
+    stages: [
+      { label: 'Word 1', decision: '"The ___"',
+        options: [
+          { label: 'cat', active: true },
+          { label: 'big', active: false },
+          { label: 'old', active: false },
+          { label: 'quick', active: false },
+          { label: 'red', active: false },
+          { label: 'small', active: false },
+        ]},
+      { label: 'Word 2', decision: '"The cat ___"',
+        options: [
+          { label: 'sat', active: true },
+          { label: 'ran', active: false },
+          { label: 'slept', active: false },
+          { label: 'jumped', active: false },
+        ]},
+      { label: 'Word 3', decision: '"The cat sat ___"',
+        options: [
+          { label: 'on', active: true },
+          { label: 'by', active: false },
+          { label: 'in', active: false },
+          { label: 'near', active: false },
+          { label: 'under', active: false },
+          { label: 'with', active: false },
+        ]},
+      { label: 'Word 4', decision: '"…sat on ___"',
+        options: [
+          { label: 'the', active: true },
+          { label: 'a', active: false },
+          { label: 'his', active: false },
+        ]},
+      { label: 'Word 5', decision: '"…on the ___"',
+        options: [
+          { label: 'mat', active: true },
+        ]},
+    ],
+    entropy: [120, 24, 6, 3, 1],
+    phases: [], // no software lifecycle phases for token prediction
+  },
+  {
+    id: 'traditional',
+    tab: 'Traditional Coding',
+    title: 'Traditional Coding',
+    subtitle: 'Building a web app',
+    desc: 'Entropy lingers in code complexity. Decisions deferred to runtime are expensive — errors collapse to zero but at an undesirable endpoint.',
+    stages: [
+      { label: 'Framework', decision: 'Choose framework',
+        options: [
+          { label: 'React', active: true },
+          { label: 'Vue', active: false },
+          { label: 'Svelte', active: false },
+          { label: 'Angular', active: false },
+          { label: 'Vanilla', active: false },
+        ]},
+      { label: 'State Mgmt', decision: 'State management',
+        options: [
+          { label: 'Redux', active: true },
+          { label: 'Context', active: false },
+          { label: 'MobX', active: false },
+          { label: 'Zustand', active: false },
+        ]},
+      { label: 'Error Handling', decision: 'Error strategy',
+        options: [
+          { label: 'try/catch', active: true },
+          { label: 'Result type', active: false },
+          { label: 'Boundaries', active: false },
+        ]},
+      { label: 'Runtime Surprises', decision: 'Unexpected branches',
+        options: [
+          { label: 'null ref', active: true },
+          { label: 'race cond.', active: false },
+          { label: 'silent fail', active: false },
+          { label: 'type coerce', active: false },
+        ]},
+      { label: 'Debug & Fix', decision: 'Resolve',
+        options: [
+          { label: 'stack trace', active: true },
+        ]},
+    ],
+    entropy: [48, 40, 32, 28, 10],
+    phases: [
+      { afterStage: 0, label: 'Design' },
+      { afterStage: 2, label: 'Code' },
+      { afterStage: 3, label: 'Runtime' },
+    ],
+    // Design=1 stage, Code=2 stages, Runtime=2 stages — decisions spread late
+  },
+  {
+    id: 'ailang',
+    tab: 'AILANG Approach',
+    title: 'AILANG Approach',
+    subtitle: 'Building the same app',
+    desc: 'AILANG explores more options at design time (higher initial entropy) but resolves them early when changes are cheap. Same complexity, resolved sooner.',
+    stages: [
+      { label: 'Type Constraints', decision: 'Declare effects + contracts',
+        options: [
+          { label: 'effects + contracts', active: true },
+          { label: 'skip constraints', active: false },
+        ]},
+      { label: 'Effect Permissions', decision: 'Capability bounds',
+        options: [
+          { label: '! {DB, HTTP}', active: true },
+          { label: 'allow all', active: false },
+          { label: 'restrict all', active: false },
+        ]},
+      { label: 'Contracts', decision: 'Requires / ensures',
+        options: [
+          { label: 'requires/ensures', active: true },
+          { label: 'informal checks', active: false },
+        ]},
+      { label: 'Budget Limits', decision: 'Resource cap',
+        options: [
+          { label: '@limit=N', active: true },
+          { label: 'unbounded', active: false },
+        ]},
+      { label: 'Execution', decision: 'Deterministic traversal',
+        options: [
+          { label: 'deterministic', active: true },
+        ]},
+    ],
+    entropy: [96, 40, 8, 2, 1],
+    phases: [
+      { afterStage: 2, label: 'Design' },
+      { afterStage: 3, label: 'Code' },
+    ],
+    // Design=3 stages, Code=1 stage, remaining=Execution (just traversal)
+  },
+];
+
+// ─── STATE ──────────────────────────────────────────────────
+let state = {
+  scenarioIdx: 0,
+  step: -1,       // -1 = initial (all visible, nothing chosen yet)
+  playing: false,
+  interval: null,
+};
+
+const STEP_MS = 2500;
+
+// ─── THEME ──────────────────────────────────────────────────
+function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+// ─── DOM REFS ───────────────────────────────────────────────
+const svg = d3.select('#graphSvg');
+const tabsEl = document.getElementById('tabs');
+const btnPlay = document.getElementById('btnPlay');
+const btnBack = document.getElementById('btnBack');
+const btnFwd = document.getElementById('btnFwd');
+
+// ─── INIT ───────────────────────────────────────────────────
+function init() {
+  // Build tabs
+  SCENARIOS.forEach((s, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab' + (i === 0 ? ' active' : '');
+    btn.textContent = s.tab;
+    btn.onclick = () => switchScenario(i);
+    tabsEl.appendChild(btn);
+  });
+
+  // SVG defs
+  svg.append('defs').html(`
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  `);
+
+  // Groups in draw order
+  svg.append('g').attr('class', 'phases-layer');
+  svg.append('g').attr('class', 'flow-layer');
+  svg.append('g').attr('class', 'bundle-layer');
+  svg.append('g').attr('class', 'edges-layer');
+  svg.append('g').attr('class', 'nodes-layer');
+  svg.append('g').attr('class', 'labels-layer');
+
+  // Entropy chart SVG setup
+  const chartSvg = d3.select('#entropyChartSvg');
+  chartSvg.append('g').attr('class', 'chart-phases-layer');
+  chartSvg.append('g').attr('class', 'chart-ghost-layer');
+  chartSvg.append('g').attr('class', 'chart-area-layer');
+  chartSvg.append('g').attr('class', 'chart-line-layer');
+  chartSvg.append('g').attr('class', 'chart-dots-layer');
+  chartSvg.append('g').attr('class', 'chart-axis-layer');
+
+  // ←/→ = steps/scenarios within this deck only (no boundary crossing)
+  // ↑/↓ = deck-level navigation (handled by parent presenter)
+  function navForward(){
+    const scenario = SCENARIOS[state.scenarioIdx];
+    const maxStep = scenario.stages.length - 1;
+    if(state.step >= maxStep){
+      // At end of scenario — advance to next scenario if available
+      if(state.scenarioIdx < SCENARIOS.length - 1){
+        switchScenario(state.scenarioIdx + 1);
+      }
+      return;
+    }
+    stepTo(state.step + 1);
+  }
+  function navBack(){
+    if(state.step <= -1){
+      // At start of scenario — go to previous scenario if available
+      if(state.scenarioIdx > 0){
+        const prevIdx = state.scenarioIdx - 1;
+        switchScenario(prevIdx);
+        const prevMax = SCENARIOS[prevIdx].stages.length - 1;
+        setTimeout(()=> stepTo(prevMax), 100);
+      }
+      return;
+    }
+    stepTo(state.step - 1);
+  }
+  btnPlay.onclick = togglePlay;
+  btnBack.onclick = navBack;
+  btnFwd.onclick = navForward;
+
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+    if (e.code === 'ArrowRight') navForward();
+    if (e.code === 'ArrowLeft') navBack();
+    if (e.code === 'ArrowDown') { e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*'); }
+    if (e.code === 'ArrowUp') { e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*'); }
+  });
+
+  // Listen for navigator commands (when embedded in iframe)
+  window.addEventListener('message', e=>{
+    if(e.data && e.data.type==='deck-command'){
+      if(e.data.action==='go-first'){ switchScenario(0); }
+      if(e.data.action==='go-last'){
+        const lastIdx = SCENARIOS.length - 1;
+        switchScenario(lastIdx);
+        const maxStep = SCENARIOS[lastIdx].stages.length - 1;
+        setTimeout(()=> stepTo(maxStep), 100);
+      }
+      if(e.data.action==='set-theme'){
+        document.documentElement.setAttribute('data-theme', e.data.theme);
+        render(false); updateEntropy(true);
+      }
+    }
+  });
+
+  // Report ready to parent
+  window.parent.postMessage({type:'deck-ready',total:SCENARIOS.length},'*');
+
+  window.addEventListener('resize', () => render(false));
+
+  // Initial render
+  render(true);
+  updateEntropy(true);
+}
+
+// ─── SCENARIO SWITCHING ─────────────────────────────────────
+function switchScenario(idx) {
+  if (idx === state.scenarioIdx && state.step === -1) return;
+
+  stopPlay();
+  state.scenarioIdx = idx;
+  state.step = -1;
+
+  // Update tab styling
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', i === idx);
+  });
+
+  render(true);
+  updateEntropy(true);
+}
+
+// ─── LAYOUT COMPUTATION ─────────────────────────────────────
+function computeLayout() {
+  const scenario = SCENARIOS[state.scenarioIdx];
+  const stages = scenario.stages;
+  const rect = document.getElementById('graphArea').getBoundingClientRect();
+  const W = rect.width;
+  const H = rect.height;
+  const padX = 100;
+  const padY = 40;
+
+  const nodes = [];
+  const edges = [];
+
+  const maxOptions = Math.max(...stages.map(s => s.options.length));
+
+  stages.forEach((stage, si) => {
+    const x = padX + (si / Math.max(stages.length - 1, 1)) * (W - padX * 2);
+    const count = stage.options.length;
+
+    stage.options.forEach((opt, oi) => {
+      const spacing = Math.min((H - padY * 2) / (maxOptions + 1), 70);
+      const totalH = (count - 1) * spacing;
+      const y = H / 2 - totalH / 2 + oi * spacing;
+
+      nodes.push({
+        id: `${si}-${oi}`,
+        x, y,
+        stageIdx: si,
+        optIdx: oi,
+        label: opt.label,
+        active: opt.active,
+        isChosen: false,
+        isPruned: false,
+        isFuture: true,
+      });
+    });
+  });
+
+  // Connect every node in stage N to every node in stage N+1
+  // This creates the dense "all possible paths" web
+  stages.forEach((stage, si) => {
+    if (si === 0) return;
+    const prevNodes = nodes.filter(n => n.stageIdx === si - 1);
+    const curNodes = nodes.filter(n => n.stageIdx === si);
+    prevNodes.forEach(pn => {
+      curNodes.forEach(cn => {
+        edges.push({
+          id: `e-${pn.id}-${cn.id}`,
+          source: pn,
+          target: cn,
+          sourceStage: si - 1,
+          targetStage: si,
+          isActivePath: pn.active && cn.active, // the one true path
+        });
+      });
+    });
+  });
+
+  return { nodes, edges, W, H, stages };
+}
+
+// ─── RENDER ─────────────────────────────────────────────────
+function render(animate) {
+  const { nodes, edges, W, H, stages } = computeLayout();
+  const scenario = SCENARIOS[state.scenarioIdx];
+  const step = state.step;
+
+  svg.attr('viewBox', `0 0 ${W} ${H}`);
+
+  // Classify nodes
+  nodes.forEach(n => {
+    if (step < 0) {
+      n.isChosen = false;
+      n.isPruned = false;
+      n.isFuture = true;
+    } else if (n.stageIdx <= step) {
+      if (n.active) {
+        n.isChosen = true;
+        n.isPruned = false;
+        n.isFuture = false;
+      } else {
+        n.isChosen = false;
+        n.isPruned = true;
+        n.isFuture = false;
+      }
+    } else {
+      n.isChosen = false;
+      n.isPruned = false;
+      n.isFuture = true;
+    }
+  });
+
+  // Classify edges
+  edges.forEach(e => {
+    if (step < 0) {
+      e.state = 'future';
+    } else if (e.targetStage <= step) {
+      e.state = e.isActivePath ? 'active' : 'pruned';
+    } else if (e.sourceStage <= step) {
+      // Source decided, target not yet — show connections from chosen source only
+      const srcNode = nodes.find(n => n.id === e.source.id);
+      e.state = (srcNode && srcNode.active) ? 'future' : 'pruned';
+    } else {
+      e.state = 'future';
+    }
+  });
+
+  const dur = animate ? 800 : 0;
+  const link = d3.linkHorizontal().x(d => d.x).y(d => d.y);
+
+  // ── Phase marker lines
+  const phases = scenario.phases || [];
+  const phaseData = phases.map(p => {
+    // Position between afterStage and afterStage+1
+    const leftNodes = nodes.filter(n => n.stageIdx === p.afterStage);
+    const rightNodes = nodes.filter(n => n.stageIdx === p.afterStage + 1);
+    const lx = leftNodes.length ? leftNodes[0].x : 0;
+    const rx = rightNodes.length ? rightNodes[0].x : W;
+    return { ...p, x: (lx + rx) / 2 };
+  });
+
+  // Phase background regions (colored bands between phase lines)
+  const phaseRegions = [];
+  const phaseColors = [css('--phase-region-design'), css('--phase-region-mid'), css('--phase-region-late')];
+  for (let i = 0; i <= phaseData.length; i++) {
+    const x0 = i === 0 ? 0 : phaseData[i - 1].x;
+    const x1 = i === phaseData.length ? W : phaseData[i].x;
+    const label = i === 0 && phaseData.length > 0 ? phaseData[0].label :
+                  i > 0 && i < phaseData.length ? phaseData[i].label :
+                  i === phaseData.length && phaseData.length > 0 ? '' : '';
+    // Label goes in the region *before* its divider
+    phaseRegions.push({ id: `region-${i}`, x0, x1, color: phaseColors[i] || phaseColors[2] });
+  }
+
+  // Clear and redraw phase regions + lines (simple redraw avoids stale D3 joins)
+  svg.select('.phases-layer').selectAll('rect.phase-region').remove();
+  phaseRegions.forEach(d => {
+    svg.select('.phases-layer').append('rect').attr('class', 'phase-region')
+      .attr('x', d.x0).attr('y', 0).attr('width', d.x1 - d.x0).attr('height', H)
+      .attr('fill', d.color);
+  });
+
+  svg.select('.phases-layer').selectAll('line.phase-line').remove();
+  phaseData.forEach(d => {
+    svg.select('.phases-layer').append('line').attr('class', 'phase-line')
+      .attr('x1', d.x).attr('x2', d.x)
+      .attr('y1', 10).attr('y2', H - 10)
+      .attr('stroke', css('--phase-line'))
+      .attr('stroke-width', 1.5)
+      .attr('stroke-dasharray', '6,4');
+  });
+
+  // Phase labels (one per region between dividers)
+  // phases[] defines dividers; each phase's label names the region to its LEFT
+  // So N dividers create N+1 regions, but we only label the first N (each phase names its own region)
+  const phaseLabelData = [];
+  if (phases.length > 0) {
+    for (let i = 0; i < phases.length; i++) {
+      const firstStageX = nodes.find(n => n.stageIdx === 0)?.x || 0;
+      const regionLeft = i === 0 ? firstStageX * 0.3 : phaseData[i - 1].x;
+      const regionRight = phaseData[i].x;
+      phaseLabelData.push({
+        id: `pl-${i}`,
+        label: phases[i].label,
+        x: (regionLeft + regionRight) / 2,
+        y: 22,
+      });
+    }
+  }
+
+  // Clear and redraw phase labels (simple — low count, avoid stale D3 joins)
+  svg.select('.phases-layer').selectAll('text.phase-label').remove();
+  phaseLabelData.forEach((d, i) => {
+    svg.select('.phases-layer').append('text').attr('class', 'phase-label')
+      .attr('text-anchor', 'middle')
+      .attr('font-family', 'var(--sans)')
+      .attr('font-size', '10px')
+      .attr('font-weight', '700')
+      .attr('letter-spacing', '.1em')
+      .attr('x', d.x).attr('y', d.y)
+      .attr('fill', i === 0 ? css('--orange') : css('--phase-label-secondary'))
+      .text(d.label);
+  });
+
+  // ── Flow ribbons between stages (shows possibility funnel)
+  const flowData = [];
+  for (let si = 0; si < stages.length - 1; si++) {
+    const leftNodes = nodes.filter(n => n.stageIdx === si);
+    const rightNodes = nodes.filter(n => n.stageIdx === si + 1);
+    const leftActive = leftNodes.filter(n => !n.isPruned);
+    const rightActive = rightNodes.filter(n => !n.isPruned);
+
+    const lAll = leftNodes.map(n => n.y);
+    const rAll = rightNodes.map(n => n.y);
+    const lAct = leftActive.length ? leftActive.map(n => n.y) : lAll;
+    const rAct = rightActive.length ? rightActive.map(n => n.y) : rAll;
+
+    const pad = 20;
+    const lx = leftNodes[0].x;
+    const rx = rightNodes[0].x;
+
+    // Full envelope (all paths)
+    flowData.push({
+      id: `flow-full-${si}`,
+      type: 'full',
+      lx, rx,
+      lTop: Math.min(...lAll) - pad, lBot: Math.max(...lAll) + pad,
+      rTop: Math.min(...rAll) - pad, rBot: Math.max(...rAll) + pad,
+    });
+
+    // Active envelope (remaining paths after decisions)
+    if (step >= 0) {
+      flowData.push({
+        id: `flow-active-${si}`,
+        type: 'active',
+        lx, rx,
+        lTop: Math.min(...lAct) - pad * 0.5, lBot: Math.max(...lAct) + pad * 0.5,
+        rTop: Math.min(...rAct) - pad * 0.5, rBot: Math.max(...rAct) + pad * 0.5,
+      });
+    }
+  }
+
+  const flowSel = svg.select('.flow-layer')
+    .selectAll('path')
+    .data(flowData, d => d.id);
+
+  flowSel.exit().transition().duration(dur).attr('opacity', 0).remove();
+
+  const flowEnter = flowSel.enter().append('path')
+    .attr('fill-opacity', 0);
+
+  flowSel.merge(flowEnter)
+    .transition().duration(dur).ease(d3.easeCubicOut)
+    .attr('d', d => {
+      const mx = (d.lx + d.rx) / 2;
+      return `M${d.lx},${d.lTop} C${mx},${d.lTop} ${mx},${d.rTop} ${d.rx},${d.rTop}
+              L${d.rx},${d.rBot} C${mx},${d.rBot} ${mx},${d.lBot} ${d.lx},${d.lBot} Z`;
+    })
+    .attr('fill', d => d.type === 'active' ? css('--flow-active') : css('--flow-full'))
+    .attr('fill-opacity', 1)
+    .attr('stroke', d => d.type === 'active' ? css('--flow-active-stroke') : css('--flow-full-stroke'))
+    .attr('stroke-width', 0.5);
+
+  // ── Bundle width indicators
+  // Vertical gradient bars showing remaining state-space width at each stage
+  const bundleData = stages.map((stage, si) => {
+    const stageNodes = nodes.filter(n => n.stageIdx === si);
+    const activeNodes = stageNodes.filter(n => !n.isPruned);
+    const allY = stageNodes.map(n => n.y);
+    const activeY = activeNodes.map(n => n.y);
+    const x = stageNodes[0]?.x || 0;
+    const minY = Math.min(...allY);
+    const maxY = Math.max(...allY);
+    const fullH = maxY - minY;
+    // Bundle height proportional to active options vs total
+    const ratio = step < 0 ? 1 : (si <= step ? activeNodes.length / stageNodes.length : 1);
+    const centerY = activeY.length ? (Math.min(...activeY) + Math.max(...activeY)) / 2 : (minY + maxY) / 2;
+    const bundleH = Math.max(8, fullH * ratio);
+    return { id: `bundle-${si}`, x, centerY, bundleH, fullH, ratio, stageIdx: si, decided: step >= 0 && si <= step };
+  });
+
+  const bundleSel = svg.select('.bundle-layer')
+    .selectAll('rect')
+    .data(bundleData, d => d.id);
+
+  bundleSel.exit().remove();
+
+  const bundleEnter = bundleSel.enter().append('rect')
+    .attr('rx', 4).attr('ry', 4);
+
+  bundleSel.merge(bundleEnter)
+    .transition().duration(dur).ease(d3.easeCubicOut)
+    .attr('x', d => d.x - 18)
+    .attr('y', d => d.centerY - d.bundleH / 2 - 8)
+    .attr('width', 36)
+    .attr('height', d => d.bundleH + 16)
+    .attr('fill', d => d.decided ? (d.ratio < 0.4 ? css('--bundle-decided-hi') : css('--bundle-decided')) : css('--bundle-future'))
+    .attr('stroke', d => d.decided ? css('--bundle-decided-stroke') : css('--bundle-future-stroke'))
+    .attr('stroke-width', 1)
+    .attr('stroke-dasharray', d => d.decided ? 'none' : '3,3');
+
+  // ── Edges
+  const edgeSel = svg.select('.edges-layer')
+    .selectAll('path')
+    .data(edges, d => d.id);
+
+  edgeSel.exit().remove();
+
+  const edgeEnter = edgeSel.enter().append('path')
+    .attr('fill', 'none')
+    .attr('d', d => link({ source: { x: d.source.x, y: d.source.y }, target: { x: d.target.x, y: d.target.y } }));
+
+  edgeSel.merge(edgeEnter)
+    .sort((a, b) => (a.state === 'active' ? 1 : 0) - (b.state === 'active' ? 1 : 0)) // active on top
+    .transition().duration(dur).ease(d3.easeCubicOut)
+    .attr('d', d => link({ source: { x: d.source.x, y: d.source.y }, target: { x: d.target.x, y: d.target.y } }))
+    .attr('stroke', d => d.state === 'active' ? css('--orange') : d.state === 'pruned' ? css('--edge-pruned') : css('--edge-future'))
+    .attr('stroke-width', d => d.state === 'active' ? 3 : d.state === 'pruned' ? 0.7 : 0.8)
+    .attr('filter', d => d.state === 'active' ? 'url(#glow-soft)' : 'none')
+    .attr('opacity', 1);
+
+  // ── Nodes
+  const nodeSel = svg.select('.nodes-layer')
+    .selectAll('circle')
+    .data(nodes, d => d.id);
+
+  nodeSel.exit().remove();
+
+  const nodeEnter = nodeSel.enter().append('circle')
+    .attr('cx', d => d.x)
+    .attr('cy', d => d.y);
+
+  nodeSel.merge(nodeEnter)
+    .transition().duration(dur).ease(d3.easeCubicOut)
+    .attr('cx', d => d.x)
+    .attr('cy', d => d.y)
+    .attr('r', d => d.isChosen ? 10 : d.isPruned ? 5 : 6)
+    .attr('fill', d => d.isChosen ? css('--orange') : d.isPruned ? css('--node-pruned') : css('--node-future'))
+    .attr('stroke', d => d.isChosen ? css('--orange') : d.isPruned ? css('--node-pruned-stroke') : css('--node-future-stroke'))
+    .attr('stroke-width', d => d.isChosen ? 2 : 1)
+    .attr('filter', d => d.isChosen ? 'url(#glow)' : 'none');
+
+  // ── Labels
+  const labelSel = svg.select('.labels-layer')
+    .selectAll('text')
+    .data(nodes, d => d.id);
+
+  labelSel.exit().remove();
+
+  const labelEnter = labelSel.enter().append('text')
+    .attr('class', 'node-label')
+    .attr('text-anchor', 'middle')
+    .attr('x', d => d.x)
+    .attr('y', d => d.y - 16);
+
+  labelSel.merge(labelEnter)
+    .text(d => d.label)
+    .transition().duration(dur).ease(d3.easeCubicOut)
+    .attr('x', d => d.x)
+    .attr('y', d => d.y - (d.isChosen ? 18 : 14))
+    .attr('font-size', d => d.isChosen ? '12px' : '10px')
+    .attr('fill', d => d.isChosen ? css('--label-chosen') : d.isPruned ? css('--label-pruned') : css('--label-future'))
+    .attr('font-weight', d => d.isChosen ? 700 : 500);
+
+  // Stage label
+  const stageEl = document.getElementById('stageLabel');
+  if (step >= 0 && step < stages.length) {
+    const s = stages[step];
+    stageEl.innerHTML = `<span class="highlight">${s.label}</span> — ${s.decision}`;
+  } else {
+    stageEl.innerHTML = scenario.subtitle;
+  }
+
+  // Scenario description
+  const descEl = document.getElementById('scenarioDesc');
+  descEl.innerHTML = `<div class="title">${scenario.title}</div>${scenario.desc}`;
+
+  // Step indicator
+  document.getElementById('stepCur').textContent = Math.max(0, step + 1);
+  document.getElementById('stepMax').textContent = stages.length;
+
+  // Entropy area chart
+  renderEntropyChart(scenario, stages, nodes, step, dur);
+}
+
+// ─── ENTROPY AREA CHART ─────────────────────────────────────
+function renderEntropyChart(scenario, stages, nodes, step, dur) {
+  const chartEl = document.getElementById('entropyChart');
+  const rect = chartEl.getBoundingClientRect();
+  const cW = rect.width;
+  const cH = rect.height;
+  const chartSvg = d3.select('#entropyChartSvg');
+  chartSvg.attr('viewBox', `0 0 ${cW} ${cH}`);
+
+  const padX = 100;
+  const padTop = 30;
+  const padBot = 16;
+
+  // All scenarios' bits data (for ghost curves)
+  const allBits = SCENARIOS.map(s => ({
+    id: s.id,
+    tab: s.tab,
+    data: s.entropy.map((n, i) => ({ stage: i, bits: n > 0 ? Math.log2(n) : 0 })),
+    totalArea: s.entropy.reduce((acc, n, i, arr) => {
+      if (i === 0) return acc;
+      return acc + (Math.log2(arr[i-1]) + Math.log2(n)) / 2;
+    }, 0),
+  }));
+
+  const bitsData = allBits.find(b => b.id === scenario.id).data;
+  const maxBits = Math.max(...SCENARIOS.map(s => Math.log2(s.entropy[0])));
+  const maxStages = Math.max(...SCENARIOS.map(s => s.stages.length - 1));
+
+  const xScale = d3.scaleLinear().domain([0, maxStages]).range([padX, cW - padX]);
+  const yScale = d3.scaleLinear().domain([0, maxBits * 1.05]).range([cH - padBot, padTop]);
+
+  // Phase lines
+  const phases = scenario.phases || [];
+  chartSvg.select('.chart-phases-layer').selectAll('*').remove();
+  phases.forEach(p => {
+    const leftX = xScale(p.afterStage);
+    const rightX = xScale(Math.min(p.afterStage + 1, maxStages));
+    const x = (leftX + rightX) / 2;
+    chartSvg.select('.chart-phases-layer').append('line')
+      .attr('x1', x).attr('x2', x).attr('y1', 0).attr('y2', cH)
+      .attr('stroke', css('--phase-line')).attr('stroke-width', 1).attr('stroke-dasharray', '6,4');
+  });
+
+  const area = d3.area()
+    .x(d => xScale(d.stage)).y0(yScale(0)).y1(d => yScale(d.bits))
+    .curve(d3.curveMonotoneX);
+  const line = d3.line()
+    .x(d => xScale(d.stage)).y(d => yScale(d.bits))
+    .curve(d3.curveMonotoneX);
+
+  // ── Ghost curves: ALL other scenarios shown as faint references
+  const ghostColors = { token: 'rgba(120,140,160,.25)', traditional: 'rgba(120,140,160,.35)', ailang: 'rgba(231,60,23,.2)' };
+  const ghostColorsLight = { token: 'rgba(80,100,120,.2)', traditional: 'rgba(80,100,120,.3)', ailang: 'rgba(212,48,15,.15)' };
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  const gc = isLight ? ghostColorsLight : ghostColors;
+
+  chartSvg.select('.chart-ghost-layer').selectAll('*').remove();
+  allBits.filter(b => b.id !== scenario.id).forEach(other => {
+    // Ghost filled area
+    chartSvg.select('.chart-ghost-layer').append('path')
+      .attr('d', area(other.data))
+      .attr('fill', gc[other.id] || 'rgba(120,140,160,.1)')
+      .attr('stroke', 'none');
+    // Ghost line
+    chartSvg.select('.chart-ghost-layer').append('path')
+      .attr('d', line(other.data))
+      .attr('fill', 'none')
+      .attr('stroke', gc[other.id] || 'rgba(120,140,160,.2)')
+      .attr('stroke-width', 1.5)
+      .attr('stroke-dasharray', '5,3');
+    // Ghost label at the midpoint of the curve (max vertical separation)
+    const midIdx = Math.floor(other.data.length / 2);
+    const midPt = other.data[midIdx];
+    chartSvg.select('.chart-ghost-layer').append('text')
+      .attr('x', xScale(midPt.stage))
+      .attr('y', yScale(midPt.bits) - 8)
+      .attr('text-anchor', 'middle')
+      .attr('font-family', 'var(--sans)')
+      .attr('font-size', '9px')
+      .attr('font-weight', '600')
+      .attr('fill', css('--text-dim'))
+      .attr('opacity', 0.7)
+      .text(other.tab);
+  });
+
+  // ── Full area backdrop for active scenario
+  const fullAreaSel = chartSvg.select('.chart-area-layer').selectAll('path.full-area').data([bitsData]);
+  fullAreaSel.enter().append('path').attr('class', 'full-area')
+    .merge(fullAreaSel)
+    .transition().duration(dur)
+    .attr('d', area)
+    .attr('fill', css('--chart-full-fill'))
+    .attr('stroke', css('--chart-full-stroke'))
+    .attr('stroke-width', 0.5);
+
+  // ── Active area (progressive fill)
+  const visibleData = step < 0 ? [bitsData[0]] : bitsData.slice(0, step + 1);
+
+  const activeAreaSel = chartSvg.select('.chart-area-layer').selectAll('path.active-area').data([visibleData]);
+  activeAreaSel.enter().append('path').attr('class', 'active-area')
+    .merge(activeAreaSel)
+    .transition().duration(dur)
+    .attr('d', area)
+    .attr('fill', css('--chart-active-fill'))
+    .attr('stroke', css('--chart-active-stroke'))
+    .attr('stroke-width', 1);
+
+  // ── Active line (bold)
+  const lineSel = chartSvg.select('.chart-line-layer').selectAll('path').data([visibleData]);
+  lineSel.enter().append('path').attr('fill', 'none')
+    .merge(lineSel)
+    .transition().duration(dur)
+    .attr('d', line)
+    .attr('stroke', css('--orange'))
+    .attr('stroke-width', 3);
+
+  // ── Dots with value labels
+  const dotSel = chartSvg.select('.chart-dots-layer').selectAll('g.dot-group').data(visibleData, d => d.stage);
+  dotSel.exit().transition().duration(dur).attr('opacity', 0).remove();
+
+  const dotEnter = dotSel.enter().append('g').attr('class', 'dot-group').attr('opacity', 0);
+  dotEnter.append('circle').attr('r', 0);
+  dotEnter.append('text')
+    .attr('text-anchor', 'middle')
+    .attr('font-family', 'var(--mono)')
+    .attr('font-size', '10px')
+    .attr('font-weight', '700');
+
+  const dotMerge = dotEnter.merge(dotSel);
+  dotMerge.transition().duration(dur)
+    .attr('opacity', 1)
+    .attr('transform', d => `translate(${xScale(d.stage)},${yScale(d.bits)})`);
+  dotMerge.select('circle')
+    .transition().duration(dur)
+    .attr('r', 5)
+    .attr('fill', css('--orange'))
+    .attr('stroke', css('--bg'))
+    .attr('stroke-width', 2);
+  dotMerge.select('text')
+    .text(d => d.bits.toFixed(1))
+    .transition().duration(dur)
+    .attr('y', -12)
+    .attr('fill', css('--orange'));
+
+  // ── Y-axis
+  const yTicks = [0, 2, 4, 6];
+  chartSvg.select('.chart-axis-layer').selectAll('text.ytick').data(yTicks)
+    .join('text').attr('class', 'ytick')
+    .attr('font-family', 'var(--mono)')
+    .attr('font-size', '9px')
+    .attr('fill', css('--chart-axis'))
+    .attr('text-anchor', 'end')
+    .attr('x', padX - 10)
+    .attr('y', d => yScale(d) + 3)
+    .text(d => d + 'b');
+
+  chartSvg.select('.chart-axis-layer').selectAll('line.grid').data(yTicks)
+    .join('line').attr('class', 'grid')
+    .attr('x1', padX).attr('x2', cW - padX)
+    .attr('y1', d => yScale(d)).attr('y2', d => yScale(d))
+    .attr('stroke', css('--chart-grid'))
+    .attr('stroke-width', 0.5);
+
+  // ── Area comparison label
+  const activeArea = allBits.find(b => b.id === scenario.id).totalArea;
+  const areaLabel = document.getElementById('areaLabel');
+
+  if (step >= 0 && step >= stages.length - 1) {
+    // Show comparison when animation completes
+    const tradArea = allBits.find(b => b.id === 'traditional').totalArea;
+    const ailangArea = allBits.find(b => b.id === 'ailang').totalArea;
+
+    if (scenario.id === 'ailang') {
+      const pctDesign = ((ailangArea > 0 ? allBits.find(b => b.id === 'ailang').data.slice(0,3).reduce((a,d,i,arr) => i===0?a:a+(arr[i-1].bits+d.bits)/2, 0) / ailangArea * 100 : 0)).toFixed(0);
+      areaLabel.innerHTML = `${pctDesign}% of entropy resolved at design time — same complexity, resolved earlier`;
+    } else if (scenario.id === 'traditional') {
+      const pctLate = ((tradArea > 0 ? allBits.find(b => b.id === 'traditional').data.slice(2).reduce((a,d,i,arr) => i===0?a:a+(arr[i-1].bits+d.bits)/2, 0) / tradArea * 100 : 0)).toFixed(0);
+      areaLabel.innerHTML = `${pctLate}% of entropy still unresolved at runtime — AILANG moves this to design time`;
+    } else {
+      const visArea = visibleData.reduce((acc, d, i) => {
+        if (i === 0) return acc;
+        return acc + (visibleData[i-1].bits + d.bits) / 2;
+      }, 0);
+      areaLabel.textContent = `Area: ${visArea.toFixed(1)} bit·stages`;
+    }
+  } else if (step >= 0) {
+    const visArea = visibleData.reduce((acc, d, i) => {
+      if (i === 0) return acc;
+      return acc + (visibleData[i-1].bits + d.bits) / 2;
+    }, 0);
+    areaLabel.textContent = `${visArea.toFixed(1)} bit·stages`;
+  } else {
+    areaLabel.textContent = '';
+  }
+}
+
+// ─── ENTROPY COUNTER ────────────────────────────────────────
+function updateEntropy(immediate) {
+  const scenario = SCENARIOS[state.scenarioIdx];
+  const step = state.step;
+  const total = scenario.entropy[0];
+  const current = step < 0 ? total : scenario.entropy[Math.min(step, scenario.entropy.length - 1)];
+  const bits = Math.max(0, Math.log2(current)).toFixed(1);
+  const pct = (current / total) * 100;
+
+  document.getElementById('entropyTotal').textContent = total;
+  document.getElementById('entropyBits').textContent = `${bits} bits`;
+
+  // Animate number
+  const numEl = document.getElementById('entropyNum');
+  const startVal = parseInt(numEl.textContent) || total;
+  if (immediate) {
+    numEl.textContent = current;
+  } else {
+    const duration = 800;
+    const startTime = performance.now();
+    function tick(now) {
+      const t = Math.min(1, (now - startTime) / duration);
+      const ease = 1 - Math.pow(1 - t, 3); // cubic ease out
+      numEl.textContent = Math.round(startVal + (current - startVal) * ease);
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Bar
+  const bar = document.getElementById('entropyBar');
+  if (immediate) {
+    bar.style.transition = 'none';
+    bar.style.width = pct + '%';
+    requestAnimationFrame(() => bar.style.transition = '');
+  } else {
+    bar.style.width = pct + '%';
+  }
+}
+
+// ─── STEP CONTROL ───────────────────────────────────────────
+function stepTo(n) {
+  const scenario = SCENARIOS[state.scenarioIdx];
+  const maxStep = scenario.stages.length - 1;
+  n = Math.max(-1, Math.min(n, maxStep));
+  if (n === state.step) return;
+  state.step = n;
+  render(true);
+  updateEntropy(false);
+
+  // Auto-stop at end
+  if (n >= maxStep && state.playing) {
+    // Pause after a beat, then reset
+    setTimeout(() => {
+      stopPlay();
+    }, STEP_MS);
+  }
+}
+
+function togglePlay() {
+  if (state.playing) {
+    stopPlay();
+  } else {
+    startPlay();
+  }
+}
+
+function startPlay() {
+  const scenario = SCENARIOS[state.scenarioIdx];
+  // If at end, restart
+  if (state.step >= scenario.stages.length - 1) {
+    state.step = -1;
+    render(true);
+    updateEntropy(true);
+  }
+  state.playing = true;
+  btnPlay.textContent = '▐▐';
+  btnPlay.classList.add('playing');
+  state.interval = setInterval(() => {
+    const maxStep = SCENARIOS[state.scenarioIdx].stages.length - 1;
+    if (state.step >= maxStep) {
+      stopPlay();
+      return;
+    }
+    stepTo(state.step + 1);
+  }, STEP_MS);
+  // Immediate first step
+  stepTo(state.step + 1);
+}
+
+function stopPlay() {
+  state.playing = false;
+  btnPlay.textContent = '▶';
+  btnPlay.classList.remove('playing');
+  if (state.interval) {
+    clearInterval(state.interval);
+    state.interval = null;
+  }
+}
+
+// ─── GO ─────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>

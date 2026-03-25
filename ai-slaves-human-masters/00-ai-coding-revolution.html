@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Case for AI Coding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+/* ─── Dark theme (default) ─── */
+:root{
+  --bg:#0f0f1a;
+  --surface:#1a1a2e;
+  --surface-hi:#222240;
+  --orange:#e73c17;
+  --orange-dim:rgba(231,60,23,.35);
+  --orange-glow:rgba(231,60,23,.6);
+  --green:#22c55e;
+  --green-dim:rgba(34,197,94,.15);
+  --indigo:#6366f1;
+  --indigo-dim:rgba(99,102,241,.15);
+  --ghost:rgba(255,255,255,.12);
+  --text:#e2e8f0;
+  --text-dim:#718096;
+  --bar-bg:rgba(15,15,26,.8);
+  --bar-border:rgba(255,255,255,.06);
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Montserrat',sans-serif;
+}
+
+/* ─── Light theme ─── */
+[data-theme="light"]{
+  --bg:#f5f5f0;
+  --surface:#ffffff;
+  --surface-hi:#f0f0ea;
+  --orange:#d4300f;
+  --orange-dim:rgba(212,48,15,.2);
+  --orange-glow:rgba(212,48,15,.4);
+  --green:#16a34a;
+  --green-dim:rgba(22,163,74,.1);
+  --indigo:#4f46e5;
+  --indigo-dim:rgba(79,70,229,.1);
+  --ghost:rgba(0,0,0,.1);
+  --text:#1a202c;
+  --text-dim:#4a5568;
+  --bar-bg:rgba(255,255,255,.85);
+  --bar-border:rgba(0,0,0,.08);
+}
+
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+
+body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(231,60,23,.03) 0%, transparent 70%),
+    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+}
+[data-theme="light"] body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(212,48,15,.03) 0%, transparent 70%),
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+}
+
+/* ─── Layout ─── */
+#app{display:flex;flex-direction:column;height:100vh}
+
+/* ─── Slides ─── */
+.slides-viewport{flex:1;position:relative;overflow:hidden}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 48px;gap:24px;
+  opacity:0;visibility:hidden;
+  transform:translateX(40px);
+  transition:opacity .45s ease, transform .45s ease, visibility .45s;
+}
+.slide.active{opacity:1;visibility:visible;transform:translateX(0)}
+.slide.exit-left{transform:translateX(-40px);opacity:0}
+
+/* ─── Title styling ─── */
+.slide-title{
+  font-size:clamp(28px,4vw,48px);
+  font-weight:800;letter-spacing:-.02em;
+  text-align:center;line-height:1.15;
+}
+.slide-title .accent{color:var(--orange)}
+.slide-title .dim{color:var(--text-dim)}
+.slide-subtitle{
+  font-size:clamp(14px,1.8vw,20px);
+  color:var(--text-dim);text-align:center;
+  max-width:700px;
+}
+
+/* ─── Stats grid ─── */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;max-width:840px;width:100%;
+}
+.stat-card{
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-radius:12px;padding:28px 20px;
+  text-align:center;
+  opacity:0;transform:translateY(20px);
+}
+.slide.active .stat-card{animation:fadeSlideUp .5s ease forwards}
+.slide.active .stat-card:nth-child(1){animation-delay:.15s}
+.slide.active .stat-card:nth-child(2){animation-delay:.3s}
+.slide.active .stat-card:nth-child(3){animation-delay:.45s}
+.stat-number{
+  font-size:clamp(36px,5vw,56px);
+  font-weight:800;color:var(--orange);
+  font-family:var(--mono);line-height:1;
+}
+.stat-label{font-size:14px;color:var(--text);margin-top:8px;font-weight:600}
+.stat-source{font-size:11px;color:var(--text-dim);margin-top:6px;font-family:var(--mono)}
+
+/* ─── Quote card ─── */
+.quote-card{
+  background:var(--surface);
+  border-left:4px solid var(--orange);
+  border-radius:0 12px 12px 0;
+  padding:32px;
+  max-width:860px;width:100%;
+  display:flex;gap:24px;align-items:flex-start;
+  opacity:0;transform:translateY(20px);
+}
+.slide.active .quote-card{animation:fadeSlideUp .5s ease .15s forwards}
+
+.quote-avatar-wrap{flex-shrink:0;position:relative}
+.quote-avatar{
+  width:80px;height:80px;
+  border-radius:50%;object-fit:cover;
+  border:3px solid var(--orange);
+  background:var(--surface-hi);
+}
+.avatar-fallback{
+  width:80px;height:80px;border-radius:50%;
+  border:3px solid var(--orange);
+  background:var(--surface-hi);
+  display:none;align-items:center;justify-content:center;
+  font-size:24px;font-weight:800;color:var(--orange);
+  font-family:var(--mono);
+}
+.quote-body{flex:1;min-width:0}
+.quote-text{
+  font-size:17px;line-height:1.65;
+  font-style:italic;color:var(--text);
+  margin-bottom:14px;
+}
+.quote-text::before{content:'\201C';font-size:28px;color:var(--orange);margin-right:2px;font-style:normal}
+.quote-text::after{content:'\201D';font-size:28px;color:var(--orange);margin-left:2px;font-style:normal}
+.quote-attr{
+  font-size:12px;color:var(--text-dim);
+  font-family:var(--mono);line-height:1.5;
+}
+.quote-attr .name{color:var(--orange);font-weight:700}
+
+/* ─── Update callout ─── */
+.quote-update{
+  margin-top:16px;padding:14px 18px;
+  background:var(--orange-dim);
+  border-radius:8px;border-left:3px solid var(--orange);
+  font-size:13px;line-height:1.55;
+  color:var(--text);
+  opacity:0;transform:translateY(12px);
+}
+.slide.active .quote-update{animation:fadeSlideUp .5s ease .55s forwards}
+.quote-update .update-label{
+  font-family:var(--mono);font-weight:700;
+  color:var(--orange);font-size:11px;
+  text-transform:uppercase;letter-spacing:.05em;
+  margin-bottom:4px;display:block;
+}
+
+/* ─── Secondary callout ─── */
+.callout-card{
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-radius:10px;padding:20px 24px;
+  max-width:860px;width:100%;
+  display:flex;align-items:center;gap:16px;
+  opacity:0;transform:translateY(16px);
+}
+.slide.active .callout-card{animation:fadeSlideUp .5s ease .5s forwards}
+.callout-icon{
+  width:44px;height:44px;border-radius:10px;
+  background:var(--orange-dim);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--orange);font-size:18px;flex-shrink:0;
+}
+.callout-text{font-size:14px;color:var(--text);line-height:1.5}
+.callout-text .highlight{color:var(--orange);font-weight:700;font-family:var(--mono)}
+
+/* ─── Footer quote ─── */
+.footer-quote{
+  font-size:13px;font-style:italic;
+  color:var(--text-dim);text-align:center;
+  max-width:700px;
+  opacity:0;transform:translateY(12px);
+}
+.slide.active .footer-quote{animation:fadeSlideUp .5s ease .7s forwards}
+
+/* ─── Evolution layout ─── */
+.evolution-row{
+  display:flex;align-items:stretch;gap:0;
+  max-width:880px;width:100%;
+}
+.evo-stage{
+  flex:1;padding:28px 24px;
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  text-align:center;
+  opacity:0;transform:translateY(20px);
+}
+.evo-stage:first-child{border-radius:12px 0 0 12px}
+.evo-stage:last-child{border-radius:0 12px 12px 0}
+.slide.active .evo-stage:nth-child(1){animation:fadeSlideUp .5s ease .15s forwards}
+.slide.active .evo-stage:nth-child(3){animation:fadeSlideUp .5s ease .45s forwards}
+.evo-stage-icon{font-size:28px;margin-bottom:12px}
+.evo-stage-title{
+  font-size:16px;font-weight:700;
+  margin-bottom:6px;font-family:var(--mono);
+}
+.evo-stage-date{font-size:11px;color:var(--text-dim);font-family:var(--mono);margin-bottom:12px}
+.evo-stage-desc{font-size:13px;color:var(--text-dim);line-height:1.55;font-style:italic}
+
+.evo-arrow{
+  display:flex;align-items:center;justify-content:center;
+  padding:0 16px;
+  font-size:28px;color:var(--orange);
+  opacity:0;
+}
+.slide.active .evo-arrow{animation:fadeSlideUp .5s ease .3s forwards}
+
+.evo-bottom-note{
+  font-size:13px;color:var(--text-dim);text-align:center;
+  max-width:700px;margin-top:4px;
+  opacity:0;transform:translateY(12px);
+}
+.slide.active .evo-bottom-note{animation:fadeSlideUp .5s ease .6s forwards}
+
+/* ─── Two-col stats ─── */
+.stats-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:16px;max-width:600px;width:100%;
+}
+.stat-card-sm{
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-radius:10px;padding:24px;
+  text-align:center;
+  opacity:0;transform:translateY(16px);
+}
+.slide.active .stat-card-sm:nth-child(1){animation:fadeSlideUp .5s ease .5s forwards}
+.slide.active .stat-card-sm:nth-child(2){animation:fadeSlideUp .5s ease .65s forwards}
+.stat-sm-number{
+  font-size:clamp(28px,4vw,44px);
+  font-weight:800;color:var(--orange);
+  font-family:var(--mono);line-height:1;
+}
+.stat-sm-label{font-size:13px;color:var(--text);margin-top:6px;font-weight:500}
+.stat-sm-source{font-size:10px;color:var(--text-dim);margin-top:4px;font-family:var(--mono)}
+
+/* ─── Closing callout ─── */
+.closing-callout{
+  background:var(--surface);
+  border-left:4px solid var(--orange);
+  border-radius:0 10px 10px 0;
+  padding:20px 24px;
+  max-width:700px;width:100%;
+  font-size:15px;font-weight:600;
+  color:var(--text);text-align:center;
+  line-height:1.5;
+  opacity:0;transform:translateY(16px);
+}
+.slide.active .closing-callout{animation:fadeSlideUp .5s ease .8s forwards}
+
+/* ─── Bottom bar ─── */
+.bottom-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 20px;
+  border-top:1px solid var(--bar-border);
+  flex-shrink:0;background:var(--bar-bg);
+  backdrop-filter:blur(8px);
+}
+.transport{display:flex;align-items:center;gap:8px}
+.transport-btn{
+  width:28px;height:28px;border-radius:50%;
+  border:1px solid var(--ghost);background:transparent;
+  color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;transition:all .2s;
+}
+.transport-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}
+.transport-btn:disabled{opacity:.3;cursor:default}
+.step-indicator{font-family:var(--mono);font-size:12px;color:var(--text-dim)}
+.step-indicator .current{color:var(--text);font-weight:700}
+.slide-dots{display:flex;gap:6px}
+.slide-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--ghost);border:none;cursor:pointer;
+  transition:all .25s;
+}
+.slide-dot.active{background:var(--orange);transform:scale(1.3)}
+.nav-hints{display:flex;align-items:center;gap:6px}
+.kbd{
+  display:inline-block;padding:1px 5px;border-radius:3px;
+  font-family:var(--mono);font-size:9px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:var(--text-dim);
+}
+[data-theme="light"] .kbd{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
+
+/* ─── Builder quotes grid ─── */
+.builders-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:14px;max-width:900px;width:100%;
+}
+.builder-card{
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-radius:10px;padding:20px;
+  display:flex;gap:14px;align-items:flex-start;
+  opacity:0;transform:translateY(16px);
+}
+.slide.active .builder-card:nth-child(1){animation:fadeSlideUp .45s ease .1s forwards}
+.slide.active .builder-card:nth-child(2){animation:fadeSlideUp .45s ease .2s forwards}
+.slide.active .builder-card:nth-child(3){animation:fadeSlideUp .45s ease .3s forwards}
+.slide.active .builder-card:nth-child(4){animation:fadeSlideUp .45s ease .4s forwards}
+.slide.active .builder-card:nth-child(5){animation:fadeSlideUp .45s ease .5s forwards}
+.slide.active .builder-card:nth-child(6){animation:fadeSlideUp .45s ease .6s forwards}
+.builder-avatar{
+  width:44px;height:44px;border-radius:50%;
+  object-fit:cover;border:2px solid var(--ghost);
+  background:var(--surface-hi);flex-shrink:0;
+}
+.builder-avatar-fb{
+  width:44px;height:44px;border-radius:50%;
+  border:2px solid var(--ghost);background:var(--surface-hi);
+  display:none;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:var(--orange);
+  font-family:var(--mono);flex-shrink:0;
+}
+.builder-body{flex:1;min-width:0}
+.builder-quote{
+  font-size:12.5px;line-height:1.55;
+  font-style:italic;color:var(--text);
+  margin-bottom:6px;
+}
+.builder-name{font-size:11px;font-weight:700;color:var(--orange);font-family:var(--mono)}
+.builder-role{font-size:10px;color:var(--text-dim);font-family:var(--mono)}
+.builder-card.shifted{border-left:3px solid var(--green)}
+.builder-card.skeptical{border-left:3px solid var(--orange)}
+.shift-badge{
+  display:inline-block;font-size:9px;font-weight:700;
+  padding:1px 6px;border-radius:8px;margin-left:6px;
+  vertical-align:middle;letter-spacing:.03em;
+}
+.shift-badge.evolved{background:var(--green-dim);color:var(--green)}
+.shift-badge.firm{background:var(--orange-dim);color:var(--orange)}
+
+@media(max-width:700px){
+  .builders-grid{grid-template-columns:1fr}
+}
+
+/* ─── Animations ─── */
+@keyframes fadeSlideUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeSlideIn{
+  from{opacity:0;transform:translateX(20px)}
+  to{opacity:1;transform:translateX(0)}
+}
+
+/* ─── Responsive ─── */
+@media(max-width:700px){
+  .stats-grid{grid-template-columns:1fr}
+  .evolution-row{flex-direction:column}
+  .evo-stage:first-child{border-radius:12px 12px 0 0}
+  .evo-stage:last-child{border-radius:0 0 12px 12px}
+  .evo-arrow{transform:rotate(90deg);padding:12px 0}
+  .stats-row{grid-template-columns:1fr}
+  .quote-card{flex-direction:column;align-items:center;text-align:center}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="slides-viewport">
+
+    <!-- ═══════════ Slide 0: Title ═══════════ -->
+    <section class="slide active" data-slide="0">
+      <h1 class="slide-title">The <span class="accent">AI Coding</span> Revolution</h1>
+      <p class="slide-subtitle">From prediction to reality in 12 months</p>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">90%</div>
+          <div class="stat-label">AI-written code predicted</div>
+          <div class="stat-source">Dario Amodei, Mar 2025</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">25-30%</div>
+          <div class="stat-label">AI-written code at Big Tech</div>
+          <div class="stat-source">Google &amp; Microsoft, 2024</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Some engineers today</div>
+          <div class="stat-source">Boris Cherny, 2026</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 1: Dario Amodei ═══════════ -->
+    <section class="slide" data-slide="1">
+      <h2 class="slide-title">"Three to Six Months..."</h2>
+      <div class="quote-card">
+        <div class="quote-avatar-wrap">
+          <img class="quote-avatar" src="images/dario-amodei.jpg" alt="Dario Amodei"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="avatar-fallback">DA</div>
+        </div>
+        <div class="quote-body">
+          <div class="quote-text">I think we will be there in three to six months, where AI is writing 90% of the code. And then, in 12 months, we may be in a world where AI is writing essentially all of the code.</div>
+          <div class="quote-attr">
+            <span class="name">Dario Amodei</span>, CEO of Anthropic<br>
+            Council of Foreign Relations &middot; March 2025
+          </div>
+        </div>
+      </div>
+      <div class="quote-update">
+        <span class="update-label"><i class="fas fa-clock-rotate-left"></i> One year later &middot; March 2026</span>
+        Amodei confirmed the 90% prediction has happened "at least at some places," including at Anthropic itself. Some engineers have completely stopped writing code manually: "I don't write any code anymore. I just let the model write the code."
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 2: Boris Cherny ═══════════ -->
+    <section class="slide" data-slide="2">
+      <h2 class="slide-title">"I Have Not Written a <span class="accent">Single Line</span> of Code"</h2>
+      <div class="quote-card">
+        <div class="quote-avatar-wrap">
+          <img class="quote-avatar" src="images/boris-cherny.jpg" alt="Boris Cherny"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="avatar-fallback">BC</div>
+        </div>
+        <div class="quote-body">
+          <div class="quote-text">I have not written a single line of code since November. For me personally, it has been 100% for two-plus months now &mdash; I don't even make small edits by hand.</div>
+          <div class="quote-attr">
+            <span class="name">Boris Cherny</span>, Creator &amp; Head of Claude Code, Anthropic<br>
+            Lenny's Newsletter &middot; February 2026
+          </div>
+        </div>
+      </div>
+      <div class="callout-card">
+        <div class="callout-icon"><i class="fas fa-code-pull-request"></i></div>
+        <div class="callout-text">Ships <span class="highlight">10&ndash;30 PRs per day</span> entirely via AI agents &mdash; no manual code editing</div>
+      </div>
+      <p class="footer-quote">"I think by the end of the year, everyone is going to be a product manager, and everyone codes. The title software engineer is going to start to go away."</p>
+    </section>
+
+    <!-- ═══════════ Slide 3: Andrej Karpathy ═══════════ -->
+    <section class="slide" data-slide="3">
+      <h2 class="slide-title">From <span class="dim">"Vibe Coding"</span> to <span class="accent">Agentic Engineering</span></h2>
+      <div class="evolution-row">
+        <div class="evo-stage">
+          <div class="evo-stage-icon"><i class="fas fa-music" style="color:var(--indigo)"></i></div>
+          <div class="evo-stage-title" style="color:var(--indigo)">Vibe Coding</div>
+          <div class="evo-stage-date">February 2025</div>
+          <div class="evo-stage-desc">"There's a new kind of coding I call 'vibe coding', where you fully give in to the vibes, embrace exponentials, and forget that the code even exists."</div>
+        </div>
+        <div class="evo-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="evo-stage">
+          <div class="evo-stage-icon"><i class="fas fa-robot" style="color:var(--orange)"></i></div>
+          <div class="evo-stage-title" style="color:var(--orange)">Agentic Engineering</div>
+          <div class="evo-stage-date">2026</div>
+          <div class="evo-stage-desc">"You are not writing the code directly 99% of the time &mdash; you are orchestrating agents who do, and acting as oversight."</div>
+        </div>
+      </div>
+      <div class="evo-bottom-note">
+        <div class="quote-avatar-wrap" style="display:inline-flex;vertical-align:middle;margin-right:8px">
+          <img class="quote-avatar" src="images/andrej-karpathy.jpg" alt="Andrej Karpathy"
+               style="width:36px;height:36px;border-width:2px"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="avatar-fallback" style="width:36px;height:36px;font-size:13px;border-width:2px;display:none">AK</div>
+        </div>
+        <strong>Andrej Karpathy</strong> &middot; Former Tesla AI Director, OpenAI Co-founder &mdash; hasn't typed a line of code since December 2025
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 4: Industry Momentum ═══════════ -->
+    <section class="slide" data-slide="4">
+      <h2 class="slide-title">The <span class="accent">Tipping Point</span></h2>
+      <div class="quote-card">
+        <div class="quote-avatar-wrap">
+          <img class="quote-avatar" src="images/jensen-huang.jpg" alt="Jensen Huang"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="avatar-fallback">JH</div>
+        </div>
+        <div class="quote-body">
+          <div class="quote-text">It is our job to create computing technology such that nobody has to program. And that the programming language is human. Everybody in the world is now a programmer.</div>
+          <div class="quote-attr">
+            <span class="name">Jensen Huang</span>, CEO of NVIDIA<br>
+            World Government Summit &middot; February 2024
+          </div>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card-sm">
+          <div class="stat-sm-number">25%+</div>
+          <div class="stat-sm-label">of new code is AI-generated</div>
+          <div class="stat-sm-source">Sundar Pichai, Nov 2024</div>
+        </div>
+        <div class="stat-card-sm">
+          <div class="stat-sm-number">~30%</div>
+          <div class="stat-sm-label">of code written by AI</div>
+          <div class="stat-sm-source">Satya Nadella, 2024</div>
+        </div>
+      </div>
+      <div class="closing-callout">
+        The question is no longer <em>whether</em> AI will write code.<br>It's what humans will do when it does.
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 5: What the Builders Say ═══════════ -->
+    <section class="slide" data-slide="5">
+      <h2 class="slide-title">What the <span class="accent">Builders</span> Say</h2>
+      <p class="slide-subtitle" style="margin-bottom:4px">Independent voices &mdash; no AI products to sell</p>
+      <div class="builders-grid">
+
+        <div class="builder-card shifted">
+          <div style="flex-shrink:0">
+            <img class="builder-avatar" src="images/linus-torvalds.jpg" alt="Linus Torvalds"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="builder-avatar-fb">LT</div>
+          </div>
+          <div class="builder-body">
+            <div class="builder-quote">"The python visualizer has been basically written by vibe-coding. Is this much better than I could do by hand? Sure is."</div>
+            <div class="builder-name">Linus Torvalds <span class="shift-badge evolved">shifted</span></div>
+            <div class="builder-role">Creator of Linux &amp; Git &middot; Jan 2026</div>
+          </div>
+        </div>
+
+        <div class="builder-card shifted">
+          <div style="flex-shrink:0">
+            <img class="builder-avatar" src="images/dhh.jpg" alt="DHH"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="builder-avatar-fb">DH</div>
+          </div>
+          <div class="builder-body">
+            <div class="builder-quote">"You can't let the slop and cringe deny you the wonder of AI. This is the most exciting thing we've made computers do since we connected them to the internet."</div>
+            <div class="builder-name">DHH <span class="shift-badge evolved">shifted</span></div>
+            <div class="builder-role">Creator of Ruby on Rails &middot; Jan 2026</div>
+          </div>
+        </div>
+
+        <div class="builder-card shifted">
+          <div style="flex-shrink:0">
+            <img class="builder-avatar" src="images/kent-beck.jpg" alt="Kent Beck"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="builder-avatar-fb">KB</div>
+          </div>
+          <div class="builder-body">
+            <div class="builder-quote">"90% of my skills dropped to $0. The leverage for the remaining 10% went up 1000x. I need to recalibrate."</div>
+            <div class="builder-name">Kent Beck <span class="shift-badge evolved">evolved</span></div>
+            <div class="builder-role">Creator of TDD &amp; Extreme Programming &middot; 2023&ndash;2026</div>
+          </div>
+        </div>
+
+        <div class="builder-card skeptical">
+          <div style="flex-shrink:0">
+            <img class="builder-avatar" src="images/daniel-stenberg.jpg" alt="Daniel Stenberg"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="builder-avatar-fb">DS</div>
+          </div>
+          <div class="builder-body">
+            <div class="builder-quote">"AI slop is a Denial-of-Service attack on open source maintainers." Shut down curl's bug bounty over AI-generated fake reports &mdash; but acknowledges AI finds deep bugs no tool ever could.</div>
+            <div class="builder-name">Daniel Stenberg <span class="shift-badge firm">nuanced</span></div>
+            <div class="builder-role">Creator of curl &middot; FOSDEM Feb 2026</div>
+          </div>
+        </div>
+
+        <div class="builder-card">
+          <div style="flex-shrink:0">
+            <img class="builder-avatar" src="images/john-carmack.jpg" alt="John Carmack"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="builder-avatar-fb">JC</div>
+          </div>
+          <div class="builder-body">
+            <div class="builder-quote">"'Coding' was never the source of value. Problem solving is the core skill. AI training on open source code magnifies the value of the gift."</div>
+            <div class="builder-name">John Carmack</div>
+            <div class="builder-role">Creator of Doom &amp; Quake &middot; Mar 2026</div>
+          </div>
+        </div>
+
+        <div class="builder-card shifted">
+          <div style="flex-shrink:0">
+            <img class="builder-avatar" src="images/simon-willison.jpg" alt="Simon Willison"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="builder-avatar-fb">SW</div>
+          </div>
+          <div class="builder-body">
+            <div class="builder-quote">"Our job is not to type code into a computer. Our job is to deliver systems that solve problems." Coined "Deep Blue" for the existential dread developers feel.</div>
+            <div class="builder-name">Simon Willison</div>
+            <div class="builder-role">Co-creator of Django &middot; Feb 2026</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div><!-- /slides-viewport -->
+
+  <!-- Bottom bar -->
+  <div class="bottom-bar">
+    <div class="transport">
+      <button class="transport-btn" id="btnPrev" title="Previous slide">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <span class="step-indicator">
+        <span class="current" id="slideNum">1</span> / <span id="slideTotal">6</span>
+      </span>
+      <button class="transport-btn" id="btnNext" title="Next slide">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+    <div class="slide-dots" id="slideDots"></div>
+    <div class="nav-hints">
+      <span class="kbd">&larr;</span><span class="kbd">&rarr;</span>
+      <span style="font-size:11px;color:var(--text-dim);margin-left:4px">navigate</span>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+(function(){
+  const TOTAL = 6;
+  let current = 0;
+  let transitioning = false;
+
+  const slides = document.querySelectorAll('.slide');
+  const slideNum = document.getElementById('slideNum');
+  const dotsContainer = document.getElementById('slideDots');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+
+  // Build dots
+  for(let i=0;i<TOTAL;i++){
+    const d = document.createElement('button');
+    d.className = 'slide-dot' + (i===0?' active':'');
+    d.dataset.idx = i;
+    d.addEventListener('click', ()=> goTo(i));
+    dotsContainer.appendChild(d);
+  }
+
+  function goTo(n){
+    if(n<0||n>=TOTAL||n===current||transitioning) return;
+    transitioning = true;
+    const dir = n > current ? 1 : -1;
+
+    // Remove active + reset all
+    slides.forEach(s=>{
+      s.classList.remove('active','exit-left');
+      // Reset child animations
+      s.querySelectorAll('.stat-card,.quote-card,.quote-update,.callout-card,.footer-quote,.evo-stage,.evo-arrow,.evo-bottom-note,.stat-card-sm,.closing-callout,.builder-card').forEach(el=>{
+        el.style.opacity='0';
+        el.style.transform='';
+      });
+    });
+
+    // Outgoing
+    if(current>=0 && current<TOTAL && dir>0) slides[current].classList.add('exit-left');
+
+    // Incoming
+    slides[n].classList.add('active');
+
+    // Update indicators
+    current = n;
+    slideNum.textContent = current + 1;
+    document.querySelectorAll('.slide-dot').forEach((d,i)=>{
+      d.classList.toggle('active', i===current);
+    });
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === TOTAL - 1;
+
+    setTimeout(()=>{ transitioning = false; }, 500);
+  }
+
+  btnPrev.disabled = true;
+
+  // ←/→ = slides within this deck
+  // ↑/↓ = deck-level navigation (parent presenter)
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key===' ') goTo(current+1);
+    if(e.key==='ArrowLeft') goTo(current-1);
+    if(e.key==='ArrowDown'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*'); }
+    if(e.key==='ArrowUp'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*'); }
+  });
+  btnPrev.addEventListener('click', ()=> goTo(current-1));
+  btnNext.addEventListener('click', ()=> goTo(current+1));
+
+  // Listen for navigator commands (when embedded in iframe)
+  window.addEventListener('message', e=>{
+    if(e.data && e.data.type==='deck-command'){
+      if(e.data.action==='go-first') goTo(0);
+      if(e.data.action==='go-last'){ current=-1; goTo(TOTAL-1); }
+      if(e.data.action==='set-theme') setTheme(e.data.theme);
+    }
+  });
+
+  // Report ready to parent
+  window.parent.postMessage({type:'deck-ready',total:TOTAL},'*');
+
+  // Theme (controlled by presenter via postMessage)
+  function setTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
+})();
+</script>
+</body>
+</html>
