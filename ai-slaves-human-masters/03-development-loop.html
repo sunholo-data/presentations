@@ -173,7 +173,7 @@ body{
 
 .loop-layout{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:1.2fr 1fr;
   height:100%;
   gap:0;
 }
@@ -182,13 +182,13 @@ body{
 .diagram-pane{
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  padding:24px 20px 24px 36px;
+  padding:16px 12px 16px 24px;
   position:relative;
 }
 
 .diagram-header{
   text-align:center;
-  margin-bottom:12px;
+  margin-bottom:8px;
   width:100%;
 }
 .diagram-title{
@@ -219,7 +219,7 @@ body{
 .detail-pane{
   display:flex;flex-direction:column;
   justify-content:center;
-  padding:40px 40px 40px 20px;
+  padding:32px 36px 32px 16px;
   position:relative;
 }
 
@@ -386,9 +386,14 @@ body{
 }
 .play-btn:hover{border-color:var(--orange);color:var(--orange)}
 .play-btn.playing{border-color:var(--orange);color:var(--orange)}
+
+/* Hide own bottom-bar when embedded in presenter iframe */
+.in-iframe .bottom-bar{display:none}
+.in-iframe .slides-viewport{flex:1}
 </style>
 </head>
 <body>
+<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
 <div id="app">
 
   <div class="slides-viewport">
@@ -402,7 +407,7 @@ body{
             <div class="diagram-caption">6 stages &middot; continuous improvement</div>
           </div>
           <div class="diagram-svg-wrap">
-            <svg id="loopSvg" width="100%" height="100%" style="max-width:640px;max-height:640px"></svg>
+            <svg id="loopSvg" width="100%" height="100%" style="max-width:560px;max-height:560px"></svg>
           </div>
         </div>
 
@@ -480,7 +485,7 @@ body{
       badge: 'AI BUILDS',
       icon: 'fa-microchip',
       type: 'ai',
-      desc: 'Claude Code implements each task via the <strong>sprint skill system</strong>. Runs typecheck + lint after every change. Creates branch, commits, requests review.',
+      desc: 'AI coding harness implements each task via the <strong>sprint skill system</strong>. Runs typecheck + lint after every change. Creates branch, commits, requests review.',
       artifactLabel: 'Output',
       artifact: 'IMPLEMENTATION_COMPLETE marker',
     },
@@ -489,9 +494,9 @@ body{
       badge: 'EVALUATE',
       icon: 'fa-chart-bar',
       type: 'eval',
-      desc: 'Script-based eval runner &mdash; <strong>zero AI cost</strong>. 230 tests across 6 models, outputs PASS_RATE. OpenTelemetry spans track cost, tokens, and duration.',
-      artifactLabel: 'Metrics',
-      artifact: 'PASS_RATE + eval results',
+      desc: 'Eval harness sends coding tasks to the <strong>AI coding harness</strong> and validates output. 16+ tasks across languages (binary_tree_sum, lambda_calc, state_machine&hellip;). OpenTelemetry spans track cost, tokens, and duration.',
+      artifactLabel: 'Example',
+      artifact: 'binary_tree_sum_ailang_claude &rarr; 576 tokens, PASS',
     },
     {
       name: 'New Design Docs',
