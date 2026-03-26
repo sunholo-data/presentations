@@ -21,11 +21,17 @@
   --orange-glow:rgba(231,60,23,.6);
   --green:#22c55e;
   --green-dim:rgba(34,197,94,.15);
+  --red:#ef4444;
+  --red-dim:rgba(239,68,68,.12);
+  --amber:#f59e0b;
+  --amber-dim:rgba(245,158,11,.15);
   --indigo:#6366f1;
   --indigo-dim:rgba(99,102,241,.15);
   --ghost:rgba(255,255,255,.12);
   --text:#e2e8f0;
   --text-dim:#718096;
+  --code-bg:rgba(255,255,255,.03);
+  --code-border:rgba(255,255,255,.06);
   --bar-bg:rgba(15,15,26,.8);
   --bar-border:rgba(255,255,255,.06);
   --mono:'JetBrains Mono',monospace;
@@ -42,11 +48,17 @@
   --orange-glow:rgba(212,48,15,.4);
   --green:#16a34a;
   --green-dim:rgba(22,163,74,.1);
+  --red:#dc2626;
+  --red-dim:rgba(220,38,38,.08);
+  --amber:#d97706;
+  --amber-dim:rgba(217,119,6,.1);
   --indigo:#4f46e5;
   --indigo-dim:rgba(79,70,229,.1);
   --ghost:rgba(0,0,0,.1);
   --text:#1a202c;
   --text-dim:#4a5568;
+  --code-bg:rgba(0,0,0,.03);
+  --code-border:rgba(0,0,0,.08);
   --bar-bg:rgba(255,255,255,.85);
   --bar-border:rgba(0,0,0,.08);
 }
@@ -76,10 +88,11 @@ body{
 .slide{
   position:absolute;inset:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:40px 48px;gap:24px;
+  padding:40px 48px;gap:20px;
   opacity:0;visibility:hidden;
   transform:translateX(40px);
   transition:opacity .45s ease, transform .45s ease, visibility .45s;
+  overflow-y:auto;
 }
 .slide.active{opacity:1;visibility:visible;transform:translateX(0)}
 .slide.exit-left{transform:translateX(-40px);opacity:0}
@@ -122,152 +135,26 @@ body{
 .stat-label{font-size:14px;color:var(--text);margin-top:8px;font-weight:600}
 .stat-source{font-size:11px;color:var(--text-dim);margin-top:6px;font-family:var(--mono)}
 
-/* ─── Quote card ─── */
-.quote-card{
-  background:var(--surface);
-  border-left:4px solid var(--orange);
-  border-radius:0 12px 12px 0;
-  padding:32px;
-  max-width:860px;width:100%;
-  display:flex;gap:24px;align-items:flex-start;
-  opacity:0;transform:translateY(20px);
+/* ─── Voices row ─── */
+.voices-row{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:12px;max-width:900px;width:100%;
 }
-.slide.active .quote-card{animation:fadeSlideUp .5s ease .15s forwards}
-
-.quote-avatar-wrap{flex-shrink:0;position:relative}
-.quote-avatar{
-  width:80px;height:80px;
-  border-radius:50%;object-fit:cover;
-  border:3px solid var(--orange);
-  background:var(--surface-hi);
-}
-.avatar-fallback{
-  width:80px;height:80px;border-radius:50%;
-  border:3px solid var(--orange);
-  background:var(--surface-hi);
-  display:none;align-items:center;justify-content:center;
-  font-size:24px;font-weight:800;color:var(--orange);
-  font-family:var(--mono);
-}
-.quote-body{flex:1;min-width:0}
-.quote-text{
-  font-size:17px;line-height:1.65;
-  font-style:italic;color:var(--text);
-  margin-bottom:14px;
-}
-.quote-text::before{content:'\201C';font-size:28px;color:var(--orange);margin-right:2px;font-style:normal}
-.quote-text::after{content:'\201D';font-size:28px;color:var(--orange);margin-left:2px;font-style:normal}
-.quote-attr{
-  font-size:12px;color:var(--text-dim);
-  font-family:var(--mono);line-height:1.5;
-}
-.quote-attr .name{color:var(--orange);font-weight:700}
-
-/* ─── Update callout ─── */
-.quote-update{
-  margin-top:16px;padding:14px 18px;
-  background:var(--orange-dim);
-  border-radius:8px;border-left:3px solid var(--orange);
-  font-size:13px;line-height:1.55;
-  color:var(--text);
-  opacity:0;transform:translateY(12px);
-}
-.slide.active .quote-update{animation:fadeSlideUp .5s ease .55s forwards}
-.quote-update .update-label{
-  font-family:var(--mono);font-weight:700;
-  color:var(--orange);font-size:11px;
-  text-transform:uppercase;letter-spacing:.05em;
-  margin-bottom:4px;display:block;
-}
-
-/* ─── Secondary callout ─── */
-.callout-card{
+.voice-chip{
   background:var(--surface);
   border:1px solid var(--ghost);
-  border-radius:10px;padding:20px 24px;
-  max-width:860px;width:100%;
-  display:flex;align-items:center;gap:16px;
-  opacity:0;transform:translateY(16px);
+  border-radius:8px;padding:12px 14px;
+  opacity:0;transform:translateY(14px);
 }
-.slide.active .callout-card{animation:fadeSlideUp .5s ease .5s forwards}
-.callout-icon{
-  width:44px;height:44px;border-radius:10px;
-  background:var(--orange-dim);
-  display:flex;align-items:center;justify-content:center;
-  color:var(--orange);font-size:18px;flex-shrink:0;
+.slide.active .voice-chip:nth-child(1){animation:fadeSlideUp .4s ease .55s forwards}
+.slide.active .voice-chip:nth-child(2){animation:fadeSlideUp .4s ease .65s forwards}
+.slide.active .voice-chip:nth-child(3){animation:fadeSlideUp .4s ease .75s forwards}
+.slide.active .voice-chip:nth-child(4){animation:fadeSlideUp .4s ease .85s forwards}
+.voice-name{
+  font-size:11px;font-weight:700;color:var(--orange);
+  font-family:var(--mono);margin-bottom:4px;
 }
-.callout-text{font-size:14px;color:var(--text);line-height:1.5}
-.callout-text .highlight{color:var(--orange);font-weight:700;font-family:var(--mono)}
-
-/* ─── Footer quote ─── */
-.footer-quote{
-  font-size:13px;font-style:italic;
-  color:var(--text-dim);text-align:center;
-  max-width:700px;
-  opacity:0;transform:translateY(12px);
-}
-.slide.active .footer-quote{animation:fadeSlideUp .5s ease .7s forwards}
-
-/* ─── Evolution layout ─── */
-.evolution-row{
-  display:flex;align-items:stretch;gap:0;
-  max-width:880px;width:100%;
-}
-.evo-stage{
-  flex:1;padding:28px 24px;
-  background:var(--surface);
-  border:1px solid var(--ghost);
-  text-align:center;
-  opacity:0;transform:translateY(20px);
-}
-.evo-stage:first-child{border-radius:12px 0 0 12px}
-.evo-stage:last-child{border-radius:0 12px 12px 0}
-.slide.active .evo-stage:nth-child(1){animation:fadeSlideUp .5s ease .15s forwards}
-.slide.active .evo-stage:nth-child(3){animation:fadeSlideUp .5s ease .45s forwards}
-.evo-stage-icon{font-size:28px;margin-bottom:12px}
-.evo-stage-title{
-  font-size:16px;font-weight:700;
-  margin-bottom:6px;font-family:var(--mono);
-}
-.evo-stage-date{font-size:11px;color:var(--text-dim);font-family:var(--mono);margin-bottom:12px}
-.evo-stage-desc{font-size:13px;color:var(--text-dim);line-height:1.55;font-style:italic}
-
-.evo-arrow{
-  display:flex;align-items:center;justify-content:center;
-  padding:0 16px;
-  font-size:28px;color:var(--orange);
-  opacity:0;
-}
-.slide.active .evo-arrow{animation:fadeSlideUp .5s ease .3s forwards}
-
-.evo-bottom-note{
-  font-size:13px;color:var(--text-dim);text-align:center;
-  max-width:700px;margin-top:4px;
-  opacity:0;transform:translateY(12px);
-}
-.slide.active .evo-bottom-note{animation:fadeSlideUp .5s ease .6s forwards}
-
-/* ─── Two-col stats ─── */
-.stats-row{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:16px;max-width:600px;width:100%;
-}
-.stat-card-sm{
-  background:var(--surface);
-  border:1px solid var(--ghost);
-  border-radius:10px;padding:24px;
-  text-align:center;
-  opacity:0;transform:translateY(16px);
-}
-.slide.active .stat-card-sm:nth-child(1){animation:fadeSlideUp .5s ease .5s forwards}
-.slide.active .stat-card-sm:nth-child(2){animation:fadeSlideUp .5s ease .65s forwards}
-.stat-sm-number{
-  font-size:clamp(28px,4vw,44px);
-  font-weight:800;color:var(--orange);
-  font-family:var(--mono);line-height:1;
-}
-.stat-sm-label{font-size:13px;color:var(--text);margin-top:6px;font-weight:500}
-.stat-sm-source{font-size:10px;color:var(--text-dim);margin-top:4px;font-family:var(--mono)}
+.voice-quote{font-size:11px;color:var(--text-dim);line-height:1.45}
 
 /* ─── Closing callout ─── */
 .closing-callout{
@@ -281,43 +168,7 @@ body{
   line-height:1.5;
   opacity:0;transform:translateY(16px);
 }
-.slide.active .closing-callout{animation:fadeSlideUp .5s ease .8s forwards}
-
-/* ─── Bottom bar ─── */
-.bottom-bar{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:8px 20px;
-  border-top:1px solid var(--bar-border);
-  flex-shrink:0;background:var(--bar-bg);
-  backdrop-filter:blur(8px);
-}
-.transport{display:flex;align-items:center;gap:8px}
-.transport-btn{
-  width:28px;height:28px;border-radius:50%;
-  border:1px solid var(--ghost);background:transparent;
-  color:var(--text-dim);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;transition:all .2s;
-}
-.transport-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}
-.transport-btn:disabled{opacity:.3;cursor:default}
-.step-indicator{font-family:var(--mono);font-size:12px;color:var(--text-dim)}
-.step-indicator .current{color:var(--text);font-weight:700}
-.slide-dots{display:flex;gap:6px}
-.slide-dot{
-  width:8px;height:8px;border-radius:50%;
-  background:var(--ghost);border:none;cursor:pointer;
-  transition:all .25s;
-}
-.slide-dot.active{background:var(--orange);transform:scale(1.3)}
-.nav-hints{display:flex;align-items:center;gap:6px}
-.kbd{
-  display:inline-block;padding:1px 5px;border-radius:3px;
-  font-family:var(--mono);font-size:9px;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
-  color:var(--text-dim);
-}
-[data-theme="light"] .kbd{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
+.slide.active .closing-callout{animation:fadeSlideUp .5s ease .95s forwards}
 
 /* ─── Builder quotes grid ─── */
 .builders-grid{
@@ -367,29 +218,145 @@ body{
 .shift-badge.evolved{background:var(--green-dim);color:var(--green)}
 .shift-badge.firm{background:var(--orange-dim);color:var(--orange)}
 
-@media(max-width:700px){
-  .builders-grid{grid-template-columns:1fr}
+/* ─── Research slide ─── */
+.research-layout{
+  display:grid;grid-template-columns:1.2fr 1fr;
+  gap:28px;max-width:960px;width:100%;
+  align-items:center;
 }
+.research-image{
+  width:100%;border-radius:10px;
+  border:1px solid var(--ghost);
+  box-shadow:0 4px 24px rgba(0,0,0,.2);
+}
+[data-theme="light"] .research-image{
+  box-shadow:0 4px 24px rgba(0,0,0,.08);
+}
+.research-findings{display:flex;flex-direction:column;gap:14px}
+.finding-card{
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-radius:10px;padding:16px 20px;
+  opacity:0;transform:translateY(16px);
+}
+.slide.active .finding-card:nth-child(1){animation:fadeSlideUp .5s ease .2s forwards}
+.slide.active .finding-card:nth-child(2){animation:fadeSlideUp .5s ease .33s forwards}
+.slide.active .finding-card:nth-child(3){animation:fadeSlideUp .5s ease .46s forwards}
+.finding-stat{
+  font-size:clamp(20px,2.5vw,28px);
+  font-weight:800;color:var(--orange);
+  font-family:var(--mono);line-height:1;
+  margin-bottom:6px;
+}
+.finding-desc{font-size:13px;color:var(--text-dim);line-height:1.45}
+.research-cite{
+  font-size:10px;color:var(--text-dim);font-family:var(--mono);
+  text-align:center;opacity:0;transform:translateY(12px);
+}
+.slide.active .research-cite{animation:fadeSlideUp .5s ease .75s forwards}
+
+/* ─── Contrast cards ─── */
+.contrast-cols{
+  display:grid;grid-template-columns:1fr 1fr;gap:24px;
+  max-width:860px;width:100%;
+}
+.contrast-card{
+  border-radius:10px;padding:24px 28px;
+  opacity:0;transform:translateY(16px);
+}
+.slide.active .contrast-card:nth-child(1){animation:fadeSlideUp .5s ease .15s forwards}
+.slide.active .contrast-card:nth-child(2){animation:fadeSlideUp .5s ease .3s forwards}
+.contrast-card.warn{
+  background:var(--amber-dim);
+  border:1px solid rgba(245,158,11,.2);
+}
+.contrast-card.safe{
+  background:var(--green-dim);
+  border:1px solid rgba(34,197,94,.2);
+}
+.contrast-icon{font-size:24px;margin-bottom:12px}
+.contrast-card.warn .contrast-icon{color:var(--amber)}
+.contrast-card.safe .contrast-icon{color:var(--green)}
+.contrast-label{
+  font-size:13px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;margin-bottom:8px;font-family:var(--mono);
+}
+.contrast-card.warn .contrast-label{color:var(--amber)}
+.contrast-card.safe .contrast-label{color:var(--green)}
+.contrast-text{font-size:14px;line-height:1.6;color:var(--text-dim)}
+
+/* ─── Callout card ─── */
+.callout-card{
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-radius:10px;padding:20px 24px;
+  max-width:860px;width:100%;
+  display:flex;align-items:center;gap:16px;
+  opacity:0;transform:translateY(16px);
+}
+.slide.active .callout-card{animation:fadeSlideUp .5s ease .5s forwards}
+.callout-icon{
+  width:44px;height:44px;border-radius:10px;
+  background:var(--orange-dim);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--orange);font-size:18px;flex-shrink:0;
+}
+.callout-text{font-size:14px;color:var(--text);line-height:1.5}
+.callout-text .highlight{color:var(--orange);font-weight:700;font-family:var(--mono)}
+
+/* ─── Bottom bar ─── */
+.bottom-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 20px;
+  border-top:1px solid var(--bar-border);
+  flex-shrink:0;background:var(--bar-bg);
+  backdrop-filter:blur(8px);
+}
+.transport{display:flex;align-items:center;gap:8px}
+.transport-btn{
+  width:28px;height:28px;border-radius:50%;
+  border:1px solid var(--ghost);background:transparent;
+  color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;transition:all .2s;
+}
+.transport-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}
+.transport-btn:disabled{opacity:.3;cursor:default}
+.step-indicator{font-family:var(--mono);font-size:12px;color:var(--text-dim)}
+.step-indicator .current{color:var(--text);font-weight:700}
+.slide-dots{display:flex;gap:6px}
+.slide-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--ghost);border:none;cursor:pointer;
+  transition:all .25s;
+}
+.slide-dot.active{background:var(--orange);transform:scale(1.3)}
+.nav-hints{display:flex;align-items:center;gap:6px}
+.kbd{
+  display:inline-block;padding:1px 5px;border-radius:3px;
+  font-family:var(--mono);font-size:9px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:var(--text-dim);
+}
+[data-theme="light"] .kbd{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
 
 /* ─── Animations ─── */
 @keyframes fadeSlideUp{
   from{opacity:0;transform:translateY(20px)}
   to{opacity:1;transform:translateY(0)}
 }
-@keyframes fadeSlideIn{
-  from{opacity:0;transform:translateX(20px)}
-  to{opacity:1;transform:translateX(0)}
-}
 
 /* ─── Responsive ─── */
-@media(max-width:700px){
+@media(max-width:900px){
   .stats-grid{grid-template-columns:1fr}
-  .evolution-row{flex-direction:column}
-  .evo-stage:first-child{border-radius:12px 12px 0 0}
-  .evo-stage:last-child{border-radius:0 0 12px 12px}
-  .evo-arrow{transform:rotate(90deg);padding:12px 0}
-  .stats-row{grid-template-columns:1fr}
-  .quote-card{flex-direction:column;align-items:center;text-align:center}
+  .voices-row{grid-template-columns:1fr 1fr}
+  .builders-grid{grid-template-columns:1fr}
+  .research-layout{grid-template-columns:1fr}
+  .contrast-cols{grid-template-columns:1fr}
+  .slide{padding:24px 24px}
+}
+@media(max-width:500px){
+  .voices-row{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -398,10 +365,9 @@ body{
 
   <div class="slides-viewport">
 
-    <!-- ═══════════ Slide 0: Title ═══════════ -->
+    <!-- ═══════════ Slide 0: The AI Coding Revolution (condensed) ═══════════ -->
     <section class="slide active" data-slide="0">
       <h1 class="slide-title">The <span class="accent">AI Coding</span> Revolution</h1>
-      <p class="slide-subtitle">From prediction to reality in 12 months</p>
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-number">90%</div>
@@ -419,111 +385,22 @@ body{
           <div class="stat-source">Boris Cherny, 2026</div>
         </div>
       </div>
-    </section>
-
-    <!-- ═══════════ Slide 1: Dario Amodei ═══════════ -->
-    <section class="slide" data-slide="1">
-      <h2 class="slide-title">"Three to Six Months..."</h2>
-      <div class="quote-card">
-        <div class="quote-avatar-wrap">
-          <img class="quote-avatar" src="images/dario-amodei.jpg" alt="Dario Amodei"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="avatar-fallback">DA</div>
+      <div class="voices-row">
+        <div class="voice-chip">
+          <div class="voice-name">Dario Amodei</div>
+          <div class="voice-quote">Confirmed 90% prediction &mdash; "I don't write any code anymore." (Mar 2026)</div>
         </div>
-        <div class="quote-body">
-          <div class="quote-text">I think we will be there in three to six months, where AI is writing 90% of the code. And then, in 12 months, we may be in a world where AI is writing essentially all of the code.</div>
-          <div class="quote-attr">
-            <span class="name">Dario Amodei</span>, CEO of Anthropic<br>
-            Council of Foreign Relations &middot; March 2025
-          </div>
+        <div class="voice-chip">
+          <div class="voice-name">Boris Cherny</div>
+          <div class="voice-quote">Ships 10&ndash;30 PRs/day, zero manual code. Created Claude Code. (Feb 2026)</div>
         </div>
-      </div>
-      <div class="quote-update">
-        <span class="update-label"><i class="fas fa-clock-rotate-left"></i> One year later &middot; March 2026</span>
-        Amodei confirmed the 90% prediction has happened "at least at some places," including at Anthropic itself. Some engineers have completely stopped writing code manually: "I don't write any code anymore. I just let the model write the code."
-      </div>
-    </section>
-
-    <!-- ═══════════ Slide 2: Boris Cherny ═══════════ -->
-    <section class="slide" data-slide="2">
-      <h2 class="slide-title">"I Have Not Written a <span class="accent">Single Line</span> of Code"</h2>
-      <div class="quote-card">
-        <div class="quote-avatar-wrap">
-          <img class="quote-avatar" src="images/boris-cherny.jpg" alt="Boris Cherny"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="avatar-fallback">BC</div>
+        <div class="voice-chip">
+          <div class="voice-name">Andrej Karpathy</div>
+          <div class="voice-quote">Coined "vibe coding," now full agentic &mdash; hasn't typed code since Dec 2025.</div>
         </div>
-        <div class="quote-body">
-          <div class="quote-text">I have not written a single line of code since November. For me personally, it has been 100% for two-plus months now &mdash; I don't even make small edits by hand.</div>
-          <div class="quote-attr">
-            <span class="name">Boris Cherny</span>, Creator &amp; Head of Claude Code, Anthropic<br>
-            Lenny's Newsletter &middot; February 2026
-          </div>
-        </div>
-      </div>
-      <div class="callout-card">
-        <div class="callout-icon"><i class="fas fa-code-pull-request"></i></div>
-        <div class="callout-text">Ships <span class="highlight">10&ndash;30 PRs per day</span> entirely via AI agents &mdash; no manual code editing</div>
-      </div>
-      <p class="footer-quote">"I think by the end of the year, everyone is going to be a product manager, and everyone codes. The title software engineer is going to start to go away."</p>
-    </section>
-
-    <!-- ═══════════ Slide 3: Andrej Karpathy ═══════════ -->
-    <section class="slide" data-slide="3">
-      <h2 class="slide-title">From <span class="dim">"Vibe Coding"</span> to <span class="accent">Agentic Engineering</span></h2>
-      <div class="evolution-row">
-        <div class="evo-stage">
-          <div class="evo-stage-icon"><i class="fas fa-music" style="color:var(--indigo)"></i></div>
-          <div class="evo-stage-title" style="color:var(--indigo)">Vibe Coding</div>
-          <div class="evo-stage-date">February 2025</div>
-          <div class="evo-stage-desc">"There's a new kind of coding I call 'vibe coding', where you fully give in to the vibes, embrace exponentials, and forget that the code even exists."</div>
-        </div>
-        <div class="evo-arrow"><i class="fas fa-arrow-right"></i></div>
-        <div class="evo-stage">
-          <div class="evo-stage-icon"><i class="fas fa-robot" style="color:var(--orange)"></i></div>
-          <div class="evo-stage-title" style="color:var(--orange)">Agentic Engineering</div>
-          <div class="evo-stage-date">2026</div>
-          <div class="evo-stage-desc">"You are not writing the code directly 99% of the time &mdash; you are orchestrating agents who do, and acting as oversight."</div>
-        </div>
-      </div>
-      <div class="evo-bottom-note">
-        <div class="quote-avatar-wrap" style="display:inline-flex;vertical-align:middle;margin-right:8px">
-          <img class="quote-avatar" src="images/andrej-karpathy.jpg" alt="Andrej Karpathy"
-               style="width:36px;height:36px;border-width:2px"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="avatar-fallback" style="width:36px;height:36px;font-size:13px;border-width:2px;display:none">AK</div>
-        </div>
-        <strong>Andrej Karpathy</strong> &middot; Former Tesla AI Director, OpenAI Co-founder &mdash; hasn't typed a line of code since December 2025
-      </div>
-    </section>
-
-    <!-- ═══════════ Slide 4: Industry Momentum ═══════════ -->
-    <section class="slide" data-slide="4">
-      <h2 class="slide-title">The <span class="accent">Tipping Point</span></h2>
-      <div class="quote-card">
-        <div class="quote-avatar-wrap">
-          <img class="quote-avatar" src="images/jensen-huang.jpg" alt="Jensen Huang"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="avatar-fallback">JH</div>
-        </div>
-        <div class="quote-body">
-          <div class="quote-text">There's a new programming language. It's called human. Everybody knows human. Relatively few people know C++ or Python &mdash; but everybody knows human.</div>
-          <div class="quote-attr">
-            <span class="name">Jensen Huang</span>, CEO of NVIDIA<br>
-            London Tech Week &middot; June 2025
-          </div>
-        </div>
-      </div>
-      <div class="stats-row">
-        <div class="stat-card-sm">
-          <div class="stat-sm-number">~50%</div>
-          <div class="stat-sm-label">of new code is AI-generated</div>
-          <div class="stat-sm-source">Sundar Pichai, Google, 2026</div>
-        </div>
-        <div class="stat-card-sm">
-          <div class="stat-sm-number">30%+</div>
-          <div class="stat-sm-label">of code written by AI &amp; rising</div>
-          <div class="stat-sm-source">Satya Nadella, Microsoft, 2025</div>
+        <div class="voice-chip">
+          <div class="voice-name">Jensen Huang</div>
+          <div class="voice-quote">"The programming language is human. Everybody knows human." (Jun 2025)</div>
         </div>
       </div>
       <div class="closing-callout">
@@ -531,8 +408,8 @@ body{
       </div>
     </section>
 
-    <!-- ═══════════ Slide 5: What the Builders Say ═══════════ -->
-    <section class="slide" data-slide="5">
+    <!-- ═══════════ Slide 1: What the Builders Say ═══════════ -->
+    <section class="slide" data-slide="1">
       <h2 class="slide-title">What the <span class="accent">Builders</span> Say</h2>
       <p class="slide-subtitle" style="margin-bottom:4px">Independent voices &mdash; no AI products to sell</p>
       <div class="builders-grid">
@@ -618,6 +495,56 @@ body{
       </div>
     </section>
 
+    <!-- ═══════════ Slide 2: Does Language Matter? (LoCoBench) ═══════════ -->
+    <section class="slide" data-slide="2">
+      <h1 class="slide-title">If AI Writes All the Code&hellip; Does <span class="accent">Language</span> Matter?</h1>
+      <p class="slide-subtitle">LoCoBench: 8,000 scenarios, 10 languages, 12 models, 10K&ndash;1M token contexts</p>
+      <div class="research-layout">
+        <img class="research-image" src="images/programming-language-performance-heatmap.png" alt="LoCoBench: LLM performance across programming languages">
+        <div class="research-findings">
+          <div class="finding-card">
+            <div class="finding-stat">Two forces</div>
+            <div class="finding-desc"><strong>Training data bias</strong> favours popular languages (Python, PHP). But the consistent ordering across all 12 models reveals <strong>systematic structural challenges</strong> too &mdash; it's not just familiarity.</div>
+          </div>
+          <div class="finding-card">
+            <div class="finding-stat">TS &lt; JS</div>
+            <div class="finding-desc">TypeScript scores <em>lower</em> than JavaScript despite having types. Types alone don't help if they add complexity.</div>
+          </div>
+          <div class="finding-card">
+            <div class="finding-stat">C, Rust: worst</div>
+            <div class="finding-desc">Systems languages score lowest across every model. Headers, manual memory, macros &mdash; implicit complexity that no amount of training data overcomes.</div>
+          </div>
+        </div>
+      </div>
+      <div class="research-cite">Qiu et al. 2025, LoCoBench, Salesforce AI Research &mdash; arXiv:2509.09614</div>
+    </section>
+
+    <!-- ═══════════ Slide 3: The Lesson — Explicitness Without Complexity ═══════════ -->
+    <section class="slide" data-slide="3">
+      <h1 class="slide-title">Explicitness Without <span class="accent">Complexity</span></h1>
+      <div class="contrast-cols">
+        <div class="contrast-card warn">
+          <div class="contrast-icon"><i class="fas fa-skull-crossbones"></i></div>
+          <div class="contrast-label">Complexity kills AI</div>
+          <div class="contrast-text">C, Rust score worst across every model. Headers, manual memory, macros &mdash; implicit complexity that no amount of training data overcomes.</div>
+        </div>
+        <div class="contrast-card safe">
+          <div class="contrast-icon"><i class="fas fa-bullseye"></i></div>
+          <div class="contrast-label">The sweet spot</div>
+          <div class="contrast-text">Simple structure + explicit semantics. Not types for safety's sake, but clarity for reasoning's sake. Explicitness that <em>reduces</em> complexity.</div>
+        </div>
+      </div>
+      <div class="callout-card">
+        <div class="callout-icon"><i class="fas fa-lightbulb"></i></div>
+        <div class="callout-text">
+          Training data bias is real &mdash; Python wins partly on volume. But the structural signal is consistent across all models: <strong>implicit complexity is the enemy</strong>. The answer isn't more types, it's more clarity.
+        </div>
+      </div>
+      <div class="closing-callout">
+        If AI codes best in AI-friendly languages&hellip; maybe AI should help design that language. That's <span class="accent" style="font-family:var(--mono)">AILANG</span>.
+      </div>
+    </section>
+
   </div><!-- /slides-viewport -->
 
   <!-- Bottom bar -->
@@ -627,7 +554,7 @@ body{
         <i class="fas fa-chevron-left"></i>
       </button>
       <span class="step-indicator">
-        <span class="current" id="slideNum">1</span> / <span id="slideTotal">6</span>
+        <span class="current" id="slideNum">1</span> / <span id="slideTotal">4</span>
       </span>
       <button class="transport-btn" id="btnNext" title="Next slide">
         <i class="fas fa-chevron-right"></i>
@@ -644,7 +571,7 @@ body{
 
 <script>
 (function(){
-  const TOTAL = 6;
+  const TOTAL = 4;
   let current = 0;
   let transitioning = false;
 
@@ -671,8 +598,7 @@ body{
     // Remove active + reset all
     slides.forEach(s=>{
       s.classList.remove('active','exit-left');
-      // Reset child animations
-      s.querySelectorAll('.stat-card,.quote-card,.quote-update,.callout-card,.footer-quote,.evo-stage,.evo-arrow,.evo-bottom-note,.stat-card-sm,.closing-callout,.builder-card').forEach(el=>{
+      s.querySelectorAll('.stat-card,.voice-chip,.closing-callout,.builder-card,.finding-card,.research-cite,.contrast-card,.callout-card').forEach(el=>{
         el.style.opacity='0';
         el.style.transform='';
       });
@@ -698,8 +624,6 @@ body{
 
   btnPrev.disabled = true;
 
-  // ←/→ = slides within this deck
-  // ↑/↓ = deck-level navigation (parent presenter)
   document.addEventListener('keydown', e=>{
     if(e.key==='ArrowRight'||e.key===' ') goTo(current+1);
     if(e.key==='ArrowLeft') goTo(current-1);
@@ -709,7 +633,6 @@ body{
   btnPrev.addEventListener('click', ()=> goTo(current-1));
   btnNext.addEventListener('click', ()=> goTo(current+1));
 
-  // Listen for navigator commands (when embedded in iframe)
   window.addEventListener('message', e=>{
     if(e.data && e.data.type==='deck-command'){
       if(e.data.action==='go-first') goTo(0);
@@ -718,10 +641,8 @@ body{
     }
   });
 
-  // Report ready to parent
   window.parent.postMessage({type:'deck-ready',total:TOTAL},'*');
 
-  // Theme (controlled by presenter via postMessage)
   function setTheme(theme){
     document.documentElement.setAttribute('data-theme', theme);
   }

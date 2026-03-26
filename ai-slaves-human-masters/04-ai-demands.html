@@ -247,44 +247,6 @@ body{
 .code-example .fx{color:var(--orange);font-weight:700}
 .code-example .cm{color:var(--text-dim);font-style:italic}
 
-/* ─── Research slide ─── */
-.research-layout{
-  display:grid;grid-template-columns:1.2fr 1fr;
-  gap:28px;max-width:960px;width:100%;
-  align-items:center;
-}
-.research-image{
-  width:100%;border-radius:10px;
-  border:1px solid var(--ghost);
-  box-shadow:0 4px 24px rgba(0,0,0,.2);
-}
-[data-theme="light"] .research-image{
-  box-shadow:0 4px 24px rgba(0,0,0,.08);
-}
-.research-findings{display:flex;flex-direction:column;gap:14px}
-.finding-card{
-  background:var(--surface);
-  border:1px solid var(--ghost);
-  border-radius:10px;padding:16px 20px;
-  opacity:0;transform:translateY(16px);
-}
-.slide.active .finding-card:nth-child(1){animation:fadeSlideUp .5s ease .2s forwards}
-.slide.active .finding-card:nth-child(2){animation:fadeSlideUp .5s ease .33s forwards}
-.slide.active .finding-card:nth-child(3){animation:fadeSlideUp .5s ease .46s forwards}
-.slide.active .finding-card:nth-child(4){animation:fadeSlideUp .5s ease .59s forwards}
-.finding-stat{
-  font-size:clamp(20px,2.5vw,28px);
-  font-weight:800;color:var(--orange);
-  font-family:var(--mono);line-height:1;
-  margin-bottom:6px;
-}
-.finding-desc{font-size:13px;color:var(--text-dim);line-height:1.45}
-.research-cite{
-  font-size:10px;color:var(--text-dim);font-family:var(--mono);
-  text-align:center;opacity:0;transform:translateY(12px);
-}
-.slide.active .research-cite{animation:fadeSlideUp .5s ease .75s forwards}
-
 /* ─── Demand grid ─── */
 .demand-grid{
   display:grid;grid-template-columns:1fr 1fr;
@@ -360,7 +322,6 @@ body{
   .stats-grid{grid-template-columns:1fr}
   .contrast-cols{grid-template-columns:1fr}
   .demand-grid{grid-template-columns:1fr}
-  .research-layout{grid-template-columns:1fr}
   .evolution-row{flex-direction:column}
   .evo-stage:first-child{border-radius:12px 12px 0 0}
   .evo-stage:last-child{border-radius:0 0 12px 12px}
@@ -480,54 +441,8 @@ result = readFile(path)
       </div>
     </section>
 
-    <!-- ═══ SLIDE 4: LoCoBench — The Heatmap ═══ -->
+    <!-- ═══ SLIDE 4: The Demand Sheet ═══ -->
     <section class="slide" data-slide="4">
-      <h1 class="slide-title">What the <span class="accent">Research</span> Says</h1>
-      <p class="slide-subtitle">LoCoBench: 8,000 scenarios, 10 languages, 12 models, 10K&ndash;1M token contexts</p>
-      <div class="research-layout">
-        <img class="research-image" src="images/programming-language-performance-heatmap.png" alt="LoCoBench: LLM performance across programming languages">
-        <div class="research-findings">
-          <div class="finding-card">
-            <div class="finding-stat">Two forces</div>
-            <div class="finding-desc"><strong>Training data bias</strong> favours popular languages (Python, PHP). But the consistent ordering across all 12 models reveals <strong>systematic structural challenges</strong> too &mdash; it's not just familiarity.</div>
-          </div>
-          <div class="finding-card">
-            <div class="finding-stat">TS &lt; JS</div>
-            <div class="finding-desc">TypeScript scores <em>lower</em> than JavaScript despite having types. Types alone don't help if they add complexity.</div>
-          </div>
-        </div>
-      </div>
-      <div class="research-cite">Qiu et al. 2025, LoCoBench, Salesforce AI Research &mdash; arXiv:2509.09614</div>
-    </section>
-
-    <!-- ═══ SLIDE 5: LoCoBench — The Lesson ═══ -->
-    <section class="slide" data-slide="5">
-      <h1 class="slide-title">Explicitness Without <span class="accent">Complexity</span></h1>
-      <div class="contrast-cols">
-        <div class="contrast-card warn">
-          <div class="contrast-icon"><i class="fas fa-skull-crossbones"></i></div>
-          <div class="contrast-label">Complexity kills AI</div>
-          <div class="contrast-text">C, Rust score worst across every model. Headers, manual memory, macros &mdash; implicit complexity that no amount of training data overcomes.</div>
-        </div>
-        <div class="contrast-card safe">
-          <div class="contrast-icon"><i class="fas fa-bullseye"></i></div>
-          <div class="contrast-label">The sweet spot</div>
-          <div class="contrast-text">Simple structure + explicit semantics. Not types for safety's sake, but clarity for reasoning's sake. Explicitness that <em>reduces</em> complexity.</div>
-        </div>
-      </div>
-      <div class="callout-card">
-        <div class="callout-icon"><i class="fas fa-lightbulb"></i></div>
-        <div class="callout-text">
-          Training data bias is real &mdash; Python wins partly on volume. But the structural signal is consistent across all models: <strong>implicit complexity is the enemy</strong>. The answer isn't more types, it's more clarity.
-        </div>
-      </div>
-      <div class="closing-callout">
-        Go-level simplicity + AILANG-level semantic explicitness. Not more complexity for safety &mdash; more clarity for reasoning.
-      </div>
-    </section>
-
-    <!-- ═══ SLIDE 6: The Demand Sheet ═══ -->
-    <section class="slide" data-slide="6">
       <h1 class="slide-title">The <span class="accent">Demand</span> Sheet</h1>
       <div class="demand-grid">
         <div class="demand-item">
@@ -585,7 +500,7 @@ result = readFile(path)
         <i class="fas fa-chevron-left"></i>
       </button>
       <span class="step-indicator">
-        <span class="current" id="slideNum">1</span> / <span id="slideTotal">7</span>
+        <span class="current" id="slideNum">1</span> / <span id="slideTotal">5</span>
       </span>
       <button class="transport-btn" id="btnNext" title="Next slide">
         <i class="fas fa-chevron-right"></i>
@@ -602,7 +517,7 @@ result = readFile(path)
 
 <script>
 (function(){
-  const TOTAL = 7;
+  const TOTAL = 5;
   let current = 0;
   let transitioning = false;
 
@@ -629,7 +544,7 @@ result = readFile(path)
     // Remove active + reset all
     slides.forEach(s=>{
       s.classList.remove('active','exit-left');
-      s.querySelectorAll('.stat-card,.callout-card,.closing-callout,.contrast-card,.evo-stage,.evo-arrow,.finding-card,.demand-item,.research-cite,.code-example').forEach(el=>{
+      s.querySelectorAll('.stat-card,.callout-card,.closing-callout,.contrast-card,.evo-stage,.evo-arrow,.demand-item,.code-example').forEach(el=>{
         el.style.opacity='0';
         el.style.transform='';
       });

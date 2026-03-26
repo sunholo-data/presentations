@@ -1079,8 +1079,7 @@ function render(animate) {
       .attr('fill', 'none')
       .attr('d', link({ source: { x: d.source.x, y: d.source.y }, target: { x: d.target.x, y: d.target.y } }))
       .attr('stroke', d.state === 'active' ? css('--orange') : d.state === 'pruned' ? css('--edge-pruned') : css('--edge-future'))
-      .attr('stroke-width', d.state === 'active' ? 3 : d.state === 'pruned' ? 0.7 : 0.8)
-      .attr('filter', d.state === 'active' ? 'url(#glow-soft)' : 'none');
+      .attr('stroke-width', d.state === 'active' ? 3 : d.state === 'pruned' ? 0.7 : 0.8);
   });
 
   // ── Nodes
