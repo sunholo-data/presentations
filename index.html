@@ -197,6 +197,7 @@ a:hover{text-decoration:underline}
 }
 .deck-details{flex:1;min-width:0}
 .deck-details h3{font-size:14px;font-weight:700;margin-bottom:2px}
+.deck-details .deck-meta{font-family:var(--mono);font-size:10px;color:var(--text-dim);margin-bottom:4px;letter-spacing:.04em}
 .deck-details p{font-size:12px;color:var(--text-dim);line-height:1.4}
 .deck-tag{
   font-family:var(--mono);font-size:10px;
@@ -234,23 +235,7 @@ a:hover{text-decoration:underline}
   margin-top:6px;display:inline-block;
 }
 
-/* ─── CTA ─── */
-.cta-section{
-  text-align:center;
-  padding:40px 24px;
-  border-top:1px solid var(--ghost);
-  max-width:600px;margin:0 auto;
-}
-.cta-section h2{font-size:22px;font-weight:700;margin-bottom:8px}
-.cta-section p{font-size:14px;color:var(--text-dim);margin-bottom:20px}
-.cta-btn{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:10px 24px;border-radius:10px;
-  background:var(--orange);color:#fff;
-  font-weight:600;font-size:14px;
-  text-decoration:none;transition:all .25s;
-}
-.cta-btn:hover{background:var(--orange-glow);text-decoration:none;transform:translateY(-1px)}
+/* ─── CTA (removed) ─── */
 .cta-btn-secondary{
   display:inline-flex;align-items:center;gap:8px;
   padding:10px 24px;border-radius:10px;
@@ -365,6 +350,7 @@ a:hover{text-decoration:underline}
         <i class="fas fa-server"></i>
       </div>
       <div class="deck-details">
+        <div class="deck-meta"><i class="fas fa-calendar"></i> 2025 &middot; Sales &amp; Platform</div>
         <h3>Multivac: Your AI Platform</h3>
         <p>Event-driven microservice architecture, MCP &amp; A2A support, multi-cloud deployment, bridging prototype to production AI at scale</p>
       </div>
@@ -376,6 +362,7 @@ a:hover{text-decoration:underline}
         <i class="fas fa-robot"></i>
       </div>
       <div class="deck-details">
+        <div class="deck-meta"><i class="fas fa-calendar"></i> 2025 &middot; Procurement Intelligence</div>
         <h3>Building AI with AI</h3>
         <p>How AI-first approaches transform procurement and intelligence gathering with iterative improvement loops</p>
       </div>
@@ -387,6 +374,7 @@ a:hover{text-decoration:underline}
         <i class="fas fa-project-diagram"></i>
       </div>
       <div class="deck-details">
+        <div class="deck-meta"><i class="fas fa-calendar"></i> March 2026 &middot; IDA Driving AI, Copenhagen</div>
         <h3>What AI Slaves Will Demand of Their Human Masters</h3>
         <p>Five-part exploration: AI coding revolution, entropy visualization, authority models, development loops, and what AI needs from humans</p>
       </div>
@@ -421,13 +409,6 @@ a:hover{text-decoration:underline}
   </a>
 </div>
 
-<!-- CTA -->
-<div class="cta-section">
-  <h2>Want a Custom Presentation?</h2>
-  <p>We can prepare tailored presentations for your team on AI architecture, implementation strategies, or specific use cases.</p>
-  <a href="/#contact" class="cta-btn"><i class="fas fa-envelope"></i> Get in Touch</a>
-  <a href="https://dev.sunholo.com/docs" target="_blank" class="cta-btn-secondary"><i class="fas fa-book"></i> Documentation</a>
-</div>
 
 <!-- Footer -->
 <div class="site-footer">
