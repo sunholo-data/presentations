@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multivac: Your AI Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+/* ─── Dark theme (default) ─── */
+:root{
+  --bg:#0f0f1a;
+  --surface:#1a1a2e;
+  --surface-hi:#222240;
+  --orange:#e73c17;
+  --orange-dim:rgba(231,60,23,.35);
+  --orange-glow:rgba(231,60,23,.6);
+  --green:#22c55e;
+  --green-dim:rgba(34,197,94,.15);
+  --red:#ef4444;
+  --red-dim:rgba(239,68,68,.12);
+  --amber:#f59e0b;
+  --amber-dim:rgba(245,158,11,.15);
+  --indigo:#6366f1;
+  --indigo-dim:rgba(99,102,241,.15);
+  --ghost:rgba(255,255,255,.12);
+  --text:#e2e8f0;
+  --text-dim:#718096;
+  --code-bg:rgba(255,255,255,.03);
+  --code-border:rgba(255,255,255,.06);
+  --bar-bg:rgba(15,15,26,.8);
+  --bar-border:rgba(255,255,255,.06);
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Montserrat',sans-serif;
+}
+
+/* ─── Light theme ─── */
+[data-theme="light"]{
+  --bg:#f5f5f0;
+  --surface:#ffffff;
+  --surface-hi:#f0f0ea;
+  --orange:#d4300f;
+  --orange-dim:rgba(212,48,15,.2);
+  --orange-glow:rgba(212,48,15,.4);
+  --green:#16a34a;
+  --green-dim:rgba(22,163,74,.1);
+  --red:#dc2626;
+  --red-dim:rgba(220,38,38,.08);
+  --amber:#d97706;
+  --amber-dim:rgba(217,119,6,.1);
+  --indigo:#4f46e5;
+  --indigo-dim:rgba(79,70,229,.1);
+  --ghost:rgba(0,0,0,.1);
+  --text:#1a202c;
+  --text-dim:#4a5568;
+  --code-bg:rgba(0,0,0,.03);
+  --code-border:rgba(0,0,0,.08);
+  --bar-bg:rgba(255,255,255,.85);
+  --bar-border:rgba(0,0,0,.08);
+}
+
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+
+body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(231,60,23,.03) 0%, transparent 70%),
+    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+}
+[data-theme="light"] body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(212,48,15,.03) 0%, transparent 70%),
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+}
+
+/* ─── Layout ─── */
+#app{display:flex;flex-direction:column;height:100vh}
+
+/* ─── Slides ─── */
+.slides-viewport{flex:1;position:relative;overflow:hidden}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 48px;gap:24px;
+  opacity:0;visibility:hidden;
+  transform:translateX(40px);
+  transition:opacity .45s ease, transform .45s ease, visibility .45s;
+}
+.slide.active{opacity:1;visibility:visible;transform:translateX(0)}
+.slide.exit-left{transform:translateX(-40px);opacity:0}
+
+/* ─── Title styling ─── */
+.slide-title{
+  font-size:clamp(28px,4vw,48px);
+  font-weight:800;letter-spacing:-.02em;
+  text-align:center;line-height:1.15;
+}
+.slide-title .accent{color:var(--orange)}
+.slide-title .dim{color:var(--text-dim)}
+.slide-subtitle{
+  font-size:clamp(14px,1.8vw,20px);
+  color:var(--text-dim);text-align:center;
+  max-width:700px;
+}
+
+/* ─── Stats grid — 3 col ─── */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;max-width:840px;width:100%;
+}
+
+/* ─── Stats grid — 4 col ─── */
+.stats-grid-4{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:16px;max-width:900px;width:100%;
+}
+
+.stat-card{
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-radius:12px;padding:28px 20px;
+  text-align:center;
+  opacity:0;transform:translateY(20px);
+}
+.slide.active .stat-card{animation:fadeSlideUp .5s ease forwards}
+.slide.active .stat-card:nth-child(1){animation-delay:.15s}
+.slide.active .stat-card:nth-child(2){animation-delay:.3s}
+.slide.active .stat-card:nth-child(3){animation-delay:.45s}
+.slide.active .stat-card:nth-child(4){animation-delay:.6s}
+.stat-number{
+  font-size:clamp(32px,5vw,52px);
+  font-weight:800;color:var(--orange);
+  font-family:var(--mono);line-height:1;
+}
+.stat-label{font-size:14px;color:var(--text);margin-top:8px;font-weight:600}
+.stat-icon{font-size:28px;color:var(--orange);margin-bottom:12px}
+.stat-desc{font-size:12px;color:var(--text-dim);margin-top:4px;line-height:1.4}
+
+/* ─── Three-column feature cards ─── */
+.feature-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;max-width:900px;width:100%;
+}
+.feature-card{
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-top:3px solid var(--orange);
+  border-radius:0 0 12px 12px;
+  padding:28px 24px;text-align:center;
+  opacity:0;transform:translateY(20px);
+}
+.slide.active .feature-card{animation:fadeSlideUp .5s ease forwards}
+.slide.active .feature-card:nth-child(1){animation-delay:.15s}
+.slide.active .feature-card:nth-child(2){animation-delay:.3s}
+.slide.active .feature-card:nth-child(3){animation-delay:.45s}
+.feature-icon{font-size:28px;margin-bottom:14px}
+.feature-title{font-size:15px;font-weight:700;margin-bottom:10px;color:var(--text)}
+.feature-list{list-style:none;padding:0;text-align:left}
+.feature-list li{
+  font-size:13px;color:var(--text-dim);
+  padding:4px 0;display:flex;align-items:center;gap:8px;
+}
+.feature-list li i{color:var(--orange);font-size:10px;flex-shrink:0}
+
+/* ─── Split columns ─── */
+.split-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:24px;max-width:900px;width:100%;
+}
+.split-col{
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-radius:12px;padding:28px 24px;
+  opacity:0;transform:translateY(20px);
+}
+.slide.active .split-col:nth-child(1){animation:fadeSlideUp .5s ease .15s forwards}
+.slide.active .split-col:nth-child(2){animation:fadeSlideUp .5s ease .3s forwards}
+.split-col h3{font-size:16px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.split-col ul{list-style:none;padding:0}
+.split-col li{
+  font-size:13px;color:var(--text-dim);
+  padding:5px 0;display:flex;align-items:center;gap:8px;
+}
+.split-col li i{font-size:11px;flex-shrink:0}
+.split-col.positive h3{color:var(--green)}
+.split-col.positive li i{color:var(--green)}
+.split-col.negative h3{color:var(--red)}
+.split-col.negative li i{color:var(--red)}
+.split-col.highlight-orange{border-color:var(--orange-dim);border-top:3px solid var(--orange)}
+.split-col.highlight-orange h3{color:var(--orange)}
+.split-col.highlight-orange li i{color:var(--orange)}
+
+/* ─── Success story cards ─── */
+.story-card{
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-left:4px solid var(--orange);
+  border-radius:0 12px 12px 0;
+  padding:28px 32px;
+  max-width:800px;width:100%;
+  opacity:0;transform:translateY(20px);
+}
+.slide.active .story-card{animation:fadeSlideUp .5s ease .15s forwards}
+.story-card h3{font-size:17px;font-weight:700;color:var(--text);margin-bottom:12px}
+.story-challenge{font-size:14px;color:var(--text-dim);margin-bottom:14px}
+.story-results{list-style:none;padding:0}
+.story-results li{
+  display:flex;align-items:center;gap:10px;
+  font-size:14px;color:var(--text);padding:6px 0;
+}
+.story-results li .metric{
+  font-family:var(--mono);font-weight:700;color:var(--orange);
+}
+
+/* ─── Process steps ─── */
+.process-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:16px;max-width:900px;width:100%;
+}
+.process-step{
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-radius:12px;padding:24px 20px;
+  text-align:center;
+  opacity:0;transform:translateY(20px);
+}
+.slide.active .process-step{animation:fadeSlideUp .5s ease forwards}
+.slide.active .process-step:nth-child(1){animation-delay:.1s}
+.slide.active .process-step:nth-child(2){animation-delay:.25s}
+.slide.active .process-step:nth-child(3){animation-delay:.4s}
+.slide.active .process-step:nth-child(4){animation-delay:.55s}
+.process-num{
+  font-family:var(--mono);font-size:24px;font-weight:800;
+  color:var(--orange);margin-bottom:8px;
+}
+.process-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.process-time{font-family:var(--mono);font-size:12px;color:var(--text-dim)}
+
+/* ─── Callout ─── */
+.callout-card{
+  background:var(--surface);
+  border-left:4px solid var(--orange);
+  border-radius:0 12px 12px 0;
+  padding:24px 28px;
+  max-width:800px;width:100%;
+  font-size:16px;line-height:1.6;
+  font-weight:600;color:var(--text);
+  text-align:center;
+  opacity:0;transform:translateY(16px);
+}
+.slide.active .callout-card{animation:fadeSlideUp .5s ease .5s forwards}
+
+/* ─── Contact card ─── */
+.contact-card{
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-radius:14px;
+  padding:40px;text-align:center;
+  max-width:500px;width:100%;
+  opacity:0;transform:translateY(16px);
+}
+.slide.active .contact-card{animation:fadeSlideUp .5s ease .2s forwards}
+.contact-card p{
+  font-size:15px;color:var(--text-dim);
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin:8px 0;
+}
+.contact-card a{color:var(--text);text-decoration:none;font-weight:600}
+.contact-card a:hover{color:var(--orange)}
+
+/* ─── Bottom bar ─── */
+.bottom-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 20px;
+  border-top:1px solid var(--bar-border);
+  flex-shrink:0;background:var(--bar-bg);
+  backdrop-filter:blur(8px);
+}
+.transport{display:flex;align-items:center;gap:8px}
+.transport-btn{
+  width:28px;height:28px;border-radius:50%;
+  border:1px solid var(--ghost);background:transparent;
+  color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;transition:all .2s;
+}
+.transport-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}
+.transport-btn:disabled{opacity:.3;cursor:default}
+.step-indicator{font-family:var(--mono);font-size:12px;color:var(--text-dim)}
+.step-indicator .current{color:var(--text);font-weight:700}
+.slide-dots{display:flex;gap:6px}
+.slide-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--ghost);border:none;cursor:pointer;
+  transition:all .25s;
+}
+.slide-dot.active{background:var(--orange);transform:scale(1.3)}
+.nav-hints{display:flex;align-items:center;gap:6px}
+.kbd{
+  display:inline-block;padding:1px 5px;border-radius:3px;
+  font-family:var(--mono);font-size:9px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:var(--text-dim);
+}
+[data-theme="light"] .kbd{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
+
+/* ─── Animations ─── */
+@keyframes fadeSlideUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ─── Responsive ─── */
+@media(max-width:700px){
+  .stats-grid,.feature-grid{grid-template-columns:1fr}
+  .stats-grid-4,.process-grid{grid-template-columns:1fr 1fr}
+  .split-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="slides-viewport">
+
+    <!-- ═══════════ Slide 0: Title ═══════════ -->
+    <section class="slide active" data-slide="0">
+      <img src="images/sunholo-logo.svg" alt="Sunholo" style="height:80px;opacity:.8;margin-bottom:8px">
+      <h1 class="slide-title"><span class="accent">Multivac</span></h1>
+      <p class="slide-subtitle" style="font-size:clamp(18px,2.5vw,28px);font-weight:600;color:var(--text)">Your Complete AI Platform</p>
+      <p class="slide-subtitle">From Prototype to Production in Weeks</p>
+    </section>
+
+    <!-- ═══════════ Slide 1: The Gap ═══════════ -->
+    <section class="slide" data-slide="1">
+      <h1 class="slide-title">The <span class="accent">AI Implementation</span> Gap</h1>
+      <div class="split-row">
+        <div class="split-col negative">
+          <h3><i class="fas fa-triangle-exclamation"></i> 90% of AI projects fail here</h3>
+          <ul>
+            <li><i class="fas fa-check"></i> Promising prototype</li>
+            <li><i class="fas fa-xmark"></i> Production ready</li>
+            <li><i class="fas fa-clock"></i> Months of delay</li>
+            <li><i class="fas fa-coins"></i> Budget overruns</li>
+          </ul>
+        </div>
+        <div class="split-col" style="display:flex;align-items:center;justify-content:center;border-color:transparent;background:transparent">
+          <img src="images/ai-engineer.svg" alt="AI Engineer" style="max-height:200px;opacity:.7">
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 2: Roadblocks ═══════════ -->
+    <section class="slide" data-slide="2">
+      <h1 class="slide-title">Common <span class="accent">Roadblocks</span></h1>
+      <div class="stats-grid-4">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-expand"></i></div>
+          <div class="stat-label">Won't Scale</div>
+          <div class="stat-desc">Crashes under load</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
+          <div class="stat-label">Too Slow</div>
+          <div class="stat-desc">Users won't wait</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-plug"></i></div>
+          <div class="stat-label">Can't Integrate</div>
+          <div class="stat-desc">Isolated systems</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-puzzle-piece"></i></div>
+          <div class="stat-label">Too Complex</div>
+          <div class="stat-desc">Beyond team skills</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 3: Multivac Bridges ═══════════ -->
+    <section class="slide" data-slide="3">
+      <h1 class="slide-title"><span class="accent">Multivac</span> Bridges the Gap</h1>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">3wk</div>
+          <div class="stat-label">Not 6 months</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">&euro;500K+</div>
+          <div class="stat-label">Saved in development</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number"><i class="fas fa-shield-halved" style="font-size:.8em"></i></div>
+          <div class="stat-label">Enterprise-ready from day one</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 4: What's Included ═══════════ -->
+    <section class="slide" data-slide="4">
+      <h1 class="slide-title">What's <span class="accent">Included</span></h1>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-lock" style="color:var(--green)"></i></div>
+          <div class="feature-title">Security Built-in</div>
+          <ul class="feature-list">
+            <li><i class="fas fa-circle"></i> Authentication &amp; SSO</li>
+            <li><i class="fas fa-circle"></i> Role-based access</li>
+            <li><i class="fas fa-circle"></i> Data encryption</li>
+            <li><i class="fas fa-circle"></i> Audit trails</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-chart-line" style="color:var(--indigo)"></i></div>
+          <div class="feature-title">Infinite Scale</div>
+          <ul class="feature-list">
+            <li><i class="fas fa-circle"></i> Auto-scaling</li>
+            <li><i class="fas fa-circle"></i> Load balancing</li>
+            <li><i class="fas fa-circle"></i> Multi-region</li>
+            <li><i class="fas fa-circle"></i> High availability</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-gears" style="color:var(--orange)"></i></div>
+          <div class="feature-title">AI Operations</div>
+          <ul class="feature-list">
+            <li><i class="fas fa-circle"></i> Model versioning</li>
+            <li><i class="fas fa-circle"></i> A/B testing</li>
+            <li><i class="fas fa-circle"></i> Monitoring</li>
+            <li><i class="fas fa-circle"></i> Cost optimization</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 5: Real Impact ═══════════ -->
+    <section class="slide" data-slide="5">
+      <h1 class="slide-title">Real <span class="accent">Impact</span></h1>
+      <div class="stats-grid-4">
+        <div class="stat-card">
+          <div class="stat-number">300%</div>
+          <div class="stat-label">User Adoption</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">95%</div>
+          <div class="stat-label">Cost Reduction</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">7x</div>
+          <div class="stat-label">Faster Performance</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">24hrs</div>
+          <div class="stat-label">vs 70 days</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 6: ESRS Story ═══════════ -->
+    <section class="slide" data-slide="6">
+      <h2 class="slide-title" style="font-size:clamp(22px,3vw,36px)">Success: <span class="accent">ESRS Reporting</span></h2>
+      <div class="story-card">
+        <h3><i class="fas fa-file-lines" style="color:var(--orange);margin-right:8px"></i> AI Document Processing at Scale</h3>
+        <div class="story-challenge"><strong>Challenge:</strong> Process 100M documents per quarter</div>
+        <ul class="story-results">
+          <li><i class="fas fa-clock" style="color:var(--green)"></i> <span class="metric">500x faster</span> &mdash; 70 days &rarr; 24 hours</li>
+          <li><i class="fas fa-bullseye" style="color:var(--green)"></i> <span class="metric">80% accuracy</span> &mdash; up from 50%</li>
+          <li><i class="fas fa-coins" style="color:var(--green)"></i> <span class="metric">10x cheaper</span> &mdash; &euro;1M &rarr; &euro;100K per run</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 7: Green Energy Story ═══════════ -->
+    <section class="slide" data-slide="7">
+      <h2 class="slide-title" style="font-size:clamp(22px,3vw,36px)">Success: <span class="accent">Green Energy</span> Assistant</h2>
+      <div class="story-card">
+        <h3><i class="fas fa-wind" style="color:var(--green);margin-right:8px"></i> Aitana &mdash; Legal AI Assistant</h3>
+        <div class="story-challenge"><strong>Challenge:</strong> Navigate TBs of confidential contracts</div>
+        <ul class="story-results">
+          <li><i class="fas fa-rocket" style="color:var(--green)"></i> <span class="metric">Idea to POC in 2 weeks</span></li>
+          <li><i class="fas fa-lock" style="color:var(--green)"></i> Secure document handling</li>
+          <li><i class="fas fa-robot" style="color:var(--green)"></i> Intelligent contract agents</li>
+          <li><i class="fas fa-laptop-code" style="color:var(--green)"></i> Web UI &amp; API ready</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 8: What We Do / Don't Do ═══════════ -->
+    <section class="slide" data-slide="8">
+      <h1 class="slide-title">What We <span class="accent">Do</span></h1>
+      <div class="split-row">
+        <div class="split-col positive">
+          <h3><i class="fas fa-check-circle"></i> We Deliver</h3>
+          <ul>
+            <li><i class="fas fa-check"></i> Production-ready AI systems</li>
+            <li><i class="fas fa-check"></i> Engineering excellence</li>
+            <li><i class="fas fa-check"></i> Integration expertise</li>
+            <li><i class="fas fa-check"></i> Deployment mastery</li>
+            <li><i class="fas fa-check"></i> Optimization focus</li>
+          </ul>
+        </div>
+        <div class="split-col negative">
+          <h3><i class="fas fa-ban"></i> No AI Theater</h3>
+          <ul>
+            <li><i class="fas fa-xmark"></i> Inspiration workshops</li>
+            <li><i class="fas fa-xmark"></i> Brainstorming sessions</li>
+            <li><i class="fas fa-xmark"></i> Use case discovery</li>
+            <li><i class="fas fa-xmark"></i> Strategy consulting</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout-card" style="margin-top:0">We build, not talk</div>
+    </section>
+
+    <!-- ═══════════ Slide 9: Our Process ═══════════ -->
+    <section class="slide" data-slide="9">
+      <h1 class="slide-title">Our <span class="accent">Process</span></h1>
+      <div class="process-grid">
+        <div class="process-step">
+          <div class="process-num">01</div>
+          <div class="process-title">Assess</div>
+          <div class="process-time">2 days</div>
+        </div>
+        <div class="process-step">
+          <div class="process-num">02</div>
+          <div class="process-title">Design</div>
+          <div class="process-time">3 days</div>
+        </div>
+        <div class="process-step">
+          <div class="process-num">03</div>
+          <div class="process-title">Build</div>
+          <div class="process-time">2 weeks</div>
+        </div>
+        <div class="process-step">
+          <div class="process-num">04</div>
+          <div class="process-title">Deploy</div>
+          <div class="process-time">3 days</div>
+        </div>
+      </div>
+      <div class="callout-card">Total: <span style="color:var(--orange)">3 weeks</span> to production</div>
+    </section>
+
+    <!-- ═══════════ Slide 10: Tech Stack ═══════════ -->
+    <section class="slide" data-slide="10">
+      <h1 class="slide-title">Technology <span class="accent">Stack</span></h1>
+      <div class="split-row">
+        <div class="split-col highlight-orange">
+          <h3><i class="fas fa-brain"></i> AI Frameworks</h3>
+          <ul>
+            <li><i class="fas fa-circle"></i> Langchain &middot; Langgraph &middot; CrewAI</li>
+            <li><i class="fas fa-circle"></i> Gemini &middot; OpenAI &middot; Claude</li>
+            <li><i class="fas fa-circle"></i> MCP &middot; A2A &middot; ADK</li>
+          </ul>
+        </div>
+        <div class="split-col highlight-orange">
+          <h3><i class="fas fa-server"></i> Infrastructure</h3>
+          <ul>
+            <li><i class="fas fa-circle"></i> Cloud Native &middot; Docker &middot; K8s</li>
+            <li><i class="fas fa-circle"></i> Terraform &middot; IaC</li>
+            <li><i class="fas fa-circle"></i> Auto-documentation &middot; Self-healing</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 11: ROI ═══════════ -->
+    <section class="slide" data-slide="11">
+      <h1 class="slide-title">ROI <span class="accent">Comparison</span></h1>
+      <div class="split-row">
+        <div class="split-col negative">
+          <h3><i class="fas fa-triangle-exclamation"></i> Traditional Build</h3>
+          <ul>
+            <li><i class="fas fa-clock"></i> 6&ndash;12 months</li>
+            <li><i class="fas fa-coins"></i> &euro;500K &ndash; &euro;2M</li>
+            <li><i class="fas fa-wrench"></i> Ongoing maintenance</li>
+            <li><i class="fas fa-arrow-trend-up"></i> Technical debt</li>
+          </ul>
+        </div>
+        <div class="split-col positive">
+          <h3><i class="fas fa-check-circle"></i> With Multivac</h3>
+          <ul>
+            <li><i class="fas fa-check"></i> 2&ndash;4 weeks</li>
+            <li><i class="fas fa-check"></i> Predictable costs</li>
+            <li><i class="fas fa-check"></i> Always updated</li>
+            <li><i class="fas fa-check"></i> Focus on AI value</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout-card" style="margin-top:0">Save <span style="color:var(--orange)">6+ months</span> and <span style="color:var(--orange)">&euro;500K+</span></div>
+    </section>
+
+    <!-- ═══════════ Slide 12: Deployment Options ═══════════ -->
+    <section class="slide" data-slide="12">
+      <h1 class="slide-title">Deployment <span class="accent">Options</span></h1>
+      <div class="split-row">
+        <div class="split-col" style="text-align:center">
+          <h3 style="justify-content:center"><i class="fas fa-cloud" style="color:var(--indigo)"></i> Multivac Cloud</h3>
+          <ul style="text-align:left">
+            <li><i class="fas fa-circle" style="color:var(--indigo)"></i> Fully managed service</li>
+            <li><i class="fas fa-circle" style="color:var(--indigo)"></i> No infrastructure overhead</li>
+            <li><i class="fas fa-circle" style="color:var(--indigo)"></i> Pay-as-you-grow</li>
+          </ul>
+        </div>
+        <div class="split-col" style="text-align:center">
+          <h3 style="justify-content:center"><i class="fas fa-building" style="color:var(--amber)"></i> Self-Hosted</h3>
+          <ul style="text-align:left">
+            <li><i class="fas fa-circle" style="color:var(--amber)"></i> Your infrastructure</li>
+            <li><i class="fas fa-circle" style="color:var(--amber)"></i> Complete data control</li>
+            <li><i class="fas fa-circle" style="color:var(--amber)"></i> Annual licensing</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 13: Why Sunholo ═══════════ -->
+    <section class="slide" data-slide="13">
+      <h1 class="slide-title">Why <span class="accent">Sunholo?</span></h1>
+      <div class="stats-grid-4">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-crosshairs"></i></div>
+          <div class="stat-label">Laser Focus</div>
+          <div class="stat-desc">Production AI only</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+          <div class="stat-label">Proven Success</div>
+          <div class="stat-desc">Since 2023</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-handshake"></i></div>
+          <div class="stat-label">Cloud Native</div>
+          <div class="stat-desc">Modern tech stack</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+          <div class="stat-label">Results Driven</div>
+          <div class="stat-desc">Your success = Our success</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 14: Next Steps ═══════════ -->
+    <section class="slide" data-slide="14">
+      <h1 class="slide-title">Ready to <span class="accent">Accelerate</span> Your AI?</h1>
+      <div class="process-grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="process-step">
+          <div class="process-num"><i class="fas fa-phone"></i></div>
+          <div class="process-title">Technical Assessment</div>
+        </div>
+        <div class="process-step">
+          <div class="process-num"><i class="fas fa-clipboard-list"></i></div>
+          <div class="process-title">Custom Proposal</div>
+        </div>
+        <div class="process-step">
+          <div class="process-num"><i class="fas fa-rocket"></i></div>
+          <div class="process-title">Start in Days</div>
+        </div>
+      </div>
+      <div class="callout-card" style="font-family:var(--mono);font-size:18px">
+        <a href="mailto:multivac@sunholo.com" style="color:var(--orange);text-decoration:none">multivac@sunholo.com</a>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 15: Thank You ═══════════ -->
+    <section class="slide" data-slide="15">
+      <img src="images/sunholo-logo.svg" alt="Sunholo" style="height:80px;opacity:.7;margin-bottom:8px">
+      <h1 class="slide-title">Let's Build Your <span class="accent">AI Future</span> Together</h1>
+      <div class="contact-card">
+        <p><i class="fas fa-envelope" style="color:var(--orange)"></i> <a href="mailto:multivac@sunholo.com">multivac@sunholo.com</a></p>
+        <p><i class="fab fa-linkedin" style="color:var(--orange)"></i> <a href="https://linkedin.com/company/sunholo" target="_blank">linkedin.com/company/sunholo</a></p>
+      </div>
+    </section>
+
+  </div><!-- /slides-viewport -->
+
+  <!-- Bottom bar -->
+  <div class="bottom-bar">
+    <div class="transport">
+      <button class="transport-btn" id="btnPrev" title="Previous slide">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <span class="step-indicator">
+        <span class="current" id="slideNum">1</span> / <span id="slideTotal">16</span>
+      </span>
+      <button class="transport-btn" id="btnNext" title="Next slide">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+    <div class="slide-dots" id="slideDots"></div>
+    <div class="nav-hints">
+      <span class="kbd">&larr;</span><span class="kbd">&rarr;</span>
+      <span style="font-size:11px;color:var(--text-dim);margin-left:4px">navigate</span>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+(function(){
+  const TOTAL = 16;
+  let current = 0;
+  let transitioning = false;
+
+  const slides = document.querySelectorAll('.slide');
+  const slideNum = document.getElementById('slideNum');
+  const dotsContainer = document.getElementById('slideDots');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+
+  for(let i=0;i<TOTAL;i++){
+    const d = document.createElement('button');
+    d.className = 'slide-dot' + (i===0?' active':'');
+    d.dataset.idx = i;
+    d.addEventListener('click', ()=> goTo(i));
+    dotsContainer.appendChild(d);
+  }
+
+  function goTo(n){
+    if(n<0||n>=TOTAL||n===current||transitioning) return;
+    transitioning = true;
+    const dir = n > current ? 1 : -1;
+
+    slides.forEach(s=>{
+      s.classList.remove('active','exit-left');
+      s.querySelectorAll('.stat-card,.feature-card,.split-col,.story-card,.process-step,.callout-card,.contact-card').forEach(el=>{
+        el.style.opacity='0';
+        el.style.transform='';
+      });
+    });
+
+    if(dir>0) slides[current].classList.add('exit-left');
+    slides[n].classList.add('active');
+
+    current = n;
+    slideNum.textContent = current + 1;
+    document.querySelectorAll('.slide-dot').forEach((d,i)=>{
+      d.classList.toggle('active', i===current);
+    });
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === TOTAL - 1;
+
+    setTimeout(()=>{ transitioning = false; }, 500);
+  }
+
+  btnPrev.disabled = true;
+
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key===' ') goTo(current+1);
+    if(e.key==='ArrowLeft') goTo(current-1);
+    if(e.key==='ArrowDown'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*'); }
+    if(e.key==='ArrowUp'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*'); }
+  });
+  btnPrev.addEventListener('click', ()=> goTo(current-1));
+  btnNext.addEventListener('click', ()=> goTo(current+1));
+
+  window.addEventListener('message', e=>{
+    if(e.data && e.data.type==='deck-command'){
+      if(e.data.action==='go-first') goTo(0);
+      if(e.data.action==='go-last'){ current=-1; goTo(TOTAL-1); }
+      if(e.data.action==='set-theme') setTheme(e.data.theme);
+    }
+  });
+  window.parent.postMessage({type:'deck-ready',total:TOTAL},'*');
+
+  function setTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('presenter-theme', theme);
+    window.parent.postMessage({type:'deck-theme',theme:theme},'*');
+  }
+  const saved = localStorage.getItem('presenter-theme');
+  if(saved) setTheme(saved);
+
+})();
+</script>
+</body>
+</html>

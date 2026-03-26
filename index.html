@@ -1,147 +1,454 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide Decks - Sunholo AI Engineering</title>
-    <link rel="stylesheet" href="/styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-WLQZQF2P');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talks & Presentations - Sunholo AI Engineering</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WLQZQF2P');</script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#0f0f1a;
+  --surface:#1a1a2e;
+  --surface-hi:#222240;
+  --orange:#e73c17;
+  --orange-dim:rgba(231,60,23,.35);
+  --orange-glow:rgba(231,60,23,.6);
+  --green:#22c55e;
+  --green-dim:rgba(34,197,94,.15);
+  --indigo:#6366f1;
+  --indigo-dim:rgba(99,102,241,.15);
+  --ghost:rgba(255,255,255,.12);
+  --text:#e2e8f0;
+  --text-dim:#718096;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Montserrat',sans-serif;
+}
+
+[data-theme="light"]{
+  --bg:#f5f5f0;
+  --surface:#ffffff;
+  --surface-hi:#f0f0ea;
+  --orange:#d4300f;
+  --orange-dim:rgba(212,48,15,.2);
+  --orange-glow:rgba(212,48,15,.4);
+  --green:#16a34a;
+  --green-dim:rgba(22,163,74,.1);
+  --indigo:#4f46e5;
+  --indigo-dim:rgba(79,70,229,.1);
+  --ghost:rgba(0,0,0,.1);
+  --text:#1a202c;
+  --text-dim:#4a5568;
+}
+
+html{height:100%}
+body{
+  min-height:100%;
+  background:var(--bg);color:var(--text);font-family:var(--sans);
+  background-image:
+    radial-gradient(circle at 50% 30%, rgba(231,60,23,.04) 0%, transparent 60%),
+    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+}
+[data-theme="light"] body{
+  background-image:
+    radial-gradient(circle at 50% 30%, rgba(212,48,15,.03) 0%, transparent 60%),
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+}
+
+a{color:var(--orange);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ─── Header ─── */
+.site-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 24px;
+  border-bottom:1px solid var(--ghost);
+  background:rgba(15,15,26,.6);
+  backdrop-filter:blur(12px);
+  position:sticky;top:0;z-index:10;
+}
+[data-theme="light"] .site-header{background:rgba(255,255,255,.7)}
+.header-left{display:flex;align-items:center;gap:12px}
+.header-logo{height:28px;opacity:.8}
+.header-brand{font-size:16px;font-weight:700;color:var(--text);text-decoration:none}
+.header-brand:hover{color:var(--orange);text-decoration:none}
+.header-nav{display:flex;align-items:center;gap:6px}
+.header-nav a{
+  font-size:12px;font-weight:500;color:var(--text-dim);
+  text-decoration:none;padding:5px 10px;border-radius:6px;
+  transition:all .2s;
+}
+.header-nav a:hover{color:var(--text);background:var(--ghost);text-decoration:none}
+.header-nav a.active{color:var(--orange);font-weight:600}
+.theme-toggle{
+  width:32px;height:32px;border-radius:50%;border:1px solid var(--ghost);
+  background:transparent;color:var(--text-dim);cursor:pointer;
+  font-size:13px;transition:all .25s;display:flex;align-items:center;justify-content:center;
+  margin-left:12px;
+}
+.theme-toggle:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ─── Hero ─── */
+.hero{
+  text-align:center;
+  padding:60px 24px 32px;
+  max-width:800px;margin:0 auto;
+}
+.hero h1{
+  font-size:clamp(28px,5vw,48px);
+  font-weight:800;line-height:1.15;
+  margin-bottom:16px;
+}
+.hero .subtitle{
+  font-size:clamp(14px,2vw,18px);
+  color:var(--text-dim);line-height:1.6;
+  max-width:650px;margin:0 auto;
+}
+.hero-stats{
+  display:flex;justify-content:center;gap:32px;
+  margin-top:32px;flex-wrap:wrap;
+}
+.hero-stat{text-align:center}
+.hero-stat i{font-size:24px;color:var(--orange);margin-bottom:8px;display:block}
+.hero-stat strong{font-size:13px;display:block;margin-bottom:2px}
+.hero-stat span{font-size:11px;color:var(--text-dim)}
+
+/* ─── Sections ─── */
+.hub-section{
+  max-width:900px;margin:0 auto;
+  padding:16px 24px 40px;
+}
+.section-label{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:16px;
+  padding-left:4px;
+}
+
+/* ─── Event cards (talks) ─── */
+.event-card{
+  display:flex;gap:24px;align-items:center;
+  padding:20px 24px;
+  border-radius:14px;
+  border:1px solid var(--ghost);
+  background:var(--surface);
+  text-decoration:none;color:inherit;
+  transition:all .3s ease;
+  margin-bottom:12px;
+}
+.event-card:hover{
+  border-color:var(--orange-dim);
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(0,0,0,.15);
+  text-decoration:none;
+}
+.event-img{
+  width:180px;height:120px;border-radius:10px;
+  object-fit:cover;flex-shrink:0;
+}
+.event-details{flex:1;min-width:0}
+.event-meta{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  color:var(--text-dim);text-transform:uppercase;
+  letter-spacing:.06em;margin-bottom:6px;
+}
+.event-details h3{font-size:16px;font-weight:700;margin-bottom:6px;color:var(--text)}
+.event-details p{font-size:13px;color:var(--text-dim);line-height:1.5}
+.event-cta{
+  font-size:12px;color:var(--orange);font-weight:600;
+  margin-top:8px;display:inline-block;
+}
+
+/* ─── Deck cards ─── */
+.deck-grid{display:flex;flex-direction:column;gap:10px}
+.deck-card{
+  display:flex;align-items:center;gap:16px;
+  padding:16px 20px;
+  border-radius:12px;
+  border:1px solid var(--ghost);
+  background:var(--surface);
+  text-decoration:none;color:inherit;
+  transition:all .25s ease;
+}
+.deck-card:hover{
+  border-color:rgba(231,60,23,.4);
+  background:var(--surface-hi);
+  transform:translateX(4px);
+  text-decoration:none;
+}
+.deck-icon{
+  width:44px;height:44px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:#fff;flex-shrink:0;
+}
+.deck-details{flex:1;min-width:0}
+.deck-details h3{font-size:14px;font-weight:700;margin-bottom:2px}
+.deck-details p{font-size:12px;color:var(--text-dim);line-height:1.4}
+.deck-tag{
+  font-family:var(--mono);font-size:10px;
+  padding:3px 8px;border-radius:8px;
+  background:var(--ghost);color:var(--text-dim);
+  flex-shrink:0;transition:all .25s;
+}
+.deck-card:hover .deck-tag{background:var(--orange-dim);color:var(--orange)}
+
+/* ─── Podcast cards ─── */
+.podcast-card{
+  display:flex;gap:20px;align-items:center;
+  padding:16px 20px;
+  border-radius:12px;
+  border:1px solid var(--ghost);
+  background:var(--surface);
+  text-decoration:none;color:inherit;
+  transition:all .25s ease;
+  margin-bottom:10px;
+}
+.podcast-card:hover{
+  border-color:var(--indigo-dim);
+  background:var(--surface-hi);
+  text-decoration:none;
+}
+.podcast-img{
+  width:80px;height:80px;border-radius:10px;
+  object-fit:cover;flex-shrink:0;
+}
+.podcast-details{flex:1;min-width:0}
+.podcast-details h3{font-size:14px;font-weight:700;margin-bottom:4px}
+.podcast-details p{font-size:12px;color:var(--text-dim);line-height:1.4}
+.podcast-cta{
+  font-size:11px;color:var(--indigo);font-weight:600;
+  margin-top:6px;display:inline-block;
+}
+
+/* ─── CTA ─── */
+.cta-section{
+  text-align:center;
+  padding:40px 24px;
+  border-top:1px solid var(--ghost);
+  max-width:600px;margin:0 auto;
+}
+.cta-section h2{font-size:22px;font-weight:700;margin-bottom:8px}
+.cta-section p{font-size:14px;color:var(--text-dim);margin-bottom:20px}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 24px;border-radius:10px;
+  background:var(--orange);color:#fff;
+  font-weight:600;font-size:14px;
+  text-decoration:none;transition:all .25s;
+}
+.cta-btn:hover{background:var(--orange-glow);text-decoration:none;transform:translateY(-1px)}
+.cta-btn-secondary{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 24px;border-radius:10px;
+  border:1px solid var(--ghost);
+  color:var(--text);
+  font-weight:600;font-size:14px;
+  text-decoration:none;transition:all .25s;
+  margin-left:12px;
+}
+.cta-btn-secondary:hover{border-color:var(--orange);color:var(--orange);text-decoration:none}
+
+/* ─── Footer ─── */
+.site-footer{
+  text-align:center;padding:24px;
+  font-size:11px;color:var(--text-dim);
+  border-top:1px solid var(--ghost);
+  font-family:var(--mono);
+  margin-top:40px;
+}
+
+@media(max-width:700px){
+  .event-card{flex-direction:column;align-items:stretch}
+  .event-img{width:100%;height:160px}
+  .header-nav{display:none}
+  .hero-stats{gap:16px}
+}
+</style>
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WLQZQF2P"
-      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <nav>
-                <a href="/" style="text-decoration:none">
-                    <div class="logo">
-                        <img src="/sunholo-logo.svg" alt="Sunholo Logo" width="60" height="60">
-                        <span>Sunholo</span>
-                    </div>
-                </a>
-                <ul class="nav-links">
-                    <li><a href="/#services">Services</a></li>
-                    <li><a href="/#case-studies">Case Studies</a></li>
-                    <li><a href="/ailang-demos/">Demos</a></li>
-                    <li><a href="/vision.html">Vision</a></li>
-                    <li><a href="/presentations.html">Talks</a></li>
-                    <li><a href="/#contact">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WLQZQF2P"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-    <!-- Hero Section -->
-    <section class="case-study-hero">
-        <div class="container">
-            <a href="/presentations.html" class="back-link">
-                <i class="fas fa-arrow-left"></i> Back to Talks
-            </a>
-            <h1>Slide Decks</h1>
-            <p class="lead">Interactive presentations on AI engineering, platforms, and programming languages. Click to view the slides.</p>
-        </div>
-    </section>
+<!-- Header -->
+<header class="site-header">
+  <div class="header-left">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none">
+      <img src="images/logos/sunholo-logo.svg" alt="Sunholo" class="header-logo">
+      <span class="header-brand">Sunholo</span>
+    </a>
+  </div>
+  <div style="display:flex;align-items:center">
+    <nav class="header-nav">
+      <a href="/#services">Services</a>
+      <a href="/#case-studies">Case Studies</a>
+      <a href="/ailang-demos/">Demos</a>
+      <a href="/vision.html">Vision</a>
+      <a href="/presentations/" class="active">Talks</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+      <i class="fas fa-sun"></i>
+    </button>
+  </div>
+</header>
 
-    <!-- Presentations -->
-    <section class="case-study-section">
-        <div class="container">
-            <div class="solution-showcase" style="margin-top: 50px;">
-                <a href="multivac-presentation-final-v2.html" class="showcase-item" style="text-decoration: none; color: inherit; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;">
-                    <div class="showcase-icon" style="background: linear-gradient(135deg, var(--primary-color), #d23210);">
-                        <i class="fas fa-server"></i>
-                    </div>
-                    <h3>Multivac: Your AI Platform</h3>
-                    <p>Event-driven microservice architecture, native MCP and A2A protocol support, multi-cloud deployment, and bridging prototype to production-grade AI at scale.</p>
-                    <div style="margin-top: 15px; color: var(--primary-color); font-weight: 600;">
-                        <i class="fas fa-play-circle"></i> View Slides
-                    </div>
-                </a>
+<!-- Hero -->
+<div class="hero">
+  <h1>Talks &amp; Presentations</h1>
+  <p class="subtitle">Presentations, podcast appearances, and conversations on AI engineering, the Multivac platform, and building production-grade AI systems.</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <i class="fas fa-chalkboard-teacher"></i>
+      <strong>Technical Deep Dives</strong>
+      <span>Architecture &amp; Implementation</span>
+    </div>
+    <div class="hero-stat">
+      <i class="fas fa-lightbulb"></i>
+      <strong>Best Practices</strong>
+      <span>Lessons from Production</span>
+    </div>
+    <div class="hero-stat">
+      <i class="fas fa-rocket"></i>
+      <strong>Future Vision</strong>
+      <span>AI Platform Evolution</span>
+    </div>
+  </div>
+</div>
 
-                <a href="presentation-ai-first-procurement.html" class="showcase-item" style="text-decoration: none; color: inherit; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;">
-                    <div class="showcase-icon" style="background: linear-gradient(135deg, #4285F4, #1a73e8);">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <h3>Building AI with AI</h3>
-                    <p>How AI-first approaches transform procurement and intelligence gathering. Real examples of AI systems that build, evaluate, and improve other AI systems.</p>
-                    <div style="margin-top: 15px; color: var(--primary-color); font-weight: 600;">
-                        <i class="fas fa-play-circle"></i> View Slides
-                    </div>
-                </a>
+<!-- Upcoming Talks -->
+<div class="hub-section">
+  <div class="section-label"><i class="fas fa-calendar-alt"></i> Upcoming Talks</div>
 
-                <a href="ai-slaves-human-masters/" class="showcase-item" style="text-decoration: none; color: inherit; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;">
-                    <div class="showcase-icon" style="background: linear-gradient(135deg, #e73c17, #ff5722);">
-                        <i class="fas fa-project-diagram"></i>
-                    </div>
-                    <h3>Decision Space Explorer</h3>
-                    <p>Interactive visualization of entropy reduction in decision-making. How AILANG front-loads design decisions to minimize the state space AI must navigate.</p>
-                    <div style="margin-top: 15px; color: var(--primary-color); font-weight: 600;">
-                        <i class="fas fa-play-circle"></i> View Interactive
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
+  <a href="http://analyticsdev.net/" target="_blank" class="event-card">
+    <img src="images/talks/analyticsdev-banner.jpg" alt="AnalyticsDev.net" class="event-img">
+    <div class="event-details">
+      <div class="event-meta"><i class="fas fa-calendar"></i> April 29, 2026 &middot; Copenhagen</div>
+      <h3>Analytics for AI Agents</h3>
+      <p>Keynote at AnalyticsDev.net &mdash; exploring how analytics stacks evolve to power agentic workflows, moving from pageviews and dashboards to data products that drive AI agent outcomes.</p>
+      <span class="event-cta"><i class="fas fa-external-link-alt"></i> Event Details</span>
+    </div>
+  </a>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Services</h3>
-                    <ul>
-                        <li><a href="/ai-engineering.html">AI Engineering Support</a></li>
-                        <li><a href="/ai-platform.html">Multivac Platform</a></li>
-                        <li><a href="/case-study-ailang.html">AILANG</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Company</h3>
-                    <ul>
-                        <li><a href="/vision.html">Our Vision</a></li>
-                        <li><a href="/#contact">Contact</a></li>
-                        <li><a href="https://dev.sunholo.com/blog/">Blog</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Resources</h3>
-                    <ul>
-                        <li><a href="/ailang-demos/">Live Demos</a></li>
-                        <li><a href="https://dev.sunholo.com/">Documentation</a></li>
-                        <li><a href="/presentations.html">Presentations</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column footer-newsletter">
-                    <h3>Stay Updated</h3>
-                    <p>Get the latest AI deployment tips and Multivac updates at our LinkedIn page.</p>
-                    <div class="contact-method">
-                        <a href="https://www.linkedin.com/company/sunholo/" target="_blank">
-                        <div class="method-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                            </svg>
-                        </div>
-                        <div class="method-details">
-                            <h4>Connect With Us</h4>
-                            <p>LinkedIn</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2025 Holosun ApS. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+  <a href="https://ida.dk/driving-ai" target="_blank" class="event-card">
+    <img src="images/talks/driving-ai-banner.jpg" alt="IDA Driving AI 2026" class="event-img">
+    <div class="event-details">
+      <div class="event-meta"><i class="fas fa-calendar"></i> May 27, 2026 &middot; IDA Conference, Copenhagen</div>
+      <h3>Programming Languages for AI, Not Humans</h3>
+      <p>Presenting at IDA's Driving AI 2026 conference. Introducing AILANG and exploring how determinism, explicit effects, and executable contracts reshape how AI reasons about code.</p>
+      <span class="event-cta"><i class="fas fa-external-link-alt"></i> Conference Details</span>
+    </div>
+  </a>
+</div>
+
+<!-- Slide Decks -->
+<div class="hub-section">
+  <div class="section-label"><i class="fas fa-layer-group"></i> Slide Decks</div>
+  <div class="deck-grid">
+
+    <a href="multivac/" class="deck-card">
+      <div class="deck-icon" style="background:linear-gradient(135deg, var(--orange), #d23210)">
+        <i class="fas fa-server"></i>
+      </div>
+      <div class="deck-details">
+        <h3>Multivac: Your AI Platform</h3>
+        <p>Event-driven microservice architecture, MCP &amp; A2A support, multi-cloud deployment, bridging prototype to production AI at scale</p>
+      </div>
+      <span class="deck-tag">16 slides</span>
+    </a>
+
+    <a href="ai-first-procurement/" class="deck-card">
+      <div class="deck-icon" style="background:linear-gradient(135deg, #4285F4, #1a73e8)">
+        <i class="fas fa-robot"></i>
+      </div>
+      <div class="deck-details">
+        <h3>Building AI with AI</h3>
+        <p>How AI-first approaches transform procurement and intelligence gathering with iterative improvement loops</p>
+      </div>
+      <span class="deck-tag">19 slides</span>
+    </a>
+
+    <a href="ai-slaves-human-masters/" class="deck-card">
+      <div class="deck-icon" style="background:linear-gradient(135deg, #e73c17, #ff5722)">
+        <i class="fas fa-project-diagram"></i>
+      </div>
+      <div class="deck-details">
+        <h3>What AI Slaves Will Demand of Their Human Masters</h3>
+        <p>Five-part exploration: AI coding revolution, entropy visualization, authority models, development loops, and what AI needs from humans</p>
+      </div>
+      <span class="deck-tag">5 decks</span>
+    </a>
+
+  </div>
+</div>
+
+<!-- Podcasts -->
+<div class="hub-section">
+  <div class="section-label"><i class="fas fa-podcast"></i> Podcast Appearances</div>
+
+  <a href="https://push.fm/fl/mx2kcdwh" target="_blank" class="podcast-card">
+    <img src="images/talks/etfemfemten-podcast.png" alt="Et Fem Femten" class="podcast-img">
+    <div class="podcast-details">
+      <div class="event-meta"><i class="fas fa-calendar"></i> February 2026 &middot; KEA Copenhagen</div>
+      <h3>Cloud-Based GenAI at Sunholo</h3>
+      <p>First episode of Klaus Mandal Hansen's podcast interviewing AI frontrunners. Discussing cloud-based generative AI engineering and the evolving landscape of AI development.</p>
+      <span class="podcast-cta"><i class="fas fa-headphones"></i> Listen Now</span>
+    </div>
+  </a>
+
+  <a href="https://www.measurelab.co.uk/insights/podcast/genai-in-cloud-devops-tagassistant-mark-edmondson" target="_blank" class="podcast-card">
+    <img src="images/talks/measurelab-podcast.jpg" alt="The Measure Pod" class="podcast-img">
+    <div class="podcast-details">
+      <div class="event-meta"><i class="fas fa-calendar"></i> October 2025 &middot; London</div>
+      <h3>GenAI in Action: Cloud DevOps and TagAssistant.ai</h3>
+      <p>Discussing the intersection of AI and business operations &mdash; DevOps practices, data pipeline architecture, the development of TagAssistant.ai using MCP.</p>
+      <span class="podcast-cta"><i class="fas fa-headphones"></i> Listen Now</span>
+    </div>
+  </a>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Want a Custom Presentation?</h2>
+  <p>We can prepare tailored presentations for your team on AI architecture, implementation strategies, or specific use cases.</p>
+  <a href="/#contact" class="cta-btn"><i class="fas fa-envelope"></i> Get in Touch</a>
+  <a href="https://dev.sunholo.com/docs" target="_blank" class="cta-btn-secondary"><i class="fas fa-book"></i> Documentation</a>
+</div>
+
+<!-- Footer -->
+<div class="site-footer">
+  &copy; 2025 Holosun ApS &middot; <a href="https://sunholo.com">sunholo.com</a> &middot; <a href="https://linkedin.com/company/sunholo">LinkedIn</a>
+</div>
+
+<script>
+(function(){
+  const toggle = document.getElementById('themeToggle');
+  function setTheme(t){
+    document.documentElement.setAttribute('data-theme', t);
+    toggle.innerHTML = t === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    localStorage.setItem('presenter-theme', t);
+  }
+  toggle.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    setTheme(cur === 'light' ? 'dark' : 'light');
+  });
+  const saved = localStorage.getItem('presenter-theme');
+  if (saved) setTheme(saved);
+})();
+</script>
 </body>
 </html>

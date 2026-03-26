@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building AI with AI — Procurement Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+/* ─── Dark theme (default) ─── */
+:root{
+  --bg:#0f0f1a;
+  --surface:#1a1a2e;
+  --surface-hi:#222240;
+  --orange:#e73c17;
+  --orange-dim:rgba(231,60,23,.35);
+  --orange-glow:rgba(231,60,23,.6);
+  --green:#22c55e;
+  --green-dim:rgba(34,197,94,.15);
+  --red:#ef4444;
+  --red-dim:rgba(239,68,68,.12);
+  --amber:#f59e0b;
+  --amber-dim:rgba(245,158,11,.15);
+  --indigo:#6366f1;
+  --indigo-dim:rgba(99,102,241,.15);
+  --ghost:rgba(255,255,255,.12);
+  --text:#e2e8f0;
+  --text-dim:#718096;
+  --code-bg:rgba(255,255,255,.03);
+  --code-border:rgba(255,255,255,.06);
+  --bar-bg:rgba(15,15,26,.8);
+  --bar-border:rgba(255,255,255,.06);
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Montserrat',sans-serif;
+}
+
+/* ─── Light theme ─── */
+[data-theme="light"]{
+  --bg:#f5f5f0;
+  --surface:#ffffff;
+  --surface-hi:#f0f0ea;
+  --orange:#d4300f;
+  --orange-dim:rgba(212,48,15,.2);
+  --orange-glow:rgba(212,48,15,.4);
+  --green:#16a34a;
+  --green-dim:rgba(22,163,74,.1);
+  --red:#dc2626;
+  --red-dim:rgba(220,38,38,.08);
+  --amber:#d97706;
+  --amber-dim:rgba(217,119,6,.1);
+  --indigo:#4f46e5;
+  --indigo-dim:rgba(79,70,229,.1);
+  --ghost:rgba(0,0,0,.1);
+  --text:#1a202c;
+  --text-dim:#4a5568;
+  --code-bg:rgba(0,0,0,.03);
+  --code-border:rgba(0,0,0,.08);
+  --bar-bg:rgba(255,255,255,.85);
+  --bar-border:rgba(0,0,0,.08);
+}
+
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+
+body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(231,60,23,.03) 0%, transparent 70%),
+    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+}
+[data-theme="light"] body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(212,48,15,.03) 0%, transparent 70%),
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+}
+
+/* ─── Layout ─── */
+#app{display:flex;flex-direction:column;height:100vh}
+
+/* ─── Slides ─── */
+.slides-viewport{flex:1;position:relative;overflow:hidden}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 48px;gap:24px;
+  opacity:0;visibility:hidden;
+  transform:translateX(40px);
+  transition:opacity .45s ease, transform .45s ease, visibility .45s;
+}
+.slide.active{opacity:1;visibility:visible;transform:translateX(0)}
+.slide.exit-left{transform:translateX(-40px);opacity:0}
+
+/* ─── Title styling ─── */
+.slide-title{
+  font-size:clamp(28px,4vw,48px);
+  font-weight:800;letter-spacing:-.02em;
+  text-align:center;line-height:1.15;
+}
+.slide-title .accent{color:var(--orange)}
+.slide-title .dim{color:var(--text-dim)}
+.slide-subtitle{
+  font-size:clamp(14px,1.8vw,20px);
+  color:var(--text-dim);text-align:center;
+  max-width:700px;
+}
+
+/* ─── Big statement ─── */
+.big-statement{
+  font-size:clamp(24px,4vw,44px);
+  font-weight:800;line-height:1.3;
+  color:var(--orange);text-align:center;
+  max-width:800px;
+}
+
+/* ─── Callout card ─── */
+.callout-card{
+  background:var(--surface);
+  border-left:4px solid var(--orange);
+  border-radius:0 12px 12px 0;
+  padding:28px 32px;
+  max-width:800px;width:100%;
+  font-size:17px;line-height:1.65;
+  font-weight:600;color:var(--text);
+  opacity:0;transform:translateY(16px);
+}
+.slide.active .callout-card{animation:fadeSlideUp .5s ease .2s forwards}
+
+/* ─── Stats grid ─── */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;max-width:840px;width:100%;
+}
+.stat-card{
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-radius:12px;padding:28px 20px;
+  text-align:center;
+  opacity:0;transform:translateY(20px);
+}
+.slide.active .stat-card{animation:fadeSlideUp .5s ease forwards}
+.slide.active .stat-card:nth-child(1){animation-delay:.15s}
+.slide.active .stat-card:nth-child(2){animation-delay:.3s}
+.slide.active .stat-card:nth-child(3){animation-delay:.45s}
+.stat-icon{font-size:32px;color:var(--orange);margin-bottom:14px}
+.stat-label{font-size:16px;color:var(--text);font-weight:700;margin-bottom:4px}
+.stat-desc{font-size:13px;color:var(--text-dim);line-height:1.4}
+
+/* ─── Workflow items ─── */
+.workflow-list{
+  display:flex;flex-direction:column;gap:24px;
+  max-width:700px;width:100%;
+}
+.workflow-item{
+  display:flex;align-items:center;gap:20px;
+  opacity:0;transform:translateY(16px);
+}
+.slide.active .workflow-item{animation:fadeSlideUp .5s ease forwards}
+.slide.active .workflow-item:nth-child(1){animation-delay:.15s}
+.slide.active .workflow-item:nth-child(2){animation-delay:.3s}
+.slide.active .workflow-item:nth-child(3){animation-delay:.45s}
+.slide.active .workflow-item:nth-child(4){animation-delay:.6s}
+.workflow-icon{
+  width:56px;height:56px;border-radius:14px;
+  background:var(--orange-dim);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--orange);font-size:24px;flex-shrink:0;
+}
+.workflow-text{font-size:18px;font-weight:700;color:var(--text)}
+
+/* ─── SVG loop diagrams ─── */
+.loop-wrap{
+  opacity:0;transform:translateY(16px);
+}
+.slide.active .loop-wrap{animation:fadeSlideUp .5s ease .15s forwards}
+.loop-path{
+  stroke-dasharray:20 10;
+  animation:flowLoop 2s linear infinite;
+}
+@keyframes flowLoop{
+  from{stroke-dashoffset:30}
+  to{stroke-dashoffset:0}
+}
+
+/* ─── Image slide ─── */
+.slide-image{
+  max-width:85%;max-height:65vh;
+  border-radius:12px;
+  box-shadow:0 8px 40px rgba(0,0,0,.3);
+  opacity:0;transform:translateY(16px);
+}
+.slide.active .slide-image{animation:fadeSlideUp .5s ease .1s forwards}
+
+/* ─── Bullet list card ─── */
+.bullet-list{
+  list-style:none;padding:0;
+  max-width:700px;width:100%;
+}
+.bullet-list li{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 0;
+  border-bottom:1px solid var(--ghost);
+  font-size:16px;color:var(--text);
+  opacity:0;transform:translateY(12px);
+}
+.bullet-list li:last-child{border-bottom:none}
+.slide.active .bullet-list li{animation:fadeSlideUp .4s ease forwards}
+.slide.active .bullet-list li:nth-child(1){animation-delay:.15s}
+.slide.active .bullet-list li:nth-child(2){animation-delay:.25s}
+.slide.active .bullet-list li:nth-child(3){animation-delay:.35s}
+.slide.active .bullet-list li:nth-child(4){animation-delay:.45s}
+.bullet-icon{color:var(--orange);font-size:16px;flex-shrink:0}
+
+/* ─── Pilot card ─── */
+.pilot-card{
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-left:4px solid var(--orange);
+  border-radius:0 14px 14px 0;
+  padding:36px 40px;
+  max-width:600px;width:100%;
+  opacity:0;transform:translateY(16px);
+}
+.slide.active .pilot-card{animation:fadeSlideUp .5s ease .2s forwards}
+.pilot-card h3{font-size:20px;font-weight:700;color:var(--orange);margin-bottom:20px}
+.pilot-card li{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 0;font-size:15px;color:var(--text);
+}
+.pilot-card li i{color:var(--green);font-size:14px}
+
+/* ─── Contact card ─── */
+.contact-card{
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-radius:14px;
+  padding:40px;text-align:center;
+  max-width:500px;width:100%;
+  opacity:0;transform:translateY(16px);
+}
+.slide.active .contact-card{animation:fadeSlideUp .5s ease .2s forwards}
+.contact-card p{
+  font-size:15px;color:var(--text-dim);
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin:8px 0;
+}
+.contact-card a{color:var(--text);text-decoration:none;font-weight:600}
+.contact-card a:hover{color:var(--orange)}
+
+/* ─── Demo link ─── */
+.demo-link{
+  display:inline-flex;align-items:center;gap:8px;
+  color:var(--orange);font-size:14px;font-weight:600;
+  font-family:var(--mono);text-decoration:none;
+  padding:8px 16px;border-radius:8px;
+  border:1px solid var(--orange-dim);
+  transition:all .25s;
+  opacity:0;transform:translateY(12px);
+}
+.slide.active .demo-link{animation:fadeSlideUp .5s ease .3s forwards}
+.demo-link:hover{background:var(--orange-dim);border-color:var(--orange)}
+
+/* ─── Bottom bar ─── */
+.bottom-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 20px;
+  border-top:1px solid var(--bar-border);
+  flex-shrink:0;background:var(--bar-bg);
+  backdrop-filter:blur(8px);
+}
+.transport{display:flex;align-items:center;gap:8px}
+.transport-btn{
+  width:28px;height:28px;border-radius:50%;
+  border:1px solid var(--ghost);background:transparent;
+  color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;transition:all .2s;
+}
+.transport-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}
+.transport-btn:disabled{opacity:.3;cursor:default}
+.step-indicator{font-family:var(--mono);font-size:12px;color:var(--text-dim)}
+.step-indicator .current{color:var(--text);font-weight:700}
+.slide-dots{display:flex;gap:6px}
+.slide-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--ghost);border:none;cursor:pointer;
+  transition:all .25s;
+}
+.slide-dot.active{background:var(--orange);transform:scale(1.3)}
+.nav-hints{display:flex;align-items:center;gap:6px}
+.kbd{
+  display:inline-block;padding:1px 5px;border-radius:3px;
+  font-family:var(--mono);font-size:9px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:var(--text-dim);
+}
+[data-theme="light"] .kbd{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
+
+/* ─── Animations ─── */
+@keyframes fadeSlideUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ─── Responsive ─── */
+@media(max-width:700px){
+  .stats-grid{grid-template-columns:1fr}
+  .workflow-list{gap:16px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="slides-viewport">
+
+    <!-- ═══════════ Slide 0: Title ═══════════ -->
+    <section class="slide active" data-slide="0">
+      <img src="../images/logos/sunholo-logo.svg" alt="Sunholo" style="height:64px;opacity:.8;margin-bottom:8px">
+      <h1 class="slide-title">Building <span class="accent">AI</span> with <span class="accent">AI</span></h1>
+      <p class="slide-subtitle">Transforming Procurement Through Iterative Intelligence</p>
+    </section>
+
+    <!-- ═══════════ Slide 1: AI-First ═══════════ -->
+    <section class="slide" data-slide="1">
+      <div style="font-size:64px;color:var(--orange);margin-bottom:8px;opacity:0;transform:translateY(16px)" class="anim-icon"><i class="fas fa-rocket"></i></div>
+      <h1 class="slide-title">We Started <span class="accent">AI-First</span></h1>
+      <p class="slide-subtitle">Rethinking every process from the beginning</p>
+    </section>
+
+    <!-- ═══════════ Slide 2: The Question ═══════════ -->
+    <section class="slide" data-slide="2">
+      <p class="big-statement">What does running a company look like in the <span style="color:var(--text)">post-AI era?</span></p>
+    </section>
+
+    <!-- ═══════════ Slide 3: AI Building AI ═══════════ -->
+    <section class="slide" data-slide="3">
+      <h1 class="slide-title">Using <span class="accent">AI</span> to Build <span class="accent">AI</span> Infrastructure</h1>
+      <p class="slide-subtitle">AI helping create AI infrastructure</p>
+    </section>
+
+    <!-- ═══════════ Slide 4: Core Learning ═══════════ -->
+    <section class="slide" data-slide="4">
+      <h2 class="slide-title" style="font-size:clamp(24px,3vw,36px)">Our <span class="accent">First Learning</span></h2>
+      <div class="callout-card">
+        <i class="fas fa-lightbulb" style="color:var(--orange);margin-right:8px"></i>
+        Iterative improvement loops create massive efficiency gains
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 5: Loop Examples ═══════════ -->
+    <section class="slide" data-slide="5">
+      <h1 class="slide-title"><span class="accent">Loop</span> Examples</h1>
+      <p class="slide-subtitle">The same iterative pattern powers sprint planning, infrastructure, and procurement</p>
+    </section>
+
+    <!-- ═══════════ Slide 6: Sprint Planning Loop ═══════════ -->
+    <section class="slide" data-slide="6">
+      <h2 class="slide-title" style="font-size:clamp(20px,2.5vw,32px)"><span class="accent">Sprint</span> Planning</h2>
+      <div class="loop-wrap">
+        <svg width="700" height="400" viewBox="0 0 550 350" style="max-width:100%">
+          <path class="loop-path" d="M 275 50 A 120 120 0 1 1 274 50" fill="none" stroke="var(--orange)" stroke-width="3"/>
+          <g>
+            <rect x="213" y="28" width="125" height="45" rx="6" fill="var(--orange)"/>
+            <text x="275" y="55" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Montserrat,sans-serif">Create Design Doc</text>
+            <rect x="340" y="110" width="100" height="45" rx="6" fill="var(--orange)"/>
+            <text x="390" y="137" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Montserrat,sans-serif">Sprint Plan</text>
+            <rect x="295" y="254" width="115" height="45" rx="6" fill="var(--orange)"/>
+            <text x="352" y="281" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Montserrat,sans-serif">Execute Sprint</text>
+            <rect x="135" y="254" width="125" height="45" rx="6" fill="var(--orange)" opacity=".7"/>
+            <text x="197" y="281" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Montserrat,sans-serif">Evaluate Results</text>
+            <rect x="105" y="110" width="105" height="45" rx="6" fill="var(--orange)" opacity=".7"/>
+            <text x="157" y="137" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Montserrat,sans-serif">Identify Gaps</text>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 7: Infrastructure Loop ═══════════ -->
+    <section class="slide" data-slide="7">
+      <h2 class="slide-title" style="font-size:clamp(20px,2.5vw,32px)"><span class="accent">Infrastructure</span></h2>
+      <div class="loop-wrap">
+        <svg width="700" height="400" viewBox="0 0 550 350" style="max-width:100%">
+          <path class="loop-path" d="M 275 50 A 120 120 0 1 1 274 50" fill="none" stroke="var(--orange)" stroke-width="3"/>
+          <g>
+            <rect x="198" y="28" width="155" height="45" rx="6" fill="var(--orange)"/>
+            <text x="275" y="55" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Montserrat,sans-serif">Create Infrastructure</text>
+            <rect x="332" y="88" width="100" height="45" rx="6" fill="var(--orange)"/>
+            <text x="382" y="115" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Montserrat,sans-serif">Deploy</text>
+            <rect x="332" y="218" width="100" height="45" rx="6" fill="var(--orange)"/>
+            <text x="382" y="245" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Montserrat,sans-serif">Run AI</text>
+            <rect x="218" y="278" width="115" height="45" rx="6" fill="var(--orange)" opacity=".7"/>
+            <text x="275" y="305" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Montserrat,sans-serif">AI Evaluates</text>
+            <rect x="108" y="218" width="120" height="45" rx="6" fill="var(--orange)" opacity=".7"/>
+            <text x="168" y="245" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Montserrat,sans-serif">Identifies Gaps</text>
+            <rect x="105" y="88" width="125" height="45" rx="6" fill="var(--orange)" opacity=".7"/>
+            <text x="168" y="103" text-anchor="middle" fill="white" font-size="12" font-weight="600" font-family="Montserrat,sans-serif">Fix Infrastructure</text>
+            <text x="168" y="121" text-anchor="middle" fill="white" font-size="12" font-weight="600" font-family="Montserrat,sans-serif">Code</text>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 8: Procurement Loop ═══════════ -->
+    <section class="slide" data-slide="8">
+      <h2 class="slide-title" style="font-size:clamp(20px,2.5vw,32px)"><span class="accent">Procurement</span></h2>
+      <div class="loop-wrap">
+        <svg width="700" height="400" viewBox="0 0 550 350" style="max-width:100%">
+          <path class="loop-path" d="M 275 50 A 120 120 0 1 1 274 50" fill="none" stroke="var(--orange)" stroke-width="3"/>
+          <g>
+            <rect x="210" y="28" width="130" height="45" rx="6" fill="var(--orange)"/>
+            <text x="275" y="55" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Montserrat,sans-serif">Receive Tender</text>
+            <rect x="310" y="88" width="140" height="45" rx="6" fill="var(--orange)"/>
+            <text x="380" y="115" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Montserrat,sans-serif">Extract Requirements</text>
+            <rect x="332" y="218" width="100" height="45" rx="6" fill="var(--orange)"/>
+            <text x="382" y="245" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Montserrat,sans-serif">AI Validates</text>
+            <rect x="208" y="278" width="135" height="45" rx="6" fill="var(--orange)" opacity=".7"/>
+            <text x="275" y="305" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Montserrat,sans-serif">Identifies Issues</text>
+            <rect x="108" y="218" width="115" height="45" rx="6" fill="var(--orange)" opacity=".7"/>
+            <text x="165" y="245" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Montserrat,sans-serif">Refine Model</text>
+            <rect x="108" y="88" width="110" height="45" rx="6" fill="var(--orange)" opacity=".7"/>
+            <text x="163" y="115" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Montserrat,sans-serif">Next Tender</text>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 9: Right Workflows ═══════════ -->
+    <section class="slide" data-slide="9">
+      <h1 class="slide-title">Identify the <span class="accent">Right Workflows</span></h1>
+      <div class="workflow-list">
+        <div class="workflow-item">
+          <div class="workflow-icon"><i class="fas fa-check-circle"></i></div>
+          <div class="workflow-text">Within AI Abilities</div>
+        </div>
+        <div class="workflow-item">
+          <div class="workflow-icon"><i class="fas fa-bolt"></i></div>
+          <div class="workflow-text">Can Be Parallelized</div>
+        </div>
+        <div class="workflow-item">
+          <div class="workflow-icon"><i class="fas fa-infinity"></i></div>
+          <div class="workflow-text">Unbounded KPIs</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 10: AI Superpowers ═══════════ -->
+    <section class="slide" data-slide="10">
+      <h1 class="slide-title"><span class="accent">AI</span> Superpowers</h1>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-code-branch"></i></div>
+          <div class="stat-label">Parallelization</div>
+          <div class="stat-desc">Run hundreds of tasks simultaneously</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-gauge-high"></i></div>
+          <div class="stat-label">Speed</div>
+          <div class="stat-desc">Process in seconds what takes humans hours</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-battery-full"></i></div>
+          <div class="stat-label">Inexhaustible Enthusiasm</div>
+          <div class="stat-desc">Never bored, never tired, always consistent</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 11: Offload / Amplify ═══════════ -->
+    <section class="slide" data-slide="11">
+      <h1 class="slide-title"><span class="accent">Offload</span> Work<br><span class="dim">Amplify</span> Decisions</h1>
+      <p class="slide-subtitle">Augmenting humans, not replacing them</p>
+    </section>
+
+    <!-- ═══════════ Slide 12: The Boring Task ═══════════ -->
+    <section class="slide" data-slide="12">
+      <img src="images/boring-task.png" alt="AI never gets bored" class="slide-image">
+    </section>
+
+    <!-- ═══════════ Slide 13: Structured Data ═══════════ -->
+    <section class="slide" data-slide="13">
+      <h1 class="slide-title">Why <span class="accent">Structured Data</span> Matters</h1>
+      <div class="callout-card">
+        <i class="fas fa-database" style="color:var(--orange);margin-right:8px"></i>
+        Downstream data pipelines thrive on structured data
+      </div>
+      <ul class="bullet-list">
+        <li><i class="fas fa-table bullet-icon"></i> Queryable databases</li>
+        <li><i class="fas fa-chart-line bullet-icon"></i> Analytics dashboards</li>
+        <li><i class="fas fa-cogs bullet-icon"></i> Automated workflows</li>
+        <li><i class="fas fa-brain bullet-icon"></i> Predictive insights</li>
+      </ul>
+    </section>
+
+    <!-- ═══════════ Slide 14: AITANA Demo ═══════════ -->
+    <section class="slide" data-slide="14">
+      <h2 class="slide-title" style="font-size:clamp(24px,3vw,36px)"><span class="accent">AITANA</span> Demo</h2>
+      <p class="slide-subtitle" style="margin-bottom:8px">Document Processing in Action</p>
+      <img src="images/aitana-dashboard.png" alt="AITANA Dashboard" class="slide-image" style="max-height:50vh">
+      <a href="https://frontend-556246783252.europe-west1.run.app/assistant/a3614c76-c997-47a9-9e2d-c80b75496ee4" target="_blank" class="demo-link">
+        <i class="fas fa-external-link-alt"></i> Try Live Demo
+      </a>
+    </section>
+
+    <!-- ═══════════ Slide 15: Procurement Challenges ═══════════ -->
+    <section class="slide" data-slide="15">
+      <h1 class="slide-title">Your <span class="accent">Procurement</span> Challenges</h1>
+      <ul class="bullet-list">
+        <li><i class="fas fa-clock bullet-icon"></i> Tender analysis taking weeks</li>
+        <li><i class="fas fa-puzzle-piece bullet-icon"></i> Contract obligations scattered</li>
+        <li><i class="fas fa-file-pdf bullet-icon"></i> Supplier risk buried in PDFs</li>
+        <li><i class="fas fa-door-open bullet-icon"></i> Institutional knowledge walking out the door</li>
+      </ul>
+    </section>
+
+    <!-- ═══════════ Slide 16: The Solution ═══════════ -->
+    <section class="slide" data-slide="16">
+      <h1 class="slide-title"><span class="dim">Unstructured</span> &rarr; <span class="accent">Structured</span></h1>
+      <p class="slide-subtitle" style="font-weight:600;color:var(--orange)">At machine speed, with human oversight</p>
+    </section>
+
+    <!-- ═══════════ Slide 17: Pilot ═══════════ -->
+    <section class="slide" data-slide="17">
+      <h1 class="slide-title">Let's <span class="accent">Prove It</span> Together</h1>
+      <div class="pilot-card">
+        <h3><i class="fas fa-flask"></i> 4&ndash;6 Week Pilot</h3>
+        <ul style="list-style:none;padding:0">
+          <li><i class="fas fa-check"></i> Your real documents</li>
+          <li><i class="fas fa-check"></i> Your specific use case</li>
+          <li><i class="fas fa-check"></i> Measurable results</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 18: Q&A ═══════════ -->
+    <section class="slide" data-slide="18">
+      <h1 class="slide-title" style="margin-bottom:16px"><span class="accent">Questions?</span></h1>
+      <div class="contact-card">
+        <p><i class="fas fa-envelope" style="color:var(--orange)"></i> <a href="mailto:multivac@sunholo.com">multivac@sunholo.com</a></p>
+        <p><i class="fab fa-linkedin" style="color:var(--orange)"></i> <a href="https://linkedin.com/company/sunholo" target="_blank">linkedin.com/company/sunholo</a></p>
+      </div>
+      <img src="../images/logos/sunholo-logo.svg" alt="Sunholo" style="height:48px;opacity:.5;margin-top:16px">
+    </section>
+
+  </div><!-- /slides-viewport -->
+
+  <!-- Bottom bar -->
+  <div class="bottom-bar">
+    <div class="transport">
+      <button class="transport-btn" id="btnPrev" title="Previous slide">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <span class="step-indicator">
+        <span class="current" id="slideNum">1</span> / <span id="slideTotal">19</span>
+      </span>
+      <button class="transport-btn" id="btnNext" title="Next slide">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+    <div class="slide-dots" id="slideDots"></div>
+    <div class="nav-hints">
+      <span class="kbd">&larr;</span><span class="kbd">&rarr;</span>
+      <span style="font-size:11px;color:var(--text-dim);margin-left:4px">navigate</span>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+(function(){
+  const TOTAL = 19;
+  let current = 0;
+  let transitioning = false;
+
+  const slides = document.querySelectorAll('.slide');
+  const slideNum = document.getElementById('slideNum');
+  const dotsContainer = document.getElementById('slideDots');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+
+  // Build dots
+  for(let i=0;i<TOTAL;i++){
+    const d = document.createElement('button');
+    d.className = 'slide-dot' + (i===0?' active':'');
+    d.dataset.idx = i;
+    d.addEventListener('click', ()=> goTo(i));
+    dotsContainer.appendChild(d);
+  }
+
+  function goTo(n){
+    if(n<0||n>=TOTAL||n===current||transitioning) return;
+    transitioning = true;
+    const dir = n > current ? 1 : -1;
+
+    slides.forEach(s=>{
+      s.classList.remove('active','exit-left');
+      s.querySelectorAll('.stat-card,.callout-card,.workflow-item,.loop-wrap,.slide-image,.bullet-list li,.pilot-card,.contact-card,.demo-link,.anim-icon').forEach(el=>{
+        el.style.opacity='0';
+        el.style.transform='';
+      });
+    });
+
+    if(dir>0) slides[current].classList.add('exit-left');
+    slides[n].classList.add('active');
+
+    current = n;
+    slideNum.textContent = current + 1;
+    document.querySelectorAll('.slide-dot').forEach((d,i)=>{
+      d.classList.toggle('active', i===current);
+    });
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === TOTAL - 1;
+
+    setTimeout(()=>{ transitioning = false; }, 500);
+  }
+
+  btnPrev.disabled = true;
+
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key===' ') goTo(current+1);
+    if(e.key==='ArrowLeft') goTo(current-1);
+    if(e.key==='ArrowDown'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*'); }
+    if(e.key==='ArrowUp'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*'); }
+  });
+  btnPrev.addEventListener('click', ()=> goTo(current-1));
+  btnNext.addEventListener('click', ()=> goTo(current+1));
+
+  window.addEventListener('message', e=>{
+    if(e.data && e.data.type==='deck-command'){
+      if(e.data.action==='go-first') goTo(0);
+      if(e.data.action==='go-last'){ current=-1; goTo(TOTAL-1); }
+      if(e.data.action==='set-theme') setTheme(e.data.theme);
+    }
+  });
+  window.parent.postMessage({type:'deck-ready',total:TOTAL},'*');
+
+  function setTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('presenter-theme', theme);
+    window.parent.postMessage({type:'deck-theme',theme:theme},'*');
+  }
+  const saved = localStorage.getItem('presenter-theme');
+  if(saved) setTheme(saved);
+
+})();
+</script>
+</body>
+</html>

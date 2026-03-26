@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building AI with AI — Sunholo Presentations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#0f0f1a;
+  --surface:#1a1a2e;
+  --surface-hi:#222240;
+  --orange:#e73c17;
+  --orange-dim:rgba(231,60,23,.35);
+  --orange-glow:rgba(231,60,23,.6);
+  --green:#22c55e;
+  --green-dim:rgba(34,197,94,.15);
+  --ghost:rgba(255,255,255,.12);
+  --text:#e2e8f0;
+  --text-dim:#718096;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Montserrat',sans-serif;
+}
+
+[data-theme="light"]{
+  --bg:#f5f5f0;
+  --surface:#ffffff;
+  --surface-hi:#f0f0ea;
+  --orange:#d4300f;
+  --orange-dim:rgba(212,48,15,.2);
+  --orange-glow:rgba(212,48,15,.4);
+  --green:#16a34a;
+  --green-dim:rgba(22,163,74,.1);
+  --ghost:rgba(0,0,0,.1);
+  --text:#1a202c;
+  --text-dim:#4a5568;
+}
+
+html{height:100%}
+body{
+  min-height:100%;
+  background:var(--bg);color:var(--text);font-family:var(--sans);
+  background-image:
+    radial-gradient(circle at 50% 30%, rgba(231,60,23,.06) 0%, transparent 60%),
+    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+}
+[data-theme="light"] body{
+  background-image:
+    radial-gradient(circle at 50% 30%, rgba(212,48,15,.04) 0%, transparent 60%),
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+}
+
+/* ─── Top bar ─── */
+.top-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 24px;
+  border-bottom:1px solid var(--ghost);
+  background:rgba(15,15,26,.6);
+  backdrop-filter:blur(12px);
+  position:sticky;top:0;z-index:10;
+}
+[data-theme="light"] .top-bar{background:rgba(255,255,255,.7)}
+.top-left{display:flex;align-items:center;gap:12px}
+.top-logo{height:22px;opacity:.7}
+.back-link{
+  font-size:12px;font-family:var(--mono);color:var(--text-dim);
+  text-decoration:none;transition:color .2s;
+}
+.back-link:hover{color:var(--orange)}
+.theme-toggle{
+  width:32px;height:32px;border-radius:50%;border:1px solid var(--ghost);
+  background:transparent;color:var(--text-dim);cursor:pointer;
+  font-size:13px;transition:all .25s;display:flex;align-items:center;justify-content:center;
+}
+.theme-toggle:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ─── Hero ─── */
+.hero{
+  text-align:center;
+  padding:80px 24px 40px;
+  max-width:800px;margin:0 auto;
+}
+.hero-badge{
+  display:inline-block;
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--orange);
+  padding:6px 16px;border-radius:20px;
+  border:1px solid var(--orange-dim);
+  background:rgba(231,60,23,.08);
+  margin-bottom:24px;
+}
+.hero h1{
+  font-size:clamp(28px,5vw,48px);
+  font-weight:800;line-height:1.15;
+  margin-bottom:16px;
+  background:linear-gradient(135deg, var(--text) 0%, var(--orange) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero .subtitle{
+  font-size:clamp(14px,2vw,18px);
+  color:var(--text-dim);line-height:1.6;
+  max-width:600px;margin:0 auto;
+}
+
+/* ─── Cards ─── */
+.cards-section{
+  max-width:900px;margin:0 auto;
+  padding:20px 24px 60px;
+}
+.section-label{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:20px;
+  padding-left:4px;
+}
+
+.launch-card{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 28px;
+  border-radius:14px;
+  border:1px solid var(--orange-dim);
+  background:linear-gradient(135deg, rgba(231,60,23,.08), rgba(231,60,23,.02));
+  text-decoration:none;color:inherit;
+  transition:all .3s ease;
+  margin-bottom:32px;
+}
+.launch-card:hover{
+  border-color:var(--orange);
+  background:linear-gradient(135deg, rgba(231,60,23,.15), rgba(231,60,23,.05));
+  transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(231,60,23,.15);
+}
+.launch-info{display:flex;align-items:center;gap:16px}
+.launch-icon{
+  width:48px;height:48px;border-radius:12px;
+  background:var(--orange);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;color:#fff;flex-shrink:0;
+}
+.launch-text h3{font-size:16px;font-weight:700;margin-bottom:2px}
+.launch-text p{font-size:13px;color:var(--text-dim)}
+.launch-arrow{
+  font-size:20px;color:var(--orange);
+  transition:transform .3s;
+}
+.launch-card:hover .launch-arrow{transform:translateX(4px)}
+
+/* ─── Footer ─── */
+.footer{
+  text-align:center;padding:24px;
+  font-size:11px;color:var(--text-dim);
+  border-top:1px solid var(--ghost);
+  font-family:var(--mono);
+}
+.footer a{color:var(--orange);text-decoration:none}
+.footer a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="top-bar">
+  <div class="top-left">
+    <img src="../images/logos/sunholo-logo.svg" alt="Sunholo" class="top-logo">
+    <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> All Presentations</a>
+  </div>
+  <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+    <i class="fas fa-sun"></i>
+  </button>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-badge"><i class="fas fa-microphone-alt"></i> Presentation</div>
+  <h1>Building AI with AI</h1>
+  <p class="subtitle">How AI-first approaches transform procurement and intelligence gathering. Real examples of AI systems that build, evaluate, and improve other AI systems.</p>
+</div>
+
+<!-- Cards -->
+<div class="cards-section">
+
+  <div class="section-label"><i class="fas fa-play-circle"></i> Launch Presenter</div>
+  <a href="presenter.html" class="launch-card">
+    <div class="launch-info">
+      <div class="launch-icon"><i class="fas fa-tv"></i></div>
+      <div class="launch-text">
+        <h3>Launch Presenter Mode</h3>
+        <p>Full presenter with deck navigation, theme toggle, and keyboard controls</p>
+      </div>
+    </div>
+    <div class="launch-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+
+  <div class="section-label"><i class="fas fa-layer-group"></i> Individual Decks</div>
+  <a href="00-building-ai-with-ai.html" class="launch-card">
+    <div class="launch-info">
+      <div class="launch-icon"><i class="fas fa-images"></i></div>
+      <div class="launch-text">
+        <h3>AI + Procurement</h3>
+        <p>19 slides &mdash; iterative AI loops, procurement intelligence, and structured data</p>
+      </div>
+    </div>
+    <div class="launch-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <a href="https://sunholo.com">sunholo.com</a>
+</div>
+
+<script>
+(function(){
+  const toggle = document.getElementById('themeToggle');
+  function setTheme(t){
+    document.documentElement.setAttribute('data-theme', t);
+    toggle.innerHTML = t === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    localStorage.setItem('presenter-theme', t);
+  }
+  toggle.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    setTheme(cur === 'light' ? 'dark' : 'light');
+  });
+  const saved = localStorage.getItem('presenter-theme');
+  if (saved) setTheme(saved);
+})();
+</script>
+</body>
+</html>
