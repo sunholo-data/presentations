@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's Coming — Analytics for AI Agents</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#0f0f1a;--surface:#1a1a2e;--surface-hi:#222240;
+  --orange:#e73c17;--orange-dim:rgba(231,60,23,.35);--orange-glow:rgba(231,60,23,.6);
+  --green:#22c55e;--amber:#f59e0b;--indigo:#6366f1;
+  --teal:#1da69a;--teal-dim:rgba(29,166,154,.25);
+  --ghost:rgba(255,255,255,.12);
+  --text:#e2e8f0;--text-dim:#718096;
+  --bar-bg:rgba(15,15,26,.8);--bar-border:rgba(255,255,255,.06);
+  --mono:'JetBrains Mono',monospace;--sans:'Montserrat',sans-serif;
+}
+[data-theme="light"]{
+  --bg:#f5f5f0;--surface:#ffffff;--surface-hi:#f0f0ea;
+  --orange:#d4300f;--orange-dim:rgba(212,48,15,.2);--orange-glow:rgba(212,48,15,.4);
+  --green:#16a34a;--amber:#d97706;--indigo:#4f46e5;
+  --teal:#168077;--teal-dim:rgba(22,128,119,.18);
+  --ghost:rgba(0,0,0,.1);
+  --text:#1a202c;--text-dim:#4a5568;
+  --bar-bg:rgba(255,255,255,.85);--bar-border:rgba(0,0,0,.08);
+}
+
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(231,60,23,.03) 0%, transparent 70%),
+    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size:100% 100%, 60px 60px, 60px 60px;
+}
+[data-theme="light"] body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(212,48,15,.03) 0%, transparent 70%),
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+  background-size:100% 100%, 60px 60px, 60px 60px;
+}
+
+#app{display:flex;flex-direction:column;height:100vh}
+.slides-viewport{flex:1;position:relative;overflow:hidden}
+
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 48px;gap:24px;
+  opacity:0;visibility:hidden;
+  transform:translateX(40px);
+  transition:opacity .45s ease, transform .45s ease, visibility .45s;
+  overflow-y:auto;
+}
+.slide.active{opacity:1;visibility:visible;transform:translateX(0)}
+.slide.exit-left{transform:translateX(-40px);opacity:0}
+
+.slide-title{
+  font-size:clamp(28px,4vw,48px);
+  font-weight:800;letter-spacing:-.02em;
+  text-align:center;line-height:1.15;max-width:900px;
+}
+.slide-title .accent{color:var(--orange)}
+.slide-title .dim{color:var(--text-dim)}
+.slide-subtitle{
+  font-size:clamp(14px,1.8vw,20px);
+  color:var(--text-dim);text-align:center;
+  max-width:700px;line-height:1.5;
+}
+.slide-tag{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--orange);
+  padding:6px 14px;border-radius:20px;
+  border:1px solid var(--orange-dim);
+  background:rgba(231,60,23,.08);
+}
+
+.todo-card{
+  background:var(--surface);border:1px dashed var(--orange-dim);
+  border-radius:12px;padding:20px 24px;max-width:720px;width:100%;
+  font-size:13px;line-height:1.6;color:var(--text-dim);
+  font-family:var(--mono);
+}
+.todo-card .todo-label{
+  display:inline-block;font-size:10px;font-weight:700;
+  color:var(--orange);letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:8px;
+}
+.todo-card ul{padding-left:18px;margin-top:6px}
+.todo-card li{margin:3px 0}
+
+/* ─── Co-presenter callout (Analytics.dev programme link) ─── */
+.co-talk-card{
+  display:flex;align-items:flex-start;gap:14px;
+  background:var(--surface);
+  border:1px solid var(--teal-dim);
+  border-left:4px solid var(--teal);
+  border-radius:10px;padding:14px 18px;
+  max-width:680px;width:100%;
+  text-align:left;
+}
+.co-talk-icon{
+  width:36px;height:36px;border-radius:8px;
+  background:rgba(29,166,154,.12);
+  color:var(--teal);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;
+}
+.co-talk-body{flex:1;min-width:0}
+.co-talk-meta{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  color:var(--teal);letter-spacing:.06em;text-transform:uppercase;
+  margin-bottom:3px;
+}
+.co-talk-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.co-talk-quote{font-size:12px;color:var(--text-dim);line-height:1.5;font-style:italic}
+
+.bottom-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 20px;
+  border-top:1px solid var(--bar-border);
+  flex-shrink:0;background:var(--bar-bg);backdrop-filter:blur(8px);
+}
+.transport{display:flex;align-items:center;gap:8px}
+.transport-btn{
+  width:28px;height:28px;border-radius:50%;
+  border:1px solid var(--ghost);background:transparent;
+  color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;transition:all .2s;
+}
+.transport-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}
+.transport-btn:disabled{opacity:.3;cursor:default}
+.step-indicator{font-family:var(--mono);font-size:12px;color:var(--text-dim)}
+.step-indicator .current{color:var(--text);font-weight:700}
+.slide-dots{display:flex;gap:6px}
+.slide-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--ghost);border:none;cursor:pointer;
+  transition:all .25s;
+}
+.slide-dot.active{background:var(--orange);transform:scale(1.3)}
+.nav-hints{display:flex;align-items:center;gap:6px}
+.kbd{
+  display:inline-block;padding:1px 5px;border-radius:3px;
+  font-family:var(--mono);font-size:9px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:var(--text-dim);
+}
+[data-theme="light"] .kbd{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
+
+@keyframes fadeSlideUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.slide.active .todo-card{animation:fadeSlideUp .5s ease .15s both}
+.slide.active .slide-tag{animation:fadeSlideUp .4s ease .05s both}
+
+@media(max-width:900px){.slide{padding:24px}}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="slides-viewport">
+
+    <!-- ═══════════ Slide 1: Section Title ═══════════ -->
+    <section class="slide active" data-slide="1">
+      <span class="slide-tag"><i class="fas fa-rocket"></i> Act 3 &middot; 7 min</span>
+      <h1 class="slide-title">What I Think Is <span class="accent">Coming</span></h1>
+      <p class="slide-subtitle">Speculation grounded in experience.</p>
+    </section>
+
+    <!-- ═══════════ Slide 2: 3.1 AI Referrals ═══════════ -->
+    <section class="slide" data-slide="2">
+      <h1 class="slide-title">3.1 &middot; <span class="accent">AI Referrals</span></h1>
+      <p class="slide-subtitle">Low volume. High intent. High conversion. How do you optimise for a referral source that never visits your website?</p>
+      <div class="todo-card">
+        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
+        Mock GA4 acquisition report:
+        <ul>
+          <li>Familiar channel grouping table</li>
+          <li>New row fades in: "AI Referrals"</li>
+          <li>Stats: low sessions, high conversion rate, high revenue/session</li>
+          <li>Source examples: Claude, ChatGPT, Perplexity</li>
+        </ul>
+      </div>
+      <div class="co-talk-card">
+        <div class="co-talk-icon"><i class="fas fa-user-plus"></i></div>
+        <div class="co-talk-body">
+          <div class="co-talk-meta">Coming up tonight &middot; Caroline Vidal &middot; DFDS</div>
+          <div class="co-talk-title">Agentic Lead Enrichment &amp; Attribution</div>
+          <div class="co-talk-quote">"Caroline goes deeper on agentic enrichment after me — she'll show you what to do with these leads once they arrive. I'm here to ask whether you're even seeing them."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 3: 3.2 Agents Browsing ═══════════ -->
+    <section class="slide" data-slide="3">
+      <h1 class="slide-title">3.2 &middot; <span class="accent">Agents</span> Are the New Users</h1>
+      <p class="slide-subtitle">Past peak human browsing. Your website is now an interface for machines that never agreed to your terms of service.</p>
+      <div class="todo-card">
+        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
+        Bot traffic stat + visual:
+        <ul>
+          <li>Headline stat: % of web traffic that's automated (cite Imperva / Cloudflare report)</li>
+          <li>Browser visual with AI agent avatar as the "user"</li>
+          <li>Tool calls instead of clicks</li>
+          <li>End: "the assumption that a human loads a page is already breaking"</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 4: 3.3 MCP and the Bypass ═══════════ -->
+    <section class="slide" data-slide="4">
+      <h1 class="slide-title">3.3 &middot; <span class="accent">MCP</span> &mdash; The Bypass</h1>
+      <p class="slide-subtitle">The webpage never loads.</p>
+      <div class="todo-card">
+        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
+        Two flow diagrams:
+        <ul>
+          <li>Traditional: User → Browser → Website → Data</li>
+          <li>MCP: User → AI → Tool Call → Data (website fades out)</li>
+          <li>Brief MCP explainer (Model Context Protocol)</li>
+          <li>Honest landing: "I don't have answers. I just know this is happening."</li>
+        </ul>
+      </div>
+      <div class="co-talk-card">
+        <div class="co-talk-icon"><i class="fas fa-server"></i></div>
+        <div class="co-talk-body">
+          <div class="co-talk-meta">Coming up tonight &middot; Serge Shkvarnytskyi &middot; Stape</div>
+          <div class="co-talk-title">Server-side tracking: From audit to reporting</div>
+          <div class="co-talk-quote">"Serge talks server-side later — same trust and control problem from a different angle. We're both moving collection off the page."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 5: 3.4 Skills Transfer ═══════════ -->
+    <section class="slide" data-slide="5">
+      <h1 class="slide-title">3.4 &middot; The Tools Changed.<br>The <span class="accent">Thinking</span> Didn't.</h1>
+      <p class="slide-subtitle">Building on fifteen years of foundations — not starting over.</p>
+      <div class="todo-card">
+        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
+        Skills mapping (left → right reveal):
+        <ul>
+          <li>Event taxonomy → Tool call schemas</li>
+          <li>User journeys → Agent traces</li>
+          <li>Funnels → Task completion rates</li>
+          <li>Segmentation → Intent clustering</li>
+          <li>BigQuery → Still BigQuery (joke landing)</li>
+        </ul>
+      </div>
+    </section>
+
+  </div><!-- /slides-viewport -->
+
+  <div class="bottom-bar">
+    <div class="transport">
+      <button class="transport-btn" id="btnPrev" title="Previous slide"><i class="fas fa-chevron-left"></i></button>
+      <span class="step-indicator"><span class="current" id="slideNum">1</span> / <span id="slideTotal">1</span></span>
+      <button class="transport-btn" id="btnNext" title="Next slide"><i class="fas fa-chevron-right"></i></button>
+    </div>
+    <div class="slide-dots" id="slideDots"></div>
+    <div class="nav-hints">
+      <span class="kbd">&larr;</span><span class="kbd">&rarr;</span>
+      <span style="font-size:11px;color:var(--text-dim);margin-left:4px">navigate</span>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const TOTAL = slides.length;
+  let current = 0;
+  let transitioning = false;
+
+  const slideNum = document.getElementById('slideNum');
+  const slideTotal = document.getElementById('slideTotal');
+  const dotsContainer = document.getElementById('slideDots');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+
+  slideTotal.textContent = TOTAL;
+
+  for(let i=0;i<TOTAL;i++){
+    const d = document.createElement('button');
+    d.className = 'slide-dot' + (i===0?' active':'');
+    d.dataset.idx = i;
+    d.addEventListener('click', ()=> goTo(i));
+    dotsContainer.appendChild(d);
+  }
+
+  function goTo(n){
+    if(n<0||n>=TOTAL||n===current||transitioning) return;
+    transitioning = true;
+    const dir = n > current ? 1 : -1;
+
+    slides.forEach(s=>s.classList.remove('active','exit-left'));
+    if(current>=0 && current<TOTAL && dir>0) slides[current].classList.add('exit-left');
+    slides[n].classList.add('active');
+
+    current = n;
+    slideNum.textContent = current + 1;
+    document.querySelectorAll('.slide-dot').forEach((d,i)=>{
+      d.classList.toggle('active', i===current);
+    });
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === TOTAL - 1;
+
+    setTimeout(()=>{ transitioning = false; }, 500);
+  }
+
+  btnPrev.disabled = true;
+  if(TOTAL <= 1) btnNext.disabled = true;
+
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key===' ') goTo(current+1);
+    if(e.key==='ArrowLeft') goTo(current-1);
+    if(e.key==='ArrowDown'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*'); }
+    if(e.key==='ArrowUp'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*'); }
+  });
+  btnPrev.addEventListener('click', ()=> goTo(current-1));
+  btnNext.addEventListener('click', ()=> goTo(current+1));
+
+  window.addEventListener('message', e=>{
+    if(e.data && e.data.type==='deck-command'){
+      if(e.data.action==='go-first') goTo(0);
+      if(e.data.action==='go-last'){ current=-1; goTo(TOTAL-1); }
+      if(e.data.action==='set-theme') setTheme(e.data.theme);
+    }
+  });
+
+  window.parent.postMessage({type:'deck-ready',total:TOTAL},'*');
+
+  function setTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+})();
+</script>
+</body>
+</html>

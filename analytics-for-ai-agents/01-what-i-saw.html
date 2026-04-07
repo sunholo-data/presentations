@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What I Saw Changing — Analytics for AI Agents</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#0f0f1a;--surface:#1a1a2e;--surface-hi:#222240;
+  --orange:#e73c17;--orange-dim:rgba(231,60,23,.35);--orange-glow:rgba(231,60,23,.6);
+  --green:#22c55e;--amber:#f59e0b;--indigo:#6366f1;
+  --teal:#1da69a;--teal-dim:rgba(29,166,154,.25);
+  --ghost:rgba(255,255,255,.12);
+  --text:#e2e8f0;--text-dim:#718096;
+  --bar-bg:rgba(15,15,26,.8);--bar-border:rgba(255,255,255,.06);
+  --mono:'JetBrains Mono',monospace;--sans:'Montserrat',sans-serif;
+}
+[data-theme="light"]{
+  --bg:#f5f5f0;--surface:#ffffff;--surface-hi:#f0f0ea;
+  --orange:#d4300f;--orange-dim:rgba(212,48,15,.2);--orange-glow:rgba(212,48,15,.4);
+  --green:#16a34a;--amber:#d97706;--indigo:#4f46e5;
+  --teal:#168077;--teal-dim:rgba(22,128,119,.18);
+  --ghost:rgba(0,0,0,.1);
+  --text:#1a202c;--text-dim:#4a5568;
+  --bar-bg:rgba(255,255,255,.85);--bar-border:rgba(0,0,0,.08);
+}
+
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(231,60,23,.03) 0%, transparent 70%),
+    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size:100% 100%, 60px 60px, 60px 60px;
+}
+[data-theme="light"] body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(212,48,15,.03) 0%, transparent 70%),
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+  background-size:100% 100%, 60px 60px, 60px 60px;
+}
+
+#app{display:flex;flex-direction:column;height:100vh}
+.slides-viewport{flex:1;position:relative;overflow:hidden}
+
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 48px;gap:24px;
+  opacity:0;visibility:hidden;
+  transform:translateX(40px);
+  transition:opacity .45s ease, transform .45s ease, visibility .45s;
+  overflow-y:auto;
+}
+.slide.active{opacity:1;visibility:visible;transform:translateX(0)}
+.slide.exit-left{transform:translateX(-40px);opacity:0}
+
+.slide-title{
+  font-size:clamp(28px,4vw,48px);
+  font-weight:800;letter-spacing:-.02em;
+  text-align:center;line-height:1.15;max-width:900px;
+}
+.slide-title .accent{color:var(--orange)}
+.slide-title .dim{color:var(--text-dim)}
+.slide-subtitle{
+  font-size:clamp(14px,1.8vw,20px);
+  color:var(--text-dim);text-align:center;
+  max-width:700px;line-height:1.5;
+}
+.slide-tag{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--orange);
+  padding:6px 14px;border-radius:20px;
+  border:1px solid var(--orange-dim);
+  background:rgba(231,60,23,.08);
+}
+
+.todo-card{
+  background:var(--surface);border:1px dashed var(--orange-dim);
+  border-radius:12px;padding:20px 24px;max-width:720px;width:100%;
+  font-size:13px;line-height:1.6;color:var(--text-dim);
+  font-family:var(--mono);
+}
+.todo-card .todo-label{
+  display:inline-block;font-size:10px;font-weight:700;
+  color:var(--orange);letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:8px;
+}
+.todo-card ul{padding-left:18px;margin-top:6px}
+.todo-card li{margin:3px 0}
+
+/* ─── Co-presenter callout (Analytics.dev programme link) ─── */
+.co-talk-card{
+  display:flex;align-items:flex-start;gap:14px;
+  background:var(--surface);
+  border:1px solid var(--teal-dim);
+  border-left:4px solid var(--teal);
+  border-radius:10px;padding:14px 18px;
+  max-width:680px;width:100%;
+  text-align:left;
+}
+.co-talk-icon{
+  width:36px;height:36px;border-radius:8px;
+  background:rgba(29,166,154,.12);
+  color:var(--teal);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;
+}
+.co-talk-body{flex:1;min-width:0}
+.co-talk-meta{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  color:var(--teal);letter-spacing:.06em;text-transform:uppercase;
+  margin-bottom:3px;
+}
+.co-talk-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.co-talk-quote{font-size:12px;color:var(--text-dim);line-height:1.5;font-style:italic}
+
+.bottom-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 20px;
+  border-top:1px solid var(--bar-border);
+  flex-shrink:0;background:var(--bar-bg);backdrop-filter:blur(8px);
+}
+.transport{display:flex;align-items:center;gap:8px}
+.transport-btn{
+  width:28px;height:28px;border-radius:50%;
+  border:1px solid var(--ghost);background:transparent;
+  color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;transition:all .2s;
+}
+.transport-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}
+.transport-btn:disabled{opacity:.3;cursor:default}
+.step-indicator{font-family:var(--mono);font-size:12px;color:var(--text-dim)}
+.step-indicator .current{color:var(--text);font-weight:700}
+.slide-dots{display:flex;gap:6px}
+.slide-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--ghost);border:none;cursor:pointer;
+  transition:all .25s;
+}
+.slide-dot.active{background:var(--orange);transform:scale(1.3)}
+.nav-hints{display:flex;align-items:center;gap:6px}
+.kbd{
+  display:inline-block;padding:1px 5px;border-radius:3px;
+  font-family:var(--mono);font-size:9px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:var(--text-dim);
+}
+[data-theme="light"] .kbd{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
+
+@keyframes fadeSlideUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.slide.active .todo-card{animation:fadeSlideUp .5s ease .15s both}
+.slide.active .slide-tag{animation:fadeSlideUp .4s ease .05s both}
+
+@media(max-width:900px){.slide{padding:24px}}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="slides-viewport">
+
+    <!-- ═══════════ Slide 1: Section Title ═══════════ -->
+    <section class="slide active" data-slide="1">
+      <span class="slide-tag"><i class="fas fa-eye"></i> Act 1 &middot; 6 min</span>
+      <h1 class="slide-title">What I <span class="accent">Saw</span> Changing</h1>
+      <p class="slide-subtitle">The paradigm shift, told as personal observation.</p>
+    </section>
+
+    <!-- ═══════════ Slide 2: 1.1 The Overwhelm ═══════════ -->
+    <section class="slide" data-slide="2">
+      <h1 class="slide-title">1.1 &middot; The <span class="accent">Overwhelm</span></h1>
+      <p class="slide-subtitle">The pace is relentless. I went all-in.</p>
+      <div class="todo-card">
+        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
+        Timeline of AI releases, rapid fire:
+        <ul>
+          <li>GPT-3 → ChatGPT → GPT-4 → Claude → Gemini → Agents → MCP</li>
+          <li>Visual: cascading dates / logos that overwhelm the screen</li>
+          <li>Land on: "Built Multivac as a laboratory"</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 3: 1.2 The Rosetta Stone ═══════════ -->
+    <section class="slide" data-slide="3">
+      <h1 class="slide-title">1.2 &middot; The <span class="accent">Rosetta Stone</span></h1>
+      <p class="slide-subtitle">Different names, same concepts. You're not tracking a journey — you're tracking <em>reasoning</em>.</p>
+      <div class="todo-card">
+        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
+        Animated two-column mapping GA4 → Langfuse:
+        <ul>
+          <li>Session → Trace</li>
+          <li>Pageview → Generation</li>
+          <li>Event → Tool Call / Span</li>
+          <li>User ID → Thread ID</li>
+          <li>Custom dimensions → Metadata</li>
+          <li>Note: flat & sequential → nested & hierarchical</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 4: 1.3 The Technical Comparison ═══════════ -->
+    <section class="slide" data-slide="4">
+      <h1 class="slide-title">1.3 &middot; Same Discipline, <span class="accent">Richer Data</span></h1>
+      <p class="slide-subtitle">An order of magnitude richer data — model version, tokens, cost, latency, the actual conversation.</p>
+      <div class="todo-card">
+        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
+        Split-screen technical comparison:
+        <ul>
+          <li>Left: GA4 event code (build line by line)</li>
+          <li>Right: Langfuse trace code (build line by line)</li>
+          <li>Then: GA4 DebugView screenshot vs Langfuse waterfall trace</li>
+          <li>Highlight: nested drill-down per tool call</li>
+        </ul>
+      </div>
+      <div class="co-talk-card">
+        <div class="co-talk-icon"><i class="fas fa-shield-halved"></i></div>
+        <div class="co-talk-body">
+          <div class="co-talk-meta">Coming up tonight &middot; Julius Fedorovicius</div>
+          <div class="co-talk-title">The Two Pillars of Modern Tagging: Security and Enrichment</div>
+          <div class="co-talk-quote">"Julius will show you how to harden your tagging tonight. I'm here to ask whether you're capturing the right surface in the first place."</div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /slides-viewport -->
+
+  <div class="bottom-bar">
+    <div class="transport">
+      <button class="transport-btn" id="btnPrev" title="Previous slide"><i class="fas fa-chevron-left"></i></button>
+      <span class="step-indicator"><span class="current" id="slideNum">1</span> / <span id="slideTotal">1</span></span>
+      <button class="transport-btn" id="btnNext" title="Next slide"><i class="fas fa-chevron-right"></i></button>
+    </div>
+    <div class="slide-dots" id="slideDots"></div>
+    <div class="nav-hints">
+      <span class="kbd">&larr;</span><span class="kbd">&rarr;</span>
+      <span style="font-size:11px;color:var(--text-dim);margin-left:4px">navigate</span>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const TOTAL = slides.length;
+  let current = 0;
+  let transitioning = false;
+
+  const slideNum = document.getElementById('slideNum');
+  const slideTotal = document.getElementById('slideTotal');
+  const dotsContainer = document.getElementById('slideDots');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+
+  slideTotal.textContent = TOTAL;
+
+  for(let i=0;i<TOTAL;i++){
+    const d = document.createElement('button');
+    d.className = 'slide-dot' + (i===0?' active':'');
+    d.dataset.idx = i;
+    d.addEventListener('click', ()=> goTo(i));
+    dotsContainer.appendChild(d);
+  }
+
+  function goTo(n){
+    if(n<0||n>=TOTAL||n===current||transitioning) return;
+    transitioning = true;
+    const dir = n > current ? 1 : -1;
+
+    slides.forEach(s=>s.classList.remove('active','exit-left'));
+    if(current>=0 && current<TOTAL && dir>0) slides[current].classList.add('exit-left');
+    slides[n].classList.add('active');
+
+    current = n;
+    slideNum.textContent = current + 1;
+    document.querySelectorAll('.slide-dot').forEach((d,i)=>{
+      d.classList.toggle('active', i===current);
+    });
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === TOTAL - 1;
+
+    setTimeout(()=>{ transitioning = false; }, 500);
+  }
+
+  btnPrev.disabled = true;
+  if(TOTAL <= 1) btnNext.disabled = true;
+
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key===' ') goTo(current+1);
+    if(e.key==='ArrowLeft') goTo(current-1);
+    if(e.key==='ArrowDown'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*'); }
+    if(e.key==='ArrowUp'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*'); }
+  });
+  btnPrev.addEventListener('click', ()=> goTo(current-1));
+  btnNext.addEventListener('click', ()=> goTo(current+1));
+
+  window.addEventListener('message', e=>{
+    if(e.data && e.data.type==='deck-command'){
+      if(e.data.action==='go-first') goTo(0);
+      if(e.data.action==='go-last'){ current=-1; goTo(TOTAL-1); }
+      if(e.data.action==='set-theme') setTheme(e.data.theme);
+    }
+  });
+
+  window.parent.postMessage({type:'deck-ready',total:TOTAL},'*');
+
+  function setTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+})();
+</script>
+</body>
+</html>

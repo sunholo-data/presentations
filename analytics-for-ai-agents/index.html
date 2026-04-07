@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics for AI Agents — From Pageviews to Prompts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#0f0f1a;
+  --surface:#1a1a2e;
+  --surface-hi:#222240;
+  --orange:#e73c17;
+  --orange-dim:rgba(231,60,23,.35);
+  --orange-glow:rgba(231,60,23,.6);
+  --green:#22c55e;
+  --green-dim:rgba(34,197,94,.15);
+  --indigo:#6366f1;
+  --indigo-dim:rgba(99,102,241,.15);
+  --teal:#1da69a;
+  --teal-dim:rgba(29,166,154,.25);
+  --ghost:rgba(255,255,255,.12);
+  --text:#e2e8f0;
+  --text-dim:#718096;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Montserrat',sans-serif;
+}
+
+[data-theme="light"]{
+  --bg:#f5f5f0;
+  --surface:#ffffff;
+  --surface-hi:#f0f0ea;
+  --orange:#d4300f;
+  --orange-dim:rgba(212,48,15,.2);
+  --orange-glow:rgba(212,48,15,.4);
+  --green:#16a34a;
+  --green-dim:rgba(22,163,74,.1);
+  --indigo:#4f46e5;
+  --indigo-dim:rgba(79,70,229,.1);
+  --teal:#168077;
+  --teal-dim:rgba(22,128,119,.18);
+  --ghost:rgba(0,0,0,.1);
+  --text:#1a202c;
+  --text-dim:#4a5568;
+}
+
+html{height:100%}
+body{
+  min-height:100%;
+  background:var(--bg);color:var(--text);font-family:var(--sans);
+  background-image:
+    radial-gradient(circle at 50% 30%, rgba(231,60,23,.06) 0%, transparent 60%),
+    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+}
+[data-theme="light"] body{
+  background-image:
+    radial-gradient(circle at 50% 30%, rgba(212,48,15,.04) 0%, transparent 60%),
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+}
+
+/* ─── Top bar ─── */
+.top-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 24px;
+  border-bottom:1px solid var(--ghost);
+  background:rgba(15,15,26,.6);
+  backdrop-filter:blur(12px);
+  position:sticky;top:0;z-index:10;
+}
+[data-theme="light"] .top-bar{background:rgba(255,255,255,.7)}
+.top-left{display:flex;align-items:center;gap:12px}
+.top-logo{height:22px;opacity:.7}
+.top-logo.ailang{height:26px}
+.back-link{
+  font-size:12px;font-family:var(--mono);color:var(--text-dim);
+  text-decoration:none;transition:color .2s;
+}
+.back-link:hover{color:var(--orange)}
+.theme-toggle{
+  width:32px;height:32px;border-radius:50%;border:1px solid var(--ghost);
+  background:transparent;color:var(--text-dim);cursor:pointer;
+  font-size:13px;transition:all .25s;display:flex;align-items:center;justify-content:center;
+}
+.theme-toggle:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ─── Event banner ─── */
+.event-banner{
+  max-width:1100px;margin:24px auto 0;padding:0 24px;
+}
+.event-banner a{display:block;border-radius:14px;overflow:hidden;
+  border:2px solid var(--teal-dim);transition:all .25s;
+  box-shadow:0 4px 32px rgba(29,166,154,.1);
+}
+.event-banner a:hover{border-color:var(--teal);transform:translateY(-2px);
+  box-shadow:0 8px 40px rgba(29,166,154,.18);
+}
+.event-banner img{display:block;width:100%;height:auto}
+
+/* ─── Hero ─── */
+.hero{
+  text-align:center;
+  padding:80px 24px 40px;
+  max-width:800px;margin:0 auto;
+}
+.hero-badge{
+  display:inline-block;
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--teal);
+  padding:6px 16px;border-radius:20px;
+  border:1px solid var(--teal-dim);
+  background:rgba(29,166,154,.08);
+  margin-bottom:24px;
+}
+.hero h1{
+  font-size:clamp(28px,5vw,48px);
+  font-weight:800;line-height:1.15;
+  margin-bottom:16px;
+  background:linear-gradient(135deg, var(--text) 0%, var(--orange) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero .subtitle{
+  font-size:clamp(14px,2vw,18px);
+  color:var(--text-dim);line-height:1.6;
+  max-width:640px;margin:0 auto;
+}
+
+/* ─── Cards ─── */
+.cards-section{
+  max-width:900px;margin:0 auto;
+  padding:20px 24px 60px;
+}
+.section-label{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:20px;
+  padding-left:4px;
+}
+
+/* Full presentation launcher */
+.launch-card{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 28px;
+  border-radius:14px;
+  border:1px solid var(--orange-dim);
+  background:linear-gradient(135deg, rgba(231,60,23,.08), rgba(231,60,23,.02));
+  text-decoration:none;color:inherit;
+  transition:all .3s ease;
+  margin-bottom:32px;
+}
+.launch-card:hover{
+  border-color:var(--orange);
+  background:linear-gradient(135deg, rgba(231,60,23,.15), rgba(231,60,23,.05));
+  transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(231,60,23,.15);
+}
+.launch-info{display:flex;align-items:center;gap:16px}
+.launch-icon{
+  width:48px;height:48px;border-radius:12px;
+  background:var(--orange);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;color:#fff;flex-shrink:0;
+}
+.launch-text h3{font-size:16px;font-weight:700;margin-bottom:2px}
+.launch-text p{font-size:13px;color:var(--text-dim)}
+.launch-arrow{
+  font-size:20px;color:var(--orange);
+  transition:transform .3s;
+}
+.launch-card:hover .launch-arrow{transform:translateX(4px)}
+
+/* Individual deck cards */
+.deck-grid{display:flex;flex-direction:column;gap:10px}
+
+.deck-card{
+  display:flex;align-items:center;gap:16px;
+  padding:16px 20px;
+  border-radius:12px;
+  border:1px solid var(--ghost);
+  background:var(--surface);
+  text-decoration:none;color:inherit;
+  transition:all .25s ease;
+}
+.deck-card:hover{
+  border-color:rgba(231,60,23,.4);
+  background:var(--surface-hi);
+  transform:translateX(4px);
+}
+.deck-num{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--ghost);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:13px;font-weight:700;
+  color:var(--text-dim);flex-shrink:0;
+  transition:all .25s;
+}
+.deck-card:hover .deck-num{
+  background:var(--orange-dim);color:var(--orange);
+}
+.deck-details{flex:1;min-width:0}
+.deck-details h3{font-size:14px;font-weight:700;margin-bottom:2px}
+.deck-details p{font-size:12px;color:var(--text-dim);line-height:1.4}
+.deck-tag{
+  font-family:var(--mono);font-size:10px;
+  padding:3px 8px;border-radius:8px;
+  background:var(--ghost);color:var(--text-dim);
+  flex-shrink:0;transition:all .25s;
+}
+.deck-card:hover .deck-tag{background:var(--orange-dim);color:var(--orange)}
+
+/* ─── Footer ─── */
+.footer{
+  text-align:center;padding:24px;
+  font-size:11px;color:var(--text-dim);
+  border-top:1px solid var(--ghost);
+  font-family:var(--mono);
+}
+.footer a{color:var(--orange);text-decoration:none}
+.footer a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="top-bar">
+  <div class="top-left">
+    <img src="../images/logos/sunholo-logo.svg" alt="Sunholo" class="top-logo">
+    <img src="../images/logos/ailang-logo.svg" alt="AILANG" class="top-logo ailang">
+    <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> All Presentations</a>
+  </div>
+  <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+    <i class="fas fa-sun"></i>
+  </button>
+</div>
+
+<!-- Event banner -->
+<div class="event-banner">
+  <a href="https://brandleadership.community/Insights/analytics-dev-29-april-2026/" target="_blank" rel="noopener">
+    <img src="images/hero-banner.jpg" alt="Analytics.dev Copenhagen — 29 April 2026">
+  </a>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-badge"><i class="fas fa-chart-line"></i> Analytics.dev &middot; Copenhagen &middot; 29 April 2026</div>
+  <h1>Analytics for AI Agents<br>From Pageviews to Prompts</h1>
+  <p class="subtitle">The most valuable digital analytics data in your organisation isn't in your website tags &mdash; it's now in AI chatbot logs. And you're probably giving it away.</p>
+</div>
+
+<!-- Cards -->
+<div class="cards-section">
+
+  <!-- Launch full presentation -->
+  <div class="section-label"><i class="fas fa-play-circle"></i> Full Presentation</div>
+  <a href="presenter.html" class="launch-card">
+    <div class="launch-info">
+      <div class="launch-icon"><i class="fas fa-tv"></i></div>
+      <div class="launch-text">
+        <h3>Launch Presenter Mode</h3>
+        <p>All 5 sections in sequence &middot; ~30 min &middot; keyboard navigation &amp; deck switching</p>
+      </div>
+    </div>
+    <div class="launch-arrow"><i class="fas fa-arrow-right"></i></div>
+  </a>
+
+  <!-- Individual sections -->
+  <div class="section-label"><i class="fas fa-layer-group"></i> Sections</div>
+  <div class="deck-grid">
+
+    <a href="00-opening.html" class="deck-card">
+      <div class="deck-num">00</div>
+      <div class="deck-details">
+        <h3>Opening</h3>
+        <p>Hook and bio flash &mdash; ~2 min</p>
+      </div>
+      <span class="deck-tag">3 slides</span>
+    </a>
+
+    <a href="01-what-i-saw.html" class="deck-card">
+      <div class="deck-num">01</div>
+      <div class="deck-details">
+        <h3>Act 1 &middot; What I Saw Changing</h3>
+        <p>The overwhelm, the GA4&harr;Langfuse Rosetta Stone, the technical comparison &mdash; ~6 min &middot; <em>references Julius Fedorovicius</em></p>
+      </div>
+      <span class="deck-tag">4 slides</span>
+    </a>
+
+    <a href="02-what-i-found.html" class="deck-card">
+      <div class="deck-num">02</div>
+      <div class="deck-details">
+        <h3>Act 2 &middot; What I Found</h3>
+        <p>Prompts as intent, provider studies, the hero story, text at scale, Langfuse demo &mdash; ~11 min &middot; <em>references Peter Meyer</em></p>
+      </div>
+      <span class="deck-tag">6 slides</span>
+    </a>
+
+    <a href="03-whats-coming.html" class="deck-card">
+      <div class="deck-num">03</div>
+      <div class="deck-details">
+        <h3>Act 3 &middot; What I Think Is Coming</h3>
+        <p>AI referrals, agents browsing, MCP &amp; the bypass, skills transfer &mdash; ~7 min &middot; <em>references Caroline Vidal &amp; Serge Shkvarnytskyi</em></p>
+      </div>
+      <span class="deck-tag">5 slides</span>
+    </a>
+
+    <a href="04-close.html" class="deck-card">
+      <div class="deck-num">04</div>
+      <div class="deck-details">
+        <h3>Close</h3>
+        <p>Live conference agent demo, three takeaways, the invitation &mdash; ~4 min</p>
+      </div>
+      <span class="deck-tag">3 slides</span>
+    </a>
+
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <a href="https://sunholo.com">sunholo.com</a> &middot; <a href="outline.md">Full narrative outline</a>
+</div>
+
+<script>
+(function(){
+  const toggle = document.getElementById('themeToggle');
+  function setTheme(t){
+    document.documentElement.setAttribute('data-theme', t);
+    toggle.innerHTML = t === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    localStorage.setItem('presenter-theme', t);
+  }
+  toggle.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    setTheme(cur === 'light' ? 'dark' : 'light');
+  });
+  const saved = localStorage.getItem('presenter-theme');
+  if (saved) setTheme(saved);
+})();
+</script>
+</body>
+</html>
