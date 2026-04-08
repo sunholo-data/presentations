@@ -64,6 +64,49 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 }
 .theme-toggle:hover{border-color:var(--orange);color:var(--orange)}
 
+/* ─── Clock & timer ─── */
+.clock{
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  color:var(--text-dim);letter-spacing:.04em;
+  padding:4px 8px;border-radius:4px;border:1px solid transparent;
+  cursor:pointer;user-select:none;transition:all .2s;
+  display:flex;align-items:center;gap:6px;
+}
+.clock:hover{border-color:var(--ghost);color:var(--text)}
+.clock.running{color:var(--text)}
+.clock .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--text-dim);transition:background .2s;
+}
+.clock.running .dot{background:var(--green);box-shadow:0 0 6px var(--green)}
+
+/* ─── Bottom bar timer block ─── */
+.timer-block{
+  display:flex;align-items:center;gap:14px;
+  font-family:var(--mono);font-size:11px;color:var(--text-dim);
+}
+.timer-deck{display:flex;align-items:center;gap:8px;min-width:180px}
+.timer-deck .label{font-size:9px;text-transform:uppercase;letter-spacing:.08em;opacity:.6}
+.timer-deck .vals{font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}
+.timer-bar{
+  position:relative;width:120px;height:4px;border-radius:2px;
+  background:rgba(255,255,255,.08);overflow:hidden;
+}
+[data-theme="light"] .timer-bar{background:rgba(0,0,0,.08)}
+.timer-bar .fill{
+  position:absolute;inset:0;width:0;
+  background:var(--green);transition:width .5s linear,background .3s;
+}
+.timer-bar .fill.warn{background:#f59e0b}
+.timer-bar .fill.over{background:var(--orange)}
+.timer-delta{
+  font-weight:700;font-variant-numeric:tabular-nums;
+  padding:2px 7px;border-radius:10px;
+  background:rgba(255,255,255,.05);border:1px solid var(--ghost);
+}
+.timer-delta.ahead{color:var(--green);border-color:rgba(34,197,94,.3)}
+.timer-delta.behind{color:var(--orange);border-color:var(--orange-dim)}
+
 /* ─── Iframe viewport ─── */
 .deck-viewport{flex:1;position:relative;overflow:hidden}
 .deck-frame{
@@ -106,6 +149,10 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     </div>
     <div class="deck-tabs" id="deckTabs"></div>
     <div class="top-right">
+      <div class="clock" id="clock" title="Click: start/pause · Double-click: reset">
+        <span class="dot"></span>
+        <span id="clockTime">--:--</span>
+      </div>
       <button class="theme-toggle" id="themeToggle" title="Toggle theme">
         <i class="fas fa-sun"></i>
       </button>
@@ -116,7 +163,15 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 
   <div class="bottom-bar">
     <div class="nav-info">
-      Deck <span class="current" id="deckNum">1</span> / <span id="deckTotal">5</span>
+      Deck <span class="current" id="deckNum">1</span> / <span id="deckTotal">6</span>
+    </div>
+    <div class="timer-block">
+      <div class="timer-deck">
+        <span class="label">Slide</span>
+        <span class="vals"><span id="deckElapsed">0:00</span> / <span id="deckBudget">0:00</span></span>
+        <div class="timer-bar"><div class="fill" id="deckFill"></div></div>
+      </div>
+      <span class="timer-delta" id="schedDelta" title="Schedule delta — green: ahead, orange: behind">±0:00</span>
     </div>
     <div class="nav-hints">
       <span class="kbd">←</span><span class="kbd">→</span>
@@ -135,12 +190,17 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   // ═══════════════════════════════════════
   // PLAYLIST — Edit this to reorder/add/remove decks
   // ═══════════════════════════════════════
+  // `minutes` is the budgeted talk time for that deck (file-level).
+  // Tweak these to match your target running order.
+  // Budgets per outline.md "Structure Summary — 30 min cut".
+  // Opening hook (1) + About Mark visual flash (1) = 2 min Opening block.
   const PLAYLIST = [
-    { src: '00-opening.html',      label: 'Opening' },
-    { src: '01-what-i-saw.html',   label: 'What I Saw' },
-    { src: '02-what-i-found.html', label: 'What I Found' },
-    { src: '03-whats-coming.html', label: 'What\'s Coming' },
-    { src: '04-close.html',        label: 'Close' },
+    { src: '00-opening.html',                  label: 'Opening',       minutes: 1  },
+    { src: '../about-mark/about-mark.html',    label: 'About Mark',    minutes: 1  },
+    { src: '01-what-i-saw.html',               label: 'What I Saw',    minutes: 6  },
+    { src: '02-what-i-found.html',             label: 'What I Found',  minutes: 11 },
+    { src: '03-whats-coming.html',             label: "What's Coming", minutes: 7  },
+    { src: '04-close.html',                    label: 'Close',         minutes: 4  },
   ];
 
   // ═══════════════════════════════════════
@@ -247,6 +307,119 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
       f.contentWindow.postMessage({ type: 'deck-command', action: 'set-theme', theme: theme }, '*');
     });
   });
+
+  // ═══════════════════════════════════════
+  // CLOCK + PER-DECK TIMER + SCHEDULE DELTA
+  // ═══════════════════════════════════════
+  const clockEl      = document.getElementById('clock');
+  const clockTimeEl  = document.getElementById('clockTime');
+  const deckElapsedEl= document.getElementById('deckElapsed');
+  const deckBudgetEl = document.getElementById('deckBudget');
+  const deckFillEl   = document.getElementById('deckFill');
+  const schedDeltaEl = document.getElementById('schedDelta');
+
+  // Per-deck cumulative seconds spoken on each deck
+  const deckSpent = PLAYLIST.map(() => 0);
+  let timerRunning = false;
+  let lastTick = null;       // timestamp of last accumulation
+  let activeDeck = 0;        // deck currently being timed
+
+  function fmt(sec){
+    sec = Math.max(0, Math.round(sec));
+    const m = Math.floor(sec/60);
+    const s = sec % 60;
+    return m + ':' + String(s).padStart(2,'0');
+  }
+  function fmtSigned(sec){
+    const sign = sec < 0 ? '-' : '+';
+    return sign + fmt(Math.abs(sec));
+  }
+
+  function accumulate(){
+    if (!timerRunning) return;
+    const now = Date.now();
+    if (lastTick !== null) {
+      deckSpent[activeDeck] += (now - lastTick) / 1000;
+    }
+    lastTick = now;
+  }
+
+  function render(){
+    // Wall clock
+    const d = new Date();
+    clockTimeEl.textContent =
+      String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+
+    // Current deck timer
+    const budget = (PLAYLIST[currentDeck].minutes || 0) * 60;
+    const spent  = deckSpent[currentDeck];
+    deckElapsedEl.textContent = fmt(spent);
+    deckBudgetEl.textContent  = fmt(budget);
+
+    const ratio = budget > 0 ? spent / budget : 0;
+    deckFillEl.style.width = Math.min(100, ratio * 100) + '%';
+    deckFillEl.classList.toggle('warn', ratio >= 0.8 && ratio < 1);
+    deckFillEl.classList.toggle('over', ratio >= 1);
+
+    // Schedule delta: actual total spoken vs expected at this point.
+    // Expected = full budgets of all decks BEFORE current + spent on current.
+    // (i.e. "if I'm in deck N, I should have used budgets[0..N-1] + my time here")
+    // Delta = totalSpent - (sumPrevBudgets + spent_current)
+    //       = sum(spent[0..N-1]) - sumPrevBudgets
+    //   positive => behind, negative => ahead
+    let prevBudgets = 0, prevSpent = 0;
+    for (let i = 0; i < currentDeck; i++) {
+      prevBudgets += (PLAYLIST[i].minutes || 0) * 60;
+      prevSpent   += deckSpent[i];
+    }
+    const delta = prevSpent - prevBudgets;
+    schedDeltaEl.textContent = fmtSigned(delta);
+    schedDeltaEl.classList.toggle('behind', delta > 5);
+    schedDeltaEl.classList.toggle('ahead',  delta < -5);
+  }
+
+  function tick(){
+    accumulate();
+    render();
+  }
+  setInterval(tick, 500);
+  render();
+
+  // Click: start/pause. Double-click: reset all.
+  let clickTimer = null;
+  clockEl.addEventListener('click', () => {
+    if (clickTimer) return; // double-click in progress
+    clickTimer = setTimeout(() => {
+      clickTimer = null;
+      timerRunning = !timerRunning;
+      lastTick = timerRunning ? Date.now() : null;
+      activeDeck = currentDeck;
+      clockEl.classList.toggle('running', timerRunning);
+    }, 220);
+  });
+  clockEl.addEventListener('dblclick', () => {
+    if (clickTimer) { clearTimeout(clickTimer); clickTimer = null; }
+    if (!confirm('Reset all slide timers?')) return;
+    for (let i = 0; i < deckSpent.length; i++) deckSpent[i] = 0;
+    timerRunning = false;
+    lastTick = null;
+    clockEl.classList.remove('running');
+    render();
+  });
+
+  // When deck switches, flush time onto the previously-active deck
+  // before retargeting accumulation to the new one.
+  const _origSwitchDeck = switchDeck;
+  switchDeck = function(n, goToEnd){
+    if (timerRunning) {
+      accumulate();           // bank time on the deck we're leaving
+      activeDeck = n;         // (will be clamped by orig if out of range)
+      lastTick = Date.now();
+    }
+    _origSwitchDeck(n, goToEnd);
+    activeDeck = currentDeck;
+    render();
+  };
 
 })();
 </script>
