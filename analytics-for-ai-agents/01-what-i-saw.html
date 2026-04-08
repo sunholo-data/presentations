@@ -164,7 +164,346 @@ body{
 .slide.active .todo-card{animation:fadeSlideUp .5s ease .15s both}
 .slide.active .slide-tag{animation:fadeSlideUp .4s ease .05s both}
 
-@media(max-width:900px){.slide{padding:24px}}
+/* ─── 1.0 Transformational chart ─── */
+.transform-stage{
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  width:100%;max-width:1180px;
+}
+.dumky-frame{
+  width:100%;padding:12px 18px 6px;border-radius:12px;
+  background:var(--surface);border:1px solid var(--ghost);
+  display:flex;flex-direction:column;gap:4px;
+  opacity:0;animation:fadeSlideUp .6s ease .15s forwards;
+}
+.dumky-title{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-dim);
+}
+.dumky-title strong{color:var(--text)}
+.dumky-chart{
+  width:100%;height:auto;
+  max-height:calc(100vh - 320px);
+  color:var(--text);
+}
+.dumky-source{
+  font-family:var(--mono);font-size:9px;color:var(--text-dim);
+  display:flex;justify-content:space-between;align-items:center;gap:14px;
+  padding-top:4px;border-top:1px solid var(--ghost);
+  margin-top:2px;
+}
+.dumky-source a{color:var(--orange);text-decoration:none}
+.dumky-source a:hover{text-decoration:underline}
+
+.bets-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:10px;width:100%;
+}
+.bet-card{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:11px 16px;border-radius:12px;
+  background:var(--surface);
+  opacity:0;animation:fadeSlideUp .55s ease forwards;
+}
+.bet-card.wave{
+  border:1px solid var(--orange-dim);border-left:4px solid var(--orange);
+  animation-delay:.45s;
+}
+.bet-card.google{
+  border:1px solid var(--teal-dim);border-left:4px solid var(--teal);
+  animation-delay:.6s;
+}
+.bet-card .icon{
+  width:36px;height:36px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;
+}
+.bet-card.wave .icon{background:rgba(231,60,23,.12);color:var(--orange)}
+.bet-card.google .icon{background:rgba(29,166,154,.12);color:var(--teal)}
+.bet-card .body{flex:1;min-width:0}
+.bet-card .label{
+  display:block;font-family:var(--mono);font-size:9px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  margin-bottom:3px;
+}
+.bet-card.wave .label{color:var(--orange)}
+.bet-card.google .label{color:var(--teal)}
+.bet-card .text{font-size:12px;line-height:1.45;color:var(--text)}
+.bet-card.wave .text strong{color:var(--orange)}
+.bet-card.google .text strong{color:var(--teal)}
+.bet-card .src{
+  display:block;font-family:var(--mono);font-size:9px;color:var(--text-dim);
+  margin-top:4px;
+}
+.bet-card .src a{color:var(--teal);text-decoration:none}
+.bet-card .src a:hover{text-decoration:underline}
+
+/* ─── 1.1 Overwhelm — acronym soup ─── */
+.soup-stage{
+  position:relative;width:100%;flex:1;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:20px;
+  min-height:0;
+}
+.soup{
+  position:absolute;inset:0;
+  perspective:900px;perspective-origin:center center;
+  overflow:hidden;
+  pointer-events:none;
+  -webkit-mask-image:radial-gradient(ellipse at center, black 55%, transparent 92%);
+          mask-image:radial-gradient(ellipse at center, black 55%, transparent 92%);
+}
+.term{
+  position:absolute;left:50%;top:50%;
+  font-family:var(--mono);font-weight:700;
+  white-space:nowrap;
+  color:var(--text);
+  transform-origin:center center;
+  animation:rush var(--dur,7s) linear var(--delay,0s) infinite;
+  opacity:0;
+  will-change:transform,opacity;
+}
+.term.hot{color:var(--orange);text-shadow:0 0 18px var(--orange-glow)}
+.term.cool{color:var(--teal)}
+.term.dim{color:var(--text-dim)}
+@keyframes rush{
+  0%{
+    transform:translate(-50%,-50%) translate(calc(var(--dx,1) * 10px), calc(var(--dy,0) * 10px)) scale(.15);
+    opacity:0;
+  }
+  12%{opacity:.9}
+  78%{opacity:.9}
+  100%{
+    transform:translate(-50%,-50%) translate(calc(var(--dx,1) * var(--reach,820px)), calc(var(--dy,0) * var(--reach,820px))) scale(var(--end,2.4));
+    opacity:0;
+  }
+}
+.multivac-anchor{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  padding:24px 32px;border-radius:18px;
+  background:radial-gradient(ellipse at center, var(--surface) 0%, var(--surface) 65%, transparent 100%);
+  max-width:520px;
+  opacity:0;transform:scale(.7);
+  transition:opacity .7s cubic-bezier(.2,.9,.3,1.4), transform .7s cubic-bezier(.2,.9,.3,1.4);
+  pointer-events:none;
+}
+.slide[data-current-step="1"] .multivac-anchor{
+  opacity:1;transform:scale(1);pointer-events:auto;
+}
+.multivac-anchor::before{
+  content:'';position:absolute;inset:-4px;border-radius:22px;
+  background:radial-gradient(ellipse at center, rgba(231,60,23,.18) 0%, transparent 70%);
+  z-index:-1;filter:blur(12px);
+}
+.multivac-mark{
+  display:flex;align-items:center;gap:12px;
+}
+.multivac-mark img{
+  height:38px;width:auto;
+  filter:drop-shadow(0 0 24px var(--orange-glow));
+}
+.multivac-wordmark{
+  font-family:var(--sans);font-size:30px;font-weight:800;
+  letter-spacing:-.02em;line-height:1;color:var(--text);
+}
+.multivac-wordmark .accent{color:var(--orange)}
+.multivac-tagline{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:var(--orange);
+  padding:5px 12px;border-radius:999px;
+  border:1px solid var(--orange-dim);
+  background:rgba(231,60,23,.08);
+}
+.multivac-blurb{
+  font-size:13px;line-height:1.55;color:var(--text);
+  text-align:center;max-width:440px;
+}
+.multivac-blurb strong{color:var(--orange)}
+.multivac-blurb .sub{
+  display:block;font-family:var(--mono);font-size:9px;
+  color:var(--text-dim);letter-spacing:.08em;margin-top:6px;
+  text-transform:uppercase;
+}
+
+/* ─── 1.2 Rosetta Stone — abstractions mapping ─── */
+.rosetta-stage{
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  width:100%;max-width:1000px;
+}
+.stages-table{
+  display:grid;
+  grid-template-columns:auto 1fr auto 1fr;
+  gap:10px 18px;width:100%;
+  padding:18px 24px;border-radius:14px;
+  background:var(--surface);border:1px solid var(--ghost);
+}
+.stages-head{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;
+  padding:4px 0 10px;border-bottom:1px solid var(--ghost);
+}
+.stages-head.stage{color:var(--text-dim)}
+.stages-head.left{color:var(--teal)}
+.stages-head.mid{}
+.stages-head.right{color:var(--orange)}
+.stage-row{display:contents}
+.stage-row > *{
+  opacity:0;transform:translateY(8px);
+  animation:fadeSlideUp .5s ease forwards;
+  padding:10px 0;
+}
+.slide.active .stage-row:nth-child(2) > *{animation-delay:.20s}
+.slide.active .stage-row:nth-child(3) > *{animation-delay:.36s}
+.slide.active .stage-row:nth-child(4) > *{animation-delay:.52s}
+.slide.active .stage-row:nth-child(5) > *{animation-delay:.68s}
+.s-stage{
+  display:flex;align-items:center;
+}
+.s-stage .badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:11px;font-weight:800;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--orange);
+  padding:6px 12px;border-radius:8px;
+  background:rgba(231,60,23,.08);
+  border:1px solid var(--orange-dim);
+  min-width:108px;justify-content:center;
+}
+.s-stage .badge i{font-size:11px}
+.s-left{
+  font-family:var(--sans);font-size:13px;line-height:1.4;
+  color:var(--text);
+}
+.s-left .dim{color:var(--text-dim);font-family:var(--mono);font-size:11px}
+.s-arrow{
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-dim);font-size:12px;
+}
+.s-right{
+  font-family:var(--sans);font-size:13px;line-height:1.4;
+  color:var(--text);
+}
+.s-right .dim{color:var(--text-dim);font-family:var(--mono);font-size:11px}
+.s-right strong{color:var(--orange);font-weight:700}
+
+.book-cite{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:11px;color:var(--text-dim);
+  opacity:0;animation:fadeSlideUp .55s ease .9s forwards;
+}
+.book-cite i{color:var(--orange)}
+.book-cite em{color:var(--text);font-style:italic}
+
+.entity-strip{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:6px 8px;
+  max-width:900px;
+  opacity:0;animation:fadeSlideUp .55s ease 1.05s forwards;
+}
+.entity-pair{
+  font-family:var(--mono);font-size:10px;
+  padding:5px 11px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--ghost);
+  color:var(--text-dim);
+}
+.entity-pair .l{color:var(--teal)}
+.entity-pair .r{color:var(--orange)}
+.entity-pair .arr{margin:0 6px;opacity:.5}
+
+/* ─── 1.3 Code comparison ─── */
+.code-stage{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:18px;width:100%;max-width:1100px;
+}
+.code-card{
+  display:flex;flex-direction:column;gap:10px;
+  padding:16px 18px;border-radius:12px;
+  background:var(--surface);border:1px solid var(--ghost);
+  opacity:0;animation:fadeSlideUp .55s ease forwards;
+}
+.code-card.left{animation-delay:.15s;border-top:3px solid var(--teal)}
+.code-card.right{animation-delay:.30s;border-top:3px solid var(--orange)}
+.code-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:8px;border-bottom:1px solid var(--ghost);
+}
+.code-head .label{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+}
+.code-card.left .code-head .label{color:var(--teal)}
+.code-card.right .code-head .label{color:var(--orange)}
+.code-head .meta{font-family:var(--mono);font-size:9px;color:var(--text-dim)}
+.code-block{
+  font-family:var(--mono);font-size:11px;line-height:1.55;
+  color:var(--text);white-space:pre;overflow-x:auto;
+  padding:6px 0;
+}
+.code-block .k{color:var(--orange)}
+.code-block .s{color:var(--teal)}
+.code-block .c{color:var(--text-dim);font-style:italic}
+.code-block .n{color:var(--amber)}
+.code-block .hi{
+  background:rgba(231,60,23,.12);
+  border-radius:3px;padding:0 3px;
+}
+.code-card.left .code-block .hi{background:rgba(29,166,154,.12)}
+
+/* ─── 1.4 Dashboard comparison ─── */
+.dash-stage{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:18px;width:100%;max-width:1200px;
+}
+.dash-card{
+  display:flex;flex-direction:column;gap:10px;
+  padding:14px 16px;border-radius:12px;
+  background:var(--surface);border:1px solid var(--ghost);
+  opacity:0;animation:fadeSlideUp .55s ease forwards;
+}
+.dash-card.left{animation-delay:.15s;border-top:3px solid var(--teal)}
+.dash-card.right{animation-delay:.30s;border-top:3px solid var(--orange)}
+.dash-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:8px;border-bottom:1px solid var(--ghost);
+}
+.dash-head .label{
+  display:flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+}
+.dash-card.left .dash-head .label{color:var(--teal)}
+.dash-card.right .dash-head .label{color:var(--orange)}
+.dash-head .meta{font-family:var(--mono);font-size:9px;color:var(--text-dim)}
+.dash-shot{
+  position:relative;width:100%;border-radius:8px;overflow:hidden;
+  border:1px solid var(--ghost);background:#fff;
+  aspect-ratio:16/9;
+}
+.dash-shot img{
+  width:100%;height:100%;object-fit:cover;object-position:top center;
+  display:block;
+}
+.gain-row{
+  display:flex;flex-wrap:wrap;gap:6px;
+  padding-top:6px;
+}
+.gain-chip{
+  font-family:var(--mono);font-size:9px;font-weight:700;
+  padding:4px 9px;border-radius:999px;
+  background:rgba(231,60,23,.1);color:var(--orange);
+  border:1px solid var(--orange-dim);
+  letter-spacing:.04em;text-transform:uppercase;
+}
+.dash-card.left .gain-chip{
+  background:rgba(29,166,154,.1);color:var(--teal);
+  border-color:var(--teal-dim);
+}
+
+@media(max-width:900px){
+  .slide{padding:24px}
+  .code-stage{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -179,52 +518,194 @@ body{
       <p class="slide-subtitle">The paradigm shift, told as personal observation.</p>
     </section>
 
-    <!-- ═══════════ Slide 2: 1.1 The Overwhelm ═══════════ -->
+    <!-- ═══════════ Slide 2: 1.0 I expected this ═══════════ -->
     <section class="slide" data-slide="2">
+      <h1 class="slide-title">I bet this would be <span class="accent">transformational</span></h1>
+      <p class="slide-subtitle">Software output exploding across every registry. <span style="color:var(--orange)">Log scale, indexed to Jan 2023 = 100.</span></p>
+      <div class="transform-stage">
+        <div class="dumky-frame">
+          <div class="dumky-title">Monthly software output &middot; <strong>3-month rolling average, indexed to Jan 2023 = 100</strong></div>
+          <svg viewBox="0 0 1100 360" xmlns="http://www.w3.org/2000/svg" class="dumky-chart" preserveAspectRatio="xMidYMid meet">
+            <g transform="translate(56,20)">
+              <line x1="0" x2="904" y1="275.2" y2="275.2" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="2,3"/>
+              <text x="-8" y="279.2" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".5" font-family="JetBrains Mono, monospace">100 (baseline)</text>
+              <line x1="0" x2="904" y1="167.0" y2="167.0" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="2,3"/>
+              <text x="-8" y="171.0" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".5" font-family="JetBrains Mono, monospace">200</text>
+              <line x1="0" x2="904" y1="24.0" y2="24.0" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="2,3"/>
+              <text x="-8" y="28.0" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".5" font-family="JetBrains Mono, monospace">500</text>
+              <line x1="0" x2="904" y1="310" y2="310" stroke="currentColor" stroke-opacity=".25"/>
+              <line x1="0.0" x2="0.0" y1="310" y2="315" stroke="currentColor" stroke-opacity=".3"/>
+              <text x="0.0" y="330" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55" font-family="JetBrains Mono, monospace">Jan '23</text>
+              <line x1="142.7" x2="142.7" y1="310" y2="315" stroke="currentColor" stroke-opacity=".3"/>
+              <text x="142.7" y="330" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55" font-family="JetBrains Mono, monospace">Jul '23</text>
+              <line x1="285.5" x2="285.5" y1="310" y2="315" stroke="currentColor" stroke-opacity=".3"/>
+              <text x="285.5" y="330" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55" font-family="JetBrains Mono, monospace">Jan '24</text>
+              <line x1="428.2" x2="428.2" y1="310" y2="315" stroke="currentColor" stroke-opacity=".3"/>
+              <text x="428.2" y="330" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55" font-family="JetBrains Mono, monospace">Jul '24</text>
+              <line x1="570.9" x2="570.9" y1="310" y2="315" stroke="currentColor" stroke-opacity=".3"/>
+              <text x="570.9" y="330" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55" font-family="JetBrains Mono, monospace">Jan '25</text>
+              <line x1="713.7" x2="713.7" y1="310" y2="315" stroke="currentColor" stroke-opacity=".3"/>
+              <text x="713.7" y="330" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55" font-family="JetBrains Mono, monospace">Jul '25</text>
+              <line x1="856.4" x2="856.4" y1="310" y2="315" stroke="currentColor" stroke-opacity=".3"/>
+              <text x="856.4" y="330" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55" font-family="JetBrains Mono, monospace">Jan '26</text>
+              <path d="M 0.0,275.2 L 23.8,273.5 L 47.6,255.9 L 71.4,245.8 L 95.2,235.7 L 118.9,245.0 L 142.7,248.5 L 166.5,254.3 L 190.3,254.7 L 214.1,247.9 L 237.9,240.4 L 261.7,243.2 L 285.5,242.5 L 309.3,247.0 L 333.1,240.4 L 356.8,235.0 L 380.6,219.4 L 404.4,212.4 L 428.2,207.4 L 452.0,207.9 L 475.8,204.3 L 499.6,205.0 L 523.4,207.3 L 547.2,204.1 L 570.9,198.9 L 594.7,192.6 L 618.5,177.1 L 642.3,163.5 L 666.1,148.8 L 689.9,145.8 L 713.7,138.5 L 737.5,134.2 L 761.3,135.7 L 785.1,139.3 L 808.8,137.2 L 832.6,111.2 L 856.4,73.0 L 880.2,28.5" fill="none" stroke="#e73c17" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
+              <text x="888.2" y="32.5" font-size="12" font-weight="700" fill="#e73c17" font-family="Montserrat, sans-serif">Show HN 486</text>
+              <path d="M 0.0,275.2 L 23.8,277.1 L 47.6,269.7 L 71.4,268.9 L 95.2,264.5 L 118.9,276.0 L 142.7,279.9 L 166.5,284.7 L 190.3,285.6 L 214.1,284.8 L 237.9,283.7 L 261.7,281.9 L 285.5,270.5 L 309.3,270.2 L 333.1,262.3 L 356.8,267.7 L 380.6,269.2 L 404.4,277.5 L 428.2,273.6 L 452.0,261.1 L 475.8,257.0 L 499.6,255.8 L 523.4,259.0 L 547.2,253.2 L 570.9,254.2 L 594.7,251.6 L 618.5,240.7 L 642.3,228.8 L 666.1,226.4 L 689.9,229.7 L 713.7,230.6 L 737.5,223.3 L 761.3,217.8 L 785.1,205.5 L 808.8,190.5 L 832.6,162.7 L 856.4,131.1 L 880.2,100.7 L 904.0,86.1" fill="none" stroke="#f5a524" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
+              <text x="912.0" y="90.1" font-size="12" font-weight="700" fill="#f5a524" font-family="Montserrat, sans-serif">Crates.io 336</text>
+              <path d="M 0.0,275.2 L 23.8,257.9 L 47.6,238.6 L 71.4,226.7 L 95.2,202.5 L 118.9,202.6 L 142.7,200.0 L 166.5,215.1 L 190.3,217.0 L 214.1,198.2 L 237.9,192.9 L 261.7,190.7 L 285.5,203.7 L 309.3,196.0 L 333.1,183.4 L 356.8,173.4 L 380.6,170.2 L 404.4,170.8 L 428.2,165.7 L 452.0,175.9 L 475.8,177.9 L 499.6,168.4 L 523.4,163.5 L 547.2,161.2 L 570.9,179.2 L 594.7,167.8 L 618.5,156.3 L 642.3,147.3 L 666.1,136.5 L 689.9,135.0 L 713.7,132.5 L 737.5,142.6 L 761.3,139.3 L 785.1,126.8 L 808.8,124.3 L 832.6,132.4 L 856.4,143.1 L 880.2,137.5 L 904.0,127.6" fill="none" stroke="#1da69a" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
+              <text x="912.0" y="131.6" font-size="12" font-weight="700" fill="#1da69a" font-family="Montserrat, sans-serif">arXiv CS 257</text>
+              <path d="M 0.0,275.2 L 23.8,274.0 L 47.6,265.1 L 71.4,261.4 L 95.2,255.1 L 118.9,259.6 L 142.7,258.2 L 166.5,259.9 L 190.3,255.7 L 214.1,249.2 L 237.9,247.1 L 261.7,252.4 L 285.5,256.2 L 309.3,254.0 L 333.1,242.4 L 356.8,240.1 L 380.6,238.0 L 404.4,243.6 L 428.2,243.4 L 452.0,244.2 L 475.8,237.1 L 499.6,228.9 L 523.4,223.3 L 547.2,227.6 L 570.9,231.5 L 594.7,230.0 L 618.5,215.4 L 642.3,204.3 L 666.1,193.5 L 689.9,191.2 L 713.7,187.0 L 737.5,185.8 L 761.3,179.4 L 785.1,174.5 L 808.8,167.8 L 832.6,168.1 L 856.4,165.1 L 880.2,158.1" fill="none" stroke="#8b9bf5" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
+              <text x="888.2" y="162.1" font-size="12" font-weight="700" fill="#8b9bf5" font-family="Montserrat, sans-serif">GitHub repos 212</text>
+              <path d="M 0.0,275.2 L 47.6,271.2 L 71.4,274.6 L 95.2,274.5 L 118.9,282.2 L 142.7,286.7 L 166.5,293.6 L 190.3,299.9 L 214.1,301.9 L 237.9,303.3 L 261.7,304.4 L 285.5,301.1 L 309.3,297.0 L 333.1,282.0 L 356.8,282.8 L 380.6,262.3 L 404.4,269.3 L 428.2,263.4 L 452.0,284.4 L 475.8,284.8 L 499.6,282.9 L 523.4,276.3 L 547.2,273.5 L 570.9,273.7 L 594.7,278.8 L 618.5,252.6 L 642.3,240.7 L 666.1,227.2 L 689.9,239.0 L 713.7,240.1 L 737.5,244.0 L 761.3,241.4 L 785.1,245.5 L 808.8,243.1 L 832.6,241.3 L 856.4,232.1 L 880.2,223.1 L 904.0,226.6" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
+              <text x="912.0" y="230.6" font-size="12" font-weight="700" fill="#64748b" font-family="Montserrat, sans-serif">PyPI 136</text>
+            </g>
+          </svg>
+          <div class="dumky-source">
+            <span>Sources: HN Algolia &middot; GitHub Search &middot; PyPI BigQuery &middot; Crates.io DB &middot; arXiv stats</span>
+            <span>Chart &amp; data: <a href="https://www.dumky.net/posts/youre-right-to-be-anxious-about-ai-this-is-how-much-we-are-building/" target="_blank" rel="noopener">Dumky de Wilde &middot; Beyond Measure</a></span>
+          </div>
+        </div>
+        <div class="bets-row">
+          <div class="bet-card wave">
+            <div class="icon"><i class="fas fa-rocket"></i></div>
+            <div class="body">
+              <span class="label">Bet 1 &middot; The wave</span>
+              <p class="text">
+                Show HN <strong>5&times;</strong> &middot; Crates.io <strong>3.4&times;</strong> &middot; arXiv CS <strong>2.6&times;</strong> &middot; GitHub <strong>2.1&times;</strong>.
+                The data layer would explode &mdash; <strong>it did</strong>.
+              </p>
+            </div>
+          </div>
+          <div class="bet-card google">
+            <div class="icon"><i class="fab fa-google"></i></div>
+            <div class="body">
+              <span class="label">Bet 2 &middot; Google</span>
+              <p class="text">
+                Looked crazy in early ChatGPT days. But the full stack was already there: <strong>TPUs &middot; DeepMind &middot; Demis &middot; GCP data engineering &middot; BigQuery</strong>. Gemini caught up.
+                <span class="src">Why: <a href="https://epochai.substack.com/p/google-controls-the-most-ai-computing" target="_blank" rel="noopener">Epoch AI &middot; Google controls the most AI computing</a></span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 2: 1.1 The Overwhelm ═══════════ -->
+    <section class="slide" data-slide="2" data-steps="2" data-current-step="0">
       <h1 class="slide-title">1.1 &middot; The <span class="accent">Overwhelm</span></h1>
-      <p class="slide-subtitle">The pace is relentless. I went all-in.</p>
-      <div class="todo-card">
-        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
-        Timeline of AI releases, rapid fire:
-        <ul>
-          <li>GPT-3 → ChatGPT → GPT-4 → Claude → Gemini → Agents → MCP</li>
-          <li>Visual: cascading dates / logos that overwhelm the screen</li>
-          <li>Land on: "Built Multivac as a laboratory"</li>
-        </ul>
+      <p class="slide-subtitle">Three years of alphabet soup. Couldn't keep up part-time.</p>
+      <div class="soup-stage">
+        <div class="soup" id="soup"></div>
+        <div class="multivac-anchor">
+          <div class="multivac-mark">
+            <img src="../images/logos/sunholo-logo.svg" alt="Sunholo">
+            <div class="multivac-wordmark">Multi<span class="accent">vac</span></div>
+          </div>
+          <span class="multivac-tagline"><i class="fas fa-flask"></i> The laboratory</span>
+          <p class="multivac-blurb">
+            One AI platform on Google Cloud &mdash; <strong>capture, storage, modelling, activation</strong> &mdash; where every new model, protocol, and agent framework gets plugged in and tested as it lands.
+            <span class="sub">Same data discipline &middot; richer raw material</span>
+          </p>
+        </div>
       </div>
     </section>
 
     <!-- ═══════════ Slide 3: 1.2 The Rosetta Stone ═══════════ -->
     <section class="slide" data-slide="3">
       <h1 class="slide-title">1.2 &middot; The <span class="accent">Rosetta Stone</span></h1>
-      <p class="slide-subtitle">Different names, same concepts. You're not tracking a journey — you're tracking <em>reasoning</em>.</p>
-      <div class="todo-card">
-        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
-        Animated two-column mapping GA4 → Langfuse:
-        <ul>
-          <li>Session → Trace</li>
-          <li>Pageview → Generation</li>
-          <li>Event → Tool Call / Span</li>
-          <li>User ID → Thread ID</li>
-          <li>Custom dimensions → Metadata</li>
-          <li>Note: flat & sequential → nested & hierarchical</li>
-        </ul>
+      <p class="slide-subtitle">AI is still finding its abstractions. The mature ones already exist &mdash; we built them in digital analytics.</p>
+      <div class="rosetta-stage">
+        <div class="stages-table">
+          <div class="stage-row">
+            <div class="stages-head stage">Stage</div>
+            <div class="stages-head left">Digital analytics</div>
+            <div class="stages-head mid">&nbsp;</div>
+            <div class="stages-head right">AI / Agents</div>
+          </div>
+          <div class="stage-row">
+            <div class="s-stage"><span class="badge"><i class="fas fa-satellite-dish"></i> Capture</span></div>
+            <div class="s-left">events, dataLayer, gtag <span class="dim">// what happened?</span></div>
+            <div class="s-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="s-right"><strong>prompts</strong>, system message, tool defs <span class="dim">// what was asked?</span></div>
+          </div>
+          <div class="stage-row">
+            <div class="s-stage"><span class="badge"><i class="fas fa-database"></i> Store</span></div>
+            <div class="s-left">warehouse, BigQuery, GA4 export <span class="dim">// the lake</span></div>
+            <div class="s-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="s-right"><strong>vector DB</strong>, RAG, knowledge graph <span class="dim">// pulled into context</span></div>
+          </div>
+          <div class="stage-row">
+            <div class="s-stage"><span class="badge"><i class="fas fa-brain"></i> Model</span></div>
+            <div class="s-left">attribution, funnels, segments <span class="dim">// inferring intent</span></div>
+            <div class="s-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="s-right">the <strong>LLM</strong> itself <span class="dim">// reading intent</span></div>
+          </div>
+          <div class="stage-row">
+            <div class="s-stage"><span class="badge"><i class="fas fa-bullseye"></i> Activate</span></div>
+            <div class="s-left">audiences, personalization, bidding <span class="dim">// act on it</span></div>
+            <div class="s-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="s-right"><strong>UX, harness, tool calls</strong> <span class="dim">// agent acts</span></div>
+          </div>
+        </div>
+        <div class="book-cite">
+          <i class="fas fa-book"></i>
+          Same four stages from <em>Learning Google Analytics</em> &middot; O'Reilly 2022 &middot;
+          <span style="color:var(--text)">new raw material, same discipline</span>
+        </div>
       </div>
     </section>
 
-    <!-- ═══════════ Slide 4: 1.3 The Technical Comparison ═══════════ -->
+    <!-- ═══════════ Slide 4: 1.3 The Technical Comparison (code) ═══════════ -->
     <section class="slide" data-slide="4">
       <h1 class="slide-title">1.3 &middot; Same Discipline, <span class="accent">Richer Data</span></h1>
-      <p class="slide-subtitle">An order of magnitude richer data — model version, tokens, cost, latency, the actual conversation.</p>
-      <div class="todo-card">
-        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
-        Split-screen technical comparison:
-        <ul>
-          <li>Left: GA4 event code (build line by line)</li>
-          <li>Right: Langfuse trace code (build line by line)</li>
-          <li>Then: GA4 DebugView screenshot vs Langfuse waterfall trace</li>
-          <li>Highlight: nested drill-down per tool call</li>
-        </ul>
+      <p class="slide-subtitle">Capture the moment, add context, send it somewhere. <span style="color:var(--orange)">Look what's new.</span></p>
+      <div class="code-stage">
+        <div class="code-card left">
+          <div class="code-head">
+            <span class="label"><i class="fas fa-chart-line"></i> GA4 event</span>
+            <span class="meta">gtag.js</span>
+          </div>
+<pre class="code-block"><span class="k">gtag</span>(<span class="s">'event'</span>, <span class="s">'view_pricing'</span>, {
+  <span class="n">page_path</span>: <span class="s">'/pricing'</span>,
+  <span class="n">user_id</span>: <span class="s">'u_8421'</span>,
+  <span class="n">plan_tier</span>: <span class="s">'team'</span>,
+});</pre>
+          <div class="gain-row">
+            <span class="gain-chip">page</span>
+            <span class="gain-chip">user</span>
+            <span class="gain-chip">dimension</span>
+          </div>
+        </div>
+        <div class="code-card right">
+          <div class="code-head">
+            <span class="label"><i class="fas fa-diagram-project"></i> Langfuse trace</span>
+            <span class="meta">@langfuse/sdk</span>
+          </div>
+<pre class="code-block"><span class="k">langfuse</span>.<span class="n">trace</span>({ <span class="n">id</span>: <span class="s">'t_8421'</span>, <span class="n">userId</span>: <span class="s">'u_8421'</span> })
+  .<span class="n">generation</span>({
+    <span class="n">name</span>: <span class="s">'pricing_qa'</span>,
+    <span class="hi"><span class="n">model</span>: <span class="s">'claude-opus-4-6'</span></span>,
+    <span class="hi"><span class="n">input</span>: <span class="s">'is this worth it for a small team?'</span></span>,
+    <span class="hi"><span class="n">output</span>: <span class="s">'For a 5-person team...'</span></span>,
+    <span class="hi"><span class="n">usage</span>: { <span class="n">in</span>: <span class="n">412</span>, <span class="n">out</span>: <span class="n">186</span>, <span class="n">cost</span>: <span class="n">0.011</span> }</span>,
+    <span class="hi"><span class="n">latencyMs</span>: <span class="n">1820</span></span>,
+  });</pre>
+          <div class="gain-row">
+            <span class="gain-chip">prompt</span>
+            <span class="gain-chip">response</span>
+            <span class="gain-chip">model</span>
+            <span class="gain-chip">tokens</span>
+            <span class="gain-chip">cost</span>
+            <span class="gain-chip">latency</span>
+          </div>
+        </div>
+      </div>
+      <div class="entity-strip">
+        <span class="entity-pair"><span class="l">Session</span><span class="arr">→</span><span class="r">Trace</span></span>
+        <span class="entity-pair"><span class="l">Pageview</span><span class="arr">→</span><span class="r">Generation</span></span>
+        <span class="entity-pair"><span class="l">Event</span><span class="arr">→</span><span class="r">Tool Call / Span</span></span>
+        <span class="entity-pair"><span class="l">User ID</span><span class="arr">→</span><span class="r">Thread ID</span></span>
+        <span class="entity-pair"><span class="l">Custom dim</span><span class="arr">→</span><span class="r">Metadata</span></span>
       </div>
       <div class="co-talk-card">
         <div class="co-talk-icon"><i class="fas fa-shield-halved"></i></div>
@@ -232,6 +713,48 @@ body{
           <div class="co-talk-meta">Coming up tonight &middot; Julius Fedorovicius</div>
           <div class="co-talk-title">The Two Pillars of Modern Tagging: Security and Enrichment</div>
           <div class="co-talk-quote">"Julius will show you how to harden your tagging tonight. I'm here to ask whether you're capturing the right surface in the first place."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 5: 1.4 Dashboards Look Familiar ═══════════ -->
+    <section class="slide" data-slide="5">
+      <h1 class="slide-title">1.4 &middot; The dashboards <span class="accent">look familiar</span> too</h1>
+      <p class="slide-subtitle">Same boxes, same charts, same drill-downs &mdash; <em>radically</em> richer signal inside.</p>
+      <div class="dash-stage">
+        <div class="dash-card left">
+          <div class="dash-head">
+            <span class="label"><i class="fas fa-chart-line"></i> GA4 &middot; Reports snapshot</span>
+            <span class="meta">analytics.google.com</span>
+          </div>
+          <div class="dash-shot">
+            <img src="images/ga4-snapshot.png" alt="GA4 reports snapshot dashboard">
+          </div>
+          <div class="gain-row">
+            <span class="gain-chip">users</span>
+            <span class="gain-chip">sessions</span>
+            <span class="gain-chip">pageviews</span>
+            <span class="gain-chip">events</span>
+            <span class="gain-chip">conversions</span>
+          </div>
+        </div>
+        <div class="dash-card right">
+          <div class="dash-head">
+            <span class="label"><i class="fas fa-chart-column"></i> Langfuse &middot; LLM analytics</span>
+            <span class="meta">cloud.langfuse.com</span>
+          </div>
+          <div class="dash-shot">
+            <img src="images/langfuse-analytics.png" alt="Langfuse LLM analytics dashboard">
+          </div>
+          <div class="gain-row">
+            <span class="gain-chip">traces</span>
+            <span class="gain-chip">generations</span>
+            <span class="gain-chip">tool calls</span>
+            <span class="gain-chip">+ tokens</span>
+            <span class="gain-chip">+ cost</span>
+            <span class="gain-chip">+ latency</span>
+            <span class="gain-chip">+ model</span>
+          </div>
         </div>
       </div>
     </section>
@@ -255,6 +778,61 @@ body{
 
 <script>
 (function(){
+  // ─── Acronym soup for slide 1.1 ───
+  const TERMS = [
+    // Protocols & interop
+    {t:'MCP',hot:1},{t:'A2A',hot:1},{t:'AG-UI',hot:1},{t:'ACP'},{t:'ADK',hot:1},
+    {t:'JSON-RPC'},{t:'OpenAPI'},{t:'gRPC'},{t:'OTel'},{t:'SSE'},
+    // Model classes
+    {t:'LLM',hot:1},{t:'SLM'},{t:'VLM'},{t:'VLA'},{t:'MoE'},{t:'MoA'},
+    // Training / alignment
+    {t:'RLHF'},{t:'RLAIF'},{t:'DPO'},{t:'PPO'},{t:'GRPO'},{t:'SFT'},{t:'PEFT'},
+    {t:'LoRA',cool:1},{t:'QLoRA'},{t:'CAI'},
+    // Inference / serving
+    {t:'vLLM',cool:1},{t:'SGLang'},{t:'TGI'},{t:'GGUF'},{t:'AWQ'},{t:'GPTQ'},
+    {t:'KV-cache'},{t:'GQA'},{t:'MLA'},{t:'FlashAttn'},
+    // Reasoning / prompting
+    {t:'CoT'},{t:'ToT'},{t:'ReAct',hot:1},{t:'ICL'},{t:'DSPy'},
+    // RAG stack
+    {t:'RAG',hot:1},{t:'HNSW'},{t:'IVF'},{t:'BM25'},{t:'RRF'},{t:'FAISS'},
+    {t:'embeddings',cool:1},
+    // Agents
+    {t:'AutoGen'},{t:'CrewAI'},{t:'LangGraph',cool:1},{t:'LlamaIndex'},
+    {t:'sub-agents',hot:1},{t:'tool-use',hot:1},{t:'HITL'},
+    // Evals
+    {t:'MMLU'},{t:'GSM8K'},{t:'HumanEval'},{t:'ARC-AGI'},{t:'HELM'},
+    {t:'MT-Bench'},{t:'Arena'},{t:'LLM-as-judge'},
+    // Models / labs
+    {t:'GPT-5'},{t:'o3'},{t:'Opus 4.6',hot:1},{t:'Sonnet'},{t:'Gemini'},
+    {t:'DeepSeek'},{t:'Qwen'},{t:'Llama'},{t:'Mistral'},{t:'Whisper'},
+    {t:'CLIP'},{t:'SAM'},{t:'Sora'},{t:'Veo'},
+    // Big ideas
+    {t:'AGI',dim:1},{t:'ASI',dim:1},{t:'context-window'},{t:'long-context'},
+    {t:'function-calling'},{t:'computer-use',hot:1},{t:'browser-use'},
+  ];
+
+  const soup = document.getElementById('soup');
+  if (soup) {
+    const sizes = [13, 15, 17, 19, 22, 26];
+    TERMS.forEach((term, i) => {
+      const el = document.createElement('span');
+      el.className = 'term' + (term.hot?' hot':'') + (term.cool?' cool':'') + (term.dim?' dim':'');
+      el.textContent = term.t;
+      const angle = Math.random() * Math.PI * 2;
+      const dx = Math.cos(angle);
+      const dy = Math.sin(angle);
+      const dur = 6 + Math.random() * 4;          // 6–10s
+      const delay = -Math.random() * dur;          // negative = staggered start
+      const reach = 720 + Math.random() * 380;     // 720–1100px
+      const end = 1.8 + Math.random() * 1.4;       // 1.8–3.2x
+      const size = sizes[Math.floor(Math.random() * sizes.length)];
+      el.style.cssText =
+        `--dx:${dx.toFixed(3)};--dy:${dy.toFixed(3)};--dur:${dur}s;--delay:${delay}s;` +
+        `--reach:${reach}px;--end:${end};font-size:${size}px;`;
+      soup.appendChild(el);
+    });
+  }
+
   const slides = document.querySelectorAll('.slide');
   const TOTAL = slides.length;
   let current = 0;
@@ -284,6 +862,11 @@ body{
     slides.forEach(s=>s.classList.remove('active','exit-left'));
     if(current>=0 && current<TOTAL && dir>0) slides[current].classList.add('exit-left');
     slides[n].classList.add('active');
+    // Reset step state on entering a slide; if entering backwards, jump to last step
+    if (slides[n].hasAttribute('data-steps')) {
+      const total = +slides[n].dataset.steps || 1;
+      slides[n].dataset.currentStep = dir < 0 ? (total - 1) : 0;
+    }
 
     current = n;
     slideNum.textContent = current + 1;
@@ -299,14 +882,38 @@ body{
   btnPrev.disabled = true;
   if(TOTAL <= 1) btnNext.disabled = true;
 
+  function stepNext(){
+    const slide = slides[current];
+    if (slide && slide.hasAttribute('data-steps')) {
+      const total = +slide.dataset.steps || 1;
+      let step = +slide.dataset.currentStep || 0;
+      if (step < total - 1) {
+        slide.dataset.currentStep = step + 1;
+        return true;
+      }
+    }
+    return false;
+  }
+  function stepPrev(){
+    const slide = slides[current];
+    if (slide && slide.hasAttribute('data-steps')) {
+      let step = +slide.dataset.currentStep || 0;
+      if (step > 0) {
+        slide.dataset.currentStep = step - 1;
+        return true;
+      }
+    }
+    return false;
+  }
+
   document.addEventListener('keydown', e=>{
-    if(e.key==='ArrowRight'||e.key===' ') goTo(current+1);
-    if(e.key==='ArrowLeft') goTo(current-1);
+    if(e.key==='ArrowRight'||e.key===' '){ if(!stepNext()) goTo(current+1); }
+    if(e.key==='ArrowLeft'){ if(!stepPrev()) goTo(current-1); }
     if(e.key==='ArrowDown'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*'); }
     if(e.key==='ArrowUp'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*'); }
   });
-  btnPrev.addEventListener('click', ()=> goTo(current-1));
-  btnNext.addEventListener('click', ()=> goTo(current+1));
+  btnPrev.addEventListener('click', ()=> { if(!stepPrev()) goTo(current-1); });
+  btnNext.addEventListener('click', ()=> { if(!stepNext()) goTo(current+1); });
 
   window.addEventListener('message', e=>{
     if(e.data && e.data.type==='deck-command'){

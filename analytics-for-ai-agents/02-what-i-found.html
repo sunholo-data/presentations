@@ -164,6 +164,431 @@ body{
 .slide.active .todo-card{animation:fadeSlideUp .5s ease .15s both}
 .slide.active .slide-tag{animation:fadeSlideUp .4s ease .05s both}
 
+/* ════════════ 2.1 Prompts Are Intent ════════════ */
+.intent-grid{
+  display:grid;grid-template-columns:1.1fr 1fr;gap:28px;
+  width:100%;max-width:1150px;align-items:stretch;
+}
+.intent-col{
+  background:var(--surface);border:1px solid var(--ghost);
+  border-radius:14px;padding:22px 24px;
+  display:flex;flex-direction:column;gap:14px;
+  position:relative;
+}
+.intent-col.click{border-top:3px solid var(--text-dim)}
+.intent-col.prompt{border-top:3px solid var(--orange);box-shadow:0 0 40px rgba(231,60,23,.08)}
+.intent-col .col-label{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-dim);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.intent-col.prompt .col-label{color:var(--orange)}
+.intent-col .col-label .src{opacity:.6;font-weight:400}
+
+/* Heatmap mockup */
+.heatmap{
+  position:relative;
+  background:var(--surface-hi);border:1px solid var(--ghost);
+  border-radius:8px;padding:16px;
+  flex:1;min-height:280px;
+  display:flex;flex-direction:column;gap:10px;
+  overflow:hidden;
+}
+.heatmap .hm-bar{
+  display:flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:9px;color:var(--text-dim);
+  padding-bottom:8px;border-bottom:1px solid var(--ghost);
+}
+.heatmap .hm-bar .dot{width:7px;height:7px;border-radius:50%;background:var(--text-dim);opacity:.4}
+.heatmap .hm-bar .url{margin-left:6px}
+.heatmap .hm-headline{
+  font-size:18px;font-weight:800;color:var(--text);
+  margin-top:4px;
+}
+.heatmap .hm-sub{font-size:11px;color:var(--text-dim);margin-bottom:6px}
+.heatmap .hm-plans{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+  margin-top:4px;
+}
+.heatmap .hm-plan{
+  background:var(--surface);border:1px solid var(--ghost);
+  border-radius:6px;padding:10px 8px;
+  display:flex;flex-direction:column;gap:4px;align-items:center;
+}
+.heatmap .hm-plan .pname{font-size:10px;font-weight:700;color:var(--text)}
+.heatmap .hm-plan .price{font-size:14px;font-weight:800;color:var(--text)}
+.heatmap .hm-plan .cta{
+  font-size:8px;padding:4px 8px;border-radius:10px;
+  background:var(--bg);border:1px solid var(--ghost);
+  color:var(--text-dim);margin-top:2px;
+}
+.heatmap .hm-plan.pro{border-color:var(--orange-dim)}
+.heatmap .hm-plan.pro .cta{background:var(--orange);color:#fff;border-color:var(--orange)}
+.heatmap .hm-faq{
+  margin-top:6px;display:flex;flex-direction:column;gap:3px;
+}
+.heatmap .hm-faq-row{
+  font-size:10px;color:var(--text-dim);
+  padding:4px 6px;border-bottom:1px dashed var(--ghost);
+}
+
+/* Heatmap blobs */
+.hm-blob{
+  position:absolute;border-radius:50%;
+  pointer-events:none;
+  background:radial-gradient(circle, rgba(231,60,23,.7) 0%, rgba(245,165,36,.5) 35%, rgba(245,165,36,0) 70%);
+  mix-blend-mode:screen;
+  filter:blur(2px);
+  opacity:0;
+  animation:blobPulse 2.4s ease-in-out infinite;
+}
+[data-theme="light"] .hm-blob{mix-blend-mode:multiply;opacity:0;}
+.slide.active .hm-blob{opacity:1}
+@keyframes blobPulse{
+  0%,100%{transform:scale(.92)}
+  50%{transform:scale(1.06)}
+}
+.heatmap-caption{
+  font-size:11px;color:var(--text-dim);font-style:italic;text-align:center;
+  margin-top:auto;padding-top:8px;
+}
+.heatmap-caption strong{color:var(--text);font-style:normal}
+.insight-tags{
+  display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;
+}
+.insight-tag{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  padding:6px 11px;border-radius:14px;
+  background:rgba(231,60,23,.1);
+  border:1px solid var(--orange-dim);
+  color:var(--orange);
+  display:inline-flex;align-items:center;gap:5px;
+  animation:fadeSlideUp .5s ease both;
+}
+.insight-tag i{font-size:9px;opacity:.8}
+.intent-col.prompt .insight-tag:nth-child(1){animation-delay:.5s}
+.intent-col.prompt .insight-tag:nth-child(2){animation-delay:.65s}
+.intent-col.prompt .insight-tag:nth-child(3){animation-delay:.8s}
+.intent-col.prompt .insight-tag:nth-child(4){animation-delay:.95s}
+.intent-col.prompt .insight-tag:nth-child(5){animation-delay:1.1s}
+.intent-col.prompt .insight-tag:nth-child(6){animation-delay:1.25s}
+.intent-quote{
+  text-align:center;font-size:15px;color:var(--text-dim);
+  font-style:italic;max-width:760px;line-height:1.55;
+}
+.intent-quote strong{color:var(--text);font-style:normal;font-weight:700}
+
+/* ════════════ 2.2 Anthropic / OpenAI usage ════════════ */
+.studies-stage{
+  display:grid;grid-template-columns:1fr 1fr;gap:24px;
+  width:100%;max-width:1100px;
+}
+.usage-card{
+  background:var(--surface);border:1px solid var(--ghost);
+  border-radius:14px;padding:22px 24px;
+  display:flex;flex-direction:column;gap:14px;
+}
+.usage-card .card-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:10px;border-bottom:1px solid var(--ghost);
+}
+.usage-card .card-head .source{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);
+}
+.usage-card.anthropic .card-head .source{color:var(--orange)}
+.usage-card.openai .card-head .source{color:var(--teal)}
+.usage-card .card-head .label{
+  font-size:13px;font-weight:700;color:var(--text);
+}
+.usage-bars{display:flex;flex-direction:column;gap:9px}
+.usage-bar{
+  display:grid;grid-template-columns:120px 1fr 44px;
+  align-items:center;gap:10px;font-size:12px;
+}
+.usage-bar .bar-label{
+  font-family:var(--mono);color:var(--text);font-weight:600;
+  font-size:11px;
+}
+.usage-bar .bar-track{
+  height:14px;background:var(--surface-hi);border-radius:7px;
+  overflow:hidden;position:relative;
+}
+.usage-bar .bar-fill{
+  display:block;
+  height:100%;border-radius:7px;
+  background:linear-gradient(90deg, var(--orange-dim), var(--orange));
+  width:0;
+  transition:width 1s cubic-bezier(.2,.9,.3,1.4) .3s;
+}
+.slide.active .usage-bar .bar-fill{width:var(--w,50%)}
+.usage-card.openai .bar-fill{background:linear-gradient(90deg, var(--teal-dim), var(--teal))}
+.usage-bar .bar-pct{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  color:var(--text-dim);text-align:right;
+}
+@keyframes barGrow{to{width:var(--w,50%)}}
+.usage-card .src{
+  font-size:10px;color:var(--text-dim);font-family:var(--mono);
+  margin-top:auto;padding-top:6px;
+}
+.usage-card .src a{color:var(--text-dim);text-decoration:underline;text-decoration-color:var(--ghost)}
+.studies-question{
+  text-align:center;font-size:clamp(20px,2.6vw,30px);font-weight:800;
+  margin-top:8px;
+}
+.studies-question .you{
+  color:var(--orange);
+  text-decoration:underline;text-decoration-color:var(--orange);
+  text-underline-offset:6px;text-decoration-thickness:3px;
+}
+
+/* ════════════ Peak Human Internet ════════════ */
+.peak-stage{
+  display:flex;flex-direction:column;gap:18px;align-items:center;
+  width:100%;max-width:1100px;
+}
+.peak-chart{
+  width:100%;height:auto;
+  background:var(--surface);border:1px solid var(--ghost);
+  border-radius:14px;padding:18px 20px;
+  max-height:calc(100vh - 360px);
+}
+.peak-chart svg{width:100%;height:auto;display:block}
+.peak-chart .grid-line{stroke:currentColor;stroke-opacity:.1;stroke-dasharray:2,3}
+.peak-chart .axis-label{font-family:var(--mono);font-size:10px;fill:currentColor;fill-opacity:.5}
+.peak-chart .x-tick{stroke:currentColor;stroke-opacity:.25}
+.peak-chart .line-human{
+  fill:none;stroke:var(--text-dim);stroke-width:2.5;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.peak-chart .line-bot{
+  fill:none;stroke:var(--orange);stroke-width:2.5;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.peak-chart .line-projected{stroke-dasharray:5,4;opacity:.7}
+.peak-chart .cross-line{
+  stroke:var(--amber);stroke-width:1.5;stroke-dasharray:3,3;opacity:.7;
+}
+.peak-chart .cross-dot{fill:var(--amber);stroke:var(--bg);stroke-width:2}
+.peak-chart .cross-label{
+  font-family:var(--mono);font-size:11px;font-weight:700;fill:var(--amber);
+  letter-spacing:.04em;text-transform:uppercase;
+}
+.peak-chart .series-label{
+  font-family:var(--montserrat),sans-serif;font-size:13px;font-weight:700;
+}
+.peak-chart .series-label.human{fill:var(--text-dim)}
+.peak-chart .series-label.bot{fill:var(--orange)}
+.peak-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+  width:100%;
+}
+.peak-stat{
+  background:var(--surface);border:1px solid var(--ghost);
+  border-left:3px solid var(--orange);
+  border-radius:10px;padding:12px 16px;
+}
+.peak-stat .pl{
+  font-family:var(--mono);font-size:9px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--orange);
+}
+.peak-stat .pn{font-size:22px;font-weight:800;color:var(--text);margin-top:3px;line-height:1.1}
+.peak-stat .pd{font-size:11px;color:var(--text-dim);margin-top:3px;line-height:1.4}
+.peak-stat:nth-child(2){border-left-color:var(--text-dim)}
+.peak-stat:nth-child(2) .pl{color:var(--text-dim)}
+.peak-stat:nth-child(3){border-left-color:var(--teal)}
+.peak-stat:nth-child(3) .pl{color:var(--teal)}
+.peak-stat .ps{
+  display:block;font-family:var(--mono);font-size:9px;
+  margin-top:6px;padding-top:6px;border-top:1px dashed var(--ghost);
+  color:var(--text-dim);
+}
+.peak-stat .ps a{color:var(--text-dim);text-decoration:underline;text-decoration-color:var(--ghost)}
+.peak-stat .ps a:hover{color:var(--orange);text-decoration-color:var(--orange)}
+.peak-kicker{
+  text-align:center;font-size:14px;color:var(--text-dim);
+  font-style:italic;line-height:1.55;max-width:880px;
+}
+.peak-kicker strong{color:var(--orange);font-style:normal;font-weight:700}
+
+/* ════════════ 2.3 Hero Story — workflow morph ════════════ */
+.hero-stage{
+  width:100%;max-width:1100px;
+  display:flex;flex-direction:column;gap:22px;align-items:center;
+}
+.workflow-grid{
+  display:grid;grid-template-columns:1fr auto 1fr;gap:24px;
+  width:100%;align-items:center;
+}
+.workflow{
+  background:var(--surface);border:1px solid var(--ghost);
+  border-radius:12px;padding:20px 22px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.workflow .wf-label{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+}
+.workflow.expected .wf-label{color:var(--text-dim)}
+.workflow.actual .wf-label{color:var(--orange)}
+.workflow .wf-title{font-size:14px;font-weight:700;color:var(--text)}
+.wf-flow{display:flex;flex-direction:column;gap:6px}
+.wf-step{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:11px;
+  padding:7px 10px;border-radius:6px;
+  background:var(--surface-hi);
+  border-left:2px solid var(--text-dim);
+  color:var(--text);
+}
+.workflow.actual .wf-step{border-left-color:var(--orange)}
+.workflow.actual .wf-step.detour{
+  border-left-style:dashed;color:var(--orange);
+  background:rgba(231,60,23,.08);
+}
+.wf-step .num{
+  width:18px;height:18px;border-radius:50%;
+  background:var(--bg);border:1px solid var(--ghost);
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:700;flex-shrink:0;
+}
+.wf-arrow{
+  font-size:28px;color:var(--orange);
+  display:flex;align-items:center;justify-content:center;
+}
+.hero-quote{
+  font-size:clamp(18px,2.2vw,26px);
+  font-weight:700;text-align:center;
+  max-width:900px;line-height:1.4;
+  color:var(--text);
+}
+.hero-quote .accent{color:var(--orange)}
+.hero-kicker{
+  font-size:13px;color:var(--text-dim);text-align:center;
+  max-width:780px;font-style:italic;line-height:1.5;
+}
+.hero-kicker strong{color:var(--text);font-style:normal}
+
+/* ════════════ 2.4 Text at Scale — three approaches ════════════ */
+.approaches-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+  width:100%;max-width:1100px;
+}
+.approach{
+  background:var(--surface);border:1px solid var(--ghost);
+  border-radius:14px;padding:22px 22px 20px;
+  display:flex;flex-direction:column;gap:12px;
+  position:relative;overflow:hidden;
+}
+.approach .ap-icon{
+  width:42px;height:42px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+  background:rgba(231,60,23,.1);color:var(--orange);
+  border:1px solid var(--orange-dim);
+}
+.approach.judge .ap-icon{background:rgba(29,166,154,.1);color:var(--teal);border-color:var(--teal-dim)}
+.approach.feedback .ap-icon{background:rgba(245,165,36,.12);color:var(--amber);border-color:rgba(245,165,36,.3)}
+.approach .ap-num{
+  position:absolute;top:14px;right:18px;
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  color:var(--text-dim);opacity:.7;
+}
+.approach .ap-title{font-size:15px;font-weight:800;color:var(--text)}
+.approach .ap-desc{font-size:12px;color:var(--text-dim);line-height:1.5}
+.approach .ap-analog{
+  margin-top:auto;padding-top:10px;
+  border-top:1px dashed var(--ghost);
+  font-family:var(--mono);font-size:10px;color:var(--text-dim);
+}
+.approach .ap-analog strong{color:var(--text)}
+.text-at-scale-kicker{
+  text-align:center;font-size:15px;color:var(--text-dim);
+  font-style:italic;
+}
+.text-at-scale-kicker strong{color:var(--text);font-style:normal}
+
+/* ════════════ 2.5 Langfuse Demo ════════════ */
+.demo-stage{
+  display:grid;grid-template-columns:1.4fr 1fr;gap:24px;
+  width:100%;max-width:1150px;align-items:start;
+}
+.trace-mock{
+  background:var(--surface);border:1px solid var(--ghost);
+  border-radius:12px;padding:18px;font-family:var(--mono);font-size:11px;
+  display:flex;flex-direction:column;gap:6px;
+}
+.trace-mock .tm-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:10px;border-bottom:1px solid var(--ghost);
+  margin-bottom:6px;
+}
+.trace-mock .tm-title{font-weight:700;color:var(--text);font-size:12px}
+.trace-mock .tm-tag{
+  font-size:9px;padding:3px 8px;border-radius:10px;
+  background:rgba(231,60,23,.12);color:var(--orange);
+  border:1px solid var(--orange-dim);
+}
+.trace-row{
+  display:grid;grid-template-columns:130px 1fr 60px 50px;
+  align-items:center;gap:8px;padding:5px 6px;border-radius:5px;
+}
+.trace-row:hover{background:var(--surface-hi)}
+.trace-row .t-name{color:var(--text);font-size:11px;display:flex;align-items:center;gap:6px}
+.trace-row .t-name .t-icon{
+  width:14px;height:14px;border-radius:3px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:8px;flex-shrink:0;
+}
+.trace-row.gen .t-icon{background:rgba(231,60,23,.15);color:var(--orange)}
+.trace-row.tool .t-icon{background:rgba(29,166,154,.15);color:var(--teal)}
+.trace-row.span .t-icon{background:rgba(99,102,241,.15);color:var(--indigo)}
+.trace-row.nested{padding-left:18px}
+.trace-row.nested.deep{padding-left:34px}
+.trace-row .t-bar{
+  height:8px;background:var(--surface-hi);border-radius:3px;
+  position:relative;overflow:hidden;
+}
+.trace-row .t-bar::after{
+  content:'';position:absolute;top:0;height:100%;
+  background:var(--orange);
+  left:var(--bar-x,0%);width:var(--bar-w,40%);
+  border-radius:3px;
+}
+.trace-row.tool .t-bar::after{background:var(--teal)}
+.trace-row.span .t-bar::after{background:var(--indigo)}
+.trace-row .t-ms{font-size:9px;color:var(--text-dim);text-align:right}
+.trace-row .t-cost{font-size:9px;color:var(--text-dim);text-align:right}
+.trace-mock .tm-foot{
+  display:flex;justify-content:space-between;gap:14px;
+  margin-top:8px;padding-top:10px;border-top:1px solid var(--ghost);
+  font-size:10px;color:var(--text-dim);
+}
+.tm-foot strong{color:var(--text)}
+.demo-side{display:flex;flex-direction:column;gap:14px}
+.demo-callouts{display:flex;flex-direction:column;gap:10px}
+.demo-callout{
+  display:flex;align-items:flex-start;gap:10px;
+  background:var(--surface);border:1px solid var(--ghost);
+  border-left:3px solid var(--orange);
+  border-radius:8px;padding:11px 14px;
+}
+.demo-callout .ic{
+  width:24px;height:24px;border-radius:5px;
+  background:rgba(231,60,23,.12);color:var(--orange);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;flex-shrink:0;
+}
+.demo-callout .body{flex:1;min-width:0}
+.demo-callout .body .l{
+  font-family:var(--mono);font-size:9px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--orange);
+}
+.demo-callout .body .t{font-size:12px;color:var(--text);font-weight:600;margin-top:2px}
+.demo-callout .body .d{font-size:11px;color:var(--text-dim);margin-top:2px;line-height:1.4}
+
 @media(max-width:900px){.slide{padding:24px}}
 </style>
 </head>
@@ -182,77 +607,274 @@ body{
     <!-- ═══════════ Slide 2: 2.1 Prompts Are Intent ═══════════ -->
     <section class="slide" data-slide="2">
       <h1 class="slide-title">2.1 &middot; Prompts Are <span class="accent">Intent</span></h1>
-      <p class="slide-subtitle">Clicks tell you what someone did. Prompts tell you what they were thinking.</p>
-      <div class="todo-card">
-        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
-        Two-column comparison:
-        <ul>
-          <li>Clicks: <em>"User visited /pricing"</em></li>
-          <li>Prompts: <em>"Is this worth it for a small team or should we use the free tier?"</em></li>
-          <li>Visual: prompt "explodes" into insight tags — price sensitivity, team size, comparison shopping</li>
-        </ul>
+      <div class="intent-grid">
+        <div class="intent-col click">
+          <div class="col-label"><span><i class="fas fa-mouse-pointer"></i> &nbsp;Heatmap &middot; /pricing</span><span class="src">2,184 sessions</span></div>
+          <div class="heatmap">
+            <div class="hm-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">acme.com/pricing</span></div>
+            <div class="hm-headline">Plans &amp; pricing</div>
+            <div class="hm-sub">Pick the plan that fits your team.</div>
+            <div class="hm-plans">
+              <div class="hm-plan"><span class="pname">Starter</span><span class="price">Free</span><span class="cta">Get started</span></div>
+              <div class="hm-plan pro"><span class="pname">Pro</span><span class="price">$29</span><span class="cta">Choose Pro</span></div>
+              <div class="hm-plan"><span class="pname">Business</span><span class="price">$99</span><span class="cta">Contact us</span></div>
+            </div>
+            <div class="hm-faq">
+              <div class="hm-faq-row">How many seats are included?</div>
+              <div class="hm-faq-row">Can I upgrade later?</div>
+              <div class="hm-faq-row">Do you offer team discounts?</div>
+            </div>
+            <!-- heatmap hotspots -->
+            <span class="hm-blob" style="top:118px;left:42%;width:90px;height:90px;animation-delay:0s"></span>
+            <span class="hm-blob" style="top:115px;left:18%;width:70px;height:70px;animation-delay:.4s"></span>
+            <span class="hm-blob" style="top:118px;left:68%;width:60px;height:60px;animation-delay:.8s"></span>
+            <span class="hm-blob" style="top:215px;left:30%;width:80px;height:50px;animation-delay:.2s"></span>
+            <span class="hm-blob" style="top:243px;left:38%;width:70px;height:45px;animation-delay:.6s"></span>
+            <div class="heatmap-caption">Tells you <strong>what they clicked</strong>. Not <strong>why</strong>.</div>
+          </div>
+        </div>
+        <div class="intent-col prompt">
+          <div class="col-label"><span><i class="fas fa-comment-dots"></i> &nbsp;Prompt &middot; same user</span><span class="src">single message</span></div>
+          <div style="font-family:var(--mono);font-size:15px;color:var(--text);background:var(--surface-hi);padding:14px 16px;border-radius:8px;border-left:3px solid var(--orange);line-height:1.5">"Is this worth it for a small team or should we just stick with the free tier?"</div>
+          <div style="font-size:12px;color:var(--text-dim);font-style:italic">Tells you <strong style="color:var(--text);font-style:normal">what they were thinking</strong>. In their own words.</div>
+          <div class="insight-tags">
+            <span class="insight-tag"><i class="fas fa-tag"></i> price sensitivity</span>
+            <span class="insight-tag"><i class="fas fa-users"></i> team size: small</span>
+            <span class="insight-tag"><i class="fas fa-scale-balanced"></i> comparison shopping</span>
+            <span class="insight-tag"><i class="fas fa-circle-exclamation"></i> objection: cost</span>
+            <span class="insight-tag"><i class="fas fa-route"></i> alt: free tier</span>
+            <span class="insight-tag"><i class="fas fa-handshake"></i> decision pending</span>
+          </div>
+        </div>
       </div>
+      <p class="intent-quote">I'd spent years <em>inferring</em> intent from click patterns. Now I was just&hellip; <strong>reading it</strong>.</p>
     </section>
 
     <!-- ═══════════ Slide 3: 2.2 Anthropic / OpenAI Studies ═══════════ -->
     <section class="slide" data-slide="3">
       <h1 class="slide-title">2.2 &middot; <span class="accent">They</span> Know What Their Users Want</h1>
-      <p class="slide-subtitle">Do you?</p>
-      <div class="todo-card">
-        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
-        Visualisation of Anthropic / OpenAI usage breakdowns:
-        <ul>
-          <li>Coding, writing, research, etc. — segment chart</li>
-          <li>Source citation: Anthropic Economic Index, OpenAI usage paper</li>
-          <li>Quick aside on Google ecosystem maturing (TPUs, Anthropic stake, Gemini)</li>
-          <li>End on rhetorical: "Or is your data sitting in a third-party system you don't control?"</li>
-        </ul>
+      <div class="studies-stage">
+        <div class="usage-card anthropic">
+          <div class="card-head">
+            <span class="label">Claude usage</span>
+            <span class="source">Anthropic Economic Index</span>
+          </div>
+          <div class="usage-bars">
+            <div class="usage-bar"><span class="bar-label">Coding</span><span class="bar-track"><span class="bar-fill" style="--w:80%"></span></span><span class="bar-pct">37%</span></div>
+            <div class="usage-bar"><span class="bar-label">Writing</span><span class="bar-track"><span class="bar-fill" style="--w:54%"></span></span><span class="bar-pct">25%</span></div>
+            <div class="usage-bar"><span class="bar-label">Research</span><span class="bar-track"><span class="bar-fill" style="--w:34%"></span></span><span class="bar-pct">16%</span></div>
+            <div class="usage-bar"><span class="bar-label">Education</span><span class="bar-track"><span class="bar-fill" style="--w:22%"></span></span><span class="bar-pct">10%</span></div>
+            <div class="usage-bar"><span class="bar-label">Business ops</span><span class="bar-track"><span class="bar-fill" style="--w:18%"></span></span><span class="bar-pct">8%</span></div>
+            <div class="usage-bar"><span class="bar-label">Other</span><span class="bar-track"><span class="bar-fill" style="--w:9%"></span></span><span class="bar-pct">4%</span></div>
+          </div>
+          <div class="src">Source: <a href="https://www.anthropic.com/news/the-anthropic-economic-index" target="_blank" rel="noopener">anthropic.com/economic-index</a></div>
+        </div>
+        <div class="usage-card openai">
+          <div class="card-head">
+            <span class="label">ChatGPT usage</span>
+            <span class="source">OpenAI &middot; NBER paper</span>
+          </div>
+          <div class="usage-bars">
+            <div class="usage-bar"><span class="bar-label">Practical guidance</span><span class="bar-track"><span class="bar-fill" style="--w:62%"></span></span><span class="bar-pct">29%</span></div>
+            <div class="usage-bar"><span class="bar-label">Writing</span><span class="bar-track"><span class="bar-fill" style="--w:52%"></span></span><span class="bar-pct">24%</span></div>
+            <div class="usage-bar"><span class="bar-label">Seeking info</span><span class="bar-track"><span class="bar-fill" style="--w:48%"></span></span><span class="bar-pct">22%</span></div>
+            <div class="usage-bar"><span class="bar-label">Technical help</span><span class="bar-track"><span class="bar-fill" style="--w:28%"></span></span><span class="bar-pct">13%</span></div>
+            <div class="usage-bar"><span class="bar-label">Self-expression</span><span class="bar-track"><span class="bar-fill" style="--w:14%"></span></span><span class="bar-pct">7%</span></div>
+            <div class="usage-bar"><span class="bar-label">Other</span><span class="bar-track"><span class="bar-fill" style="--w:11%"></span></span><span class="bar-pct">5%</span></div>
+          </div>
+          <div class="src">Source: <a href="https://www.nber.org/papers/w34255" target="_blank" rel="noopener">NBER w34255 &middot; How people use ChatGPT</a></div>
+        </div>
       </div>
+      <p class="studies-question">They publish whole roadmaps from this. Do <span class="you">you</span> have this view of your own users?</p>
     </section>
 
-    <!-- ═══════════ Slide 4: 2.3 The Hero Story ═══════════ -->
+    <!-- ═══════════ Slide 4: Peak Human Internet ═══════════ -->
     <section class="slide" data-slide="4">
-      <h1 class="slide-title">2.3 &middot; <span class="dim">"We thought everyone was doing X.</span><br><span class="accent">They were actually doing Y."</span></h1>
-      <div class="todo-card">
-        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
-        Hero story — green-energy legal client:
-        <ul>
-          <li>Slow this section down</li>
-          <li>Visual: clean documented workflow → messy real workflow morph</li>
-          <li>Quote: "The documented workflow existed on paper. The real workflow was in the prompts."</li>
-          <li>Land on: "There's no pageview for 'I'm confused about the process so I'm asking the chatbot instead.'"</li>
-        </ul>
+      <h1 class="slide-title">&hellip;and we're at <span class="accent">peak human</span> internet.</h1>
+      <div class="peak-stage">
+        <div class="peak-chart">
+          <svg viewBox="0 0 920 340" preserveAspectRatio="xMidYMid meet">
+            <!-- gridlines -->
+            <line class="grid-line" x1="60" y1="40"  x2="880" y2="40"/>
+            <line class="grid-line" x1="60" y1="105" x2="880" y2="105"/>
+            <line class="grid-line" x1="60" y1="170" x2="880" y2="170"/>
+            <line class="grid-line" x1="60" y1="235" x2="880" y2="235"/>
+            <line class="grid-line" x1="60" y1="300" x2="880" y2="300"/>
+            <text class="axis-label" x="52" y="44"  text-anchor="end">65%</text>
+            <text class="axis-label" x="52" y="109" text-anchor="end">57%</text>
+            <text class="axis-label" x="52" y="174" text-anchor="end">50%</text>
+            <text class="axis-label" x="52" y="239" text-anchor="end">42%</text>
+            <text class="axis-label" x="52" y="304" text-anchor="end">35%</text>
+
+            <!-- x-axis ticks (years) -->
+            <line class="x-tick" x1="60"  y1="300" x2="60"  y2="305"/>
+            <line class="x-tick" x1="282" y1="300" x2="282" y2="305"/>
+            <line class="x-tick" x1="505" y1="300" x2="505" y2="305"/>
+            <line class="x-tick" x1="568" y1="300" x2="568" y2="305"/>
+            <line class="x-tick" x1="631" y1="300" x2="631" y2="305"/>
+            <line class="x-tick" x1="694" y1="300" x2="694" y2="305"/>
+            <line class="x-tick" x1="757" y1="300" x2="757" y2="305"/>
+            <line class="x-tick" x1="820" y1="300" x2="820" y2="305"/>
+            <text class="axis-label" x="60"  y="320" text-anchor="middle">2013</text>
+            <text class="axis-label" x="282" y="320" text-anchor="middle">'17</text>
+            <text class="axis-label" x="505" y="320" text-anchor="middle">'21</text>
+            <text class="axis-label" x="568" y="320" text-anchor="middle">'22</text>
+            <text class="axis-label" x="631" y="320" text-anchor="middle">'23</text>
+            <text class="axis-label" x="694" y="320" text-anchor="middle">'24</text>
+            <text class="axis-label" x="757" y="320" text-anchor="middle">'25</text>
+            <text class="axis-label" x="820" y="320" text-anchor="middle">'26</text>
+
+            <!-- crossover marker (early 2024) -->
+            <line class="cross-line" x1="667" y1="40" x2="667" y2="300"/>
+            <text class="cross-label" x="673" y="56">Bots overtake humans</text>
+
+            <!-- Human series (declining) — 2013→2024 solid, 2024→2026 dashed -->
+            <path class="line-human" d="M 60,109 L 282,109 L 505,140 L 568,150 L 631,168 L 694,184"/>
+            <path class="line-human line-projected" d="M 694,184 L 757,196 L 820,208"/>
+
+            <!-- Bot series (rising) — mirror of human -->
+            <path class="line-bot" d="M 60,235 L 282,235 L 505,204 L 568,194 L 631,176 L 694,160"/>
+            <path class="line-bot line-projected" d="M 694,160 L 757,148 L 820,136"/>
+
+            <!-- crossover dot -->
+            <circle class="cross-dot" cx="667" cy="172" r="5"/>
+
+            <!-- end-of-line series labels -->
+            <text class="series-label human" x="828" y="212">Humans 46%*</text>
+            <text class="series-label bot"   x="828" y="132">Bots 54%*</text>
+          </svg>
+        </div>
+        <div class="peak-stats">
+          <div class="peak-stat">
+            <div class="pl">Imperva &middot; 2024</div>
+            <div class="pn">51% bots</div>
+            <div class="pd">First time automated traffic surpassed human visitors. Up from 43% in 2013.</div>
+            <span class="ps"><i class="fas fa-link"></i> <a href="https://www.imperva.com/blog/2025-imperva-bad-bot-report-how-ai-is-supercharging-the-bot-threat/" target="_blank" rel="noopener">imperva.com &middot; 2025 Bad Bot Report</a></span>
+          </div>
+          <div class="peak-stat">
+            <div class="pl">Imperva &middot; 2013 &rarr; 2024</div>
+            <div class="pn">57% &rarr; 49%</div>
+            <div class="pd">Human share of web traffic. Declining for the sixth straight year.</div>
+            <span class="ps"><i class="fas fa-link"></i> <a href="https://www.businesswire.com/news/home/20250415432215/en/Artificial-Intelligence-Fuels-Rise-of-Hard-to-Detect-Bots-That-Now-Make-up-More-Than-Half-of-Global-Internet-Traffic-According-to-the-2025-Imperva-Bad-Bot-Report" target="_blank" rel="noopener">businesswire &middot; Imperva 13-yr trend</a></span>
+          </div>
+          <div class="peak-stat">
+            <div class="pl">Cloudflare &middot; 2025</div>
+            <div class="pn">+305% YoY</div>
+            <div class="pd">GPTBot crawler growth in one year. 82% of AI crawls are for training, only 2% for user actions.</div>
+            <span class="ps"><i class="fas fa-link"></i> <a href="https://blog.cloudflare.com/from-googlebot-to-gptbot-whos-crawling-your-site-in-2025/" target="_blank" rel="noopener">cloudflare &middot; Googlebot to GPTBot</a></span>
+          </div>
+        </div>
+        <p class="peak-kicker">And the prompts? <strong>They're not even on this chart.</strong> They're inside Claude, ChatGPT, Gemini &mdash; places your tags can't reach.</p>
       </div>
     </section>
 
-    <!-- ═══════════ Slide 5: 2.4 Analysing Text at Scale ═══════════ -->
+    <!-- ═══════════ Slide 5: 2.3 The Hero Story ═══════════ -->
     <section class="slide" data-slide="5">
-      <h1 class="slide-title">2.4 &middot; Analysing <span class="accent">Text at Scale</span></h1>
-      <p class="slide-subtitle">Funnels and segments. Just different raw material.</p>
-      <div class="todo-card">
-        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
-        Three approaches animating in:
-        <ul>
-          <li>Embedding-based clustering (similar questions find each other)</li>
-          <li>LLM-as-judge (categorise & evaluate other outputs)</li>
-          <li>Feedback loops (user ratings → evals)</li>
-        </ul>
+      <h1 class="slide-title">2.3 &middot; <span class="dim">"We thought everyone was doing X.</span><br><span class="accent">They were actually doing Y."</span></h1>
+      <div class="hero-stage">
+        <div class="workflow-grid">
+          <div class="workflow expected">
+            <div class="wf-label"><i class="fas fa-file-lines"></i> &nbsp;On paper &middot; documented</div>
+            <div class="wf-title">Green-energy legal review</div>
+            <div class="wf-flow">
+              <div class="wf-step"><span class="num">1</span>Receive contract</div>
+              <div class="wf-step"><span class="num">2</span>Tag clauses by category</div>
+              <div class="wf-step"><span class="num">3</span>Compliance checklist</div>
+              <div class="wf-step"><span class="num">4</span>Sign-off &amp; archive</div>
+            </div>
+          </div>
+          <div class="wf-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="workflow actual">
+            <div class="wf-label"><i class="fas fa-comments"></i> &nbsp;In the prompts &middot; reality</div>
+            <div class="wf-title">What people actually asked the AI</div>
+            <div class="wf-flow">
+              <div class="wf-step"><span class="num">1</span>Receive contract</div>
+              <div class="wf-step detour">"What changed vs last year's template?"</div>
+              <div class="wf-step detour">"Who normally signs this kind of deal?"</div>
+              <div class="wf-step detour">"Is the indemnity clause unusual?"</div>
+              <div class="wf-step detour">"Draft me a redline I can send back"</div>
+              <div class="wf-step"><span class="num">4</span>Sign-off &amp; archive</div>
+            </div>
+          </div>
+        </div>
+        <p class="hero-quote">The documented workflow existed <span class="dim">on paper</span>.<br>The real workflow was <span class="accent">in the prompts</span>.</p>
+        <p class="hero-kicker">Updated the AI to match reality instead of expectation. <strong>Adoption up. Satisfaction up.</strong> &nbsp;&middot;&nbsp; There's no pageview for <em>"I'm confused about the process so I'm asking the chatbot instead."</em></p>
       </div>
     </section>
 
-    <!-- ═══════════ Slide 6: 2.5 Langfuse Demo ═══════════ -->
+    <!-- ═══════════ Slide 6: 2.4 Analysing Text at Scale ═══════════ -->
     <section class="slide" data-slide="6">
+      <h1 class="slide-title">2.4 &middot; Analysing <span class="accent">Text at Scale</span></h1>
+      <p class="slide-subtitle">How do you actually analyse thousands of prompts? Text, not numbers.</p>
+      <div class="approaches-grid">
+        <div class="approach clustering">
+          <div class="ap-num">01</div>
+          <div class="ap-icon"><i class="fas fa-diagram-project"></i></div>
+          <div class="ap-title">Embedding clustering</div>
+          <div class="ap-desc">Vectorise prompts. Let similar questions find each other. The clusters become your taxonomy &mdash; discovered, not assumed.</div>
+          <div class="ap-analog">Analytics analogue: <strong>segmentation</strong></div>
+        </div>
+        <div class="approach judge">
+          <div class="ap-num">02</div>
+          <div class="ap-icon"><i class="fas fa-gavel"></i></div>
+          <div class="ap-title">LLM-as-judge</div>
+          <div class="ap-desc">Use a model to categorise and score other outputs. Run it as a batch over the trace history. Cheap labelling at scale.</div>
+          <div class="ap-analog">Analytics analogue: <strong>custom dimensions</strong></div>
+        </div>
+        <div class="approach feedback">
+          <div class="ap-num">03</div>
+          <div class="ap-icon"><i class="fas fa-thumbs-up"></i></div>
+          <div class="ap-title">Feedback loops</div>
+          <div class="ap-desc">Capture thumbs / ratings / corrections at the trace. Feed them back into evals so the next deploy is measurably better.</div>
+          <div class="ap-analog">Analytics analogue: <strong>conversion events</strong></div>
+        </div>
+      </div>
+      <p class="text-at-scale-kicker">Sound familiar? It's <strong>funnels and segments</strong>. Just different raw material.</p>
+    </section>
+
+    <!-- ═══════════ Slide 7: 2.5 Langfuse Demo ═══════════ -->
+    <section class="slide" data-slide="7">
       <h1 class="slide-title">2.5 &middot; <span class="accent">Langfuse</span> Demo</h1>
       <p class="slide-subtitle">Same analytics discipline — radically better data.</p>
-      <div class="todo-card">
-        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
-        Live demo / embedded screenshot of Langfuse trace from Multivac:
-        <ul>
-          <li>Pre-select a compelling trace</li>
-          <li>Annotations: Session = trace, Generation = pageview, Tool call = event</li>
-          <li>Highlight: token cost, latency, full conversation</li>
-          <li>Backup: pre-recorded screen capture in case live fails</li>
-        </ul>
+      <div class="demo-stage">
+        <div class="trace-mock">
+          <div class="tm-head">
+            <span class="tm-title">trace &middot; multivac-conf-assistant</span>
+            <span class="tm-tag">LIVE</span>
+          </div>
+          <div class="trace-row gen"><span class="t-name"><span class="t-icon"><i class="fas fa-comment"></i></span>session.start</span><span class="t-bar" style="--bar-x:0%;--bar-w:100%"></span><span class="t-ms">3.42s</span><span class="t-cost">$0.018</span></div>
+          <div class="trace-row gen nested"><span class="t-name"><span class="t-icon"><i class="fas fa-bolt"></i></span>generation.plan</span><span class="t-bar" style="--bar-x:2%;--bar-w:18%"></span><span class="t-ms">612ms</span><span class="t-cost">$0.003</span></div>
+          <div class="trace-row tool nested"><span class="t-name"><span class="t-icon"><i class="fas fa-wrench"></i></span>tool.search_programme</span><span class="t-bar" style="--bar-x:20%;--bar-w:14%"></span><span class="t-ms">480ms</span><span class="t-cost">&mdash;</span></div>
+          <div class="trace-row span nested deep"><span class="t-name"><span class="t-icon"><i class="fas fa-database"></i></span>span.bigquery</span><span class="t-bar" style="--bar-x:22%;--bar-w:10%"></span><span class="t-ms">340ms</span><span class="t-cost">&mdash;</span></div>
+          <div class="trace-row tool nested"><span class="t-name"><span class="t-icon"><i class="fas fa-wrench"></i></span>tool.fetch_speaker</span><span class="t-bar" style="--bar-x:34%;--bar-w:8%"></span><span class="t-ms">270ms</span><span class="t-cost">&mdash;</span></div>
+          <div class="trace-row gen nested"><span class="t-name"><span class="t-icon"><i class="fas fa-bolt"></i></span>generation.synthesise</span><span class="t-bar" style="--bar-x:42%;--bar-w:56%"></span><span class="t-ms">1.92s</span><span class="t-cost">$0.015</span></div>
+          <div class="tm-foot">
+            <span>tokens <strong>2,184</strong> in &middot; <strong>847</strong> out</span>
+            <span>cost <strong>$0.018</strong></span>
+            <span>latency <strong>3.42s</strong></span>
+            <span>model <strong>opus-4-6</strong></span>
+          </div>
+        </div>
+        <div class="demo-side">
+          <div class="demo-callouts">
+            <div class="demo-callout">
+              <div class="ic"><i class="fas fa-link"></i></div>
+              <div class="body"><div class="l">Familiar</div><div class="t">Session &rarr; Trace</div><div class="d">One unit of user activity, top of the tree.</div></div>
+            </div>
+            <div class="demo-callout">
+              <div class="ic"><i class="fas fa-eye"></i></div>
+              <div class="body"><div class="l">Familiar</div><div class="t">Pageview &rarr; Generation</div><div class="d">The atomic "thing happened" event you reason about.</div></div>
+            </div>
+            <div class="demo-callout">
+              <div class="ic"><i class="fas fa-bullseye"></i></div>
+              <div class="body"><div class="l">Familiar</div><div class="t">Event &rarr; Tool call / Span</div><div class="d">Nested instead of flat &mdash; that's the upgrade.</div></div>
+            </div>
+            <div class="demo-callout" style="border-left-color:var(--teal)">
+              <div class="ic" style="background:rgba(29,166,154,.12);color:var(--teal)"><i class="fas fa-sparkles"></i></div>
+              <div class="body"><div class="l" style="color:var(--teal)">New</div><div class="t">Cost &middot; latency &middot; the actual conversation</div><div class="d">Things you've never had in GA4. Per-step.</div></div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="co-talk-card">
         <div class="co-talk-icon"><i class="fas fa-vial-circle-check"></i></div>

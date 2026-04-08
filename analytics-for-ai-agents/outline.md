@@ -20,12 +20,13 @@ The other Analytics.dev talks all touch our argument from a different angle — 
 
 ## Opening (2 min)
 
+Digital analytics data I had framed to me was the "voice of your customer" - we interpreteted those clicks and events to be a proxy for your customers voice - how can we help them?
+
 **On screen:** Black. Text fades in:
 > "The most valuable digital analytics data in your organisation is no longer in your website analytics platform."
 >
 > "It's in your AI chatbot logs. And you're probably giving it away."
 
-Then brief credibility flash: book cover, logos, blog post URL (2–3s each, no narration).
 
 **Narrative:**
 - Built an early RAG chatbot for an internal knowledge base. Wrote a blog post about doing it on Google Cloud. It went viral.
@@ -156,49 +157,95 @@ Then: visual of expected process (clean) morphing into actual process (messier, 
 
 ## Act 3: What I Think Is Coming (7 min)
 
-*Theme: The future, told as speculation grounded in experience.*
+*Theme: The web stratifies. Agents get their own layer, their own protocols, their own commerce stack — and the customer journey gets restructured around it.*
 
-### 3.1 AI Referrals (3 min)
+### 3.1 The Web Evolved In Eras (1 min)
 
-**On screen:** Familiar GA4 acquisition report. A new channel fades in: **"AI Referrals."** Stats: low volume, high intent, high conversion.
-
-**Narrative:**
-- New referral source: users who came from an AI recommendation. Claude suggested a tool. ChatGPT mentioned a service.
-- They behave differently. Rarely browse. Know what they want. When they click, they convert.
-- Small numbers now. But: "How do you optimise for a referral source that never visits your website?"
-
-### 3.2 Agents Browsing (3 min)
-
-**On screen:** Stat on bot traffic percentage. Visual: a browser with an AI agent as the "user." Tool calls instead of clicks.
+**On screen:** Four-card timeline. Web 1.0 (Read · 1991) → Web 2.0 (Read/Write · 2004) → SaaS portals (Share · 2010s) → **Web for Agents (Transact · 2025→)**, last card highlighted.
 
 **Narrative:**
-- Past peak human browsing. Most web traffic is already automated.
-- Browser-automation agents navigate websites, fill forms, extract data. Your website isn't just for humans — it's an interface for machines that never agreed to your terms of service.
-- "I don't know exactly where this goes. But the assumption that a human loads a page, JavaScript fires, we capture intent — that assumption is already breaking."
+- Each era added a verb: read, write, share. Each one didn't replace the last — it stratified on top.
+- We're at the start of the fourth: agents transacting via protocols.
+- This is the frame for everything coming next.
 
-### 3.3 MCP and the Bypass (2 min)
+### 3.2 Agents Need Their Own Protocols (2 min)
 
-**On screen:** Traditional flow: User → Browser → Website → Data. MCP flow: User → AI → Tool Call → Data directly. The website fades out.
+**On screen:** "Browser → JS → GTM → Analytics" with strikethrough, replaced by "Agent → Protocol → Tool call → API". Plus protocol tiles: MCP (Anthropic), A2A (Google), AG-UI (CopilotKit), ACP (IBM/BeeAI).
 
 **Narrative:**
-- MCP — Model Context Protocol — lets AI agents call tools directly. No browser. No website.
-- Using it now. Instead of browsing a docs site, my agent just calls the API. The webpage never loads.
-- "If your analytics strategy depends on someone rendering your JavaScript — what happens when they never load the page at all? I don't have answers. I just know this is happening."
+- The page never loads. The JS never fires. Your tag never runs.
+- A new protocol stack has appeared in the last 18 months — MCP, A2A, AG-UI, ACP. All of them route around the browser.
+- **Reference Serge's server-side talk:** "Same trust and control problem from a different angle. We're both moving collection off the page."
 
-### 3.4 Why I Think Our Skills Transfer (2 min)
+### 3.3 Payment Required Is Back (1.5 min)
 
-**On screen:** Skills mapping:
-- Event taxonomy → Tool call schemas
-- User journeys → Agent traces
-- Funnels → Task completion rates
-- Segmentation → Intent clustering
+**On screen:** Big mono "HTTP 402 Payment Required." Subtitle: *Reserved 1991. Unused for 30 years. Revived by AI agents in 2025.* Then 4 protocol cards: x402 (Coinbase/Cloudflare/Stripe), AP2 (Google + 60 partners), TAP (Visa), ACP (Stripe/OpenAI/Mastercard).
+
+**Narrative:**
+- HTTP 402 was reserved in 1991 and unused for 30 years. Coinbase revived it in 2025.
+- Agent hits a paid endpoint → server returns 402 + price → agent signs a stablecoin payment → retries with receipt → gets the resource. One round trip. No accounts. No human.
+- Every payment giant has a horse in this race. Galaxy estimates **$3–5T in agentic commerce by 2030.**
+- This is real infrastructure landing right now. It changes who pays for what — and how you measure it.
+
+### 3.4 Websites Become Research Surfaces (1 min)
+
+**On screen:** Cloudflare data — 79% training / 17% search / 3.2% user actions. Crawl-to-refer ratios: Anthropic 38,000:1, OpenAI 3,700:1 peak, Perplexity ~100:1.
+
+**Narrative:**
+- Cloudflare measured what AI bots are actually crawling for: 79% training, 17% search, 3.2% user actions.
+- Anthropic crawls 38,000 pages for every page they refer back. Your website is not the destination anymore — it's a freshness layer for what's *not* in the training set.
+- Big implication for SEO, brand, content strategy. None of which is what this room is here for — but worth flagging.
+
+### 3.5 The Competitive Surface (1 min)
+
+**On screen:** Three pillars side by side. **Unique data** (highlighted orange, "yours alone"). **The model** (muted, hatched, "commodity ✗"). **Harness & UX** (teal, "your surface"). Below: a callout — *your website is the visible surface of your harness*.
+
+**Narrative:**
+- Mark's recurring refrain. Worth landing it slowly here.
+- Three things make a competitive AI product: unique data + a model + a harness. Two of them are commodities; one of them is yours.
+- Everyone has the same access to GPT, Claude, Gemini, Llama, DeepSeek. The model is no longer the moat. It's table stakes.
+- Your unique data is what only you have. Your harness — the agent loop, the eval pipeline, the tool catalogue, the UX, the website — is how you turn the model + your data into a product.
+- "Your website used to be the destination. Now it's the visible surface of your harness — the showcase of how well you've combined the trifecta. That's why it still matters, even when agents bypass the page."
+
+### 3.6 The New Customer Journey (1 min)
+
+**On screen:** Three-tier stratified diagram. Tier 1 Human (intent, judgement, trust). Tier 2 Agent (plan, retrieve, tool use, retry). Tier 3 Protocol (MCP, A2A, x402, OpenAPI, OTel).
+
+**Narrative:**
+- The funnel isn't gone. It's been *layered*. Humans operate at intent and judgement. Agents handle planning and execution. Protocols handle the machine layer underneath.
+- The thing this audience sells — customer journey insight — has to span all three tiers now. Most analytics setups only see tier one.
+- **Reference Caroline's agentic enrichment talk:** "Caroline goes deeper on how to enrich and act on these stratified journeys. I'm here to ask whether you're capturing them at all."
+
+### 3.7 A New Class of Data (0.5 min)
+
+**On screen:** Two-column mapping table. Web analytics → Agent analytics:
+- Pageviews → Tool calls
+- Sessions → Traces
+- Conversion rate → Task success rate
+- Bounce rate → Hallucination & retry rate
+- Cost per acquisition → Cost per task (tokens × rate)
+- Page load time → Time-to-first-token / latency budget
+- Funnels → Trace trees
+- Custom dimensions → LLM-as-judge scores
 - BigQuery → Still BigQuery
 
 > "The tools changed. The thinking didn't."
 
 **Narrative:**
-- Optimistic — for me, and maybe for you.
+- Some metrics rename. Most are genuinely new.
 - Not starting over. Building on fifteen years of foundations.
+
+## Act 3 sources
+
+- [Imperva 2025 Bad Bot Report](https://www.imperva.com/blog/2025-imperva-bad-bot-report-how-ai-is-supercharging-the-bot-threat/) — bots overtake humans (51% vs 49%)
+- [Cloudflare · From Googlebot to GPTBot](https://blog.cloudflare.com/from-googlebot-to-gptbot-whos-crawling-your-site-in-2025/) — GPTBot +305% YoY
+- [Cloudflare · The crawl-to-click gap](https://blog.cloudflare.com/crawlers-click-ai-bots-training/) — Anthropic 38,000:1 ratio
+- [Cloudflare · AI crawler traffic by purpose](https://blog.cloudflare.com/ai-crawler-traffic-by-purpose-and-industry/) — 79/17/3.2 split
+- [Google Cloud · Announcing AP2](https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol)
+- [Stripe · Agentic Commerce Suite (ACP)](https://stripe.com/blog/agentic-commerce-suite)
+- [Visa · Trusted Agent Protocol (TAP)](https://corporate.visa.com/en/sites/visa-acceptance-solutions/agentic-commerce/trusted-agent-protocol.html)
+- [x402 protocol](https://www.x402.org/) — HTTP 402 revival
+- [Crossmint · Agentic payments protocols compared](https://www.crossmint.com/learn/agentic-payments-protocols-compared)
 
 ---
 
@@ -255,10 +302,13 @@ Then: visual of expected process (clean) morphing into actual process (messier, 
 | | The Hero Story | 3 min | Keep this — it's the heart of the talk. Don't rush. |
 | | Analysing Text at Scale | 1 min | Three-bullet flash, no walkthrough |
 | | Langfuse Demo | 3 min | Pre-loaded trace; **reference Peter's e2e testing talk here** |
-| Act 3 | AI Referrals | 2 min | **Reference Caroline's agentic enrichment talk here** |
-| | Agents Browsing | 2 min | Single bot-traffic stat + one visual |
-| | MCP and the Bypass | 2 min | **Reference Serge's server-side talk here** |
-| | Why Our Skills Transfer | 1 min | Skills mapping flash, drop the optimism riff |
+| Act 3 | The Web Evolved In Eras | 1 min | Four-card timeline; the unifying frame |
+| | Agents Need Their Own Protocols | 2 min | MCP/A2A/AG-UI bypass; **reference Serge's server-side talk** |
+| | Payment Required Is Back | 1.5 min | HTTP 402 + protocol war (x402/AP2/TAP/ACP) |
+| | Websites Become Research Surfaces | 1 min | Cloudflare crawl-to-refer ratios |
+| | The Competitive Surface | 1 min | Trifecta — unique data + commodity model + harness/website |
+| | The New Customer Journey | 1 min | Stratified human/agent/protocol stack; **reference Caroline** |
+| | A New Class of Data | 0.5 min | Old-vs-new metric mapping table |
 | Close | Live Agent Demo | 2 min | 30s of agent response, the trace is the star |
 | | Takeaways | 1 min | Three lines, one at a time |
 | | Invitation | 1 min | Name + sunholo.com + closing line |

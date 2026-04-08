@@ -164,6 +164,389 @@ body{
 .slide.active .todo-card{animation:fadeSlideUp .5s ease .15s both}
 .slide.active .slide-tag{animation:fadeSlideUp .4s ease .05s both}
 
+/* ════════════ Common helpers ════════════ */
+.src-line{
+  font-family:var(--mono);font-size:10px;color:var(--text-dim);
+  text-align:center;
+}
+.src-line a{color:var(--text-dim);text-decoration:underline;text-decoration-color:var(--ghost)}
+.src-line a:hover{color:var(--orange);text-decoration-color:var(--orange)}
+
+/* ════════════ 3.1 Web evolved in eras ════════════ */
+.eras-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+  width:100%;max-width:1180px;
+}
+.era{
+  background:var(--surface);border:1px solid var(--ghost);
+  border-radius:12px;padding:18px 18px 16px;
+  display:flex;flex-direction:column;gap:8px;
+  position:relative;
+  border-top:3px solid var(--text-dim);
+}
+.era.now{
+  border-top-color:var(--orange);
+  box-shadow:0 0 50px -20px var(--orange-glow);
+}
+.era .e-num{
+  font-family:var(--mono);font-size:9px;font-weight:700;
+  letter-spacing:.1em;color:var(--text-dim);
+}
+.era.now .e-num{color:var(--orange)}
+.era .e-name{
+  font-size:18px;font-weight:800;color:var(--text);
+  line-height:1.2;
+}
+.era .e-verb{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-dim);
+  padding:4px 8px;border-radius:10px;
+  background:var(--surface-hi);
+  align-self:flex-start;
+}
+.era.now .e-verb{color:var(--orange);background:rgba(231,60,23,.1)}
+.era .e-examples{
+  font-size:11px;color:var(--text-dim);line-height:1.45;
+}
+.era .e-role{
+  font-size:11px;color:var(--text);
+  font-weight:600;line-height:1.4;
+  padding-top:8px;margin-top:auto;
+  border-top:1px dashed var(--ghost);
+}
+.era.now .e-role{color:var(--orange)}
+.eras-kicker{
+  text-align:center;font-size:14px;color:var(--text-dim);
+  font-style:italic;line-height:1.55;max-width:880px;
+}
+.eras-kicker strong{color:var(--text);font-style:normal}
+
+/* ════════════ 3.2 Protocols / the bypass ════════════ */
+.protocols-stage{
+  display:grid;grid-template-columns:1fr 1.2fr;gap:24px;
+  width:100%;max-width:1150px;align-items:stretch;
+}
+.bypass-diagram{
+  background:var(--surface);border:1px solid var(--ghost);
+  border-radius:14px;padding:22px;
+  display:flex;flex-direction:column;gap:14px;
+}
+.bypass-diagram .bd-title{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);
+}
+.bypass-flow{display:flex;flex-direction:column;gap:8px}
+.bp-row{
+  display:flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:11px;
+}
+.bp-step{
+  padding:8px 11px;border-radius:6px;
+  background:var(--surface-hi);border:1px solid var(--ghost);
+  flex:1;color:var(--text);
+}
+.bp-step.faded{opacity:.4;text-decoration:line-through;text-decoration-color:var(--orange)}
+.bp-step.new{
+  border-color:var(--orange-dim);background:rgba(231,60,23,.08);
+  color:var(--orange);font-weight:700;
+}
+.bp-arrow{color:var(--text-dim);font-size:10px}
+.bypass-divider{
+  font-family:var(--mono);font-size:9px;color:var(--text-dim);
+  text-align:center;padding:6px 0;
+  border-top:1px dashed var(--ghost);border-bottom:1px dashed var(--ghost);
+  letter-spacing:.1em;text-transform:uppercase;
+}
+.proto-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:12px;
+}
+.proto-tile{
+  background:var(--surface);border:1px solid var(--ghost);
+  border-radius:10px;padding:14px 16px;
+  display:flex;flex-direction:column;gap:6px;
+  border-left:3px solid var(--orange);
+}
+.proto-tile:nth-child(2){border-left-color:var(--teal)}
+.proto-tile:nth-child(3){border-left-color:var(--indigo)}
+.proto-tile:nth-child(4){border-left-color:var(--amber)}
+.proto-tile .pt-name{
+  display:flex;align-items:baseline;gap:8px;
+  font-size:15px;font-weight:800;color:var(--text);
+}
+.proto-tile .pt-owner{
+  font-family:var(--mono);font-size:9px;color:var(--text-dim);
+  font-weight:400;
+}
+.proto-tile .pt-desc{font-size:11px;color:var(--text-dim);line-height:1.4}
+
+/* ════════════ 3.3 Payment Required ════════════ */
+.pay-stage{
+  display:flex;flex-direction:column;gap:18px;align-items:center;
+  width:100%;max-width:1150px;
+}
+.http-402{
+  background:var(--surface);border:1px solid var(--orange-dim);
+  border-radius:14px;padding:22px 28px;
+  display:flex;align-items:center;gap:24px;width:100%;
+  box-shadow:0 0 60px -25px var(--orange-glow);
+}
+.http-402 .code{
+  font-family:var(--mono);font-size:46px;font-weight:800;
+  color:var(--orange);line-height:1;
+  letter-spacing:-.02em;flex-shrink:0;
+}
+.http-402 .label{
+  font-family:var(--mono);font-size:12px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--orange);
+}
+.http-402 .body{flex:1;min-width:0}
+.http-402 .h-title{font-size:18px;font-weight:800;color:var(--text);margin-top:2px}
+.http-402 .h-desc{font-size:12px;color:var(--text-dim);margin-top:4px;line-height:1.45}
+.pay-protocols{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:100%;
+}
+.pay-card{
+  background:var(--surface);border:1px solid var(--ghost);
+  border-radius:10px;padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:6px;
+  border-top:3px solid var(--orange);
+}
+.pay-card.ap2{border-top-color:#4285f4}
+.pay-card.tap{border-top-color:#1a1f71}
+.pay-card.acp{border-top-color:var(--teal)}
+.pay-card .pc-name{font-size:16px;font-weight:800;color:var(--text)}
+.pay-card .pc-owner{
+  font-family:var(--mono);font-size:9px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);
+}
+.pay-card .pc-desc{font-size:11px;color:var(--text-dim);line-height:1.45;margin-top:2px}
+.pay-card .pc-link{
+  font-family:var(--mono);font-size:9px;
+  margin-top:auto;padding-top:6px;
+  border-top:1px dashed var(--ghost);
+}
+.pay-card .pc-link a{color:var(--text-dim);text-decoration:underline;text-decoration-color:var(--ghost)}
+.pay-stat-strip{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-family:var(--mono);font-size:12px;color:var(--text-dim);
+  font-style:italic;
+}
+.pay-stat-strip strong{color:var(--orange);font-weight:700;font-style:normal}
+
+/* ════════════ 3.4 Research surfaces ════════════ */
+.research-stage{
+  display:grid;grid-template-columns:1fr 1fr;gap:24px;
+  width:100%;max-width:1150px;
+}
+.purpose-card{
+  background:var(--surface);border:1px solid var(--ghost);
+  border-radius:14px;padding:20px 22px;
+  display:flex;flex-direction:column;gap:14px;
+}
+.purpose-card .pc-head{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--orange);
+}
+.purpose-bars{display:flex;flex-direction:column;gap:10px}
+.purpose-row{
+  display:grid;grid-template-columns:110px 1fr 60px;
+  align-items:center;gap:10px;font-size:12px;
+}
+.purpose-row .pr-label{font-family:var(--mono);color:var(--text);font-weight:700}
+.purpose-row .pr-track{
+  height:14px;background:var(--surface-hi);border-radius:7px;
+  overflow:hidden;
+}
+.purpose-row .pr-fill{
+  display:block;height:100%;border-radius:7px;
+  background:linear-gradient(90deg,var(--orange-dim),var(--orange));
+  width:0;transition:width 1s cubic-bezier(.2,.9,.3,1.4) .3s;
+}
+.slide.active .purpose-row .pr-fill{width:var(--w,50%)}
+.purpose-row .pr-pct{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  color:var(--text-dim);text-align:right;
+}
+.purpose-card .pc-foot{
+  font-size:10px;color:var(--text-dim);font-family:var(--mono);
+  margin-top:auto;
+}
+.purpose-card .pc-foot a{color:var(--text-dim);text-decoration:underline;text-decoration-color:var(--ghost)}
+
+.ratio-card{
+  background:var(--surface);border:1px solid var(--ghost);
+  border-radius:14px;padding:20px 22px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.ratio-card .rc-head{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--teal);
+}
+.ratio-row{
+  display:grid;grid-template-columns:90px 1fr;
+  align-items:baseline;gap:14px;
+  padding:8px 0;border-bottom:1px dashed var(--ghost);
+}
+.ratio-row:last-of-type{border-bottom:none}
+.ratio-row .name{font-size:13px;font-weight:700;color:var(--text)}
+.ratio-row .num{
+  font-family:var(--mono);font-size:18px;font-weight:800;
+  color:var(--text);
+}
+.ratio-row.bad .num{color:var(--orange)}
+.ratio-row .num small{
+  font-size:10px;font-weight:400;color:var(--text-dim);margin-left:6px;
+}
+.research-kicker{
+  text-align:center;font-size:14px;color:var(--text-dim);
+  font-style:italic;max-width:900px;line-height:1.55;
+}
+.research-kicker strong{color:var(--text);font-style:normal}
+
+/* ════════════ 3.5 Competitive surface (trifecta) ════════════ */
+.trifecta-stage{
+  display:flex;flex-direction:column;gap:20px;align-items:center;
+  width:100%;max-width:1100px;
+}
+.trifecta-grid{
+  display:grid;grid-template-columns:1fr auto 1fr auto 1fr;
+  gap:14px;align-items:stretch;width:100%;
+}
+.tri-pillar{
+  background:var(--surface);border:1px solid var(--ghost);
+  border-radius:14px;padding:22px 22px 20px;
+  display:flex;flex-direction:column;gap:10px;
+  border-top:3px solid var(--text-dim);
+  position:relative;
+}
+.tri-pillar.data{
+  border-top-color:var(--orange);
+  box-shadow:0 0 50px -25px var(--orange-glow);
+}
+.tri-pillar.model{
+  opacity:.55;
+  background:repeating-linear-gradient(135deg,var(--surface) 0,var(--surface) 8px,var(--surface-hi) 8px,var(--surface-hi) 16px);
+}
+.tri-pillar.harness{border-top-color:var(--teal)}
+.tri-pillar .tp-label{
+  font-family:var(--mono);font-size:9px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-dim);
+}
+.tri-pillar.data .tp-label{color:var(--orange)}
+.tri-pillar.harness .tp-label{color:var(--teal)}
+.tri-pillar .tp-name{font-size:22px;font-weight:800;color:var(--text);line-height:1.1}
+.tri-pillar .tp-tag{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  padding:4px 8px;border-radius:10px;align-self:flex-start;
+  background:var(--surface-hi);color:var(--text-dim);
+}
+.tri-pillar.data .tp-tag{background:rgba(231,60,23,.12);color:var(--orange)}
+.tri-pillar.harness .tp-tag{background:rgba(29,166,154,.12);color:var(--teal)}
+.tri-pillar.model .tp-tag{
+  background:rgba(255,255,255,.06);color:var(--text-dim);
+  text-decoration:line-through;text-decoration-color:var(--orange);
+}
+.tri-pillar .tp-desc{font-size:12px;color:var(--text-dim);line-height:1.5}
+.tri-pillar .tp-foot{
+  font-family:var(--mono);font-size:10px;color:var(--text-dim);
+  margin-top:auto;padding-top:10px;border-top:1px dashed var(--ghost);
+}
+.tri-op{
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:24px;font-weight:800;
+  color:var(--text-dim);
+}
+.tri-callout{
+  width:100%;
+  background:var(--surface);border:1px solid var(--orange-dim);
+  border-left:4px solid var(--orange);
+  border-radius:10px;padding:14px 22px;
+  display:flex;align-items:center;gap:14px;
+}
+.tri-callout .tc-icon{
+  font-size:18px;color:var(--orange);
+}
+.tri-callout .tc-body{font-size:14px;color:var(--text);line-height:1.5}
+.tri-callout .tc-body strong{color:var(--orange)}
+.tri-callout .tc-body em{color:var(--text);font-style:normal;font-weight:700;border-bottom:2px solid var(--teal)}
+
+/* ════════════ 3.6 New customer journey ════════════ */
+.journey-stage{
+  display:flex;flex-direction:column;gap:14px;align-items:center;
+  width:100%;max-width:1100px;
+}
+.journey-tier{
+  display:grid;grid-template-columns:160px 1fr;
+  align-items:center;gap:18px;width:100%;
+  background:var(--surface);border:1px solid var(--ghost);
+  border-radius:12px;padding:16px 22px;
+  border-left:4px solid var(--text-dim);
+}
+.journey-tier.human{border-left-color:var(--teal)}
+.journey-tier.agent{border-left-color:var(--orange)}
+.journey-tier.protocol{border-left-color:var(--indigo)}
+.journey-tier .jt-icon{
+  display:flex;align-items:center;gap:10px;
+}
+.journey-tier .ji-circle{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--surface-hi);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:var(--text);
+}
+.journey-tier.human .ji-circle{background:rgba(29,166,154,.12);color:var(--teal)}
+.journey-tier.agent .ji-circle{background:rgba(231,60,23,.12);color:var(--orange)}
+.journey-tier.protocol .ji-circle{background:rgba(99,102,241,.12);color:var(--indigo)}
+.journey-tier .jt-tier{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);
+}
+.journey-tier .jt-name{font-size:14px;font-weight:800;color:var(--text);line-height:1.2}
+.journey-tier .jt-tasks{
+  display:flex;flex-wrap:wrap;gap:6px;
+}
+.jt-chip{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  padding:5px 10px;border-radius:12px;
+  background:var(--surface-hi);border:1px solid var(--ghost);
+  color:var(--text);
+}
+.journey-tier.human .jt-chip{border-color:var(--teal-dim);color:var(--teal)}
+.journey-tier.agent .jt-chip{border-color:var(--orange-dim);color:var(--orange)}
+.journey-tier.protocol .jt-chip{border-color:rgba(99,102,241,.3);color:var(--indigo)}
+
+/* ════════════ 3.6 New class of data ════════════ */
+.mapping-table{
+  width:100%;max-width:1000px;
+  background:var(--surface);border:1px solid var(--ghost);
+  border-radius:14px;overflow:hidden;
+}
+.mapping-table .mt-head{
+  display:grid;grid-template-columns:1fr 1fr;
+  background:var(--surface-hi);
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+}
+.mapping-table .mt-head div{padding:12px 22px;color:var(--text-dim)}
+.mapping-table .mt-head div:last-child{color:var(--orange)}
+.mt-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  border-top:1px solid var(--ghost);
+  font-size:13px;
+}
+.mt-row div{padding:11px 22px;display:flex;align-items:center;gap:10px}
+.mt-row .mt-old{color:var(--text-dim)}
+.mt-row .mt-new{color:var(--text);font-weight:600}
+.mt-row .mt-arrow{color:var(--orange);font-size:10px}
+.mt-row.joke .mt-old,.mt-row.joke .mt-new{color:var(--orange);font-weight:700}
+.mapping-quote{
+  text-align:center;font-size:clamp(16px,2vw,22px);
+  font-weight:700;line-height:1.4;max-width:900px;
+}
+.mapping-quote .accent{color:var(--orange)}
+
 @media(max-width:900px){.slide{padding:24px}}
 </style>
 </head>
@@ -179,85 +562,281 @@ body{
       <p class="slide-subtitle">Speculation grounded in experience.</p>
     </section>
 
-    <!-- ═══════════ Slide 2: 3.1 AI Referrals ═══════════ -->
+    <!-- ═══════════ Slide 2: 3.1 The Web Evolved In Eras ═══════════ -->
     <section class="slide" data-slide="2">
-      <h1 class="slide-title">3.1 &middot; <span class="accent">AI Referrals</span></h1>
-      <p class="slide-subtitle">Low volume. High intent. High conversion. How do you optimise for a referral source that never visits your website?</p>
-      <div class="todo-card">
-        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
-        Mock GA4 acquisition report:
-        <ul>
-          <li>Familiar channel grouping table</li>
-          <li>New row fades in: "AI Referrals"</li>
-          <li>Stats: low sessions, high conversion rate, high revenue/session</li>
-          <li>Source examples: Claude, ChatGPT, Perplexity</li>
-        </ul>
-      </div>
-      <div class="co-talk-card">
-        <div class="co-talk-icon"><i class="fas fa-user-plus"></i></div>
-        <div class="co-talk-body">
-          <div class="co-talk-meta">Coming up tonight &middot; Caroline Vidal &middot; DFDS</div>
-          <div class="co-talk-title">Agentic Lead Enrichment &amp; Attribution</div>
-          <div class="co-talk-quote">"Caroline goes deeper on agentic enrichment after me — she'll show you what to do with these leads once they arrive. I'm here to ask whether you're even seeing them."</div>
+      <h1 class="slide-title">3.1 &middot; The web evolved in <span class="accent">eras</span></h1>
+      <p class="slide-subtitle">Each era added a verb. We're at the start of a fourth.</p>
+      <div class="eras-grid">
+        <div class="era">
+          <div class="e-num">Era 1 &middot; 1991</div>
+          <div class="e-name">Web 1.0</div>
+          <div class="e-verb">Read</div>
+          <div class="e-examples">Wikipedia &middot; IMDb &middot; static sites &middot; blogs</div>
+          <div class="e-role">Humans browse documents</div>
+        </div>
+        <div class="era">
+          <div class="e-num">Era 2 &middot; 2004</div>
+          <div class="e-name">Web 2.0</div>
+          <div class="e-verb">Read / Write</div>
+          <div class="e-examples">Facebook &middot; YouTube &middot; Twitter &middot; Reddit</div>
+          <div class="e-role">Humans contribute content</div>
+        </div>
+        <div class="era">
+          <div class="e-num">Era 3 &middot; 2010s</div>
+          <div class="e-name">Cloud / SaaS</div>
+          <div class="e-verb">Share</div>
+          <div class="e-examples">Google Docs &middot; Slack &middot; Notion &middot; Figma</div>
+          <div class="e-role">Humans collaborate in portals</div>
+        </div>
+        <div class="era now">
+          <div class="e-num">Era 4 &middot; 2025 &rarr;</div>
+          <div class="e-name">Web for Agents</div>
+          <div class="e-verb">Transact</div>
+          <div class="e-examples">MCP &middot; A2A &middot; AG-UI &middot; x402 &middot; AP2</div>
+          <div class="e-role">Agents call tools and pay for resources</div>
         </div>
       </div>
+      <p class="eras-kicker">Each era didn't replace the last &mdash; it <strong>stratified on top</strong>. The same is happening now: agents are getting their own layer.</p>
     </section>
 
-    <!-- ═══════════ Slide 3: 3.2 Agents Browsing ═══════════ -->
+    <!-- ═══════════ Slide 3: 3.2 Agents Need Their Own Protocols ═══════════ -->
     <section class="slide" data-slide="3">
-      <h1 class="slide-title">3.2 &middot; <span class="accent">Agents</span> Are the New Users</h1>
-      <p class="slide-subtitle">Past peak human browsing. Your website is now an interface for machines that never agreed to your terms of service.</p>
-      <div class="todo-card">
-        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
-        Bot traffic stat + visual:
-        <ul>
-          <li>Headline stat: % of web traffic that's automated (cite Imperva / Cloudflare report)</li>
-          <li>Browser visual with AI agent avatar as the "user"</li>
-          <li>Tool calls instead of clicks</li>
-          <li>End: "the assumption that a human loads a page is already breaking"</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- ═══════════ Slide 4: 3.3 MCP and the Bypass ═══════════ -->
-    <section class="slide" data-slide="4">
-      <h1 class="slide-title">3.3 &middot; <span class="accent">MCP</span> &mdash; The Bypass</h1>
-      <p class="slide-subtitle">The webpage never loads.</p>
-      <div class="todo-card">
-        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
-        Two flow diagrams:
-        <ul>
-          <li>Traditional: User → Browser → Website → Data</li>
-          <li>MCP: User → AI → Tool Call → Data (website fades out)</li>
-          <li>Brief MCP explainer (Model Context Protocol)</li>
-          <li>Honest landing: "I don't have answers. I just know this is happening."</li>
-        </ul>
+      <h1 class="slide-title">3.2 &middot; Agents need their own <span class="accent">protocols</span></h1>
+      <p class="slide-subtitle">The page never loads. The JS never fires. Your tag never runs.</p>
+      <div class="protocols-stage">
+        <div class="bypass-diagram">
+          <div class="bd-title"><i class="fas fa-route"></i> &nbsp;The bypass</div>
+          <div class="bypass-flow">
+            <div class="bp-row"><span class="bp-step faded">Browser</span><span class="bp-arrow"><i class="fas fa-arrow-right"></i></span><span class="bp-step faded">Page load</span></div>
+            <div class="bp-row"><span class="bp-step faded">JS / GTM</span><span class="bp-arrow"><i class="fas fa-arrow-right"></i></span><span class="bp-step faded">Analytics</span></div>
+          </div>
+          <div class="bypass-divider">replaced by</div>
+          <div class="bypass-flow">
+            <div class="bp-row"><span class="bp-step new">Agent</span><span class="bp-arrow"><i class="fas fa-arrow-right"></i></span><span class="bp-step new">Protocol</span></div>
+            <div class="bp-row"><span class="bp-step new">Tool call</span><span class="bp-arrow"><i class="fas fa-arrow-right"></i></span><span class="bp-step new">API / Data</span></div>
+          </div>
+        </div>
+        <div class="proto-grid">
+          <div class="proto-tile">
+            <div class="pt-name">MCP <span class="pt-owner">Anthropic &middot; 2024</span></div>
+            <div class="pt-desc">Model Context Protocol &mdash; agents call tools and read context from any compliant server.</div>
+          </div>
+          <div class="proto-tile">
+            <div class="pt-name">A2A <span class="pt-owner">Google &middot; 2025</span></div>
+            <div class="pt-desc">Agent-to-Agent &mdash; agents discover and delegate to each other across vendors.</div>
+          </div>
+          <div class="proto-tile">
+            <div class="pt-name">AG-UI <span class="pt-owner">CopilotKit &middot; 2025</span></div>
+            <div class="pt-desc">Streams agent output into UIs &mdash; the new "frontend" for an agent.</div>
+          </div>
+          <div class="proto-tile">
+            <div class="pt-name">ACP <span class="pt-owner">IBM / BeeAI &middot; 2025</span></div>
+            <div class="pt-desc">Agent Communication Protocol &mdash; standardised request/response for orchestration.</div>
+          </div>
+        </div>
       </div>
       <div class="co-talk-card">
         <div class="co-talk-icon"><i class="fas fa-server"></i></div>
         <div class="co-talk-body">
           <div class="co-talk-meta">Coming up tonight &middot; Serge Shkvarnytskyi &middot; Stape</div>
           <div class="co-talk-title">Server-side tracking: From audit to reporting</div>
-          <div class="co-talk-quote">"Serge talks server-side later — same trust and control problem from a different angle. We're both moving collection off the page."</div>
+          <div class="co-talk-quote">"Serge talks server-side later &mdash; same trust and control problem from a different angle. We're both moving collection off the page."</div>
         </div>
       </div>
     </section>
 
-    <!-- ═══════════ Slide 5: 3.4 Skills Transfer ═══════════ -->
-    <section class="slide" data-slide="5">
-      <h1 class="slide-title">3.4 &middot; The Tools Changed.<br>The <span class="accent">Thinking</span> Didn't.</h1>
-      <p class="slide-subtitle">Building on fifteen years of foundations — not starting over.</p>
-      <div class="todo-card">
-        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
-        Skills mapping (left → right reveal):
-        <ul>
-          <li>Event taxonomy → Tool call schemas</li>
-          <li>User journeys → Agent traces</li>
-          <li>Funnels → Task completion rates</li>
-          <li>Segmentation → Intent clustering</li>
-          <li>BigQuery → Still BigQuery (joke landing)</li>
-        </ul>
+    <!-- ═══════════ Slide 4: 3.3 Payment Required is Back ═══════════ -->
+    <section class="slide" data-slide="4">
+      <h1 class="slide-title">3.3 &middot; <span class="accent">Payment Required</span> is back</h1>
+      <div class="pay-stage">
+        <div class="http-402">
+          <div>
+            <div class="label">HTTP status</div>
+            <div class="code">402</div>
+          </div>
+          <div class="body">
+            <div class="label">Payment Required</div>
+            <div class="h-title">Reserved 1991. Unused for 30 years. Revived by AI agents in 2025.</div>
+            <div class="h-desc">Agent hits a paid endpoint &rarr; server returns <strong>402 + price</strong> &rarr; agent signs a stablecoin payment &rarr; retries with payment receipt header &rarr; gets the resource. One round trip. No accounts, no API keys, no human in the loop.</div>
+          </div>
+        </div>
+        <div class="pay-protocols">
+          <div class="pay-card">
+            <div class="pc-name">x402</div>
+            <div class="pc-owner">Coinbase &middot; Cloudflare &middot; Stripe</div>
+            <div class="pc-desc">HTTP 402 revival. Pay-per-request stablecoin micropayments. Cloudflare uses it for pay-per-crawl.</div>
+            <div class="pc-link"><a href="https://www.x402.org/" target="_blank" rel="noopener">x402.org</a></div>
+          </div>
+          <div class="pay-card ap2">
+            <div class="pc-name">AP2</div>
+            <div class="pc-owner">Google &middot; 60+ partners</div>
+            <div class="pc-desc">Agent Payments Protocol. Authorization &amp; audit framework. A2A x402 extension is production-ready.</div>
+            <div class="pc-link"><a href="https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol" target="_blank" rel="noopener">cloud.google.com &middot; AP2</a></div>
+          </div>
+          <div class="pay-card tap">
+            <div class="pc-name">TAP</div>
+            <div class="pc-owner">Visa</div>
+            <div class="pc-desc">Trusted Agent Protocol. Identity &amp; merchant trust signals for agent-initiated card payments.</div>
+            <div class="pc-link"><a href="https://corporate.visa.com/en/sites/visa-acceptance-solutions/agentic-commerce/trusted-agent-protocol.html" target="_blank" rel="noopener">visa.com &middot; TAP</a></div>
+          </div>
+          <div class="pay-card acp">
+            <div class="pc-name">ACP</div>
+            <div class="pc-owner">Stripe &middot; OpenAI &middot; Mastercard</div>
+            <div class="pc-desc">Agentic Commerce Protocol. Open spec for agent checkout in third-party storefronts.</div>
+            <div class="pc-link"><a href="https://stripe.com/blog/agentic-commerce-suite" target="_blank" rel="noopener">stripe.com &middot; ACP</a></div>
+          </div>
+        </div>
+        <p class="pay-stat-strip">Galaxy estimates agentic commerce reaches <strong>$3&ndash;5 trillion</strong> by 2030.</p>
       </div>
+    </section>
+
+    <!-- ═══════════ Slide 5: 3.4 Websites Become Research Surfaces ═══════════ -->
+    <section class="slide" data-slide="5">
+      <h1 class="slide-title">3.4 &middot; Websites become <span class="accent">research surfaces</span></h1>
+      <p class="slide-subtitle">Crawled for what's <em>not</em> in the training set. Visited by humans almost not at all.</p>
+      <div class="research-stage">
+        <div class="purpose-card">
+          <div class="pc-head"><i class="fas fa-spider"></i> &nbsp;Why AI bots crawl</div>
+          <div class="purpose-bars">
+            <div class="purpose-row"><span class="pr-label">Training</span><span class="pr-track"><span class="pr-fill" style="--w:79%"></span></span><span class="pr-pct">79%</span></div>
+            <div class="purpose-row"><span class="pr-label">Search</span><span class="pr-track"><span class="pr-fill" style="--w:17%"></span></span><span class="pr-pct">17%</span></div>
+            <div class="purpose-row"><span class="pr-label">User actions</span><span class="pr-track"><span class="pr-fill" style="--w:3.2%"></span></span><span class="pr-pct">3.2%</span></div>
+          </div>
+          <div class="pc-foot">Source: <a href="https://blog.cloudflare.com/ai-crawler-traffic-by-purpose-and-industry/" target="_blank" rel="noopener">Cloudflare &middot; AI crawler traffic by purpose</a></div>
+        </div>
+        <div class="ratio-card">
+          <div class="rc-head"><i class="fas fa-arrow-right-arrow-left"></i> &nbsp;Crawl-to-refer ratio &middot; July 2025</div>
+          <div class="ratio-row bad"><span class="name">Anthropic</span><span class="num">38,000<small>:1</small></span></div>
+          <div class="ratio-row bad"><span class="name">OpenAI</span><span class="num">3,700<small>:1 peak</small></span></div>
+          <div class="ratio-row"><span class="name">Perplexity</span><span class="num">~100<small>:1</small></span></div>
+          <div class="pc-foot" style="margin-top:6px">Pages crawled per page referred. Source: <a href="https://blog.cloudflare.com/crawlers-click-ai-bots-training/" target="_blank" rel="noopener">Cloudflare &middot; The crawl-to-click gap</a></div>
+        </div>
+      </div>
+      <p class="research-kicker">Your website used to be the <em>destination</em>. It's becoming a <strong>freshness layer</strong> &mdash; queried only for what isn't already in the model's head.</p>
+    </section>
+
+    <!-- ═══════════ Slide 6: 3.5 The Competitive Surface ═══════════ -->
+    <section class="slide" data-slide="6">
+      <h1 class="slide-title">3.5 &middot; The competitive <span class="accent">surface</span></h1>
+      <p class="slide-subtitle">Everyone has the same models now. The moat lives somewhere else.</p>
+      <div class="trifecta-stage">
+        <div class="trifecta-grid">
+          <div class="tri-pillar data">
+            <div class="tp-label">Pillar 1</div>
+            <div class="tp-name">Unique data</div>
+            <div class="tp-tag">yours alone</div>
+            <div class="tp-desc">Your customers' prompts. Your domain knowledge. Your private corpus. The only thing competitors can't copy.</div>
+            <div class="tp-foot">&larr; this is what Act 2 was about</div>
+          </div>
+          <div class="tri-op">+</div>
+          <div class="tri-pillar model">
+            <div class="tp-label">Pillar 2</div>
+            <div class="tp-name">The model</div>
+            <div class="tp-tag">commodity</div>
+            <div class="tp-desc">GPT, Claude, Gemini, Llama, DeepSeek, Qwen. Open weights, hosted APIs, drop-in swaps. Everyone has the same access &mdash; you, me, your competitor.</div>
+            <div class="tp-foot">no edge here anymore</div>
+          </div>
+          <div class="tri-op">+</div>
+          <div class="tri-pillar harness">
+            <div class="tp-label">Pillar 3</div>
+            <div class="tp-name">Harness &amp; UX</div>
+            <div class="tp-tag">your surface</div>
+            <div class="tp-desc">The agent loop, the tool catalogue, the website, the chat interface, the eval harness. How your data and the model become a product.</div>
+            <div class="tp-foot">the visible part of the moat</div>
+          </div>
+        </div>
+        <div class="tri-callout">
+          <div class="tc-icon"><i class="fas fa-lightbulb"></i></div>
+          <div class="tc-body">Your <strong>website is the visible surface</strong> of your harness &mdash; the part the world sees of how well you've combined your unique data with a commodity model. It's not the destination anymore. It's the <em>showcase</em>.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 7: 3.6 The New Customer Journey ═══════════ -->
+    <section class="slide" data-slide="7">
+      <h1 class="slide-title">3.6 &middot; The new <span class="accent">customer journey</span></h1>
+      <p class="slide-subtitle">Not a funnel anymore. A stack &mdash; with humans on top and protocols at the bottom.</p>
+      <div class="journey-stage">
+        <div class="journey-tier human">
+          <div class="jt-icon">
+            <div class="ji-circle"><i class="fas fa-user"></i></div>
+            <div>
+              <div class="jt-tier">Tier 1</div>
+              <div class="jt-name">Human</div>
+            </div>
+          </div>
+          <div class="jt-tasks">
+            <span class="jt-chip">Intent</span>
+            <span class="jt-chip">Judgement</span>
+            <span class="jt-chip">Trust</span>
+            <span class="jt-chip">Approval</span>
+            <span class="jt-chip">Satisfaction</span>
+          </div>
+        </div>
+        <div class="journey-tier agent">
+          <div class="jt-icon">
+            <div class="ji-circle"><i class="fas fa-robot"></i></div>
+            <div>
+              <div class="jt-tier">Tier 2</div>
+              <div class="jt-name">Agent</div>
+            </div>
+          </div>
+          <div class="jt-tasks">
+            <span class="jt-chip">Plan</span>
+            <span class="jt-chip">Retrieve</span>
+            <span class="jt-chip">Tool use</span>
+            <span class="jt-chip">Reason</span>
+            <span class="jt-chip">Retry</span>
+            <span class="jt-chip">Hand-off</span>
+          </div>
+        </div>
+        <div class="journey-tier protocol">
+          <div class="jt-icon">
+            <div class="ji-circle"><i class="fas fa-network-wired"></i></div>
+            <div>
+              <div class="jt-tier">Tier 3</div>
+              <div class="jt-name">Protocol</div>
+            </div>
+          </div>
+          <div class="jt-tasks">
+            <span class="jt-chip">MCP</span>
+            <span class="jt-chip">A2A</span>
+            <span class="jt-chip">x402 / AP2</span>
+            <span class="jt-chip">OpenAPI</span>
+            <span class="jt-chip">OTel</span>
+          </div>
+        </div>
+      </div>
+      <div class="co-talk-card">
+        <div class="co-talk-icon"><i class="fas fa-user-plus"></i></div>
+        <div class="co-talk-body">
+          <div class="co-talk-meta">Coming up tonight &middot; Caroline Vidal &middot; DFDS</div>
+          <div class="co-talk-title">Agentic Lead Enrichment &amp; Attribution</div>
+          <div class="co-talk-quote">"Caroline goes deeper on agentic enrichment after me &mdash; she'll show you how to attribute and act on these stratified journeys. I'm here to ask whether you're capturing them at all."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 8: 3.7 A New Class of Data ═══════════ -->
+    <section class="slide" data-slide="8">
+      <h1 class="slide-title">3.7 &middot; A new class of <span class="accent">data</span></h1>
+      <p class="slide-subtitle">Some metrics rename. Most are genuinely new.</p>
+      <div class="mapping-table">
+        <div class="mt-head">
+          <div>Web analytics</div>
+          <div>Agent analytics</div>
+        </div>
+        <div class="mt-row"><div class="mt-old">Pageviews</div><div class="mt-new"><span class="mt-arrow"><i class="fas fa-arrow-right"></i></span>Tool calls</div></div>
+        <div class="mt-row"><div class="mt-old">Sessions</div><div class="mt-new"><span class="mt-arrow"><i class="fas fa-arrow-right"></i></span>Traces</div></div>
+        <div class="mt-row"><div class="mt-old">Conversion rate</div><div class="mt-new"><span class="mt-arrow"><i class="fas fa-arrow-right"></i></span>Task success rate</div></div>
+        <div class="mt-row"><div class="mt-old">Bounce rate</div><div class="mt-new"><span class="mt-arrow"><i class="fas fa-arrow-right"></i></span>Hallucination &amp; retry rate</div></div>
+        <div class="mt-row"><div class="mt-old">Cost per acquisition</div><div class="mt-new"><span class="mt-arrow"><i class="fas fa-arrow-right"></i></span>Cost per task (tokens &times; rate)</div></div>
+        <div class="mt-row"><div class="mt-old">Page load time</div><div class="mt-new"><span class="mt-arrow"><i class="fas fa-arrow-right"></i></span>Time-to-first-token / latency budget</div></div>
+        <div class="mt-row"><div class="mt-old">Funnels</div><div class="mt-new"><span class="mt-arrow"><i class="fas fa-arrow-right"></i></span>Trace trees</div></div>
+        <div class="mt-row"><div class="mt-old">Custom dimensions</div><div class="mt-new"><span class="mt-arrow"><i class="fas fa-arrow-right"></i></span>LLM-as-judge scores</div></div>
+        <div class="mt-row joke"><div class="mt-old">BigQuery</div><div class="mt-new"><span class="mt-arrow"><i class="fas fa-arrow-right"></i></span>Still BigQuery</div></div>
+      </div>
+      <p class="mapping-quote">The tools changed. The <span class="accent">thinking</span> didn't.</p>
     </section>
 
   </div><!-- /slides-viewport -->
