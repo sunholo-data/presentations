@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mark Edmondson — Contact</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#0f0f1a;--surface:#1a1a2e;--surface-hi:#222240;
+  --orange:#e73c17;--orange-dim:rgba(231,60,23,.35);--orange-glow:rgba(231,60,23,.6);
+  --teal:#1da69a;--teal-dim:rgba(29,166,154,.25);
+  --ghost:rgba(255,255,255,.12);
+  --text:#e2e8f0;--text-dim:#718096;
+  --bar-bg:rgba(15,15,26,.8);--bar-border:rgba(255,255,255,.06);
+  --mono:'JetBrains Mono',monospace;--sans:'Montserrat',sans-serif;
+}
+[data-theme="light"]{
+  --bg:#f5f5f0;--surface:#ffffff;--surface-hi:#f0f0ea;
+  --orange:#d4300f;--orange-dim:rgba(212,48,15,.2);--orange-glow:rgba(212,48,15,.4);
+  --teal:#168077;--teal-dim:rgba(22,128,119,.18);
+  --ghost:rgba(0,0,0,.1);
+  --text:#1a202c;--text-dim:#4a5568;
+  --bar-bg:rgba(255,255,255,.85);--bar-border:rgba(0,0,0,.08);
+}
+
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(231,60,23,.04) 0%, transparent 70%),
+    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size:100% 100%, 60px 60px, 60px 60px;
+}
+[data-theme="light"] body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(212,48,15,.03) 0%, transparent 70%),
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+  background-size:100% 100%, 60px 60px, 60px 60px;
+}
+
+#app{display:flex;flex-direction:column;height:100vh}
+.slides-viewport{flex:1;position:relative;overflow:hidden}
+
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:32px 48px;gap:24px;
+  opacity:0;visibility:hidden;
+  transform:translateX(40px);
+  transition:opacity .45s ease, transform .45s ease, visibility .45s;
+  overflow:hidden;
+}
+.slide.active{opacity:1;visibility:visible;transform:translateX(0)}
+
+/* ─── Top headline ─── */
+.thanks-tag{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:var(--orange);
+  padding:6px 16px;border-radius:20px;
+  border:1px solid var(--orange-dim);
+  background:rgba(231,60,23,.06);
+}
+.contact-title{
+  font-size:clamp(32px,4.6vw,56px);
+  font-weight:800;letter-spacing:-.02em;line-height:1.05;text-align:center;
+  max-width:900px;
+}
+.contact-title .accent{color:var(--orange)}
+.contact-sub{
+  font-family:var(--mono);font-size:12px;font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-dim);text-align:center;
+}
+
+/* ─── Identity row (portrait + name) ─── */
+.identity{
+  display:flex;align-items:center;gap:16px;
+}
+.identity-portrait{
+  width:72px;height:72px;border-radius:50%;
+  object-fit:cover;object-position:center top;
+  filter:grayscale(1) contrast(1.08) brightness(1.02);
+  border:2px solid var(--orange);
+  padding:2px;background:var(--bg);
+  box-shadow:0 0 0 1px var(--orange-dim), 0 6px 18px rgba(231,60,23,.18);
+}
+[data-theme="light"] .identity-portrait{filter:grayscale(1) contrast(1.05)}
+.identity-text{display:flex;flex-direction:column;gap:2px;align-items:flex-start}
+.identity-name{
+  font-family:var(--sans);font-size:22px;font-weight:800;
+  letter-spacing:-.01em;line-height:1;
+}
+.identity-name .accent{color:var(--orange)}
+.identity-role{
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);
+}
+
+/* ─── Contact card grid ─── */
+.contact-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:14px;width:100%;max-width:900px;
+}
+.contact-card{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 18px;border-radius:12px;
+  border:1px solid var(--ghost);background:var(--surface);
+  text-decoration:none;color:inherit;
+  transition:all .25s ease;
+  opacity:0;transform:translateY(12px);
+  animation:cardIn .55s cubic-bezier(.2,.9,.3,1.4) forwards;
+}
+.contact-card:hover{
+  border-color:var(--orange);
+  background:var(--surface-hi);
+  transform:translateY(-2px);
+  box-shadow:0 8px 28px rgba(231,60,23,.18);
+}
+.slide.active .contact-card:nth-child(1){animation-delay:.25s}
+.slide.active .contact-card:nth-child(2){animation-delay:.35s}
+.slide.active .contact-card:nth-child(3){animation-delay:.45s}
+.slide.active .contact-card:nth-child(4){animation-delay:.55s}
+.slide.active .contact-card:nth-child(5){animation-delay:.65s}
+.slide.active .contact-card:nth-child(6){animation-delay:.75s}
+
+@keyframes cardIn{
+  to{opacity:1;transform:translateY(0)}
+}
+
+.card-icon{
+  width:42px;height:42px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(231,60,23,.1);color:var(--orange);
+  font-size:18px;flex-shrink:0;
+  border:1px solid var(--orange-dim);
+  transition:all .25s;
+}
+.contact-card:hover .card-icon{
+  background:var(--orange);color:#fff;
+  box-shadow:0 0 18px var(--orange-glow);
+}
+.card-text{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.card-label{
+  font-family:var(--mono);font-size:9px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);
+}
+.card-value{
+  font-family:var(--mono);font-size:13px;font-weight:600;
+  color:var(--text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.contact-card:hover .card-value{color:var(--orange)}
+
+/* AILANG card uses logo image */
+.card-icon.ailang-icon{
+  background:transparent;border:none;padding:0;
+  width:42px;height:42px;
+}
+.card-icon.ailang-icon img{width:100%;height:100%;object-fit:contain}
+
+/* ─── Bottom strapline ─── */
+.strapline{
+  font-family:var(--sans);font-size:13px;font-style:italic;
+  color:var(--text-dim);text-align:center;
+  max-width:680px;line-height:1.5;
+  opacity:0;animation:cardIn .6s ease .9s forwards;
+}
+.strapline strong{color:var(--text);font-style:normal;font-weight:700}
+
+/* ─── Bottom bar ─── */
+.bottom-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 20px;
+  border-top:1px solid var(--bar-border);
+  flex-shrink:0;background:var(--bar-bg);backdrop-filter:blur(8px);
+}
+.nav-info{font-family:var(--mono);font-size:11px;color:var(--text-dim)}
+.nav-hints{display:flex;align-items:center;gap:6px}
+.kbd{
+  display:inline-block;padding:1px 5px;border-radius:3px;
+  font-family:var(--mono);font-size:9px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:var(--text-dim);
+}
+[data-theme="light"] .kbd{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
+
+@media(max-width:900px){
+  .contact-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+  .slide{padding:24px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="slides-viewport">
+
+    <section class="slide active" data-slide="1">
+
+      <span class="thanks-tag"><i class="fas fa-hand-peace"></i> Thank you</span>
+
+      <h1 class="contact-title">Let's keep <span class="accent">talking</span></h1>
+
+      <div class="identity">
+        <img class="identity-portrait" src="../about-mark/images/me_headshot.jpg" alt="Mark Edmondson">
+        <div class="identity-text">
+          <div class="identity-name">Mark <span class="accent">Edmondson</span></div>
+          <div class="identity-role">Forward Deployed Engineer &middot; Sunholo &middot; Copenhagen</div>
+        </div>
+      </div>
+
+      <div class="contact-grid">
+
+        <a class="contact-card" href="https://www.linkedin.com/in/markpeteredmondson/" target="_blank" rel="noopener">
+          <div class="card-icon"><i class="fab fa-linkedin-in"></i></div>
+          <div class="card-text">
+            <span class="card-label">LinkedIn</span>
+            <span class="card-value">markpeteredmondson</span>
+          </div>
+        </a>
+
+        <a class="contact-card" href="https://www.sunholo.com" target="_blank" rel="noopener">
+          <div class="card-icon"><i class="fas fa-globe"></i></div>
+          <div class="card-text">
+            <span class="card-label">Website</span>
+            <span class="card-value">www.sunholo.com</span>
+          </div>
+        </a>
+
+        <a class="contact-card" href="mailto:m@sunholo.com">
+          <div class="card-icon"><i class="fas fa-envelope"></i></div>
+          <div class="card-text">
+            <span class="card-label">Email</span>
+            <span class="card-value">m@sunholo.com</span>
+          </div>
+        </a>
+
+        <a class="contact-card" href="https://ailang.sunholo.com" target="_blank" rel="noopener">
+          <div class="card-icon ailang-icon"><img src="../images/logos/ailang-logo.svg" alt="AILANG"></div>
+          <div class="card-text">
+            <span class="card-label">AILANG</span>
+            <span class="card-value">ailang.sunholo.com</span>
+          </div>
+        </a>
+
+        <a class="contact-card" href="https://sunholo.com/workshops" target="_blank" rel="noopener">
+          <div class="card-icon"><i class="fas fa-chalkboard-user"></i></div>
+          <div class="card-text">
+            <span class="card-label">Workshops</span>
+            <span class="card-value">sunholo.com/workshops</span>
+          </div>
+        </a>
+
+        <a class="contact-card" href="https://www.sunholo.com/ai-platform.html" target="_blank" rel="noopener">
+          <div class="card-icon"><i class="fas fa-cube"></i></div>
+          <div class="card-text">
+            <span class="card-label">Multivac platform</span>
+            <span class="card-value">sunholo.com/ai-platform</span>
+          </div>
+        </a>
+
+      </div>
+
+      <p class="strapline">
+        <strong>Questions, ideas, or want to keep the conversation going?</strong> Any of the above works.
+      </p>
+
+    </section>
+
+  </div><!-- /slides-viewport -->
+
+  <div class="bottom-bar">
+    <div class="nav-info">Mark Edmondson &middot; sunholo.com</div>
+    <div class="nav-hints">
+      <span class="kbd">&uarr;</span><span class="kbd">&darr;</span>
+      <span style="font-size:11px;color:var(--text-dim);margin-left:4px">decks</span>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+(function(){
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowDown'||e.key==='ArrowRight'||e.key===' '){
+      e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*');
+    }
+    if(e.key==='ArrowUp'||e.key==='ArrowLeft'){
+      e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*');
+    }
+  });
+
+  window.addEventListener('message', e=>{
+    if(e.data && e.data.type==='deck-command'){
+      if(e.data.action==='set-theme') setTheme(e.data.theme);
+    }
+  });
+
+  window.parent.postMessage({type:'deck-ready',total:1},'*');
+
+  function setTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+})();
+</script>
+</body>
+</html>
