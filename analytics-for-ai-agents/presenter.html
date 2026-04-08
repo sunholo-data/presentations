@@ -171,6 +171,10 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
         <span class="vals"><span id="deckElapsed">0:00</span> / <span id="deckBudget">0:00</span></span>
         <div class="timer-bar"><div class="fill" id="deckFill"></div></div>
       </div>
+      <div class="timer-deck">
+        <span class="label">Total</span>
+        <span class="vals"><span id="totalElapsed">0:00</span> / <span id="totalBudget">0:00</span></span>
+      </div>
       <span class="timer-delta" id="schedDelta" title="Schedule delta — green: ahead, orange: behind">±0:00</span>
     </div>
     <div class="nav-hints">
@@ -316,7 +320,11 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   const deckElapsedEl= document.getElementById('deckElapsed');
   const deckBudgetEl = document.getElementById('deckBudget');
   const deckFillEl   = document.getElementById('deckFill');
+  const totalElapsedEl = document.getElementById('totalElapsed');
+  const totalBudgetEl  = document.getElementById('totalBudget');
   const schedDeltaEl = document.getElementById('schedDelta');
+
+  const TOTAL_BUDGET_SEC = PLAYLIST.reduce((s,d) => s + (d.minutes||0)*60, 0);
 
   // Per-deck cumulative seconds spoken on each deck
   const deckSpent = PLAYLIST.map(() => 0);
@@ -361,18 +369,22 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     deckFillEl.classList.toggle('warn', ratio >= 0.8 && ratio < 1);
     deckFillEl.classList.toggle('over', ratio >= 1);
 
-    // Schedule delta: actual total spoken vs expected at this point.
-    // Expected = full budgets of all decks BEFORE current + spent on current.
-    // (i.e. "if I'm in deck N, I should have used budgets[0..N-1] + my time here")
-    // Delta = totalSpent - (sumPrevBudgets + spent_current)
-    //       = sum(spent[0..N-1]) - sumPrevBudgets
+    // Total elapsed across ALL decks (cumulative wall time spoken).
+    const totalSpent = deckSpent.reduce((a,b) => a + b, 0);
+    totalElapsedEl.textContent = fmt(totalSpent);
+    totalBudgetEl.textContent  = fmt(TOTAL_BUDGET_SEC);
+
+    // Schedule delta: backtrack-aware.
+    // Expected = full budgets of decks BEFORE current + min(spent_current, budget_current).
+    // Compare against TOTAL spent (not just prior decks) so revisits & time blown
+    // on earlier decks are reflected even after navigating back.
     //   positive => behind, negative => ahead
-    let prevBudgets = 0, prevSpent = 0;
+    let prevBudgets = 0;
     for (let i = 0; i < currentDeck; i++) {
       prevBudgets += (PLAYLIST[i].minutes || 0) * 60;
-      prevSpent   += deckSpent[i];
     }
-    const delta = prevSpent - prevBudgets;
+    const expected = prevBudgets + Math.min(spent, budget);
+    const delta = totalSpent - expected;
     schedDeltaEl.textContent = fmtSigned(delta);
     schedDeltaEl.classList.toggle('behind', delta > 5);
     schedDeltaEl.classList.toggle('ahead',  delta < -5);

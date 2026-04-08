@@ -226,11 +226,13 @@ Time budgets should match the talk's outline doc (e.g. an `outline.md` "structur
 - **Double-click** = reset all deck timers (with confirm)
 
 **Bottom bar timer block** (in `.bottom-bar` between nav-info and nav-hints):
-- `Slide  M:SS / M:SS` — elapsed vs budget for the *current* deck
+- `Slide  M:SS / M:SS` — elapsed vs budget for the *current* deck (cumulative across revisits — does NOT reset when you navigate back to it)
 - Slim progress bar — green → amber at 80% → orange when over budget
+- `Total  M:SS / M:SS` — total wall time spoken across all decks vs full talk budget
 - Schedule delta pill — `±M:SS`. Green "ahead" / orange "behind".
-  - Delta = `sum(spent[0..currentDeck-1]) - sum(budgets[0..currentDeck-1])`
-  - i.e. compares actual time spoken on *prior* decks against their budgets, so the current deck's in-progress time doesn't flicker the indicator.
+  - `expected = sum(budgets[0..currentDeck-1]) + min(spent_current, budget_current)`
+  - `delta = totalSpent - expected`
+  - Backtrack-aware: uses `totalSpent` across all decks, so jumping back to an earlier deck still reflects time blown on later ones. Capping `spent_current` at the deck budget prevents the pill from flickering "behind" while you're still legitimately within the current deck's allowance.
 
 ### How time accumulates
 
