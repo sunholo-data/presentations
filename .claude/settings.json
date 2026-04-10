@@ -3,5 +3,18 @@
     "allow": [
       "WebSearch"
     ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/skills/presentation-slides/scripts/lint-slides.mjs\""
+          }
+        ]
+      }
+    ]
   }
 }

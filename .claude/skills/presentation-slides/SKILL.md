@@ -77,6 +77,78 @@ Every slide deck follows this DOM structure:
 - CSS transitions handle opacity + translateX (0.45s ease)
 - JS manages `current` index, keyboard events, dot indicators
 
+### Slide Canvas & Dimensions
+
+Every slide is rendered into a fixed **16:9 stage** centred inside `.slides-viewport`. The stage is the design canvas:
+
+- **Target dimensions: 1920×1080** (16:9). This is the projector target and what you should imagine when laying out content.
+- **Letterboxed automatically.** When the browser window or presenter iframe isn't 16:9, the stage shrinks to fit and the leftover space becomes letterbox bars (painted in `--bg` so they blend in).
+- **Type scales with the stage**, not the window. Use container query units inside `.slides-stage`:
+  - `cqi` = 1% of the stage's inline (horizontal) size
+  - `cqb` = 1% of the stage's block (vertical) size
+- **Recommended type scale** (use `clamp()` so things stay readable on small windows):
+  - Slide title: `clamp(28px, 5cqi, 64px)`
+  - Slide subtitle: `clamp(14px, 2cqi, 24px)`
+  - Body / quotes: `clamp(16px, 2.4cqi, 32px)`
+  - Captions / mono: `clamp(11px, 1.4cqi, 18px)`
+- **Padding / max-widths in `cqi`** too. Avoid raw `px` for outer padding — use `padding: 4cqb 6cqi` so margins scale proportionally.
+
+The DOM looks like this:
+
+```html
+<div class="slides-viewport">       <!-- flex centre + container-type:size -->
+  <div class="slides-stage">         <!-- 16:9 box -->
+    <section class="slide active">…</section>
+    <section class="slide">…</section>
+  </div>
+</div>
+```
+
+The CSS that makes this work lives in `resources/boilerplate.md` — new decks generated from the boilerplate get it for free.
+
+**Why a fixed canvas?** Without it, slides stretch into whatever shape the window happens to be. On a tall browser, content gets pushed down into a tall narrow column ("too high and not wide"). On a short browser, content gets clipped. A fixed 16:9 stage means you design once and it always looks the same.
+
+#### Stage-safe sizing rules (READ THIS BEFORE WRITING SLIDE CSS)
+
+The 16:9 stage is the *only* sizing surface that matters. **Anything inside `.slides-stage` must be sized relative to the stage, not the window or iframe.** Get this wrong and content overflows the bottom of the stage on non-16:9 windows even though the stage itself is letterboxed correctly.
+
+**NEVER use these inside slide content:**
+
+- `vh`, `vw`, `dvh`, `dvw`, `svh`, `svw`, `lvh`, `lvw` — these all measure the *iframe/window*, not the stage. Inside a tall browser, `100vh` is bigger than the stage's actual height, so a `max-height:80vh` chart can blow past the stage's bottom edge.
+- `calc(100vh - Npx)` to "subtract chrome height" — this was a pre-stage workaround. The stage already excludes chrome via letterboxing; subtracting again double-counts and overflows.
+- Hard-coded pixel heights (`height:600px`, `max-height:540px`) on content that should fill the stage. Pixels don't scale with the stage; on a small window the content stays 600px tall while the stage shrinks to 400px and overflows.
+
+**ALWAYS use these instead:**
+
+- `cqb` (1% of stage height) and `cqi` (1% of stage width) for any size that should track the stage. These resolve against `.slides-stage` (which has `container-type:size`).
+- Percentages (`%`) when the parent already has a fixed size.
+- Flex layout with `flex:1; min-height:0` to let a child grow to fill remaining stage height without doing pixel math at all.
+- `clamp(MINpx, Ncqi, MAXpx)` for type — keeps it readable on tiny windows and projector-large at the same time.
+
+**Before / after — a real bug from this repo:**
+
+```css
+/* ❌ WRONG — measured in viewport units, overflowed the stage on tall windows */
+.dumky-chart{
+  max-height:calc(100vh - 320px);  /* assumes chrome is exactly 320px; ignores stage */
+}
+
+/* ✅ RIGHT — measured against the stage, leaves room for title + subtitle + footer */
+.dumky-chart{
+  max-height:70cqb;  /* 70% of stage height; the other 30% is title/subtitle/bets */
+}
+```
+
+**Mental model:** if you're tempted to write `100vh` or `calc(100vh - …)`, stop. Picture the letterboxed stage as your only canvas and ask "what fraction of the stage height should this take?" — that fraction is your `cqb` value.
+
+**Automatic verification.** A `PostToolUse` hook in `.claude/settings.json` runs `scripts/lint-slides.mjs` after every `Write` / `Edit` / `MultiEdit` and exits non-zero if the change introduces a forbidden viewport unit. The hook only inspects the *new* text the tool call introduces, so editing an old file with pre-existing violations elsewhere won't trip it. To audit the whole repo manually:
+
+```bash
+node .claude/skills/presentation-slides/scripts/lint-slides.mjs
+```
+
+That walks every `*.html` under cwd, scans `<style>` blocks, and prints `file:line` for every violation. Use it as a tech-debt list when retrofitting old decks.
+
 ### Adding a Slide
 
 When adding a slide to an existing deck:
@@ -108,7 +180,7 @@ The full design system (CSS variables, themes, typography, colors) is in `resour
 - **Montserrat** for all text, **JetBrains Mono** for code and data
 - **Font Awesome 6.5.1** for icons
 - Subtle grid background at 60px intervals
-- Target **1920x1080** resolution for projectors
+- Slide canvas is a fixed 16:9 stage at 1920×1080 (see "Slide Canvas & Dimensions" above)
 
 ## Code Blocks
 
@@ -197,6 +269,22 @@ window.addEventListener('message', e=>{
   }
 });
 ```
+
+### Embed-aware chrome (fixes "inner page too high")
+
+A deck keeps its own `.top-bar` and `.bottom-bar` so it still works standalone. But inside the presenter iframe, those bars duplicate the presenter's own chrome and steal vertical space from `.slides-viewport` — the bottom of slide content ends up clipped. Since `html,body{overflow:hidden}`, no scrollbar appears; it just looks wrong.
+
+**Fix:** detect embedded mode and hide the deck's own bars.
+
+```html
+<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
+```
+```css
+.in-iframe .top-bar{display:none}
+.in-iframe .bottom-bar{display:none}
+```
+
+Standalone viewing is unchanged (the class only sets when `window !== window.top`). The boilerplate ships with this wired up.
 
 ## Presenter Timer & Schedule Tracking
 

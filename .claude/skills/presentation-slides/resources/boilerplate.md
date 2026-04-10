@@ -21,9 +21,39 @@ Copy this skeleton when starting a new slide deck. Replace `TITLE`, slide conten
 /* Paste layout, top-bar, slide, bottom-bar, theme-toggle, transport, kbd styles */
 /* Add slide-specific styles */
 /* Add @keyframes fadeSlideUp and fadeSlideIn */
+/* Add .slides-stage 16:9 letterbox + container queries (cqi/cqb) — block below */
+/* Add .in-iframe rules to hide own top-bar/bottom-bar when embedded in presenter */
+
+/* ─── Slide canvas: 16:9 letterbox stage ───
+   The slide-stage is the "design canvas" — always 16:9, centred inside the
+   viewport, with whatever space is left becoming letterbox bars (matches the
+   --bg colour so they're invisible on dark and unobtrusive on light).
+   Size by container query units inside .slides-viewport so type scales with
+   the stage's actual dimensions, not the browser window's. */
+.slides-viewport{
+  flex:1; min-height:0;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; background:var(--bg);
+  container-type:size;
+}
+.slides-stage{
+  position:relative;
+  width:  min(100cqi, 100cqb * 16 / 9);
+  height: min(100cqb, 100cqi * 9 / 16);
+  container-type:size;  /* so descendants resolve cqi/cqb against the stage */
+}
+
+/* ─── Embedded-in-presenter mode ───
+   When loaded via presenter.html the presenter supplies global chrome
+   (title, tabs, clock, deck counter, timer, kbd hints). Hide our own bars
+   so the stage gets the full iframe height — otherwise the bottom of slide
+   content gets clipped. */
+.in-iframe .top-bar{display:none}
+.in-iframe .bottom-bar{display:none}
 </style>
 </head>
 <body>
+<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
 <div id="app">
 
   <!-- Top bar -->
@@ -38,14 +68,16 @@ Copy this skeleton when starting a new slide deck. Replace `TITLE`, slide conten
     </button>
   </div>
 
-  <!-- Slides viewport -->
+  <!-- Slides viewport: holds the 16:9 stage, lets letterbox bars show -->
   <div class="slides-viewport">
-    <section class="slide active" data-slide="0">
-      <!-- Slide 1 content -->
-    </section>
-    <section class="slide" data-slide="1">
-      <!-- Slide 2 content -->
-    </section>
+    <div class="slides-stage">
+      <section class="slide active" data-slide="0">
+        <!-- Slide 1 content -->
+      </section>
+      <section class="slide" data-slide="1">
+        <!-- Slide 2 content -->
+      </section>
+    </div>
   </div>
 
   <!-- Bottom bar -->
@@ -176,3 +208,6 @@ Copy this skeleton when starting a new slide deck. Replace `TITLE`, slide conten
 - [ ] Verify at 1920x1080 (projector target)
 - [ ] Check `white-space:pre` on all code containers
 - [ ] Ensure code blocks are flush-left (no HTML indentation artifacts)
+- [ ] Verify the deck looks right both standalone *and* inside `presenter.html` (no clipped bottom, no duplicate bars)
+- [ ] Resize the browser to a non-16:9 shape (e.g. 1200×900). Slides should letterbox cleanly, not stretch
+- [ ] Use `cqi` / `cqb` units for font sizes inside slides (e.g. `clamp(24px, 5cqi, 56px)`) instead of `vw`/`vh`, so type scales with the stage rather than the window

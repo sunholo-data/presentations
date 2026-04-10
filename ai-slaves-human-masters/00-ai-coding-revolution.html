@@ -84,7 +84,22 @@ body{
 #app{display:flex;flex-direction:column;height:100vh}
 
 /* ─── Slides ─── */
-.slides-viewport{flex:1;position:relative;overflow:hidden}
+/* ─── Slide canvas: 16:9 letterbox stage ─── */
+.slides-viewport{
+  flex:1; min-height:0;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; background:var(--bg);
+  container-type:size;
+}
+.slides-stage{
+  position:relative;
+  width:  min(100cqi, 100cqb * 16 / 9);
+  height: min(100cqb, 100cqi * 9 / 16);
+  container-type:size;
+}
+/* Hide own bars when embedded in presenter — presenter supplies global chrome */
+.in-iframe .top-bar{display:none}
+.in-iframe .bottom-bar{display:none}
 .slide{
   position:absolute;inset:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -99,14 +114,14 @@ body{
 
 /* ─── Title styling ─── */
 .slide-title{
-  font-size:clamp(28px,4vw,48px);
+  font-size:clamp(28px,4cqi,48px);
   font-weight:800;letter-spacing:-.02em;
   text-align:center;line-height:1.15;
 }
 .slide-title .accent{color:var(--orange)}
 .slide-title .dim{color:var(--text-dim)}
 .slide-subtitle{
-  font-size:clamp(14px,1.8vw,20px);
+  font-size:clamp(14px,1.8cqi,20px);
   color:var(--text-dim);text-align:center;
   max-width:700px;
 }
@@ -128,7 +143,7 @@ body{
 .slide.active .stat-card:nth-child(2){animation-delay:.3s}
 .slide.active .stat-card:nth-child(3){animation-delay:.45s}
 .stat-number{
-  font-size:clamp(36px,5vw,56px);
+  font-size:clamp(36px,5cqi,56px);
   font-weight:800;color:var(--orange);
   font-family:var(--mono);line-height:1;
 }
@@ -243,7 +258,7 @@ body{
 .slide.active .finding-card:nth-child(2){animation:fadeSlideUp .5s ease .33s forwards}
 .slide.active .finding-card:nth-child(3){animation:fadeSlideUp .5s ease .46s forwards}
 .finding-stat{
-  font-size:clamp(20px,2.5vw,28px);
+  font-size:clamp(20px,2.5cqi,28px);
   font-weight:800;color:var(--orange);
   font-family:var(--mono);line-height:1;
   margin-bottom:6px;
@@ -361,9 +376,11 @@ body{
 </style>
 </head>
 <body>
+<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
 <div id="app">
 
   <div class="slides-viewport">
+    <div class="slides-stage">
 
     <!-- ═══════════ Slide 0: The AI Coding Revolution (condensed) ═══════════ -->
     <section class="slide active" data-slide="0">
@@ -545,6 +562,7 @@ body{
       </div>
     </section>
 
+    </div><!-- /slides-stage -->
   </div><!-- /slides-viewport -->
 
   <!-- Bottom bar -->

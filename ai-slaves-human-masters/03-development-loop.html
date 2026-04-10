@@ -118,8 +118,22 @@ body{
 
 #app{display:flex;flex-direction:column;height:100vh}
 
-/* ─── Slide container ─── */
-.slides-viewport{flex:1;min-height:0;position:relative;overflow:hidden}
+/* ─── Slide canvas: 16:9 letterbox stage ─── */
+.slides-viewport{
+  flex:1; min-height:0;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; background:var(--bg);
+  container-type:size;
+}
+.slides-stage{
+  position:relative;
+  width:  min(100cqi, 100cqb * 16 / 9);
+  height: min(100cqb, 100cqi * 9 / 16);
+  container-type:size;
+}
+/* Hide own bars when embedded in presenter — presenter supplies global chrome */
+.in-iframe .top-bar{display:none}
+.in-iframe .bottom-bar{display:none}
 .slide{
   position:absolute;inset:0;
   display:flex;flex-direction:column;
@@ -192,7 +206,7 @@ body{
   width:100%;
 }
 .diagram-title{
-  font-size:clamp(20px,2.4vw,30px);
+  font-size:clamp(20px,2.4cqi,30px);
   font-weight:800;
   letter-spacing:-.03em;
   line-height:1.1;
@@ -281,7 +295,7 @@ body{
 }
 
 .detail-name{
-  font-size:clamp(18px,2vw,24px);
+  font-size:clamp(18px,2cqi,24px);
   font-weight:800;
   letter-spacing:-.02em;
   line-height:1.15;
@@ -387,9 +401,6 @@ body{
 .play-btn:hover{border-color:var(--orange);color:var(--orange)}
 .play-btn.playing{border-color:var(--orange);color:var(--orange)}
 
-/* Hide own bottom-bar when embedded in presenter iframe */
-.in-iframe .bottom-bar{display:none}
-.in-iframe .slides-viewport{flex:1}
 </style>
 </head>
 <body>
@@ -397,6 +408,7 @@ body{
 <div id="app">
 
   <div class="slides-viewport">
+    <div class="slides-stage">
     <div class="slide active" data-title="The Development Loop">
       <div class="loop-layout">
 
@@ -422,6 +434,7 @@ body{
         </div>
 
       </div>
+    </div>
     </div>
   </div>
 

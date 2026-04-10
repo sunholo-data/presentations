@@ -117,7 +117,22 @@ body{
 .theme-toggle:hover{border-color:var(--orange);color:var(--orange)}
 
 /* ─── Slide container ─── */
-.slides-viewport{flex:1;min-height:0;position:relative;overflow:hidden}
+/* ─── Slide canvas: 16:9 letterbox stage ─── */
+.slides-viewport{
+  flex:1; min-height:0;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; background:var(--bg);
+  container-type:size;
+}
+.slides-stage{
+  position:relative;
+  width:  min(100cqi, 100cqb * 16 / 9);
+  height: min(100cqb, 100cqi * 9 / 16);
+  container-type:size;
+}
+/* Hide own bars when embedded in presenter — presenter supplies global chrome */
+.in-iframe .top-bar{display:none}
+.in-iframe .bottom-bar{display:none}
 
 .slide{
   position:absolute;inset:0;
@@ -179,7 +194,7 @@ body{
    SLIDE 1 — Authority Axioms
    ═══════════════════════════════════ */
 .slide-title{
-  font-size:clamp(28px,3.5vw,42px);font-weight:700;
+  font-size:clamp(28px,3.5cqi,42px);font-weight:700;
   text-align:center;margin-bottom:48px;line-height:1.15;
   letter-spacing:-.02em;
 }
@@ -228,7 +243,7 @@ body{
    ═══════════════════════════════════ */
 .sig-slide{padding:40px 80px}
 .sig-title{
-  font-size:clamp(28px,3.5vw,42px);font-weight:700;
+  font-size:clamp(28px,3.5cqi,42px);font-weight:700;
   text-align:center;margin-bottom:52px;line-height:1.15;
   letter-spacing:-.02em;
   text-shadow:0 0 60px var(--orange-dim);
@@ -247,7 +262,7 @@ body{
 }
 .sig-code{
   font-family:var(--mono);
-  font-size:clamp(16px,2.2vw,22px);
+  font-size:clamp(16px,2.2cqi,22px);
   line-height:1.6;
   white-space:nowrap;
 }
@@ -548,10 +563,12 @@ body{
 </head>
 
 <body>
+<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
 <div id="app">
 
   <!-- Slides viewport -->
   <div class="slides-viewport">
+    <div class="slides-stage">
 
     <!-- ═══ SLIDE 1: Authority Axioms ═══ -->
     <section class="slide active" data-slide="0">
@@ -774,6 +791,7 @@ body{
       </div>
     </section>
 
+    </div><!-- /slides-stage -->
   </div><!-- /slides-viewport -->
 
   <!-- Bottom bar -->

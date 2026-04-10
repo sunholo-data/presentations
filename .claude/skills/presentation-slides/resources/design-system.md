@@ -1,5 +1,7 @@
 # Design System Reference
 
+> **Slide canvas:** 16:9 stage at 1920×1080, letterboxed inside `.slides-viewport`. Use container query units (`cqi` / `cqb`) for type and padding so they scale with the stage. Full details in the parent SKILL.md → "Slide Canvas & Dimensions".
+
 ## CSS Variables
 
 ### Dark Theme (default `:root`)

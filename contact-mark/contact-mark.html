@@ -46,7 +46,22 @@ body{
 }
 
 #app{display:flex;flex-direction:column;height:100vh}
-.slides-viewport{flex:1;position:relative;overflow:hidden}
+/* ─── Slide canvas: 16:9 letterbox stage ─── */
+.slides-viewport{
+  flex:1; min-height:0;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; background:var(--bg);
+  container-type:size;
+}
+.slides-stage{
+  position:relative;
+  width:  min(100cqi, 100cqb * 16 / 9);
+  height: min(100cqb, 100cqi * 9 / 16);
+  container-type:size;
+}
+/* Hide own bars when embedded in presenter — presenter supplies global chrome */
+.in-iframe .top-bar{display:none}
+.in-iframe .bottom-bar{display:none}
 
 .slide{
   position:absolute;inset:0;
@@ -69,7 +84,7 @@ body{
   background:rgba(231,60,23,.06);
 }
 .contact-title{
-  font-size:clamp(32px,4.6vw,56px);
+  font-size:clamp(32px,4.6cqi,56px);
   font-weight:800;letter-spacing:-.02em;line-height:1.05;text-align:center;
   max-width:900px;
 }
@@ -200,9 +215,11 @@ body{
 </style>
 </head>
 <body>
+<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
 <div id="app">
 
   <div class="slides-viewport">
+    <div class="slides-stage">
 
     <section class="slide active" data-slide="1">
 
@@ -276,6 +293,7 @@ body{
 
     </section>
 
+    </div><!-- /slides-stage -->
   </div><!-- /slides-viewport -->
 
   <div class="bottom-bar">

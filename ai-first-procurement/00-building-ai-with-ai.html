@@ -83,8 +83,23 @@ body{
 /* ─── Layout ─── */
 #app{display:flex;flex-direction:column;height:100vh}
 
-/* ─── Slides ─── */
-.slides-viewport{flex:1;position:relative;overflow:hidden}
+/* ─── Slide canvas: 16:9 letterbox stage ─── */
+.slides-viewport{
+  flex:1; min-height:0;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; background:var(--bg);
+  container-type:size;
+}
+.slides-stage{
+  position:relative;
+  width:  min(100cqi, 100cqb * 16 / 9);
+  height: min(100cqb, 100cqi * 9 / 16);
+  container-type:size;
+}
+/* Hide own bars when embedded in presenter — presenter supplies global chrome */
+.in-iframe .top-bar{display:none}
+.in-iframe .bottom-bar{display:none}
+
 .slide{
   position:absolute;inset:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -98,21 +113,21 @@ body{
 
 /* ─── Title styling ─── */
 .slide-title{
-  font-size:clamp(28px,4vw,48px);
+  font-size:clamp(28px,4cqi,48px);
   font-weight:800;letter-spacing:-.02em;
   text-align:center;line-height:1.15;
 }
 .slide-title .accent{color:var(--orange)}
 .slide-title .dim{color:var(--text-dim)}
 .slide-subtitle{
-  font-size:clamp(14px,1.8vw,20px);
+  font-size:clamp(14px,1.8cqi,20px);
   color:var(--text-dim);text-align:center;
   max-width:700px;
 }
 
 /* ─── Big statement ─── */
 .big-statement{
-  font-size:clamp(24px,4vw,44px);
+  font-size:clamp(24px,4cqi,44px);
   font-weight:800;line-height:1.3;
   color:var(--orange);text-align:center;
   max-width:800px;
@@ -187,9 +202,11 @@ body{
   to{stroke-dashoffset:0}
 }
 
-/* ─── Image slide ─── */
+/* ─── Image slide ───
+   max-height in cqb so it never exceeds the letterboxed stage. The slide
+   has padding + title above; ~70cqb leaves headroom for those. */
 .slide-image{
-  max-width:85%;max-height:65vh;
+  max-width:85%;max-height:70cqb;
   border-radius:12px;
   box-shadow:0 8px 40px rgba(0,0,0,.3);
   opacity:0;transform:translateY(16px);
@@ -315,9 +332,11 @@ body{
 </style>
 </head>
 <body>
+<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
 <div id="app">
 
   <div class="slides-viewport">
+    <div class="slides-stage">
 
     <!-- ═══════════ Slide 0: Title ═══════════ -->
     <section class="slide active" data-slide="0">
@@ -346,7 +365,7 @@ body{
 
     <!-- ═══════════ Slide 4: Core Learning ═══════════ -->
     <section class="slide" data-slide="4">
-      <h2 class="slide-title" style="font-size:clamp(24px,3vw,36px)">Our <span class="accent">First Learning</span></h2>
+      <h2 class="slide-title" style="font-size:clamp(24px,3cqi,36px)">Our <span class="accent">First Learning</span></h2>
       <div class="callout-card">
         <i class="fas fa-lightbulb" style="color:var(--orange);margin-right:8px"></i>
         Iterative improvement loops create massive efficiency gains
@@ -361,7 +380,7 @@ body{
 
     <!-- ═══════════ Slide 6: Sprint Planning Loop ═══════════ -->
     <section class="slide" data-slide="6">
-      <h2 class="slide-title" style="font-size:clamp(20px,2.5vw,32px)"><span class="accent">Sprint</span> Planning</h2>
+      <h2 class="slide-title" style="font-size:clamp(20px,2.5cqi,32px)"><span class="accent">Sprint</span> Planning</h2>
       <div class="loop-wrap">
         <svg width="700" height="400" viewBox="0 0 550 350" style="max-width:100%">
           <path class="loop-path" d="M 275 50 A 120 120 0 1 1 274 50" fill="none" stroke="var(--orange)" stroke-width="3"/>
@@ -383,7 +402,7 @@ body{
 
     <!-- ═══════════ Slide 7: Infrastructure Loop ═══════════ -->
     <section class="slide" data-slide="7">
-      <h2 class="slide-title" style="font-size:clamp(20px,2.5vw,32px)"><span class="accent">Infrastructure</span></h2>
+      <h2 class="slide-title" style="font-size:clamp(20px,2.5cqi,32px)"><span class="accent">Infrastructure</span></h2>
       <div class="loop-wrap">
         <svg width="700" height="400" viewBox="0 0 550 350" style="max-width:100%">
           <path class="loop-path" d="M 275 50 A 120 120 0 1 1 274 50" fill="none" stroke="var(--orange)" stroke-width="3"/>
@@ -408,7 +427,7 @@ body{
 
     <!-- ═══════════ Slide 8: Procurement Loop ═══════════ -->
     <section class="slide" data-slide="8">
-      <h2 class="slide-title" style="font-size:clamp(20px,2.5vw,32px)"><span class="accent">Procurement</span></h2>
+      <h2 class="slide-title" style="font-size:clamp(20px,2.5cqi,32px)"><span class="accent">Procurement</span></h2>
       <div class="loop-wrap">
         <svg width="700" height="400" viewBox="0 0 550 350" style="max-width:100%">
           <path class="loop-path" d="M 275 50 A 120 120 0 1 1 274 50" fill="none" stroke="var(--orange)" stroke-width="3"/>
@@ -499,9 +518,9 @@ body{
 
     <!-- ═══════════ Slide 14: AITANA Demo ═══════════ -->
     <section class="slide" data-slide="14">
-      <h2 class="slide-title" style="font-size:clamp(24px,3vw,36px)"><span class="accent">AITANA</span> Demo</h2>
+      <h2 class="slide-title" style="font-size:clamp(24px,3cqi,36px)"><span class="accent">AITANA</span> Demo</h2>
       <p class="slide-subtitle" style="margin-bottom:8px">Document Processing in Action</p>
-      <img src="images/aitana-dashboard.png" alt="AITANA Dashboard" class="slide-image" style="max-height:50vh">
+      <img src="images/aitana-dashboard.png" alt="AITANA Dashboard" class="slide-image" style="max-height:55cqb">
       <a href="https://frontend-556246783252.europe-west1.run.app/assistant/a3614c76-c997-47a9-9e2d-c80b75496ee4" target="_blank" class="demo-link">
         <i class="fas fa-external-link-alt"></i> Try Live Demo
       </a>
@@ -547,6 +566,7 @@ body{
       <img src="../images/logos/sunholo-logo.svg" alt="Sunholo" style="height:48px;opacity:.5;margin-top:16px">
     </section>
 
+    </div><!-- /slides-stage -->
   </div><!-- /slides-viewport -->
 
   <!-- Bottom bar -->
