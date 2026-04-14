@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Development Loop — Iterative AI Feedback Cycle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+/* ─── Dark theme (default) ─── */
+:root{
+  --bg:#0f0f1a;
+  --surface:#1a1a2e;
+  --surface-hi:#222240;
+  --orange:#e73c17;
+  --orange-dim:rgba(231,60,23,.35);
+  --orange-glow:rgba(231,60,23,.6);
+  --green:#22c55e;
+  --green-dim:rgba(34,197,94,.15);
+  --green-glow:rgba(34,197,94,.4);
+  --red:#ef4444;
+  --red-dim:rgba(239,68,68,.12);
+  --amber:#f59e0b;
+  --amber-dim:rgba(245,158,11,.15);
+  --indigo:#818cf8;
+  --indigo-solid:#6366f1;
+  --indigo-dim:rgba(129,140,248,.15);
+  --indigo-glow:rgba(129,140,248,.4);
+  --gray:#4a5568;
+  --ghost:rgba(255,255,255,.12);
+  --text:#e2e8f0;
+  --text-dim:#718096;
+  --text-xdim:#4a5568;
+  --code-bg:rgba(255,255,255,.03);
+  --code-border:rgba(255,255,255,.06);
+  --bar-bg:rgba(15,15,26,.8);
+  --bar-border:rgba(255,255,255,.06);
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Montserrat',sans-serif;
+
+  --orbit-track:rgba(255,255,255,.06);
+  --orbit-lit:rgba(231,60,23,.5);
+  --orbit-glow:rgba(231,60,23,.15);
+  --node-bg:#1a1a2e;
+  --node-border:rgba(255,255,255,.1);
+  --node-border-dim:rgba(255,255,255,.04);
+  --node-shadow:rgba(0,0,0,.4);
+  --detail-bg:rgba(26,26,46,.6);
+  --detail-border:rgba(255,255,255,.06);
+  --particle:#e73c17;
+  --particle-glow:rgba(231,60,23,.6);
+  --check-color:rgba(34,197,94,.7);
+}
+
+/* ─── Light theme ─── */
+[data-theme="light"]{
+  --bg:#f5f5f0;
+  --surface:#ffffff;
+  --surface-hi:#f0f0ea;
+  --orange:#d4300f;
+  --orange-dim:rgba(212,48,15,.2);
+  --orange-glow:rgba(212,48,15,.4);
+  --green:#16a34a;
+  --green-dim:rgba(22,163,74,.1);
+  --green-glow:rgba(22,163,74,.3);
+  --red:#dc2626;
+  --red-dim:rgba(220,38,38,.08);
+  --amber:#d97706;
+  --amber-dim:rgba(217,119,6,.1);
+  --indigo:#6366f1;
+  --indigo-solid:#4f46e5;
+  --indigo-dim:rgba(99,102,241,.1);
+  --indigo-glow:rgba(99,102,241,.3);
+  --gray:#8896a4;
+  --ghost:rgba(0,0,0,.1);
+  --text:#1a202c;
+  --text-dim:#4a5568;
+  --text-xdim:#94a3b8;
+  --code-bg:rgba(0,0,0,.03);
+  --code-border:rgba(0,0,0,.08);
+  --bar-bg:rgba(255,255,255,.85);
+  --bar-border:rgba(0,0,0,.08);
+
+  --orbit-track:rgba(0,0,0,.06);
+  --orbit-lit:rgba(212,48,15,.45);
+  --orbit-glow:rgba(212,48,15,.1);
+  --node-bg:#ffffff;
+  --node-border:rgba(0,0,0,.1);
+  --node-border-dim:rgba(0,0,0,.04);
+  --node-shadow:rgba(0,0,0,.06);
+  --detail-bg:rgba(255,255,255,.7);
+  --detail-border:rgba(0,0,0,.06);
+  --particle:#d4300f;
+  --particle-glow:rgba(212,48,15,.5);
+  --check-color:rgba(22,163,74,.6);
+}
+
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+
+body{
+  background-image:
+    radial-gradient(circle at 30% 50%, rgba(231,60,23,.025) 0%, transparent 60%),
+    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+}
+[data-theme="light"] body{
+  background-image:
+    radial-gradient(circle at 30% 50%, rgba(212,48,15,.025) 0%, transparent 60%),
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+}
+
+#app{display:flex;flex-direction:column;height:100vh}
+
+/* ─── Slide canvas: 16:9 letterbox stage ─── */
+.slides-viewport{
+  flex:1; min-height:0;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; background:var(--bg);
+  container-type:size;
+}
+.slides-stage{
+  position:relative;
+  width:  min(100cqi, 100cqb * 16 / 9);
+  height: min(100cqb, 100cqi * 9 / 16);
+  container-type:size;
+}
+/* Hide own bars when embedded in presenter — presenter supplies global chrome */
+.in-iframe .top-bar{display:none}
+.in-iframe .bottom-bar{display:none}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  padding:0;
+  opacity:0;visibility:hidden;
+  transform:translateX(40px);
+  transition:opacity .45s ease, transform .45s ease, visibility 0s .45s;
+}
+.slide.active{
+  opacity:1;visibility:visible;
+  transform:translateX(0);
+  transition:opacity .45s ease, transform .45s ease, visibility 0s;
+}
+.slide.exit-left{transform:translateX(-40px)}
+
+/* ─── Bottom bar ─── */
+.bottom-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 24px;
+  border-top:1px solid var(--bar-border);
+  flex-shrink:0;background:var(--bar-bg);backdrop-filter:blur(8px);
+}
+.transport{display:flex;align-items:center;gap:8px}
+.transport-btn{
+  width:36px;height:36px;border-radius:50%;border:1px solid var(--ghost);
+  background:transparent;color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;transition:all .2s;font-family:var(--sans);
+}
+.transport-btn:hover{border-color:var(--orange);color:var(--orange)}
+.transport-btn:disabled{opacity:.3;cursor:default}
+.step-indicator{font-family:var(--mono);font-size:13px;color:var(--text-dim)}
+.step-indicator .current{color:var(--text);font-weight:700}
+.nav-hints{display:flex;align-items:center;gap:8px}
+.kbd{
+  display:inline-block;padding:1px 6px;border-radius:3px;
+  font-family:var(--mono);font-size:10px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--text-dim);
+}
+[data-theme="light"] .kbd{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
+.slide-dots{display:flex;gap:6px;align-items:center}
+.slide-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--ghost);border:none;cursor:pointer;transition:all .25s;padding:0;
+}
+.slide-dot.active{background:var(--orange);box-shadow:0 0 8px var(--orange-dim)}
+
+/* ═══════════════════════════════════════════════
+   DEVELOPMENT LOOP SLIDE
+   ═══════════════════════════════════════════════ */
+
+.loop-layout{
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  height:100%;
+  gap:0;
+}
+
+/* ─── Left: Diagram ─── */
+.diagram-pane{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:16px 12px 16px 24px;
+  position:relative;
+}
+
+.diagram-header{
+  text-align:center;
+  margin-bottom:8px;
+  width:100%;
+}
+.diagram-title{
+  font-size:clamp(20px,2.4cqi,30px);
+  font-weight:800;
+  letter-spacing:-.03em;
+  line-height:1.1;
+}
+.diagram-title .hi{color:var(--orange)}
+.diagram-caption{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-dim);
+  margin-top:4px;
+  letter-spacing:.04em;
+}
+
+.diagram-svg-wrap{
+  flex:1;
+  width:100%;
+  min-height:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* ─── Right: Detail panel ─── */
+.detail-pane{
+  display:flex;flex-direction:column;
+  justify-content:center;
+  padding:32px 36px 32px 16px;
+  position:relative;
+}
+
+/* Vertical accent line on left edge */
+.detail-pane::before{
+  content:'';
+  position:absolute;
+  left:0;top:15%;bottom:15%;
+  width:1px;
+  background:linear-gradient(to bottom, transparent, var(--ghost), transparent);
+}
+
+/* Detail card */
+.detail-card{
+  background:var(--detail-bg);
+  backdrop-filter:blur(16px);
+  border:1px solid var(--detail-border);
+  border-radius:16px;
+  padding:32px;
+  max-width:420px;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .4s ease;
+}
+
+/* Colored accent strip at top */
+.detail-card::before{
+  content:'';position:absolute;
+  top:0;left:24px;right:24px;height:3px;
+  border-radius:0 0 4px 4px;
+  background:var(--accent-color, var(--orange));
+  transition:background .4s ease;
+  box-shadow:0 0 20px var(--accent-glow, var(--orange-dim));
+}
+
+.detail-step-num{
+  font-family:var(--mono);
+  font-size:11px;font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--text-xdim);
+  margin-bottom:12px;
+  transition:color .3s;
+}
+
+.detail-icon-row{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:16px;
+}
+.detail-icon{
+  width:44px;height:44px;
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:white;
+  background:var(--accent-color, var(--orange));
+  box-shadow:0 6px 20px var(--accent-glow, var(--orange-dim));
+  transition:background .4s, box-shadow .4s;
+  flex-shrink:0;
+}
+
+.detail-name{
+  font-size:clamp(18px,2cqi,24px);
+  font-weight:800;
+  letter-spacing:-.02em;
+  line-height:1.15;
+  color:var(--text);
+}
+
+.detail-badge{
+  display:inline-block;
+  font-family:var(--mono);
+  font-size:10px;font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  padding:3px 10px;
+  border-radius:20px;
+  margin-bottom:16px;
+  color:var(--accent-color, var(--orange));
+  background:var(--accent-dim, var(--orange-dim));
+  transition:color .4s, background .4s;
+}
+
+.detail-desc{
+  font-size:14px;
+  line-height:1.65;
+  color:var(--text-dim);
+  margin-bottom:18px;
+  min-height:72px;
+}
+.detail-desc strong{color:var(--text);font-weight:600}
+
+.detail-artifact{
+  background:var(--code-bg);
+  border:1px solid var(--code-border);
+  border-radius:8px;
+  padding:10px 14px;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-dim);
+  line-height:1.5;
+}
+.detail-artifact .label{
+  font-size:9px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-xdim);
+  margin-bottom:4px;
+  display:block;
+}
+.detail-artifact code{color:var(--text);font-weight:500}
+
+/* Step dots under detail card */
+.detail-dots{
+  display:flex;gap:8px;
+  margin-top:20px;
+  justify-content:center;
+}
+.detail-dot{
+  width:8px;height:8px;
+  border-radius:50%;
+  background:var(--ghost);
+  border:none;cursor:pointer;
+  padding:0;
+  transition:all .3s;
+}
+.detail-dot.active{
+  background:var(--accent-color, var(--orange));
+  box-shadow:0 0 8px var(--accent-glow, var(--orange-dim));
+  transform:scale(1.2);
+}
+.detail-dot.completed{
+  background:var(--check-color);
+}
+
+/* ─── Overview state (step -1) ─── */
+.overview-text{
+  text-align:center;
+  padding:20px 0;
+}
+.overview-text h3{
+  font-size:18px;font-weight:700;
+  margin-bottom:10px;
+  color:var(--text);
+}
+.overview-text p{
+  font-size:13px;line-height:1.7;
+  color:var(--text-dim);
+  max-width:340px;
+  margin:0 auto;
+}
+.overview-text .hint{
+  font-family:var(--mono);
+  font-size:11px;
+  margin-top:16px;
+  color:var(--text-xdim);
+}
+
+/* ─── Play button ─── */
+.play-btn{
+  width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--ghost);background:transparent;
+  color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;transition:all .2s;
+}
+.play-btn:hover{border-color:var(--orange);color:var(--orange)}
+.play-btn.playing{border-color:var(--orange);color:var(--orange)}
+
+</style>
+</head>
+<body>
+<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
+<div id="app">
+
+  <div class="slides-viewport">
+    <div class="slides-stage">
+    <div class="slide active" data-title="The Development Loop">
+      <div class="loop-layout">
+
+        <!-- LEFT: Diagram -->
+        <div class="diagram-pane">
+          <div class="diagram-header">
+            <div class="diagram-title">The <span class="hi">Development</span> Loop</div>
+            <div class="diagram-caption">6 stages &middot; continuous improvement</div>
+          </div>
+          <div class="diagram-svg-wrap">
+            <svg id="loopSvg" width="100%" height="100%" style="max-width:560px;max-height:560px"></svg>
+          </div>
+        </div>
+
+        <!-- RIGHT: Detail Panel -->
+        <div class="detail-pane">
+          <div class="detail-card" id="detailCard">
+            <div id="detailContent">
+              <!-- Filled by JS -->
+            </div>
+          </div>
+          <div class="detail-dots" id="detailDots"></div>
+        </div>
+
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="transport">
+      <button class="transport-btn" id="btnPrev" title="Previous step"><i class="fas fa-chevron-left"></i></button>
+      <button class="play-btn" id="btnPlay" title="Auto-play"><i class="fas fa-play"></i></button>
+      <button class="transport-btn" id="btnNext" title="Next step"><i class="fas fa-chevron-right"></i></button>
+      <span class="step-indicator" style="margin-left:8px">
+        Step <span class="current" id="stepNum">0</span> / <span id="stepTotal">6</span>
+      </span>
+    </div>
+    <div class="slide-dots" id="dots"></div>
+    <div class="nav-hints">
+      <span class="kbd">&larr;</span><span class="kbd">&rarr;</span>
+      <span style="font-size:11px;color:var(--text-dim);margin-left:4px">steps</span>
+      <span style="margin:0 8px;color:var(--ghost)">|</span>
+      <span class="kbd">&uarr;</span><span class="kbd">&darr;</span>
+      <span style="font-size:11px;color:var(--text-dim);margin-left:4px">decks</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+
+  /* ═══════════════════════════════
+     NODE DATA
+     ═══════════════════════════════ */
+  const NODES = [
+    {
+      name: 'Design Doc',
+      badge: 'HUMAN',
+      icon: 'fa-pencil',
+      type: 'human',
+      desc: 'Human authors a design doc from <strong>GitHub issues</strong> or directives. Template covers Summary, Design, Implementation Steps, and Testing. <strong>Human approval required</strong> before the next stage.',
+      artifactLabel: 'Artifacts',
+      artifact: 'design_docs/**/*.md',
+    },
+    {
+      name: 'Multi-Model Review',
+      badge: 'AI REVIEW',
+      icon: 'fa-comments',
+      type: 'ai',
+      desc: 'Design validated across <strong>Claude Opus, Gemini, and GPT</strong>. Tests structured output, prompt consistency, and edge cases. Catches issues no single model would find alone.',
+      artifactLabel: 'Output',
+      artifact: 'DESIGN_DOC_PATH marker',
+    },
+    {
+      name: 'Sprint Plan',
+      badge: 'PLAN',
+      icon: 'fa-list-check',
+      type: 'human',
+      desc: 'AI creates <strong>day-sized tasks</strong> with files to modify, test scenarios, and blocker identification. Generates sprint JSON with <strong>velocity estimates</strong>.',
+      artifactLabel: 'Artifacts',
+      artifact: 'state/sprints/sprint_*.json',
+    },
+    {
+      name: 'AI Execution',
+      badge: 'AI BUILDS',
+      icon: 'fa-microchip',
+      type: 'ai',
+      desc: 'AI coding harness implements each task via the <strong>sprint skill system</strong>. Runs typecheck + lint after every change. Creates branch, commits, requests review.',
+      artifactLabel: 'Output',
+      artifact: 'IMPLEMENTATION_COMPLETE marker',
+    },
+    {
+      name: 'M-EVAL Benchmarks',
+      badge: 'EVALUATE',
+      icon: 'fa-chart-bar',
+      type: 'eval',
+      desc: 'Eval harness sends coding tasks to the <strong>AI coding harness</strong> and validates output. 16+ tasks across languages (binary_tree_sum, lambda_calc, state_machine&hellip;). OpenTelemetry spans track cost, tokens, and duration.',
+      artifactLabel: 'Example',
+      artifact: 'binary_tree_sum_ailang_claude &rarr; 576 tokens, PASS',
+    },
+    {
+      name: 'New Design Docs',
+      badge: 'ITERATE',
+      icon: 'fa-rotate',
+      type: 'human',
+      desc: 'Validator failures trigger <strong>automatic regeneration</strong>. New design doc created with failure details and required fixes. Feeds back to Step 1 &mdash; the loop continues.',
+      artifactLabel: 'Trigger',
+      artifact: 'design-doc-creator w/ failure context',
+    },
+  ];
+
+  const TYPE_STYLES = {
+    human: { color: 'var(--orange)',  glow: 'var(--orange-glow)', dim: 'var(--orange-dim)', rawHex: '#e73c17' },
+    ai:    { color: 'var(--indigo-solid)', glow: 'var(--indigo-glow)', dim: 'var(--indigo-dim)', rawHex: '#6366f1' },
+    eval:  { color: 'var(--green)',   glow: 'var(--green-glow)',  dim: 'var(--green-dim)',  rawHex: '#22c55e' },
+  };
+
+  const N = NODES.length;
+  let step = -1; // -1 = overview
+  let playing = false;
+  let playTimer = null;
+
+  /* ═══════════════════════════════
+     DOM REFS
+     ═══════════════════════════════ */
+  const svg = document.getElementById('loopSvg');
+  const detailCard = document.getElementById('detailCard');
+  const detailContent = document.getElementById('detailContent');
+  const detailDotsWrap = document.getElementById('detailDots');
+  const stepNumEl = document.getElementById('stepNum');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  const btnPlay = document.getElementById('btnPlay');
+
+  /* ═══════════════════════════════
+     BUILD DETAIL DOTS
+     ═══════════════════════════════ */
+  for (let i = 0; i < N; i++){
+    const d = document.createElement('button');
+    d.className = 'detail-dot';
+    d.addEventListener('click', () => stepTo(i));
+    detailDotsWrap.appendChild(d);
+  }
+
+  /* ═══════════════════════════════
+     BUILD SLIDE DOTS (deck nav)
+     ═══════════════════════════════ */
+  const slides = [...document.querySelectorAll('.slide')];
+  const TOTAL = slides.length;
+  let current = 0;
+  const dotsContainer = document.getElementById('dots');
+  slides.forEach((_,i) => {
+    const dot = document.createElement('button');
+    dot.className = 'slide-dot' + (i===0?' active':'');
+    dotsContainer.appendChild(dot);
+  });
+
+  /* ═══════════════════════════════
+     SVG DIAGRAM
+     ═══════════════════════════════ */
+  const NS = 'http://www.w3.org/2000/svg';
+
+  // Layout constants (viewBox-relative)
+  const VB = 620;
+  const CX = VB / 2, CY = VB / 2;
+  const RX = 240, RY = 230;
+  const NODE_W = 176, NODE_H = 56, NODE_R = 10;
+
+  svg.setAttribute('viewBox', `0 0 ${VB} ${VB}`);
+
+  // Helpers
+  function angleFor(i){ return -Math.PI/2 + (i / N) * Math.PI * 2; }
+  function posFor(i){
+    const a = angleFor(i);
+    return { x: CX + RX * Math.cos(a), y: CY + RY * Math.sin(a) };
+  }
+
+  // Describe an elliptical arc from angle a1 to a2
+  function arcPath(a1, a2, rx, ry){
+    const x1 = CX + rx * Math.cos(a1), y1 = CY + ry * Math.sin(a1);
+    const x2 = CX + rx * Math.cos(a2), y2 = CY + ry * Math.sin(a2);
+    const diff = a2 - a1;
+    const large = diff > Math.PI ? 1 : 0;
+    return `M ${x1} ${y1} A ${rx} ${ry} 0 ${large} 1 ${x2} ${y2}`;
+  }
+
+  // ─── Defs ───
+  const defs = document.createElementNS(NS, 'defs');
+  defs.innerHTML = `
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softglow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10"/>
+    </filter>
+    <marker id="arrowOrange" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0 0.5 L9 4 L0 7.5" fill="var(--orbit-lit)" opacity=".8"/>
+    </marker>
+    <marker id="arrowGhost" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0 1 L8 4 L0 7" fill="var(--orbit-track)" opacity=".5"/>
+    </marker>
+  `;
+  svg.appendChild(defs);
+
+  // ─── Full orbit track (dim) ───
+  const fullOrbit = document.createElementNS(NS, 'ellipse');
+  fullOrbit.setAttribute('cx', CX);
+  fullOrbit.setAttribute('cy', CY);
+  fullOrbit.setAttribute('rx', RX);
+  fullOrbit.setAttribute('ry', RY);
+  fullOrbit.setAttribute('fill', 'none');
+  fullOrbit.setAttribute('stroke', 'var(--orbit-track)');
+  fullOrbit.setAttribute('stroke-width', '1.5');
+  fullOrbit.setAttribute('stroke-dasharray', '6 5');
+  svg.appendChild(fullOrbit);
+
+  // ─── Arc segments (one per edge, lit when completed) ───
+  const arcEls = [];
+  for (let i = 0; i < N; i++){
+    const a1 = angleFor(i);
+    const a2 = angleFor((i + 1) % N);
+    const a2adj = (i === N - 1) ? a1 + Math.PI * 2 / N : a2; // wrap-around
+
+    // Glow layer
+    const glow = document.createElementNS(NS, 'path');
+    glow.setAttribute('d', arcPath(a1, a2adj, RX, RY));
+    glow.setAttribute('fill', 'none');
+    glow.setAttribute('stroke', 'var(--orbit-glow)');
+    glow.setAttribute('stroke-width', '14');
+    glow.setAttribute('filter', 'url(#softglow)');
+    glow.style.opacity = '0';
+    glow.style.transition = 'opacity .6s ease';
+    svg.appendChild(glow);
+
+    // Lit arc
+    const arc = document.createElementNS(NS, 'path');
+    arc.setAttribute('d', arcPath(a1, a2adj, RX, RY));
+    arc.setAttribute('fill', 'none');
+    arc.setAttribute('stroke', 'var(--orbit-lit)');
+    arc.setAttribute('stroke-width', '2.5');
+    arc.setAttribute('stroke-linecap', 'round');
+    arc.style.opacity = '0';
+    arc.style.transition = 'opacity .5s ease';
+    svg.appendChild(arc);
+
+    arcEls.push({ arc, glow });
+  }
+
+  // ─── Traveling particle ───
+  const particleGlow = document.createElementNS(NS, 'circle');
+  particleGlow.setAttribute('r', '10');
+  particleGlow.setAttribute('fill', 'var(--particle-glow)');
+  particleGlow.setAttribute('filter', 'url(#softglow)');
+  particleGlow.style.opacity = '0';
+  particleGlow.style.transition = 'opacity .5s';
+  svg.appendChild(particleGlow);
+
+  const particleCore = document.createElementNS(NS, 'circle');
+  particleCore.setAttribute('r', '3.5');
+  particleCore.setAttribute('fill', 'var(--particle)');
+  particleCore.setAttribute('filter', 'url(#glow)');
+  particleCore.style.opacity = '0';
+  particleCore.style.transition = 'opacity .5s';
+  svg.appendChild(particleCore);
+
+  let particleAngle = angleFor(0);
+  let particleTarget = angleFor(0);
+  let particleVisible = false;
+
+  function tickParticle(){
+    if (particleVisible){
+      // Ease toward target
+      let diff = particleTarget - particleAngle;
+      // Normalize
+      while (diff > Math.PI) diff -= Math.PI * 2;
+      while (diff < -Math.PI) diff += Math.PI * 2;
+      particleAngle += diff * 0.06;
+
+      const px = CX + RX * Math.cos(particleAngle);
+      const py = CY + RY * Math.sin(particleAngle);
+      particleGlow.setAttribute('cx', px);
+      particleGlow.setAttribute('cy', py);
+      particleCore.setAttribute('cx', px);
+      particleCore.setAttribute('cy', py);
+    }
+    requestAnimationFrame(tickParticle);
+  }
+  tickParticle();
+
+  // ─── Node groups ───
+  const nodeEls = [];
+  for (let i = 0; i < N; i++){
+    const { x, y } = posFor(i);
+    const node = NODES[i];
+    const style = TYPE_STYLES[node.type];
+
+    const g = document.createElementNS(NS, 'g');
+    g.style.cursor = 'pointer';
+    g.style.transition = 'transform .4s cubic-bezier(.34,1.56,.64,1), opacity .4s ease';
+    g.setAttribute('transform', `translate(${x}, ${y})`);
+
+    // Shadow
+    const shadow = document.createElementNS(NS, 'rect');
+    shadow.setAttribute('x', -NODE_W/2 + 2);
+    shadow.setAttribute('y', -NODE_H/2 + 3);
+    shadow.setAttribute('width', NODE_W);
+    shadow.setAttribute('height', NODE_H);
+    shadow.setAttribute('rx', NODE_R);
+    shadow.setAttribute('fill', 'var(--node-shadow)');
+    shadow.setAttribute('opacity', '.15');
+    shadow.setAttribute('filter', 'url(#softglow)');
+    g.appendChild(shadow);
+
+    // Background rect
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x', -NODE_W/2);
+    rect.setAttribute('y', -NODE_H/2);
+    rect.setAttribute('width', NODE_W);
+    rect.setAttribute('height', NODE_H);
+    rect.setAttribute('rx', NODE_R);
+    rect.setAttribute('fill', 'var(--node-bg)');
+    rect.setAttribute('stroke', 'var(--node-border)');
+    rect.setAttribute('stroke-width', '1.5');
+    rect.style.transition = 'stroke .4s, stroke-width .3s, filter .4s';
+    g.appendChild(rect);
+
+    // Top accent bar
+    const accent = document.createElementNS(NS, 'rect');
+    accent.setAttribute('x', -NODE_W/2 + 20);
+    accent.setAttribute('y', -NODE_H/2);
+    accent.setAttribute('width', NODE_W - 40);
+    accent.setAttribute('height', '3');
+    accent.setAttribute('rx', '1.5');
+    accent.setAttribute('fill', style.color);
+    accent.style.transition = 'opacity .4s';
+    g.appendChild(accent);
+
+    // Icon circle
+    const ICON_CX = -NODE_W/2 + 24;
+    const iconBg = document.createElementNS(NS, 'circle');
+    iconBg.setAttribute('cx', ICON_CX);
+    iconBg.setAttribute('cy', 0);
+    iconBg.setAttribute('r', '15');
+    iconBg.setAttribute('fill', style.color);
+    iconBg.style.transition = 'opacity .4s, fill .4s';
+    g.appendChild(iconBg);
+
+    // Icon (foreignObject for Font Awesome)
+    const fo = document.createElementNS(NS, 'foreignObject');
+    fo.setAttribute('x', ICON_CX - 14);
+    fo.setAttribute('y', -14);
+    fo.setAttribute('width', 28);
+    fo.setAttribute('height', 28);
+    const iconDiv = document.createElement('div');
+    iconDiv.style.cssText = 'width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:white;font-size:13px;';
+    iconDiv.innerHTML = `<i class="fas ${node.icon}"></i>`;
+    fo.appendChild(iconDiv);
+    g.appendChild(fo);
+
+    // Text + badge + step number via foreignObject for proper text clipping
+    const TEXT_LEFT = ICON_CX + 20;
+    const TEXT_RIGHT_EDGE = NODE_W/2 - 6;
+    const TEXT_WIDTH = TEXT_RIGHT_EDGE - TEXT_LEFT;
+
+    const textFo = document.createElementNS(NS, 'foreignObject');
+    textFo.setAttribute('x', TEXT_LEFT);
+    textFo.setAttribute('y', -NODE_H/2 + 2);
+    textFo.setAttribute('width', TEXT_WIDTH);
+    textFo.setAttribute('height', NODE_H - 4);
+    const textDiv = document.createElement('div');
+    textDiv.style.cssText = `
+      width:${TEXT_WIDTH}px;height:${NODE_H - 4}px;
+      display:flex;flex-direction:column;justify-content:center;
+      overflow:hidden;
+    `;
+
+    const nameDiv = document.createElement('div');
+    nameDiv.style.cssText = 'font-family:Montserrat,sans-serif;font-size:10.5px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25;transition:color .4s;';
+    nameDiv.textContent = node.name;
+
+    const badgeDiv = document.createElement('div');
+    badgeDiv.style.cssText = `font-family:JetBrains Mono,monospace;font-size:7.5px;font-weight:700;letter-spacing:.08em;color:${style.color};margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .4s,opacity .4s;`;
+    badgeDiv.textContent = node.badge;
+
+    textDiv.appendChild(nameDiv);
+    textDiv.appendChild(badgeDiv);
+    textFo.appendChild(textDiv);
+    g.appendChild(textFo);
+
+    // Step number (top-right corner)
+    const numFo = document.createElementNS(NS, 'foreignObject');
+    numFo.setAttribute('x', NODE_W/2 - 22);
+    numFo.setAttribute('y', -NODE_H/2 + 3);
+    numFo.setAttribute('width', 18);
+    numFo.setAttribute('height', 16);
+    const numDiv = document.createElement('div');
+    numDiv.style.cssText = 'font-family:JetBrains Mono,monospace;font-size:9px;font-weight:700;color:var(--text-xdim);text-align:right;line-height:16px;';
+    numDiv.textContent = String(i + 1);
+    numFo.appendChild(numDiv);
+    g.appendChild(numFo);
+
+    // Check mark (bottom-right, hidden by default)
+    const checkFo = document.createElementNS(NS, 'foreignObject');
+    checkFo.setAttribute('x', NODE_W/2 - 22);
+    checkFo.setAttribute('y', NODE_H/2 - 20);
+    checkFo.setAttribute('width', 18);
+    checkFo.setAttribute('height', 18);
+    const checkDiv = document.createElement('div');
+    checkDiv.style.cssText = 'width:18px;height:18px;display:flex;align-items:center;justify-content:center;color:var(--check-color);font-size:12px;opacity:0;transition:opacity .3s;';
+    checkDiv.innerHTML = '<i class="fas fa-check-circle"></i>';
+    checkFo.appendChild(checkDiv);
+    g.appendChild(checkFo);
+
+    g.addEventListener('click', () => stepTo(i));
+
+    svg.appendChild(g);
+    nodeEls.push({ g, rect, accent, iconBg, nameDiv, badgeDiv, checkDiv, shadow });
+  }
+
+  // ─── Center label ───
+  const centerG = document.createElementNS(NS, 'g');
+  const c1 = document.createElementNS(NS, 'text');
+  c1.setAttribute('x', CX); c1.setAttribute('y', CY - 6);
+  c1.setAttribute('text-anchor', 'middle');
+  c1.setAttribute('font-family', 'Montserrat, sans-serif');
+  c1.setAttribute('font-size', '13'); c1.setAttribute('font-weight', '800');
+  c1.setAttribute('fill', 'var(--text)');
+  c1.setAttribute('opacity', '.35');
+  c1.textContent = 'CONTINUOUS';
+  centerG.appendChild(c1);
+  const c2 = document.createElementNS(NS, 'text');
+  c2.setAttribute('x', CX); c2.setAttribute('y', CY + 10);
+  c2.setAttribute('text-anchor', 'middle');
+  c2.setAttribute('font-family', 'Montserrat, sans-serif');
+  c2.setAttribute('font-size', '13'); c2.setAttribute('font-weight', '800');
+  c2.setAttribute('fill', 'var(--text)');
+  c2.setAttribute('opacity', '.35');
+  c2.textContent = 'LOOP';
+  centerG.appendChild(c2);
+  svg.appendChild(centerG);
+
+  /* ═══════════════════════════════
+     STEP LOGIC
+     ═══════════════════════════════ */
+  function stepTo(n){
+    n = Math.max(-1, Math.min(n, N - 1));
+    if (n === step) return;
+    step = n;
+    render();
+  }
+
+  function render(){
+    stepNumEl.textContent = step + 1;
+    btnPrev.disabled = step <= -1;
+    btnNext.disabled = step >= N - 1;
+
+    // Update nodes
+    nodeEls.forEach((el, i) => {
+      const isActive = i === step;
+      const isCompleted = i < step;
+      const isFuture = i > step;
+      const isOverview = step === -1;
+
+      if (isOverview){
+        el.rect.setAttribute('stroke', 'var(--node-border)');
+        el.rect.setAttribute('stroke-width', '1.5');
+        el.rect.style.filter = '';
+        el.g.style.opacity = '1';
+        el.accent.style.opacity = '0.5';
+        el.iconBg.style.opacity = '0.5';
+        el.checkDiv.style.opacity = '0';
+      } else if (isActive){
+        const style = TYPE_STYLES[NODES[i].type];
+        el.rect.setAttribute('stroke', style.color);
+        el.rect.setAttribute('stroke-width', '2.5');
+        el.rect.style.filter = `drop-shadow(0 0 12px ${style.rawHex}44)`;
+        el.g.style.opacity = '1';
+        el.accent.style.opacity = '1';
+        el.iconBg.style.opacity = '1';
+        el.checkDiv.style.opacity = '0';
+      } else if (isCompleted){
+        el.rect.setAttribute('stroke', 'var(--check-color)');
+        el.rect.setAttribute('stroke-width', '1.5');
+        el.rect.style.filter = '';
+        el.g.style.opacity = '.7';
+        el.accent.style.opacity = '.4';
+        el.iconBg.style.opacity = '.5';
+        el.checkDiv.style.opacity = '1';
+      } else { // future
+        el.rect.setAttribute('stroke', 'var(--node-border-dim)');
+        el.rect.setAttribute('stroke-width', '1');
+        el.rect.style.filter = '';
+        el.g.style.opacity = '.35';
+        el.accent.style.opacity = '.2';
+        el.iconBg.style.opacity = '.25';
+        el.checkDiv.style.opacity = '0';
+      }
+    });
+
+    // Update arcs
+    arcEls.forEach((el, i) => {
+      const lit = i < step; // arc i connects node i → i+1, lit when step > i
+      el.arc.style.opacity = lit ? '1' : '0';
+      el.glow.style.opacity = lit ? '1' : '0';
+    });
+
+    // Particle
+    if (step >= 0){
+      particleTarget = angleFor(step);
+      if (!particleVisible){
+        particleAngle = angleFor(step); // jump on first show
+        particleVisible = true;
+        particleGlow.style.opacity = '1';
+        particleCore.style.opacity = '1';
+      }
+    } else {
+      particleVisible = false;
+      particleGlow.style.opacity = '0';
+      particleCore.style.opacity = '0';
+    }
+
+    // Detail panel
+    renderDetail();
+
+    // Detail dots
+    document.querySelectorAll('.detail-dot').forEach((d, i) => {
+      d.className = 'detail-dot';
+      if (i === step) d.classList.add('active');
+      else if (i < step) d.classList.add('completed');
+    });
+  }
+
+  function renderDetail(){
+    const card = detailCard;
+
+    if (step === -1){
+      card.style.setProperty('--accent-color', 'var(--orange)');
+      card.style.setProperty('--accent-glow', 'var(--orange-dim)');
+      card.style.setProperty('--accent-dim', 'var(--orange-dim)');
+      detailContent.innerHTML = `
+        <div class="overview-text">
+          <h3>Iterative AI Development</h3>
+          <p>A six-stage feedback loop where <strong>human intent</strong> is refined through multi-model AI review, automated execution, and continuous benchmarking. Failures generate new specifications &mdash; the cycle never stops.</p>
+          <div class="hint">&rarr; press right to step through</div>
+        </div>
+      `;
+      return;
+    }
+
+    const node = NODES[step];
+    const style = TYPE_STYLES[node.type];
+
+    card.style.setProperty('--accent-color', style.color);
+    card.style.setProperty('--accent-glow', style.glow);
+    card.style.setProperty('--accent-dim', style.dim);
+
+    detailContent.innerHTML = `
+      <div class="detail-step-num">Step ${step + 1} of ${N}</div>
+      <div class="detail-icon-row">
+        <div class="detail-icon"><i class="fas ${node.icon}"></i></div>
+        <div class="detail-name">${node.name}</div>
+      </div>
+      <div class="detail-badge">${node.badge}</div>
+      <div class="detail-desc">${node.desc}</div>
+      <div class="detail-artifact">
+        <span class="label">${node.artifactLabel}</span>
+        <code>${node.artifact}</code>
+      </div>
+    `;
+  }
+
+  /* ═══════════════════════════════
+     AUTO-PLAY
+     ═══════════════════════════════ */
+  function togglePlay(){
+    if (playing) stopPlay();
+    else startPlay();
+  }
+
+  function startPlay(){
+    playing = true;
+    btnPlay.classList.add('playing');
+    btnPlay.innerHTML = '<i class="fas fa-pause"></i>';
+    advance();
+  }
+
+  function stopPlay(){
+    playing = false;
+    btnPlay.classList.remove('playing');
+    btnPlay.innerHTML = '<i class="fas fa-play"></i>';
+    clearTimeout(playTimer);
+  }
+
+  function advance(){
+    if (!playing) return;
+    const next = step + 1;
+    if (next >= N){
+      // Loop back
+      stepTo(-1);
+      playTimer = setTimeout(() => { if(playing) { stepTo(0); playTimer = setTimeout(advance, 2800); } }, 1500);
+    } else {
+      stepTo(next);
+      playTimer = setTimeout(advance, 2800);
+    }
+  }
+
+  /* ═══════════════════════════════
+     CONTROLS
+     ═══════════════════════════════ */
+  btnPrev.addEventListener('click', () => { stopPlay(); stepTo(step - 1); });
+  btnNext.addEventListener('click', () => { stopPlay(); stepTo(step + 1); });
+  btnPlay.addEventListener('click', togglePlay);
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' '){
+      e.preventDefault();
+      stopPlay();
+      stepTo(step + 1);
+    }
+    if (e.key === 'ArrowLeft'){
+      e.preventDefault();
+      stopPlay();
+      stepTo(step - 1);
+    }
+    if (e.key === 'ArrowDown'){
+      e.preventDefault();
+      window.parent.postMessage({type:'deck-nav',dir:'next'},'*');
+    }
+    if (e.key === 'ArrowUp'){
+      e.preventDefault();
+      window.parent.postMessage({type:'deck-nav',dir:'prev'},'*');
+    }
+  });
+
+  // ─── Presenter / iframe commands ───
+  window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'deck-command'){
+      if (e.data.action === 'go-first'){ step = -2; stepTo(-1); }
+      if (e.data.action === 'go-last'){ stepTo(N - 1); }
+      if (e.data.action === 'set-theme') setTheme(e.data.theme);
+    }
+  });
+
+  window.parent.postMessage({type:'deck-ready', total:TOTAL}, '*');
+
+  function setTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  // Initial render
+  render();
+
+})();
+</script>
+</body>
+</html>
