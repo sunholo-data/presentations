@@ -494,123 +494,274 @@ body{
 }
 .hero-kicker strong{color:var(--text);font-style:normal}
 
+/* ── 2.3 emergence bridge: silos → provenance trails → Aitana brain ── */
+.emergence{
+  width:100%;max-width:1040px;
+  display:flex;flex-direction:column;align-items:center;
+  margin-top:-6px;
+}
+.emergence-svg{width:100%;height:150px;display:block;overflow:visible}
+.em-silo{fill:var(--surface-hi);stroke:var(--text-dim);stroke-width:1;stroke-dasharray:2 3;opacity:.55}
+.em-silo-line{stroke:var(--text-dim);stroke-width:.75;opacity:.5}
+.em-trail{
+  fill:none;stroke:var(--orange);stroke-width:1;stroke-dasharray:3 4;
+  opacity:.6;
+  animation:em-flow 6s linear infinite;
+}
+.em-trail:nth-child(2){animation-delay:-1.2s}
+.em-trail:nth-child(3){animation-delay:-2.4s}
+.em-trail:nth-child(4){animation-delay:-3.6s}
+.em-trail:nth-child(5){animation-delay:-4.8s}
+@keyframes em-flow{to{stroke-dashoffset:-140}}
+.em-tick{fill:var(--orange);opacity:.85}
+.em-tick-ring{fill:none;stroke:var(--orange);stroke-width:.6;opacity:.3}
+.em-brain-ring{
+  fill:none;stroke:var(--orange);stroke-width:1;
+  transform-origin:890px 80px;
+  animation:em-pulse 3.2s ease-out infinite;
+}
+.em-brain-ring.r2{animation-delay:-1s}
+.em-brain-ring.r3{animation-delay:-2s}
+@keyframes em-pulse{
+  0%  {r:40;opacity:.55}
+  100%{r:72;opacity:0}
+}
+.em-label{
+  font-family:var(--mono);font-size:9px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;
+  fill:var(--text-dim);
+}
+.em-label.hot{fill:var(--orange)}
+
 /* ════════════ 2.4 Text at Scale — three approaches ════════════ */
 .approaches-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
-  width:100%;max-width:1100px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:22px;
+  width:100%;max-width:1180px;
 }
 .approach{
   background:var(--surface);border:1px solid var(--ghost);
-  border-radius:14px;padding:22px 22px 20px;
-  display:flex;flex-direction:column;gap:12px;
+  border-radius:16px;padding:26px 26px 22px;
+  display:flex;flex-direction:column;gap:16px;
   position:relative;overflow:hidden;
 }
 .approach .ap-icon{
-  width:42px;height:42px;border-radius:10px;
+  width:54px;height:54px;border-radius:12px;
   display:flex;align-items:center;justify-content:center;
-  font-size:18px;
-  background:rgba(231,60,23,.1);color:var(--orange);
+  font-size:24px;
+  background:rgba(231,60,23,.12);color:var(--orange);
   border:1px solid var(--orange-dim);
 }
-.approach.judge .ap-icon{background:rgba(29,166,154,.1);color:var(--teal);border-color:var(--teal-dim)}
-.approach.feedback .ap-icon{background:rgba(245,165,36,.12);color:var(--amber);border-color:rgba(245,165,36,.3)}
+.approach.judge .ap-icon{background:rgba(29,166,154,.12);color:var(--teal);border-color:var(--teal-dim)}
+.approach.feedback .ap-icon{background:rgba(245,165,36,.14);color:var(--amber);border-color:rgba(245,165,36,.3)}
 .approach .ap-num{
-  position:absolute;top:14px;right:18px;
-  font-family:var(--mono);font-size:11px;font-weight:700;
+  position:absolute;top:18px;right:22px;
+  font-family:var(--mono);font-size:13px;font-weight:700;
   color:var(--text-dim);opacity:.7;
 }
-.approach .ap-title{font-size:15px;font-weight:800;color:var(--text)}
-.approach .ap-desc{font-size:12px;color:var(--text-dim);line-height:1.5}
+.approach .ap-title{font-size:22px;font-weight:800;color:var(--text);line-height:1.15}
 .approach .ap-analog{
-  margin-top:auto;padding-top:10px;
+  margin-top:auto;padding-top:14px;
   border-top:1px dashed var(--ghost);
-  font-family:var(--mono);font-size:10px;color:var(--text-dim);
+  font-family:var(--mono);font-size:13px;color:var(--text-dim);
+  letter-spacing:.02em;
 }
 .approach .ap-analog strong{color:var(--text)}
+
+/* ── 2.4 per-card practical mini-samples (hall-readable) ── */
+.ap-sample{
+  display:flex;flex-direction:column;gap:14px;
+  margin-top:2px;
+}
+
+/* 01 · clustering: BigQuery chip → scatter */
+.bq-chip{
+  display:flex;align-items:center;gap:10px;
+  background:var(--bg);border:1px solid var(--ghost);
+  border-left:3px solid var(--orange);
+  border-radius:8px;padding:10px 12px;
+}
+.bq-chip .bq-logo{width:28px;height:28px;flex:0 0 auto}
+.bq-chip .bq-text{display:flex;flex-direction:column;line-height:1.2}
+.bq-chip .bq-product{font-size:14px;font-weight:800;color:var(--text);letter-spacing:.01em}
+.bq-chip .bq-sub{font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-top:2px}
+.bq-chip .bq-arrow{margin-left:auto;color:var(--orange);font-size:14px;opacity:.8}
+.ap-scatter{width:100%;height:120px;display:block}
+.clu-hull{fill:rgba(231,60,23,.12);stroke:var(--orange);stroke-width:1;stroke-dasharray:3 4;opacity:.8}
+.clu-dot{fill:var(--orange)}
+.clu-dot.stray{fill:var(--text-dim);opacity:.55}
+.clu-lbl{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.02em;fill:var(--text);
+}
+
+/* 02 · judge: prompt → emitted tags */
+.ap-prompt{
+  display:flex;gap:10px;align-items:flex-start;
+  background:var(--bg);border:1px solid var(--ghost);
+  border-left:3px solid var(--teal);
+  border-radius:8px;padding:12px 14px;
+}
+.ap-prompt-user{
+  flex:0 0 auto;width:26px;height:26px;border-radius:50%;
+  background:rgba(29,166,154,.14);color:var(--teal);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;
+}
+.ap-prompt-text{font-size:15px;line-height:1.4;color:var(--text);font-style:italic}
+.ap-tags{display:flex;flex-wrap:wrap;gap:8px}
+.ap-tag{
+  display:inline-flex;align-items:stretch;
+  font-family:var(--mono);font-size:12px;font-weight:700;
+  border:1px solid var(--teal-dim);
+  border-radius:6px;overflow:hidden;letter-spacing:.02em;
+}
+.ap-tag .tk{background:rgba(29,166,154,.14);color:var(--teal);padding:5px 9px}
+.ap-tag .tv{background:var(--surface-hi);color:var(--text);padding:5px 9px}
+.ap-tag .tv.neg{color:var(--orange)}
+
+/* 03 · feedback: thumbs → eval → next deploy */
+.ap-loop{
+  display:flex;align-items:center;gap:4px;position:relative;
+  background:var(--bg);border:1px solid var(--ghost);
+  border-left:3px solid var(--amber);
+  border-radius:8px;padding:16px 14px 14px;
+}
+.fb-step{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  flex:1;
+}
+.fb-ico{
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(245,165,36,.14);color:var(--amber);
+  border:1px solid rgba(245,165,36,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+}
+.fb-ico.neg{background:rgba(231,60,23,.14);color:var(--orange);border-color:var(--orange-dim)}
+.fb-l{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);
+}
+.ap-loop .fb-arrow{
+  color:var(--amber);font-size:14px;opacity:.75;flex:0 0 auto;align-self:center;
+  margin-bottom:14px;
+}
+.fb-return{
+  position:absolute;right:12px;top:-12px;
+  width:26px;height:26px;border-radius:50%;
+  background:var(--bg);border:1px dashed var(--amber);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--amber);font-size:12px;
+}
+.ap-deploy{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  font-family:var(--mono);font-size:14px;color:var(--text-dim);
+}
+.ap-deploy .dep-from{opacity:.75}
+.ap-deploy .dep-from strong{color:var(--text-dim)}
+.ap-deploy .dep-to strong{color:var(--amber);font-size:20px}
+.ap-deploy .dep-from strong{font-size:18px}
+.ap-deploy .dep-arrow{color:var(--amber);font-size:12px}
 .text-at-scale-kicker{
-  text-align:center;font-size:15px;color:var(--text-dim);
-  font-style:italic;
+  text-align:center;font-size:20px;color:var(--text-dim);
+  font-style:italic;line-height:1.4;
 }
 .text-at-scale-kicker strong{color:var(--text);font-style:normal}
 
 /* ════════════ 2.5 Langfuse Demo ════════════ */
 .demo-stage{
-  display:grid;grid-template-columns:1.4fr 1fr;gap:24px;
-  width:100%;max-width:1150px;align-items:start;
+  display:grid;grid-template-columns:1.6fr 1fr;gap:26px;
+  width:100%;max-width:1180px;align-items:start;
 }
-.trace-mock{
+
+/* ── rotating screenshot gallery (CSS-only crossfade) ── */
+.lf-gallery{
+  position:relative;
   background:var(--surface);border:1px solid var(--ghost);
-  border-radius:12px;padding:18px;font-family:var(--mono);font-size:11px;
-  display:flex;flex-direction:column;gap:6px;
+  border-radius:14px;padding:14px;margin:0;
+  display:flex;flex-direction:column;gap:12px;
 }
-.trace-mock .tm-head{
-  display:flex;align-items:center;justify-content:space-between;
-  padding-bottom:10px;border-bottom:1px solid var(--ghost);
-  margin-bottom:6px;
+.lf-stage{
+  position:relative;aspect-ratio:3/2;
+  background:#ffffff;border-radius:10px;overflow:hidden;
+  box-shadow:inset 0 0 0 1px var(--ghost);
 }
-.trace-mock .tm-title{font-weight:700;color:var(--text);font-size:12px}
-.trace-mock .tm-tag{
-  font-size:9px;padding:3px 8px;border-radius:10px;
-  background:rgba(231,60,23,.12);color:var(--orange);
-  border:1px solid var(--orange-dim);
-}
-.trace-row{
-  display:grid;grid-template-columns:130px 1fr 60px 50px;
-  align-items:center;gap:8px;padding:5px 6px;border-radius:5px;
-}
-.trace-row:hover{background:var(--surface-hi)}
-.trace-row .t-name{color:var(--text);font-size:11px;display:flex;align-items:center;gap:6px}
-.trace-row .t-name .t-icon{
-  width:14px;height:14px;border-radius:3px;
+.lf-slide{
+  position:absolute;inset:0;
   display:flex;align-items:center;justify-content:center;
-  font-size:8px;flex-shrink:0;
+  opacity:0;animation:lf-rotate 30s linear infinite;
 }
-.trace-row.gen .t-icon{background:rgba(231,60,23,.15);color:var(--orange)}
-.trace-row.tool .t-icon{background:rgba(29,166,154,.15);color:var(--teal)}
-.trace-row.span .t-icon{background:rgba(99,102,241,.15);color:var(--indigo)}
-.trace-row.nested{padding-left:18px}
-.trace-row.nested.deep{padding-left:34px}
-.trace-row .t-bar{
-  height:8px;background:var(--surface-hi);border-radius:3px;
-  position:relative;overflow:hidden;
+.lf-slide img{
+  max-width:100%;max-height:100%;width:auto;height:auto;
+  object-fit:contain;display:block;
 }
-.trace-row .t-bar::after{
-  content:'';position:absolute;top:0;height:100%;
-  background:var(--orange);
-  left:var(--bar-x,0%);width:var(--bar-w,40%);
-  border-radius:3px;
+/* 5-slide rotation: each slot = 6s of 30s cycle; 1s crossfade overlap */
+.lf-slide.s1,.lf-cap.s1,.lf-dot.s1{animation-delay:0s}
+.lf-slide.s2,.lf-cap.s2,.lf-dot.s2{animation-delay:6s}
+.lf-slide.s3,.lf-cap.s3,.lf-dot.s3{animation-delay:12s}
+.lf-slide.s4,.lf-cap.s4,.lf-dot.s4{animation-delay:18s}
+.lf-slide.s5,.lf-cap.s5,.lf-dot.s5{animation-delay:24s}
+@keyframes lf-rotate{
+  0%        {opacity:0}
+  4%,17%    {opacity:1}
+  21%,100%  {opacity:0}
 }
-.trace-row.tool .t-bar::after{background:var(--teal)}
-.trace-row.span .t-bar::after{background:var(--indigo)}
-.trace-row .t-ms{font-size:9px;color:var(--text-dim);text-align:right}
-.trace-row .t-cost{font-size:9px;color:var(--text-dim);text-align:right}
-.trace-mock .tm-foot{
-  display:flex;justify-content:space-between;gap:14px;
-  margin-top:8px;padding-top:10px;border-top:1px solid var(--ghost);
-  font-size:10px;color:var(--text-dim);
+
+.lf-cap-stack{position:relative;height:50px}
+.lf-cap{
+  position:absolute;inset:0;
+  display:flex;align-items:center;gap:12px;
+  opacity:0;animation:lf-rotate 30s linear infinite;
 }
-.tm-foot strong{color:var(--text)}
+.lf-cap-k{
+  font-family:var(--mono);font-size:11px;font-weight:800;
+  color:var(--orange);letter-spacing:.12em;
+  padding:6px 10px;border:1px solid var(--orange-dim);
+  border-radius:6px;background:rgba(231,60,23,.08);
+  flex:0 0 auto;white-space:nowrap;
+}
+.lf-cap.judge .lf-cap-k{color:var(--teal);border-color:var(--teal-dim);background:rgba(29,166,154,.08)}
+.lf-cap.new  .lf-cap-k{color:var(--amber);border-color:rgba(245,165,36,.3);background:rgba(245,165,36,.1)}
+.lf-cap-t{font-size:17px;font-weight:800;color:var(--text);line-height:1.15}
+.lf-cap-d{font-size:13px;color:var(--text-dim);line-height:1.3;margin-left:auto;text-align:right;font-style:italic}
+
+.lf-dots{
+  position:absolute;top:24px;right:24px;
+  display:flex;gap:8px;z-index:2;
+}
+.lf-dot{
+  width:10px;height:10px;border-radius:50%;
+  background:rgba(0,0,0,.18);
+  animation:lf-dot 30s linear infinite;
+}
+@keyframes lf-dot{
+  0%        {background:rgba(0,0,0,.18);box-shadow:none}
+  4%,17%    {background:var(--orange);box-shadow:0 0 10px var(--orange-glow)}
+  21%,100%  {background:rgba(0,0,0,.18);box-shadow:none}
+}
+
+/* ── callouts (bigger for hall) ── */
 .demo-side{display:flex;flex-direction:column;gap:14px}
-.demo-callouts{display:flex;flex-direction:column;gap:10px}
+.demo-callouts{display:flex;flex-direction:column;gap:12px}
 .demo-callout{
-  display:flex;align-items:flex-start;gap:10px;
+  display:flex;align-items:flex-start;gap:12px;
   background:var(--surface);border:1px solid var(--ghost);
   border-left:3px solid var(--orange);
-  border-radius:8px;padding:11px 14px;
+  border-radius:10px;padding:14px 16px;
 }
 .demo-callout .ic{
-  width:24px;height:24px;border-radius:5px;
+  width:34px;height:34px;border-radius:8px;
   background:rgba(231,60,23,.12);color:var(--orange);
   display:flex;align-items:center;justify-content:center;
-  font-size:11px;flex-shrink:0;
+  font-size:15px;flex-shrink:0;
 }
 .demo-callout .body{flex:1;min-width:0}
 .demo-callout .body .l{
-  font-family:var(--mono);font-size:9px;font-weight:700;
-  letter-spacing:.08em;text-transform:uppercase;color:var(--orange);
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--orange);
 }
-.demo-callout .body .t{font-size:12px;color:var(--text);font-weight:600;margin-top:2px}
-.demo-callout .body .d{font-size:11px;color:var(--text-dim);margin-top:2px;line-height:1.4}
+.demo-callout .body .t{font-size:16px;color:var(--text);font-weight:700;margin-top:3px;line-height:1.2}
+.demo-callout .body .d{font-size:13px;color:var(--text-dim);margin-top:4px;line-height:1.4}
 
 @media(max-width:900px){.slide{padding:24px}}
 </style>
@@ -822,8 +973,75 @@ body{
             </div>
           </div>
         </div>
-        <p class="hero-quote">The documented workflow existed <span class="dim">on paper</span>.<br>The real workflow was <span class="accent">in the prompts</span>.</p>
-        <p class="hero-kicker">Updated the AI to match reality instead of expectation. <strong>Adoption up. Satisfaction up.</strong> &nbsp;&middot;&nbsp; There's no pageview for <em>"I'm confused about the process so I'm asking the chatbot instead."</em></p>
+
+        <!-- emergence bridge: the prompts above become traceable trails → company brain -->
+        <figure class="emergence" aria-label="The real-prompt detours above become timestamped, traceable interactions that aggregate into a shared company brain.">
+          <svg class="emergence-svg" viewBox="0 0 1000 150" preserveAspectRatio="xMidYMid meet">
+            <!-- left: three tilted 'personal doc' silos — invisible until now -->
+            <g transform="translate(36,30)">
+              <g transform="rotate(-6 36 12)">
+                <rect class="em-silo" x="0" y="0"  width="72" height="22" rx="3"/>
+                <line class="em-silo-line" x1="8" y1="7"  x2="52" y2="7"/>
+                <line class="em-silo-line" x1="8" y1="13" x2="40" y2="13"/>
+              </g>
+              <g transform="rotate(4 36 36)">
+                <rect class="em-silo" x="0" y="24" width="72" height="22" rx="3"/>
+                <line class="em-silo-line" x1="8" y1="31" x2="48" y2="31"/>
+                <line class="em-silo-line" x1="8" y1="37" x2="34" y2="37"/>
+              </g>
+              <g transform="rotate(-3 36 60)">
+                <rect class="em-silo" x="0" y="48" width="72" height="22" rx="3"/>
+                <line class="em-silo-line" x1="8" y1="55" x2="54" y2="55"/>
+                <line class="em-silo-line" x1="8" y1="61" x2="38" y2="61"/>
+              </g>
+            </g>
+
+            <!-- provenance trails: dashed converging paths with timestamped ticks -->
+            <g>
+              <path class="em-trail" d="M136,42  C360,42  620,80  870,80"/>
+              <path class="em-trail" d="M136,62  C380,62  640,80  870,80"/>
+              <path class="em-trail" d="M136,82  C380,82  640,80  870,80"/>
+              <path class="em-trail" d="M136,102 C360,102 620,80  870,80"/>
+              <path class="em-trail" d="M136,55  C300,55  500,100 870,80"/>
+
+              <g>
+                <circle class="em-tick-ring" cx="240" cy="44"  r="5"/>
+                <circle class="em-tick"      cx="240" cy="44"  r="2.2"/>
+                <circle class="em-tick-ring" cx="360" cy="60"  r="5"/>
+                <circle class="em-tick"      cx="360" cy="60"  r="2.2"/>
+                <circle class="em-tick-ring" cx="300" cy="86"  r="5"/>
+                <circle class="em-tick"      cx="300" cy="86"  r="2.2"/>
+                <circle class="em-tick-ring" cx="430" cy="96"  r="5"/>
+                <circle class="em-tick"      cx="430" cy="96"  r="2.2"/>
+                <circle class="em-tick-ring" cx="500" cy="74"  r="5"/>
+                <circle class="em-tick"      cx="500" cy="74"  r="2.2"/>
+                <circle class="em-tick-ring" cx="600" cy="82"  r="5"/>
+                <circle class="em-tick"      cx="600" cy="82"  r="2.2"/>
+                <circle class="em-tick-ring" cx="420" cy="48"  r="5"/>
+                <circle class="em-tick"      cx="420" cy="48"  r="2.2"/>
+                <circle class="em-tick-ring" cx="540" cy="108" r="5"/>
+                <circle class="em-tick"      cx="540" cy="108" r="2.2"/>
+                <circle class="em-tick-ring" cx="690" cy="74"  r="5"/>
+                <circle class="em-tick"      cx="690" cy="74"  r="2.2"/>
+              </g>
+            </g>
+
+            <!-- right: company brain (Aitana logo + pulsing aura) -->
+            <g>
+              <circle class="em-brain-ring r1" cx="890" cy="80"/>
+              <circle class="em-brain-ring r2" cx="890" cy="80"/>
+              <circle class="em-brain-ring r3" cx="890" cy="80"/>
+              <image href="images/aitana-brain.svg" x="820" y="10" width="140" height="140"/>
+            </g>
+
+            <!-- zone labels -->
+            <text class="em-label"     x="72"  y="142" text-anchor="middle">was: personal &middot; invisible</text>
+            <text class="em-label"     x="460" y="142" text-anchor="middle">now: every interaction &middot; traceable</text>
+            <text class="em-label hot" x="890" y="142" text-anchor="middle">company brain</text>
+          </svg>
+        </figure>
+
+        <p class="hero-kicker">Update the AI to match reality, not expectation &mdash; and every question since becomes a node of <strong>shared institutional memory</strong>.</p>
       </div>
     </section>
 
@@ -832,26 +1050,106 @@ body{
       <h1 class="slide-title">2.4 &middot; Analysing <span class="accent">Text at Scale</span></h1>
       <p class="slide-subtitle">How do you actually analyse thousands of prompts? Text, not numbers.</p>
       <div class="approaches-grid">
+
+        <!-- 01 · Embedding clustering — BigQuery chip → scatter with labels -->
         <div class="approach clustering">
           <div class="ap-num">01</div>
           <div class="ap-icon"><i class="fas fa-diagram-project"></i></div>
-          <div class="ap-title">Embedding clustering</div>
-          <div class="ap-desc">Vectorise prompts. Let similar questions find each other. The clusters become your taxonomy &mdash; discovered, not assumed.</div>
-          <div class="ap-analog">Analytics analogue: <strong>segmentation</strong></div>
+          <div class="ap-title">Embedding clusters</div>
+          <div class="ap-sample">
+            <div class="bq-chip">
+              <svg class="bq-logo" viewBox="0 0 32 32" aria-label="BigQuery">
+                <defs>
+                  <linearGradient id="bqGradTop" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#8AB4F8"/><stop offset="1" stop-color="#4285F4"/>
+                  </linearGradient>
+                  <linearGradient id="bqGradRight" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#4285F4"/><stop offset="1" stop-color="#1A73E8"/>
+                  </linearGradient>
+                  <linearGradient id="bqGradLeft" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#669DF6"/><stop offset="1" stop-color="#3367D6"/>
+                  </linearGradient>
+                </defs>
+                <polygon points="16,2 29,9.5 16,17 3,9.5" fill="url(#bqGradTop)"/>
+                <polygon points="29,9.5 29,22.5 16,30 16,17" fill="url(#bqGradRight)"/>
+                <polygon points="3,9.5 3,22.5 16,30 16,17" fill="url(#bqGradLeft)"/>
+                <circle cx="18" cy="19" r="3.2" fill="none" stroke="#ffffff" stroke-width="1.3" opacity=".9"/>
+                <line x1="20.2" y1="21.2" x2="23" y2="24" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" opacity=".9"/>
+              </svg>
+              <div class="bq-text">
+                <span class="bq-product">BigQuery</span>
+                <span class="bq-sub">ga4_prompts &rarr; embeddings</span>
+              </div>
+              <i class="fas fa-arrow-right bq-arrow"></i>
+            </div>
+            <svg class="ap-scatter" viewBox="0 0 240 120" preserveAspectRatio="xMidYMid meet">
+              <path class="clu-hull" d="M30,30 Q16,48 28,72 Q54,82 68,62 Q64,36 46,26 Z"/>
+              <path class="clu-hull" d="M104,18 Q86,34 94,58 Q114,72 138,62 Q150,40 132,22 Z"/>
+              <path class="clu-hull" d="M176,44 Q166,66 186,84 Q212,88 220,66 Q222,42 202,36 Z"/>
+              <circle class="clu-dot" cx="36" cy="38" r="3"/>
+              <circle class="clu-dot" cx="44" cy="54" r="3"/>
+              <circle class="clu-dot" cx="54" cy="44" r="3"/>
+              <circle class="clu-dot" cx="50" cy="66" r="3"/>
+              <circle class="clu-dot" cx="34" cy="58" r="3"/>
+              <circle class="clu-dot" cx="108" cy="30" r="3"/>
+              <circle class="clu-dot" cx="122" cy="42" r="3"/>
+              <circle class="clu-dot" cx="130" cy="54" r="3"/>
+              <circle class="clu-dot" cx="114" cy="58" r="3"/>
+              <circle class="clu-dot" cx="134" cy="34" r="3"/>
+              <circle class="clu-dot" cx="186" cy="52" r="3"/>
+              <circle class="clu-dot" cx="198" cy="66" r="3"/>
+              <circle class="clu-dot" cx="210" cy="58" r="3"/>
+              <circle class="clu-dot" cx="204" cy="74" r="3"/>
+              <circle class="clu-dot stray" cx="82" cy="80" r="2"/>
+              <circle class="clu-dot stray" cx="158" cy="28" r="2"/>
+              <text class="clu-lbl" x="48"  y="106" text-anchor="middle">"pricing"</text>
+              <text class="clu-lbl" x="116" y="106" text-anchor="middle">"how-to"</text>
+              <text class="clu-lbl" x="198" y="106" text-anchor="middle">"bugs"</text>
+            </svg>
+          </div>
+          <div class="ap-analog"><strong>= segmentation</strong></div>
         </div>
+
+        <!-- 02 · LLM-as-judge — sample prompt → three big tags -->
         <div class="approach judge">
           <div class="ap-num">02</div>
           <div class="ap-icon"><i class="fas fa-gavel"></i></div>
           <div class="ap-title">LLM-as-judge</div>
-          <div class="ap-desc">Use a model to categorise and score other outputs. Run it as a batch over the trace history. Cheap labelling at scale.</div>
-          <div class="ap-analog">Analytics analogue: <strong>custom dimensions</strong></div>
+          <div class="ap-sample">
+            <div class="ap-prompt">
+              <span class="ap-prompt-user"><i class="fas fa-user"></i></span>
+              <span class="ap-prompt-text">"third time I've asked &mdash; just give me the refund"</span>
+            </div>
+            <div class="ap-tags">
+              <span class="ap-tag"><span class="tk">intent</span><span class="tv">refund</span></span>
+              <span class="ap-tag"><span class="tk">sentiment</span><span class="tv neg">frustrated</span></span>
+              <span class="ap-tag"><span class="tk">resolved</span><span class="tv neg">no</span></span>
+            </div>
+          </div>
+          <div class="ap-analog"><strong>= custom dimensions</strong></div>
         </div>
+
+        <!-- 03 · Feedback loops — trace → 👎 → eval → deploy gain -->
         <div class="approach feedback">
           <div class="ap-num">03</div>
           <div class="ap-icon"><i class="fas fa-thumbs-up"></i></div>
           <div class="ap-title">Feedback loops</div>
-          <div class="ap-desc">Capture thumbs / ratings / corrections at the trace. Feed them back into evals so the next deploy is measurably better.</div>
-          <div class="ap-analog">Analytics analogue: <strong>conversion events</strong></div>
+          <div class="ap-sample">
+            <div class="ap-loop">
+              <div class="fb-step"><span class="fb-ico"><i class="fas fa-comment-dots"></i></span><span class="fb-l">trace</span></div>
+              <div class="fb-arrow"><i class="fas fa-arrow-right"></i></div>
+              <div class="fb-step"><span class="fb-ico neg"><i class="fas fa-thumbs-down"></i></span><span class="fb-l">rated</span></div>
+              <div class="fb-arrow"><i class="fas fa-arrow-right"></i></div>
+              <div class="fb-step"><span class="fb-ico"><i class="fas fa-flask"></i></span><span class="fb-l">eval</span></div>
+              <div class="fb-return"><i class="fas fa-rotate-left"></i></div>
+            </div>
+            <div class="ap-deploy">
+              <span class="dep-from"><strong>62%</strong> pass</span>
+              <i class="fas fa-arrow-right dep-arrow"></i>
+              <span class="dep-to"><strong>81%</strong> pass</span>
+            </div>
+          </div>
+          <div class="ap-analog"><strong>= conversion events</strong></div>
         </div>
       </div>
       <p class="text-at-scale-kicker">Sound familiar? It's <strong>funnels and segments</strong>. Just different raw material.</p>
@@ -862,41 +1160,63 @@ body{
       <h1 class="slide-title">2.5 &middot; <span class="accent">Langfuse</span> Demo</h1>
       <p class="slide-subtitle">Same analytics discipline — radically better data.</p>
       <div class="demo-stage">
-        <div class="trace-mock">
-          <div class="tm-head">
-            <span class="tm-title">trace &middot; multivac-conf-assistant</span>
-            <span class="tm-tag">LIVE</span>
+        <figure class="lf-gallery">
+          <div class="lf-stage">
+            <div class="lf-slide s1"><img src="images/langfuse-analytics.png"  alt="Langfuse fleet dashboard — traces, model costs, eval scores"/></div>
+            <div class="lf-slide s2"><img src="images/langfuse-session.png"    alt="Langfuse session view — multi-turn conversation with per-turn scores"/></div>
+            <div class="lf-slide s3"><img src="images/langfuse-trace.png"      alt="Langfuse single trace — nested retrieval, embedding, generation spans"/></div>
+            <div class="lf-slide s4"><img src="images/langfuse-ratings-tt.png" alt="Langfuse trace with LLM-as-judge eval scores"/></div>
+            <div class="lf-slide s5"><img src="images/langfuse-timelines.png"  alt="Langfuse Gantt-style span timeline showing parallel execution"/></div>
+            <div class="lf-dots">
+              <span class="lf-dot s1"></span>
+              <span class="lf-dot s2"></span>
+              <span class="lf-dot s3"></span>
+              <span class="lf-dot s4"></span>
+              <span class="lf-dot s5"></span>
+            </div>
           </div>
-          <div class="trace-row gen"><span class="t-name"><span class="t-icon"><i class="fas fa-comment"></i></span>session.start</span><span class="t-bar" style="--bar-x:0%;--bar-w:100%"></span><span class="t-ms">3.42s</span><span class="t-cost">$0.018</span></div>
-          <div class="trace-row gen nested"><span class="t-name"><span class="t-icon"><i class="fas fa-bolt"></i></span>generation.plan</span><span class="t-bar" style="--bar-x:2%;--bar-w:18%"></span><span class="t-ms">612ms</span><span class="t-cost">$0.003</span></div>
-          <div class="trace-row tool nested"><span class="t-name"><span class="t-icon"><i class="fas fa-wrench"></i></span>tool.search_programme</span><span class="t-bar" style="--bar-x:20%;--bar-w:14%"></span><span class="t-ms">480ms</span><span class="t-cost">&mdash;</span></div>
-          <div class="trace-row span nested deep"><span class="t-name"><span class="t-icon"><i class="fas fa-database"></i></span>span.bigquery</span><span class="t-bar" style="--bar-x:22%;--bar-w:10%"></span><span class="t-ms">340ms</span><span class="t-cost">&mdash;</span></div>
-          <div class="trace-row tool nested"><span class="t-name"><span class="t-icon"><i class="fas fa-wrench"></i></span>tool.fetch_speaker</span><span class="t-bar" style="--bar-x:34%;--bar-w:8%"></span><span class="t-ms">270ms</span><span class="t-cost">&mdash;</span></div>
-          <div class="trace-row gen nested"><span class="t-name"><span class="t-icon"><i class="fas fa-bolt"></i></span>generation.synthesise</span><span class="t-bar" style="--bar-x:42%;--bar-w:56%"></span><span class="t-ms">1.92s</span><span class="t-cost">$0.015</span></div>
-          <div class="tm-foot">
-            <span>tokens <strong>2,184</strong> in &middot; <strong>847</strong> out</span>
-            <span>cost <strong>$0.018</strong></span>
-            <span>latency <strong>3.42s</strong></span>
-            <span>model <strong>opus-4-6</strong></span>
+          <div class="lf-cap-stack">
+            <figcaption class="lf-cap s1">
+              <span class="lf-cap-k">01 · fleet</span>
+              <span class="lf-cap-t">Traces &middot; cost &middot; scores, in one place</span>
+              <span class="lf-cap-d">your GA4 home screen, for agents</span>
+            </figcaption>
+            <figcaption class="lf-cap s2">
+              <span class="lf-cap-k">02 · session</span>
+              <span class="lf-cap-t">Multi-turn conversation, end-to-end</span>
+              <span class="lf-cap-d">every turn scored</span>
+            </figcaption>
+            <figcaption class="lf-cap s3">
+              <span class="lf-cap-k">03 · trace</span>
+              <span class="lf-cap-t">One trace, opened up</span>
+              <span class="lf-cap-d">retrieval &rarr; embed &rarr; generate</span>
+            </figcaption>
+            <figcaption class="lf-cap s4 judge">
+              <span class="lf-cap-k">04 · judge</span>
+              <span class="lf-cap-t">LLM-as-judge scores attached</span>
+              <span class="lf-cap-d">satisfaction &middot; coherence &middot; fluency &middot; feedback</span>
+            </figcaption>
+            <figcaption class="lf-cap s5 new">
+              <span class="lf-cap-k">05 · timeline</span>
+              <span class="lf-cap-t">Every span, every parallel call</span>
+              <span class="lf-cap-d">execution shape, not just the outcome</span>
+            </figcaption>
           </div>
-        </div>
+        </figure>
+
         <div class="demo-side">
           <div class="demo-callouts">
             <div class="demo-callout">
-              <div class="ic"><i class="fas fa-link"></i></div>
-              <div class="body"><div class="l">Familiar</div><div class="t">Session &rarr; Trace</div><div class="d">One unit of user activity, top of the tree.</div></div>
+              <div class="ic"><i class="fas fa-gavel"></i></div>
+              <div class="body"><div class="l">From 2.4 &middot; now running</div><div class="t">Judge scores attached</div></div>
             </div>
             <div class="demo-callout">
-              <div class="ic"><i class="fas fa-eye"></i></div>
-              <div class="body"><div class="l">Familiar</div><div class="t">Pageview &rarr; Generation</div><div class="d">The atomic "thing happened" event you reason about.</div></div>
-            </div>
-            <div class="demo-callout">
-              <div class="ic"><i class="fas fa-bullseye"></i></div>
-              <div class="body"><div class="l">Familiar</div><div class="t">Event &rarr; Tool call / Span</div><div class="d">Nested instead of flat &mdash; that's the upgrade.</div></div>
+              <div class="ic"><i class="fas fa-thumbs-up"></i></div>
+              <div class="body"><div class="l">Human signal</div><div class="t">Feedback on the trace</div></div>
             </div>
             <div class="demo-callout" style="border-left-color:var(--teal)">
-              <div class="ic" style="background:rgba(29,166,154,.12);color:var(--teal)"><i class="fas fa-sparkles"></i></div>
-              <div class="body"><div class="l" style="color:var(--teal)">New</div><div class="t">Cost &middot; latency &middot; the actual conversation</div><div class="d">Things you've never had in GA4. Per-step.</div></div>
+              <div class="ic" style="background:rgba(29,166,154,.12);color:var(--teal)"><i class="fas fa-bars-staggered"></i></div>
+              <div class="body"><div class="l" style="color:var(--teal)">New vs GA4</div><div class="t">See parallelism &amp; latency shape</div></div>
             </div>
           </div>
         </div>

@@ -243,9 +243,10 @@ body{
   transition:opacity .45s ease, transform .55s cubic-bezier(.2,.9,.3,1.4);
 }
 .slide[data-current-step="5"] .popup{opacity:1;transform:translateY(0)}
-.journey-map .popup-book {transition-delay:.05s}
-.journey-map .popup-gar  {transition-delay:.12s}
-.journey-map .popup-gde  {transition-delay:.18s}
+.journey-map .popup-seo  {transition-delay:0s}
+.journey-map .popup-book {transition-delay:.07s}
+.journey-map .popup-gar  {transition-delay:.14s}
+.journey-map .popup-gde  {transition-delay:.21s}
 .journey-map .popup-ai   {transition-delay:.31s}
 
 /* ─── Bottom bar ─── */
@@ -337,6 +338,12 @@ body{
           </g>
 
           <!-- Popup cards (revealed at step 5) -->
+          <g class="popup popup-seo">
+            <path class="popup-connector" d="M 180 710 L 180 760"/>
+            <rect class="popup-bg" x="95" y="560" width="170" height="150" rx="8"/>
+            <image href="../images/case-studies/ga-effect-screenshot.png" x="115" y="570" width="130" height="130" preserveAspectRatio="xMidYMid meet"/>
+          </g>
+
           <g class="popup popup-book">
             <path class="popup-connector" d="M 370 710 L 370 760"/>
             <rect class="popup-bg" x="285" y="560" width="170" height="150" rx="8"/>

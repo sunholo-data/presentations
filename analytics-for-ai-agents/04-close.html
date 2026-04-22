@@ -98,19 +98,65 @@ body{
   background:rgba(231,60,23,.08);
 }
 
-.todo-card{
-  background:var(--surface);border:1px dashed var(--orange-dim);
-  border-radius:12px;padding:20px 24px;max-width:720px;width:100%;
-  font-size:13px;line-height:1.6;color:var(--text-dim);
-  font-family:var(--mono);
+.takeaway-grid{
+  display:flex;gap:20px;align-items:stretch;justify-content:center;
+  width:100%;max-width:960px;
 }
-.todo-card .todo-label{
-  display:inline-block;font-size:10px;font-weight:700;
-  color:var(--orange);letter-spacing:.1em;text-transform:uppercase;
-  margin-bottom:8px;
+.takeaway-card{
+  flex:1;min-width:0;
+  display:flex;flex-direction:column;gap:14px;
+  padding:28px 24px;border-radius:16px;
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  opacity:0;transform:translateY(24px);
 }
-.todo-card ul{padding-left:18px;margin-top:6px}
-.todo-card li{margin:3px 0}
+.slide.active .takeaway-card:nth-child(1){animation:fadeSlideUp .55s ease .1s both}
+.slide.active .takeaway-card:nth-child(2){animation:fadeSlideUp .55s ease .35s both}
+.slide.active .takeaway-card:nth-child(3){animation:fadeSlideUp .55s ease .6s both}
+.takeaway-card.accent-orange{border-top:3px solid var(--orange);background:rgba(231,60,23,.06)}
+.takeaway-card.accent-indigo{border-top:3px solid var(--indigo);background:rgba(99,102,241,.06)}
+.takeaway-card.accent-teal{border-top:3px solid var(--teal);background:rgba(29,166,154,.06)}
+[data-theme="light"] .takeaway-card.accent-orange{background:rgba(212,48,15,.05)}
+[data-theme="light"] .takeaway-card.accent-indigo{background:rgba(79,70,229,.05)}
+[data-theme="light"] .takeaway-card.accent-teal{background:rgba(22,128,119,.05)}
+.takeaway-num{
+  font-family:var(--mono);font-size:clamp(32px,5cqi,52px);font-weight:700;
+  line-height:1;opacity:.18;
+}
+.takeaway-card.accent-orange .takeaway-num{color:var(--orange)}
+.takeaway-card.accent-indigo .takeaway-num{color:var(--indigo)}
+.takeaway-card.accent-teal .takeaway-num{color:var(--teal)}
+.takeaway-headline{
+  font-size:clamp(15px,2cqi,22px);font-weight:800;
+  line-height:1.2;letter-spacing:-.01em;
+}
+.takeaway-card.accent-orange .takeaway-headline{color:var(--orange)}
+.takeaway-card.accent-indigo .takeaway-headline{color:var(--indigo)}
+.takeaway-card.accent-teal .takeaway-headline{color:var(--teal)}
+.takeaway-sub{
+  font-size:clamp(12px,1.5cqi,16px);color:var(--text-dim);
+  line-height:1.5;
+}
+
+.closing-quote{
+  max-width:800px;text-align:center;
+  font-size:clamp(15px,2.1cqi,24px);font-style:italic;
+  line-height:1.55;color:var(--text);
+  padding:28px 32px;border-radius:12px;
+  background:rgba(231,60,23,.06);
+  border-left:4px solid var(--orange);
+  text-align:left;
+  position:relative;
+}
+.closing-quote::before{
+  content:'\201C';
+  font-size:clamp(48px,8cqi,96px);
+  color:var(--orange);opacity:.25;
+  line-height:1;
+  position:absolute;top:8px;left:16px;
+  font-style:normal;
+}
+.closing-quote em{color:var(--orange);font-style:normal;font-weight:700}
 
 .thanks-card{
   display:flex;gap:18px;align-items:center;justify-content:center;flex-wrap:wrap;
@@ -164,8 +210,8 @@ body{
   from{opacity:0;transform:translateY(20px)}
   to{opacity:1;transform:translateY(0)}
 }
-.slide.active .todo-card{animation:fadeSlideUp .5s ease .15s both}
 .slide.active .slide-tag{animation:fadeSlideUp .4s ease .05s both}
+.slide.active .closing-quote{animation:fadeSlideUp .6s ease .2s both}
 
 @media(max-width:900px){.slide{padding:24px}}
 </style>
@@ -177,59 +223,35 @@ body{
   <div class="slides-viewport">
     <div class="slides-stage">
 
-    <!-- ═══════════ Slide 1: 4.1 Live Agent Demo ═══════════ -->
+    <!-- ═══════════ Slide 1: 4.1 Three Things I Learned ═══════════ -->
     <section class="slide active" data-slide="1">
-      <span class="slide-tag"><i class="fas fa-bolt"></i> Close &middot; 4 min</span>
-      <h1 class="slide-title">4.1 &middot; Conference <span class="accent">Assistant</span></h1>
-      <p class="slide-subtitle">Watch the trace appear in real time.</p>
-      <div class="todo-card">
-        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
-        Live agent demo wiring:
-        <ul>
-          <li>Conference assistant — knows programme, speakers, sessions</li>
-          <li>Type a question about another talk</li>
-          <li>Show Langfuse trace appearing live: tool call → generation → tokens → latency</li>
-          <li>Backup: pre-recorded video</li>
-          <li>Pre-test thoroughly. The trace is the star.</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- ═══════════ Slide 2: 4.2 The Takeaways ═══════════ -->
-    <section class="slide" data-slide="2">
-      <h1 class="slide-title">4.2 &middot; Three Things <span class="accent">I Learned</span></h1>
-      <div class="todo-card">
-        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
-        Three takeaways revealing one at a time:
-        <ul>
-          <li>1. Prompts reveal intent. I started capturing them.</li>
-          <li>2. The data showed reality, not assumptions. I started analysing it.</li>
-          <li>3. The web is changing. I'm evolving with it.</li>
-        </ul>
-        Personal framing — "I learned", not "you should". Let each one land.
-      </div>
-    </section>
-
-    <!-- ═══════════ Slide 3: 4.3 The Invitation ═══════════ -->
-    <section class="slide" data-slide="3">
-      <h1 class="slide-title">Don't give that <span class="accent">gold</span> away</h1>
-      <p class="slide-subtitle">Mark Edmondson &middot; sunholo.com &middot; Multivac</p>
-      <div class="thanks-card">
-        <img src="images/blc-logo.jpg" alt="Brand Leadership Community">
-        <div class="thanks-text">
-          <strong>Thanks to Analytics.dev</strong>
-          Brand Leadership Community &middot; Copenhagen &middot; 29 April 2026
+      <span class="slide-tag"><i class="fas fa-lightbulb"></i> Close</span>
+      <h1 class="slide-title">Three Things <span class="accent">I Learned</span></h1>
+      <div class="takeaway-grid">
+        <div class="takeaway-card accent-orange">
+          <div class="takeaway-num">01</div>
+          <div class="takeaway-headline">Prompts reveal intent.</div>
+          <div class="takeaway-sub">I started capturing them.</div>
+        </div>
+        <div class="takeaway-card accent-indigo">
+          <div class="takeaway-num">02</div>
+          <div class="takeaway-headline">The voice of the customer is louder in prompts than clicks and impressions.</div>
+          <div class="takeaway-sub">I started analysing it.</div>
+        </div>
+        <div class="takeaway-card accent-teal">
+          <div class="takeaway-num">03</div>
+          <div class="takeaway-headline">Embrace the new protocols to take advantage of the new ways AI will shape the web.</div>
+          <div class="takeaway-sub">I'm evolving with it.</div>
         </div>
       </div>
-      <div class="todo-card">
-        <div class="todo-label"><i class="fas fa-pen-to-square"></i> TODO</div>
-        Closing slide:
-        <ul>
-          <li>Name + sunholo.com + Multivac logo</li>
-          <li>QR code linking to sunholo.com or talk follow-up</li>
-          <li>Closing line: "The richest analytics data in your organisation might not be in your website tags anymore. It might be in the conversations your users are having with AI. Don't give that gold away."</li>
-          <li>Soft sell — invitation, not pitch. Pause. Let them applaud.</li>
-        </ul>
+    </section>
+
+    <!-- ═══════════ Slide 2: 4.2 Don't give that gold away ═══════════ -->
+    <section class="slide" data-slide="2">
+      <h1 class="slide-title">Don't give that <span class="accent">gold</span> away</h1>
+      <div class="closing-quote">
+        The richest analytics data in your organisation might not be in your website tags anymore.
+        It might be in the conversations your users are having with AI.
       </div>
     </section>
 
