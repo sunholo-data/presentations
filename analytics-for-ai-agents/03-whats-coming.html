@@ -187,55 +187,320 @@ body{
 .src-line a{color:var(--text-dim);text-decoration:underline;text-decoration-color:var(--ghost)}
 .src-line a:hover{color:var(--orange);text-decoration-color:var(--orange)}
 
-/* ════════════ 3.1 Web evolved in eras ════════════ */
-.eras-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
-  width:100%;max-width:1180px;
-}
-.era{
-  background:var(--surface);border:1px solid var(--ghost);
-  border-radius:12px;padding:18px 18px 16px;
-  display:flex;flex-direction:column;gap:8px;
+/* ════════════ 3.1 Web evolved in eras — DB-access flow ════════════ */
+.eras-flow{
   position:relative;
-  border-top:3px solid var(--text-dim);
+  width:100%;
+  max-width:1180px;
+  display:flex;
+  flex-direction:column;
 }
-.era.now{
-  border-top-color:var(--orange);
-  box-shadow:0 0 50px -20px var(--orange-glow);
+
+/* Vertical timeline spine — passes through the year stamps */
+.eras-flow::before{
+  content:'';
+  position:absolute;
+  left:30px;
+  top:38px;
+  bottom:38px;
+  width:1px;
+  background:linear-gradient(
+    to bottom,
+    rgba(255,255,255,.16) 0%,
+    rgba(255,255,255,.18) 30%,
+    rgba(231,60,23,.28) 65%,
+    var(--orange) 100%
+  );
+  z-index:0;
 }
-.era .e-num{
-  font-family:var(--mono);font-size:9px;font-weight:700;
-  letter-spacing:.1em;color:var(--text-dim);
+[data-theme="light"] .eras-flow::before{
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,.18) 0%,
+    rgba(0,0,0,.20) 30%,
+    rgba(212,48,15,.30) 65%,
+    var(--orange) 100%
+  );
 }
-.era.now .e-num{color:var(--orange)}
-.era .e-name{
-  font-size:18px;font-weight:800;color:var(--text);
-  line-height:1.2;
+
+.era-row{
+  display:grid;
+  grid-template-columns:
+    60px 180px 64px 72px 452px 72px 72px 110px;
+  align-items:center;
+  gap:14px;
+  padding:14px 0;
+  position:relative;
+  z-index:1;
+  opacity:0;
+  animation:row-fade .55s ease-out forwards;
+  animation-delay:calc(var(--row-i,0) * 110ms + 80ms);
 }
-.era .e-verb{
-  font-family:var(--mono);font-size:10px;font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;
+.era-row.now{ margin-top:34px; }
+@keyframes row-fade{
+  from{opacity:0;transform:translateY(8px)}
+  to  {opacity:1;transform:translateY(0)}
+}
+
+/* Year stamp on the spine */
+.er-stamp{
+  width:54px;height:54px;border-radius:8px;
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);
+  font-size:13px;font-weight:800;letter-spacing:.02em;
   color:var(--text-dim);
-  padding:4px 8px;border-radius:10px;
+  position:relative;z-index:2;
+}
+.era-row:nth-child(2) .er-stamp{color:var(--text)}
+.era-row:nth-child(3) .er-stamp{
+  color:var(--text);
+  border-color:rgba(231,60,23,.18);
+}
+.era-row.now .er-stamp{
+  background:rgba(231,60,23,.12);
+  border-color:var(--orange);
+  color:var(--orange);
+  box-shadow:0 0 0 1px var(--orange),0 0 28px -4px var(--orange-glow);
+}
+
+/* Era name block */
+.er-name-block{
+  display:flex;flex-direction:column;gap:3px;line-height:1.05;
+}
+.er-num{
+  font-family:var(--mono);
+  font-size:10px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-dim);
+}
+.era-row.now .er-num{color:var(--orange)}
+.er-name{
+  font-size:19px;font-weight:800;color:var(--text);
+  letter-spacing:-.005em;
+}
+
+/* Actor avatar */
+.er-actor{
+  width:54px;height:54px;border-radius:14px;
   background:var(--surface-hi);
-  align-self:flex-start;
+  border:1px solid var(--ghost);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-dim);font-size:22px;
 }
-.era.now .e-verb{color:var(--orange);background:rgba(231,60,23,.1)}
-.era .e-examples{
-  font-size:11px;color:var(--text-dim);line-height:1.45;
+.era-row.now .er-actor{
+  background:rgba(231,60,23,.12);
+  border-color:rgba(231,60,23,.4);
+  color:var(--orange);
 }
-.era .e-role{
-  font-size:11px;color:var(--text);
-  font-weight:600;line-height:1.4;
-  padding-top:8px;margin-top:auto;
-  border-top:1px dashed var(--ghost);
+
+/* Connector cell */
+.er-conn{
+  position:relative;height:54px;
+  display:flex;align-items:center;justify-content:center;
 }
-.era.now .e-role{color:var(--orange)}
+.er-conn::before{
+  content:'';position:absolute;left:0;right:8px;
+  top:50%;height:1px;
+  background:var(--text-dim);opacity:.45;
+}
+.er-conn::after{
+  content:'';position:absolute;right:0;top:50%;
+  width:0;height:0;
+  border-left:8px solid var(--text-dim);
+  border-top:5px solid transparent;
+  border-bottom:5px solid transparent;
+  transform:translateY(-50%);opacity:.6;
+}
+.er-conn.bidi::before{left:8px}
+.er-conn.bidi .er-conn-back{
+  position:absolute;left:0;top:50%;
+  width:0;height:0;
+  border-right:8px solid var(--text-dim);
+  border-top:5px solid transparent;
+  border-bottom:5px solid transparent;
+  transform:translateY(-50%);opacity:.6;
+}
+.er-conn-tag{
+  position:absolute;top:6px;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);
+  font-size:9px;font-weight:800;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-dim);
+  background:var(--bg);
+  padding:1px 6px;white-space:nowrap;z-index:1;
+}
+.era-row.now .er-conn{opacity:.32}
+.era-row.now .er-conn-tag{
+  color:var(--orange);
+  font-size:11px;letter-spacing:.06em;
+  font-family:var(--sans);font-weight:900;
+}
+
+/* Layer mockup card */
+.er-layer{
+  position:relative;
+  background:linear-gradient(180deg, rgba(255,255,255,.025), transparent 80%);
+  border:1px solid var(--ghost);
+  border-radius:10px;
+  padding:8px 14px;height:78px;
+  display:flex;align-items:center;gap:14px;
+  overflow:hidden;
+}
+[data-theme="light"] .er-layer{
+  background:linear-gradient(180deg, rgba(0,0,0,.025), transparent 80%);
+}
+.er-mockup{width:144px;height:60px;flex-shrink:0}
+.er-mockup .mk-frame{
+  fill:var(--surface-hi);
+  stroke:var(--text-dim);stroke-width:.75;opacity:.7;
+}
+.er-mockup .mk-bar{fill:var(--text-dim);opacity:.32}
+.er-mockup .mk-line{
+  stroke:var(--text-dim);stroke-width:1.2;
+  stroke-linecap:round;opacity:.55;
+}
+.er-mockup .mk-input{
+  fill:var(--bg);
+  stroke:var(--text-dim);stroke-width:.75;opacity:.7;
+}
+.er-mockup .mk-button{fill:var(--text-dim);opacity:.65}
+.er-mockup .mk-dot{fill:var(--text-dim);opacity:.5}
+.er-layer .l-text{display:flex;flex-direction:column;gap:3px;min-width:0}
+.er-layer .l-name{
+  font-size:15px;font-weight:700;color:var(--text);line-height:1.15;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.er-layer .l-sub{
+  font-family:var(--mono);
+  font-size:10.5px;color:var(--text-dim);letter-spacing:.04em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* Era 4 layer: ghost / desaturated */
+.era-row.now .er-layer{
+  border:1px dashed rgba(231,60,23,.32);
+  background:repeating-linear-gradient(
+    -45deg,
+    transparent 0,
+    transparent 6px,
+    rgba(231,60,23,.045) 6px,
+    rgba(231,60,23,.045) 7px
+  );
+  opacity:.55;
+}
+.era-row.now .er-layer .l-name{
+  text-decoration:line-through;
+  text-decoration-color:rgba(231,60,23,.7);
+  text-decoration-thickness:1.5px;
+}
+.era-row.now .er-layer .er-mockup{opacity:.4}
+
+/* DB icon */
+.er-db{
+  width:64px;height:64px;border-radius:14px;
+  background:rgba(29,166,154,.08);
+  border:1px solid rgba(29,166,154,.3);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--teal);font-size:25px;
+  position:relative;
+}
+.era-row.now .er-db{
+  background:rgba(231,60,23,.14);
+  border-color:rgba(231,60,23,.5);
+  color:var(--orange);
+}
+.era-row.now .er-db::before,
+.era-row.now .er-db::after{
+  content:'';position:absolute;inset:0;
+  border-radius:14px;
+  border:1.5px solid var(--orange);
+  opacity:0;
+  animation:db-pulse 2.6s ease-out infinite;
+}
+.era-row.now .er-db::after{animation-delay:1.3s}
+@keyframes db-pulse{
+  0%   {opacity:.65;transform:scale(1)}
+  100% {opacity:0;transform:scale(1.55)}
+}
+
+/* Verb chip */
+.er-verb{
+  font-family:var(--mono);
+  font-size:11.5px;font-weight:800;
+  letter-spacing:.18em;text-transform:uppercase;
+  text-align:center;
+  padding:11px 0;border-radius:6px;
+  background:var(--surface-hi);
+  color:var(--text-dim);
+  border:1px solid var(--ghost);
+}
+.era-row.now .er-verb{
+  background:var(--orange);color:#fff;
+  border-color:var(--orange);
+  box-shadow:0 6px 22px -8px var(--orange-glow);
+  letter-spacing:.22em;
+}
+
+/* Bypass arc — Era 4 climax */
+.bypass-arc{
+  position:absolute;
+  top:-26px;left:0;right:0;height:90px;
+  pointer-events:none;z-index:5;
+}
+.bypass-arc svg{width:100%;height:100%;overflow:visible}
+.arc-path{
+  fill:none;stroke:var(--orange);
+  stroke-width:2.5;stroke-linecap:round;
+  stroke-dasharray:8 6;
+  filter:drop-shadow(0 0 8px var(--orange-glow));
+  animation:arc-flow 2.6s linear infinite;
+}
+@keyframes arc-flow{to{stroke-dashoffset:-28}}
+.arc-tag-bg{
+  fill:var(--bg);stroke:var(--orange);stroke-width:1.25;
+}
+.arc-tag-text{
+  font-family:'JetBrains Mono', monospace;
+  font-size:13px;font-weight:800;
+  fill:var(--orange);letter-spacing:.18em;
+}
+.arc-head{
+  fill:var(--orange);
+  filter:drop-shadow(0 0 4px var(--orange-glow));
+}
+
+/* Kicker — three pill-style clauses */
 .eras-kicker{
-  text-align:center;font-size:14px;color:var(--text-dim);
-  font-style:italic;line-height:1.55;max-width:880px;
+  display:flex;flex-wrap:wrap;
+  align-items:center;justify-content:center;
+  gap:10px;margin-top:10px;
+  font-style:normal;max-width:none;text-align:center;
 }
-.eras-kicker strong{color:var(--text);font-style:normal}
+.kicker-clause{
+  padding:8px 14px;border-radius:6px;
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  color:var(--text-dim);
+  font-family:var(--mono);
+  font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.12em;
+}
+.kicker-clause.mid{color:var(--text)}
+.kicker-clause.now{
+  background:var(--orange);color:#fff;
+  border-color:var(--orange);
+  font-family:var(--sans);
+  font-size:15px;font-weight:800;
+  text-transform:none;letter-spacing:0;
+  box-shadow:0 6px 22px -8px var(--orange-glow);
+}
+.kicker-arrow{
+  font-family:var(--mono);
+  color:var(--text-dim);
+  font-size:14px;font-weight:700;opacity:.6;
+}
 
 /* ════════════ 3.2 Protocols / the bypass ════════════ */
 .protocols-stage{
@@ -582,38 +847,171 @@ body{
     <!-- ═══════════ Slide 2: 3.1 The Web Evolved In Eras ═══════════ -->
     <section class="slide" data-slide="2">
       <h1 class="slide-title">3.1 &middot; The web evolved in <span class="accent">eras</span></h1>
-      <p class="slide-subtitle">Each era added a verb. We're at the start of a fourth.</p>
-      <div class="eras-grid">
-        <div class="era">
-          <div class="e-num">Era 1 &middot; 1991</div>
-          <div class="e-name">Web 1.0</div>
-          <div class="e-verb">Read</div>
-          <div class="e-examples">Wikipedia &middot; IMDb &middot; static sites &middot; blogs</div>
-          <div class="e-role">Humans browse documents</div>
+      <p class="slide-subtitle">What changed isn't the data &mdash; it's the path to it.</p>
+
+      <div class="eras-flow">
+
+        <!-- Era 1 — Web 1.0 -->
+        <div class="era-row" style="--row-i:0">
+          <div class="er-stamp">1991</div>
+          <div class="er-name-block">
+            <span class="er-num">Era 01</span>
+            <span class="er-name">Web 1.0</span>
+          </div>
+          <div class="er-actor"><i class="fas fa-user"></i></div>
+          <div class="er-conn">
+            <span class="er-conn-tag">GET</span>
+          </div>
+          <div class="er-layer">
+            <svg class="er-mockup" viewBox="0 0 144 60" aria-hidden="true">
+              <rect class="mk-frame" x="2" y="2" width="140" height="56" rx="3"/>
+              <rect class="mk-bar"   x="2" y="2" width="140" height="10" rx="3"/>
+              <circle class="mk-dot" cx="9"  cy="7" r="1.5"/>
+              <circle class="mk-dot" cx="14" cy="7" r="1.5"/>
+              <circle class="mk-dot" cx="19" cy="7" r="1.5"/>
+              <line class="mk-line" x1="10" y1="22" x2="125" y2="22"/>
+              <line class="mk-line" x1="10" y1="32" x2="105" y2="32"/>
+              <line class="mk-line" x1="10" y1="42" x2="118" y2="42"/>
+              <line class="mk-line" x1="10" y1="52" x2="78"  y2="52"/>
+            </svg>
+            <div class="l-text">
+              <div class="l-name">Static HTML</div>
+              <div class="l-sub">read-only documents</div>
+            </div>
+          </div>
+          <div class="er-conn">
+            <span class="er-conn-tag">SQL</span>
+          </div>
+          <div class="er-db"><i class="fas fa-database"></i></div>
+          <div class="er-verb">Read</div>
         </div>
-        <div class="era">
-          <div class="e-num">Era 2 &middot; 2004</div>
-          <div class="e-name">Web 2.0</div>
-          <div class="e-verb">Read / Write</div>
-          <div class="e-examples">Facebook &middot; YouTube &middot; Twitter &middot; Reddit</div>
-          <div class="e-role">Humans contribute content</div>
+
+        <!-- Era 2 — Web 2.0 -->
+        <div class="era-row" style="--row-i:1">
+          <div class="er-stamp">2004</div>
+          <div class="er-name-block">
+            <span class="er-num">Era 02</span>
+            <span class="er-name">Web 2.0</span>
+          </div>
+          <div class="er-actor"><i class="fas fa-user"></i></div>
+          <div class="er-conn bidi">
+            <span class="er-conn-back"></span>
+            <span class="er-conn-tag">POST</span>
+          </div>
+          <div class="er-layer">
+            <svg class="er-mockup" viewBox="0 0 144 60" aria-hidden="true">
+              <rect class="mk-frame" x="2" y="2" width="140" height="56" rx="3"/>
+              <rect class="mk-bar"   x="2" y="2" width="140" height="10" rx="3"/>
+              <circle class="mk-dot" cx="9"  cy="7" r="1.5"/>
+              <circle class="mk-dot" cx="14" cy="7" r="1.5"/>
+              <circle class="mk-dot" cx="19" cy="7" r="1.5"/>
+              <rect class="mk-input"  x="10" y="18" width="124" height="11" rx="2"/>
+              <rect class="mk-input"  x="10" y="32" width="124" height="11" rx="2"/>
+              <rect class="mk-button" x="96" y="47" width="38"  height="9"  rx="2"/>
+            </svg>
+            <div class="l-text">
+              <div class="l-name">HTML + forms</div>
+              <div class="l-sub">pretty UIs to read &amp; write</div>
+            </div>
+          </div>
+          <div class="er-conn bidi">
+            <span class="er-conn-back"></span>
+            <span class="er-conn-tag">SQL</span>
+          </div>
+          <div class="er-db"><i class="fas fa-database"></i></div>
+          <div class="er-verb">Read · Write</div>
         </div>
-        <div class="era">
-          <div class="e-num">Era 3 &middot; 2010s</div>
-          <div class="e-name">Cloud / SaaS</div>
-          <div class="e-verb">Share</div>
-          <div class="e-examples">Google Docs &middot; Slack &middot; Notion &middot; Figma</div>
-          <div class="e-role">Humans collaborate in portals</div>
+
+        <!-- Era 3 — Cloud / SaaS -->
+        <div class="era-row" style="--row-i:2">
+          <div class="er-stamp">2010s</div>
+          <div class="er-name-block">
+            <span class="er-num">Era 03</span>
+            <span class="er-name">Cloud / SaaS</span>
+          </div>
+          <div class="er-actor"><i class="fas fa-users"></i></div>
+          <div class="er-conn bidi">
+            <span class="er-conn-back"></span>
+            <span class="er-conn-tag">REST</span>
+          </div>
+          <div class="er-layer">
+            <svg class="er-mockup" viewBox="0 0 144 60" aria-hidden="true">
+              <rect class="mk-frame" x="2"  y="2" width="140" height="56" rx="3"/>
+              <rect class="mk-bar"   x="2"  y="2" width="140" height="9"  rx="3"/>
+              <rect class="mk-input" x="6"  y="14" width="32" height="42" rx="2"/>
+              <line class="mk-line"  x1="11" y1="22" x2="32" y2="22"/>
+              <line class="mk-line"  x1="11" y1="30" x2="29" y2="30"/>
+              <line class="mk-line"  x1="11" y1="38" x2="33" y2="38"/>
+              <line class="mk-line"  x1="11" y1="46" x2="27" y2="46"/>
+              <rect class="mk-input" x="42" y="14" width="64" height="24" rx="2"/>
+              <rect class="mk-input" x="42" y="42" width="64" height="14" rx="2"/>
+              <rect class="mk-input" x="110" y="14" width="28" height="42" rx="2"/>
+              <circle class="mk-button" cx="135" cy="6" r="2"/>
+              <circle class="mk-button" cx="129" cy="6" r="2"/>
+            </svg>
+            <div class="l-text">
+              <div class="l-name">SaaS portals</div>
+              <div class="l-sub">multi-tenant collaboration</div>
+            </div>
+          </div>
+          <div class="er-conn bidi">
+            <span class="er-conn-back"></span>
+            <span class="er-conn-tag">API</span>
+          </div>
+          <div class="er-db"><i class="fas fa-database"></i></div>
+          <div class="er-verb">Share</div>
         </div>
-        <div class="era now">
-          <div class="e-num">Era 4 &middot; 2025 &rarr;</div>
-          <div class="e-name">Web for Agents</div>
-          <div class="e-verb">Transact</div>
-          <div class="e-examples">MCP &middot; A2A &middot; AG-UI &middot; x402 &middot; AP2</div>
-          <div class="e-role">Agents call tools and pay for resources</div>
+
+        <!-- Era 4 — Web for Agents (now) -->
+        <div class="era-row now" style="--row-i:3">
+          <div class="er-stamp">2025</div>
+          <div class="er-name-block">
+            <span class="er-num">Era 04 &middot; now</span>
+            <span class="er-name">Web for Agents</span>
+          </div>
+          <div class="er-actor"><i class="fas fa-robot"></i></div>
+          <div class="er-conn">
+            <span class="er-conn-tag">&times;</span>
+          </div>
+          <div class="er-layer">
+            <svg class="er-mockup" viewBox="0 0 144 60" aria-hidden="true">
+              <rect class="mk-frame" x="2" y="2" width="140" height="56" rx="3" stroke-dasharray="3 2"/>
+              <rect class="mk-bar"   x="2" y="2" width="140" height="10" rx="3"/>
+              <rect class="mk-input" x="10" y="18" width="124" height="11" rx="2" stroke-dasharray="2 2"/>
+              <rect class="mk-input" x="10" y="32" width="124" height="11" rx="2" stroke-dasharray="2 2"/>
+              <rect class="mk-button" x="96" y="47" width="38" height="9" rx="2"/>
+            </svg>
+            <div class="l-text">
+              <div class="l-name">HTML</div>
+              <div class="l-sub">bypassed</div>
+            </div>
+          </div>
+          <div class="er-conn">
+            <span class="er-conn-tag">&times;</span>
+          </div>
+          <div class="er-db"><i class="fas fa-database"></i></div>
+          <div class="er-verb">Transact</div>
+
+          <!-- THE BYPASS ARC -->
+          <div class="bypass-arc" aria-hidden="true">
+            <svg viewBox="0 0 1000 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+              <path class="arc-path" d="M 254,78 C 280,-12 820,-12 864,78"/>
+              <polygon class="arc-head" points="852,68 872,78 852,88"/>
+              <rect class="arc-tag-bg" x="380" y="0" width="260" height="24" rx="4"/>
+              <text class="arc-tag-text" x="510" y="17" text-anchor="middle">MCP &middot; APIs &middot; A2A</text>
+            </svg>
+          </div>
         </div>
+
       </div>
-      <p class="eras-kicker">Each era didn't replace the last &mdash; it <strong>stratified on top</strong>. The same is happening now: agents are getting their own layer.</p>
+
+      <p class="eras-kicker">
+        <span class="kicker-clause">The database stayed</span>
+        <span class="kicker-arrow">&rarr;</span>
+        <span class="kicker-clause mid">The wrapper changed</span>
+        <span class="kicker-arrow">&rarr;</span>
+        <span class="kicker-clause now">Agents skip the wrapper</span>
+      </p>
     </section>
 
     <!-- ═══════════ Slide 3: 3.2 Agents Need Their Own Protocols ═══════════ -->

@@ -183,7 +183,7 @@ body{
    Stage-fit layout: transform-stage flex:1's into the leftover stage
    height after title/subtitle, dumky-frame flex:1's inside that, and the
    SVG chart flex:1's inside the frame so it shrinks to whatever's left
-   after dumky-title, dumky-source, and the bets-row claim their space.
+   after dumky-title, dumky-source, and the google-note claim their space.
    No vh / no calc / no cqb caps — flex math handles sizing. */
 .transform-stage{
   display:flex;flex-direction:column;align-items:center;gap:10px;
@@ -219,49 +219,25 @@ body{
 .dumky-source a{color:var(--orange);text-decoration:none}
 .dumky-source a:hover{text-decoration:underline}
 
-.bets-row{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:10px;width:100%;
-  flex-shrink:0;
-}
-.bet-card{
-  display:flex;align-items:flex-start;gap:12px;
-  padding:11px 16px;border-radius:12px;
+.google-note{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 16px;border-radius:10px;
   background:var(--surface);
-  opacity:0;animation:fadeSlideUp .55s ease forwards;
-}
-.bet-card.wave{
-  border:1px solid var(--orange-dim);border-left:4px solid var(--orange);
-  animation-delay:.45s;
-}
-.bet-card.google{
   border:1px solid var(--teal-dim);border-left:4px solid var(--teal);
-  animation-delay:.6s;
+  font-size:12px;line-height:1.45;color:var(--text);
+  width:100%;flex-shrink:0;
+  opacity:0;animation:fadeSlideUp .55s ease .45s forwards;
 }
-.bet-card .icon{
-  width:36px;height:36px;border-radius:9px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:14px;flex-shrink:0;
+.google-note > i{
+  font-size:18px;color:var(--teal);flex-shrink:0;
 }
-.bet-card.wave .icon{background:rgba(231,60,23,.12);color:var(--orange)}
-.bet-card.google .icon{background:rgba(29,166,154,.12);color:var(--teal)}
-.bet-card .body{flex:1;min-width:0}
-.bet-card .label{
-  display:block;font-family:var(--mono);font-size:9px;font-weight:700;
-  letter-spacing:.12em;text-transform:uppercase;
-  margin-bottom:3px;
+.google-note strong{color:var(--teal)}
+.google-note a{
+  color:var(--text-dim);text-decoration:none;
+  font-family:var(--mono);font-size:10px;
+  margin-left:4px;
 }
-.bet-card.wave .label{color:var(--orange)}
-.bet-card.google .label{color:var(--teal)}
-.bet-card .text{font-size:12px;line-height:1.45;color:var(--text)}
-.bet-card.wave .text strong{color:var(--orange)}
-.bet-card.google .text strong{color:var(--teal)}
-.bet-card .src{
-  display:block;font-family:var(--mono);font-size:9px;color:var(--text-dim);
-  margin-top:4px;
-}
-.bet-card .src a{color:var(--teal);text-decoration:none}
-.bet-card .src a:hover{text-decoration:underline}
+.google-note a:hover{color:var(--teal);text-decoration:underline}
 
 /* ─── 1.1 Overwhelm — acronym soup ─── */
 .soup-stage{
@@ -548,7 +524,7 @@ body{
     <!-- ═══════════ Slide 2: 1.0 I expected this ═══════════ -->
     <section class="slide" data-slide="2">
       <h1 class="slide-title">I bet this would be <span class="accent">transformational</span></h1>
-      <p class="slide-subtitle">Software output exploding across every registry. <span style="color:var(--orange)">Log scale, indexed to Jan 2023 = 100.</span></p>
+      <p class="slide-subtitle">Software output exploding across every registry. <span style="color:var(--orange)">Indexed to Jan 2023 = 100.</span></p>
       <div class="transform-stage">
         <div class="dumky-frame">
           <div class="dumky-title">Monthly software output &middot; <strong>3-month rolling average, indexed to Jan 2023 = 100</strong></div>
@@ -556,8 +532,12 @@ body{
             <g transform="translate(56,20)">
               <line x1="0" x2="904" y1="275.2" y2="275.2" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="2,3"/>
               <text x="-8" y="279.2" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".5" font-family="JetBrains Mono, monospace">100 (baseline)</text>
-              <line x1="0" x2="904" y1="167.0" y2="167.0" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="2,3"/>
-              <text x="-8" y="171.0" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".5" font-family="JetBrains Mono, monospace">200</text>
+              <line x1="0" x2="904" y1="212.4" y2="212.4" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="2,3"/>
+              <text x="-8" y="216.4" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".5" font-family="JetBrains Mono, monospace">200</text>
+              <line x1="0" x2="904" y1="149.6" y2="149.6" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="2,3"/>
+              <text x="-8" y="153.6" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".5" font-family="JetBrains Mono, monospace">300</text>
+              <line x1="0" x2="904" y1="86.8" y2="86.8" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="2,3"/>
+              <text x="-8" y="90.8" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".5" font-family="JetBrains Mono, monospace">400</text>
               <line x1="0" x2="904" y1="24.0" y2="24.0" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="2,3"/>
               <text x="-8" y="28.0" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".5" font-family="JetBrains Mono, monospace">500</text>
               <line x1="0" x2="904" y1="310" y2="310" stroke="currentColor" stroke-opacity=".25"/>
@@ -575,16 +555,16 @@ body{
               <text x="713.7" y="330" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55" font-family="JetBrains Mono, monospace">Jul '25</text>
               <line x1="856.4" x2="856.4" y1="310" y2="315" stroke="currentColor" stroke-opacity=".3"/>
               <text x="856.4" y="330" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55" font-family="JetBrains Mono, monospace">Jan '26</text>
-              <path d="M 0.0,275.2 L 23.8,273.5 L 47.6,255.9 L 71.4,245.8 L 95.2,235.7 L 118.9,245.0 L 142.7,248.5 L 166.5,254.3 L 190.3,254.7 L 214.1,247.9 L 237.9,240.4 L 261.7,243.2 L 285.5,242.5 L 309.3,247.0 L 333.1,240.4 L 356.8,235.0 L 380.6,219.4 L 404.4,212.4 L 428.2,207.4 L 452.0,207.9 L 475.8,204.3 L 499.6,205.0 L 523.4,207.3 L 547.2,204.1 L 570.9,198.9 L 594.7,192.6 L 618.5,177.1 L 642.3,163.5 L 666.1,148.8 L 689.9,145.8 L 713.7,138.5 L 737.5,134.2 L 761.3,135.7 L 785.1,139.3 L 808.8,137.2 L 832.6,111.2 L 856.4,73.0 L 880.2,28.5" fill="none" stroke="#e73c17" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
-              <text x="888.2" y="32.5" font-size="12" font-weight="700" fill="#e73c17" font-family="Montserrat, sans-serif">Show HN 486</text>
-              <path d="M 0.0,275.2 L 23.8,277.1 L 47.6,269.7 L 71.4,268.9 L 95.2,264.5 L 118.9,276.0 L 142.7,279.9 L 166.5,284.7 L 190.3,285.6 L 214.1,284.8 L 237.9,283.7 L 261.7,281.9 L 285.5,270.5 L 309.3,270.2 L 333.1,262.3 L 356.8,267.7 L 380.6,269.2 L 404.4,277.5 L 428.2,273.6 L 452.0,261.1 L 475.8,257.0 L 499.6,255.8 L 523.4,259.0 L 547.2,253.2 L 570.9,254.2 L 594.7,251.6 L 618.5,240.7 L 642.3,228.8 L 666.1,226.4 L 689.9,229.7 L 713.7,230.6 L 737.5,223.3 L 761.3,217.8 L 785.1,205.5 L 808.8,190.5 L 832.6,162.7 L 856.4,131.1 L 880.2,100.7 L 904.0,86.1" fill="none" stroke="#f5a524" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
-              <text x="912.0" y="90.1" font-size="12" font-weight="700" fill="#f5a524" font-family="Montserrat, sans-serif">Crates.io 336</text>
-              <path d="M 0.0,275.2 L 23.8,257.9 L 47.6,238.6 L 71.4,226.7 L 95.2,202.5 L 118.9,202.6 L 142.7,200.0 L 166.5,215.1 L 190.3,217.0 L 214.1,198.2 L 237.9,192.9 L 261.7,190.7 L 285.5,203.7 L 309.3,196.0 L 333.1,183.4 L 356.8,173.4 L 380.6,170.2 L 404.4,170.8 L 428.2,165.7 L 452.0,175.9 L 475.8,177.9 L 499.6,168.4 L 523.4,163.5 L 547.2,161.2 L 570.9,179.2 L 594.7,167.8 L 618.5,156.3 L 642.3,147.3 L 666.1,136.5 L 689.9,135.0 L 713.7,132.5 L 737.5,142.6 L 761.3,139.3 L 785.1,126.8 L 808.8,124.3 L 832.6,132.4 L 856.4,143.1 L 880.2,137.5 L 904.0,127.6" fill="none" stroke="#1da69a" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
-              <text x="912.0" y="131.6" font-size="12" font-weight="700" fill="#1da69a" font-family="Montserrat, sans-serif">arXiv CS 257</text>
-              <path d="M 0.0,275.2 L 23.8,274.0 L 47.6,265.1 L 71.4,261.4 L 95.2,255.1 L 118.9,259.6 L 142.7,258.2 L 166.5,259.9 L 190.3,255.7 L 214.1,249.2 L 237.9,247.1 L 261.7,252.4 L 285.5,256.2 L 309.3,254.0 L 333.1,242.4 L 356.8,240.1 L 380.6,238.0 L 404.4,243.6 L 428.2,243.4 L 452.0,244.2 L 475.8,237.1 L 499.6,228.9 L 523.4,223.3 L 547.2,227.6 L 570.9,231.5 L 594.7,230.0 L 618.5,215.4 L 642.3,204.3 L 666.1,193.5 L 689.9,191.2 L 713.7,187.0 L 737.5,185.8 L 761.3,179.4 L 785.1,174.5 L 808.8,167.8 L 832.6,168.1 L 856.4,165.1 L 880.2,158.1" fill="none" stroke="#8b9bf5" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
-              <text x="888.2" y="162.1" font-size="12" font-weight="700" fill="#8b9bf5" font-family="Montserrat, sans-serif">GitHub repos 212</text>
-              <path d="M 0.0,275.2 L 47.6,271.2 L 71.4,274.6 L 95.2,274.5 L 118.9,282.2 L 142.7,286.7 L 166.5,293.6 L 190.3,299.9 L 214.1,301.9 L 237.9,303.3 L 261.7,304.4 L 285.5,301.1 L 309.3,297.0 L 333.1,282.0 L 356.8,282.8 L 380.6,262.3 L 404.4,269.3 L 428.2,263.4 L 452.0,284.4 L 475.8,284.8 L 499.6,282.9 L 523.4,276.3 L 547.2,273.5 L 570.9,273.7 L 594.7,278.8 L 618.5,252.6 L 642.3,240.7 L 666.1,227.2 L 689.9,239.0 L 713.7,240.1 L 737.5,244.0 L 761.3,241.4 L 785.1,245.5 L 808.8,243.1 L 832.6,241.3 L 856.4,232.1 L 880.2,223.1 L 904.0,226.6" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
-              <text x="912.0" y="230.6" font-size="12" font-weight="700" fill="#64748b" font-family="Montserrat, sans-serif">PyPI 136</text>
+              <path d="M 0.0,275.2 L 23.8,274.5 L 47.6,266.9 L 71.4,262.2 L 95.2,257.1 L 118.9,261.8 L 142.7,263.5 L 166.5,266.2 L 190.3,266.4 L 214.1,263.2 L 237.9,259.5 L 261.7,260.9 L 285.5,260.6 L 309.3,262.8 L 333.1,259.5 L 356.8,256.8 L 380.6,248.2 L 404.4,244.1 L 428.2,241.0 L 452.0,241.3 L 475.8,239.1 L 499.6,239.5 L 523.4,241.0 L 547.2,239.0 L 570.9,235.6 L 594.7,231.4 L 618.5,220.3 L 642.3,209.5 L 666.1,196.9 L 689.9,194.1 L 713.7,187.2 L 737.5,183.0 L 761.3,184.5 L 785.1,188.0 L 808.8,186.0 L 832.6,158.4 L 856.4,108.6 L 880.2,32.9" fill="none" stroke="#e73c17" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
+              <text x="888.2" y="36.9" font-size="12" font-weight="700" fill="#e73c17" font-family="Montserrat, sans-serif">Show HN 486</text>
+              <path d="M 0.0,275.2 L 23.8,276.0 L 47.6,272.9 L 71.4,272.6 L 95.2,270.7 L 118.9,275.5 L 142.7,277.1 L 166.5,278.9 L 190.3,279.2 L 214.1,278.9 L 237.9,278.5 L 261.7,277.8 L 285.5,273.3 L 309.3,273.2 L 333.1,269.8 L 356.8,272.1 L 380.6,272.7 L 404.4,276.1 L 428.2,274.6 L 452.0,269.3 L 475.8,267.4 L 499.6,266.9 L 523.4,268.3 L 547.2,265.7 L 570.9,266.2 L 594.7,264.9 L 618.5,259.7 L 642.3,253.5 L 666.1,252.1 L 689.9,253.9 L 713.7,254.4 L 737.5,250.4 L 761.3,247.3 L 785.1,239.8 L 808.8,229.9 L 832.6,208.9 L 856.4,179.9 L 880.2,145.9 L 904.0,127.1" fill="none" stroke="#f5a524" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
+              <text x="912.0" y="131.1" font-size="12" font-weight="700" fill="#f5a524" font-family="Montserrat, sans-serif">Crates.io 336</text>
+              <path d="M 0.0,275.2 L 23.8,267.8 L 47.6,258.6 L 71.4,252.3 L 95.2,237.9 L 118.9,238.0 L 142.7,236.3 L 166.5,245.7 L 190.3,246.8 L 214.1,235.1 L 237.9,231.6 L 261.7,230.1 L 285.5,238.7 L 309.3,233.7 L 333.1,224.9 L 356.8,217.4 L 380.6,214.9 L 404.4,215.4 L 428.2,211.3 L 452.0,219.4 L 475.8,220.9 L 499.6,213.5 L 523.4,209.5 L 547.2,207.6 L 570.9,221.8 L 594.7,213.0 L 618.5,203.5 L 642.3,195.5 L 666.1,185.3 L 689.9,183.8 L 713.7,181.3 L 737.5,191.1 L 761.3,188.0 L 785.1,175.5 L 808.8,172.9 L 832.6,181.2 L 856.4,191.6 L 880.2,186.3 L 904.0,176.3" fill="none" stroke="#1da69a" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
+              <text x="912.0" y="180.3" font-size="12" font-weight="700" fill="#1da69a" font-family="Montserrat, sans-serif">arXiv CS 257</text>
+              <path d="M 0.0,275.2 L 23.8,274.7 L 47.6,271.0 L 71.4,269.4 L 95.2,266.6 L 118.9,268.6 L 142.7,268.0 L 166.5,268.7 L 190.3,266.8 L 214.1,263.8 L 237.9,262.8 L 261.7,265.3 L 285.5,267.1 L 309.3,266.1 L 333.1,260.5 L 356.8,259.4 L 380.6,258.3 L 404.4,261.1 L 428.2,261.0 L 452.0,261.4 L 475.8,257.8 L 499.6,253.5 L 523.4,250.4 L 547.2,252.8 L 570.9,254.9 L 594.7,254.1 L 618.5,245.9 L 642.3,239.1 L 666.1,232.0 L 689.9,230.4 L 713.7,227.5 L 737.5,226.6 L 761.3,222.0 L 785.1,218.3 L 808.8,213.0 L 832.6,213.3 L 856.4,210.9 L 880.2,205.0" fill="none" stroke="#8b9bf5" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
+              <text x="888.2" y="209.0" font-size="12" font-weight="700" fill="#8b9bf5" font-family="Montserrat, sans-serif">GitHub repos 212</text>
+              <path d="M 0.0,275.2 L 47.6,273.6 L 71.4,275.0 L 95.2,274.9 L 118.9,278.0 L 142.7,279.7 L 166.5,282.2 L 190.3,284.4 L 214.1,285.1 L 237.9,285.5 L 261.7,285.9 L 285.5,284.8 L 309.3,283.4 L 333.1,277.9 L 356.8,278.2 L 380.6,269.8 L 404.4,272.8 L 428.2,270.3 L 452.0,278.8 L 475.8,278.9 L 499.6,278.2 L 523.4,275.6 L 547.2,274.5 L 570.9,274.6 L 594.7,276.6 L 618.5,265.4 L 642.3,259.7 L 666.1,252.6 L 689.9,258.8 L 713.7,259.4 L 737.5,261.3 L 761.3,260.0 L 785.1,262.0 L 808.8,260.9 L 832.6,260.0 L 856.4,255.2 L 880.2,250.3 L 904.0,252.3" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
+              <text x="912.0" y="256.3" font-size="12" font-weight="700" fill="#64748b" font-family="Montserrat, sans-serif">PyPI 136</text>
             </g>
           </svg>
           <div class="dumky-source">
@@ -592,28 +572,14 @@ body{
             <span>Chart &amp; data: <a href="https://www.dumky.net/posts/youre-right-to-be-anxious-about-ai-this-is-how-much-we-are-building/" target="_blank" rel="noopener">Dumky de Wilde &middot; Beyond Measure</a></span>
           </div>
         </div>
-        <div class="bets-row">
-          <div class="bet-card wave">
-            <div class="icon"><i class="fas fa-rocket"></i></div>
-            <div class="body">
-              <span class="label">Bet 1 &middot; The wave</span>
-              <p class="text">
-                Show HN <strong>5&times;</strong> &middot; Crates.io <strong>3.4&times;</strong> &middot; arXiv CS <strong>2.6&times;</strong> &middot; GitHub <strong>2.1&times;</strong>.
-                The data layer would explode &mdash; <strong>it did</strong>.
-              </p>
-            </div>
-          </div>
-          <div class="bet-card google">
-            <div class="icon"><i class="fab fa-google"></i></div>
-            <div class="body">
-              <span class="label">Bet 2 &middot; Google</span>
-              <p class="text">
-                Looked crazy in early ChatGPT days. But the full stack was already there: <strong>TPUs &middot; DeepMind &middot; Demis &middot; GCP data engineering &middot; BigQuery</strong>. Gemini caught up.
-                <span class="src">Why: <a href="https://epochai.substack.com/p/google-controls-the-most-ai-computing" target="_blank" rel="noopener">Epoch AI &middot; Google controls the most AI computing</a></span>
-              </p>
-            </div>
-          </div>
-        </div>
+        <aside class="google-note">
+          <i class="fab fa-google"></i>
+          <span>
+            <strong>Side bet:</strong> Google would catch up &mdash; full stack already there
+            (<strong>TPUs &middot; DeepMind &middot; GCP &middot; BigQuery</strong>).
+            <a href="https://epochai.substack.com/p/google-controls-the-most-ai-computing" target="_blank" rel="noopener">Epoch AI &middot; Google controls the most AI computing</a>
+          </span>
+        </aside>
       </div>
     </section>
 
