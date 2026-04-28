@@ -209,6 +209,13 @@ body{
   flex:1;min-height:0;
   color:var(--text);
 }
+.record-img{
+  width:100%;
+  flex:1;min-height:0;
+  object-fit:contain;
+  border-radius:8px;
+  display:block;
+}
 .dumky-source{
   font-family:var(--mono);font-size:9px;color:var(--text-dim);
   display:flex;justify-content:space-between;align-items:center;gap:14px;
@@ -524,52 +531,13 @@ body{
     <!-- ═══════════ Slide 2: 1.0 I expected this ═══════════ -->
     <section class="slide" data-slide="2">
       <h1 class="slide-title">I bet this would be <span class="accent">transformational</span></h1>
-      <p class="slide-subtitle">Software output exploding across every registry. <span style="color:var(--orange)">Indexed to Jan 2023 = 100.</span></p>
+      <p class="slide-subtitle">Software output exploding &mdash; <span style="color:var(--orange)">90M PRs &middot; 1.4B commits &middot; 20M new repos / month</span> on GitHub.</p>
       <div class="transform-stage">
         <div class="dumky-frame">
-          <div class="dumky-title">Monthly software output &middot; <strong>3-month rolling average, indexed to Jan 2023 = 100</strong></div>
-          <svg viewBox="0 0 1100 360" xmlns="http://www.w3.org/2000/svg" class="dumky-chart" preserveAspectRatio="xMidYMid meet">
-            <g transform="translate(56,20)">
-              <line x1="0" x2="904" y1="275.2" y2="275.2" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="2,3"/>
-              <text x="-8" y="279.2" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".5" font-family="JetBrains Mono, monospace">100 (baseline)</text>
-              <line x1="0" x2="904" y1="212.4" y2="212.4" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="2,3"/>
-              <text x="-8" y="216.4" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".5" font-family="JetBrains Mono, monospace">200</text>
-              <line x1="0" x2="904" y1="149.6" y2="149.6" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="2,3"/>
-              <text x="-8" y="153.6" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".5" font-family="JetBrains Mono, monospace">300</text>
-              <line x1="0" x2="904" y1="86.8" y2="86.8" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="2,3"/>
-              <text x="-8" y="90.8" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".5" font-family="JetBrains Mono, monospace">400</text>
-              <line x1="0" x2="904" y1="24.0" y2="24.0" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="2,3"/>
-              <text x="-8" y="28.0" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".5" font-family="JetBrains Mono, monospace">500</text>
-              <line x1="0" x2="904" y1="310" y2="310" stroke="currentColor" stroke-opacity=".25"/>
-              <line x1="0.0" x2="0.0" y1="310" y2="315" stroke="currentColor" stroke-opacity=".3"/>
-              <text x="0.0" y="330" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55" font-family="JetBrains Mono, monospace">Jan '23</text>
-              <line x1="142.7" x2="142.7" y1="310" y2="315" stroke="currentColor" stroke-opacity=".3"/>
-              <text x="142.7" y="330" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55" font-family="JetBrains Mono, monospace">Jul '23</text>
-              <line x1="285.5" x2="285.5" y1="310" y2="315" stroke="currentColor" stroke-opacity=".3"/>
-              <text x="285.5" y="330" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55" font-family="JetBrains Mono, monospace">Jan '24</text>
-              <line x1="428.2" x2="428.2" y1="310" y2="315" stroke="currentColor" stroke-opacity=".3"/>
-              <text x="428.2" y="330" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55" font-family="JetBrains Mono, monospace">Jul '24</text>
-              <line x1="570.9" x2="570.9" y1="310" y2="315" stroke="currentColor" stroke-opacity=".3"/>
-              <text x="570.9" y="330" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55" font-family="JetBrains Mono, monospace">Jan '25</text>
-              <line x1="713.7" x2="713.7" y1="310" y2="315" stroke="currentColor" stroke-opacity=".3"/>
-              <text x="713.7" y="330" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55" font-family="JetBrains Mono, monospace">Jul '25</text>
-              <line x1="856.4" x2="856.4" y1="310" y2="315" stroke="currentColor" stroke-opacity=".3"/>
-              <text x="856.4" y="330" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55" font-family="JetBrains Mono, monospace">Jan '26</text>
-              <path d="M 0.0,275.2 L 23.8,274.5 L 47.6,266.9 L 71.4,262.2 L 95.2,257.1 L 118.9,261.8 L 142.7,263.5 L 166.5,266.2 L 190.3,266.4 L 214.1,263.2 L 237.9,259.5 L 261.7,260.9 L 285.5,260.6 L 309.3,262.8 L 333.1,259.5 L 356.8,256.8 L 380.6,248.2 L 404.4,244.1 L 428.2,241.0 L 452.0,241.3 L 475.8,239.1 L 499.6,239.5 L 523.4,241.0 L 547.2,239.0 L 570.9,235.6 L 594.7,231.4 L 618.5,220.3 L 642.3,209.5 L 666.1,196.9 L 689.9,194.1 L 713.7,187.2 L 737.5,183.0 L 761.3,184.5 L 785.1,188.0 L 808.8,186.0 L 832.6,158.4 L 856.4,108.6 L 880.2,32.9" fill="none" stroke="#e73c17" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
-              <text x="888.2" y="36.9" font-size="12" font-weight="700" fill="#e73c17" font-family="Montserrat, sans-serif">Show HN 486</text>
-              <path d="M 0.0,275.2 L 23.8,276.0 L 47.6,272.9 L 71.4,272.6 L 95.2,270.7 L 118.9,275.5 L 142.7,277.1 L 166.5,278.9 L 190.3,279.2 L 214.1,278.9 L 237.9,278.5 L 261.7,277.8 L 285.5,273.3 L 309.3,273.2 L 333.1,269.8 L 356.8,272.1 L 380.6,272.7 L 404.4,276.1 L 428.2,274.6 L 452.0,269.3 L 475.8,267.4 L 499.6,266.9 L 523.4,268.3 L 547.2,265.7 L 570.9,266.2 L 594.7,264.9 L 618.5,259.7 L 642.3,253.5 L 666.1,252.1 L 689.9,253.9 L 713.7,254.4 L 737.5,250.4 L 761.3,247.3 L 785.1,239.8 L 808.8,229.9 L 832.6,208.9 L 856.4,179.9 L 880.2,145.9 L 904.0,127.1" fill="none" stroke="#f5a524" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
-              <text x="912.0" y="131.1" font-size="12" font-weight="700" fill="#f5a524" font-family="Montserrat, sans-serif">Crates.io 336</text>
-              <path d="M 0.0,275.2 L 23.8,267.8 L 47.6,258.6 L 71.4,252.3 L 95.2,237.9 L 118.9,238.0 L 142.7,236.3 L 166.5,245.7 L 190.3,246.8 L 214.1,235.1 L 237.9,231.6 L 261.7,230.1 L 285.5,238.7 L 309.3,233.7 L 333.1,224.9 L 356.8,217.4 L 380.6,214.9 L 404.4,215.4 L 428.2,211.3 L 452.0,219.4 L 475.8,220.9 L 499.6,213.5 L 523.4,209.5 L 547.2,207.6 L 570.9,221.8 L 594.7,213.0 L 618.5,203.5 L 642.3,195.5 L 666.1,185.3 L 689.9,183.8 L 713.7,181.3 L 737.5,191.1 L 761.3,188.0 L 785.1,175.5 L 808.8,172.9 L 832.6,181.2 L 856.4,191.6 L 880.2,186.3 L 904.0,176.3" fill="none" stroke="#1da69a" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
-              <text x="912.0" y="180.3" font-size="12" font-weight="700" fill="#1da69a" font-family="Montserrat, sans-serif">arXiv CS 257</text>
-              <path d="M 0.0,275.2 L 23.8,274.7 L 47.6,271.0 L 71.4,269.4 L 95.2,266.6 L 118.9,268.6 L 142.7,268.0 L 166.5,268.7 L 190.3,266.8 L 214.1,263.8 L 237.9,262.8 L 261.7,265.3 L 285.5,267.1 L 309.3,266.1 L 333.1,260.5 L 356.8,259.4 L 380.6,258.3 L 404.4,261.1 L 428.2,261.0 L 452.0,261.4 L 475.8,257.8 L 499.6,253.5 L 523.4,250.4 L 547.2,252.8 L 570.9,254.9 L 594.7,254.1 L 618.5,245.9 L 642.3,239.1 L 666.1,232.0 L 689.9,230.4 L 713.7,227.5 L 737.5,226.6 L 761.3,222.0 L 785.1,218.3 L 808.8,213.0 L 832.6,213.3 L 856.4,210.9 L 880.2,205.0" fill="none" stroke="#8b9bf5" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
-              <text x="888.2" y="209.0" font-size="12" font-weight="700" fill="#8b9bf5" font-family="Montserrat, sans-serif">GitHub repos 212</text>
-              <path d="M 0.0,275.2 L 47.6,273.6 L 71.4,275.0 L 95.2,274.9 L 118.9,278.0 L 142.7,279.7 L 166.5,282.2 L 190.3,284.4 L 214.1,285.1 L 237.9,285.5 L 261.7,285.9 L 285.5,284.8 L 309.3,283.4 L 333.1,277.9 L 356.8,278.2 L 380.6,269.8 L 404.4,272.8 L 428.2,270.3 L 452.0,278.8 L 475.8,278.9 L 499.6,278.2 L 523.4,275.6 L 547.2,274.5 L 570.9,274.6 L 594.7,276.6 L 618.5,265.4 L 642.3,259.7 L 666.1,252.6 L 689.9,258.8 L 713.7,259.4 L 737.5,261.3 L 761.3,260.0 L 785.1,262.0 L 808.8,260.9 L 832.6,260.0 L 856.4,255.2 L 880.2,250.3 L 904.0,252.3" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-opacity=".95"/>
-              <text x="912.0" y="256.3" font-size="12" font-weight="700" fill="#64748b" font-family="Montserrat, sans-serif">PyPI 136</text>
-            </g>
-          </svg>
+          <img class="record-img" src="images/record-accelleration-1920x1080-2.webp" alt="Record acceleration: 90M PRs merged, 1.4B commits, 20M new repos/month on GitHub, 2023-2026">
           <div class="dumky-source">
-            <span>Sources: HN Algolia &middot; GitHub Search &middot; PyPI BigQuery &middot; Crates.io DB &middot; arXiv stats</span>
-            <span>Chart &amp; data: <a href="https://www.dumky.net/posts/youre-right-to-be-anxious-about-ai-this-is-how-much-we-are-building/" target="_blank" rel="noopener">Dumky de Wilde &middot; Beyond Measure</a></span>
+            <span>GitHub Octoverse 2026 &middot; trailing-12-month metrics</span>
+            <span>Source: <a href="https://github.blog/news-insights/company-news/an-update-on-github-availability/" target="_blank" rel="noopener">github.blog &middot; An update on GitHub availability</a></span>
           </div>
         </div>
         <aside class="google-note">
