@@ -195,6 +195,10 @@ a:hover{text-decoration:underline}
   display:flex;align-items:center;justify-content:center;
   font-size:18px;color:#fff;flex-shrink:0;
 }
+.deck-banner-img{
+  width:120px;height:72px;border-radius:10px;
+  object-fit:cover;flex-shrink:0;
+}
 .deck-details{flex:1;min-width:0}
 .deck-details h3{font-size:14px;font-weight:700;margin-bottom:2px}
 .deck-details .deck-meta{font-family:var(--mono);font-size:10px;color:var(--text-dim);margin-bottom:4px;letter-spacing:.04em}
@@ -346,34 +350,8 @@ a:hover{text-decoration:underline}
   <div class="section-label"><i class="fas fa-layer-group"></i> Slide Decks</div>
   <div class="deck-grid">
 
-    <a href="multivac/" class="deck-card">
-      <div class="deck-icon" style="background:linear-gradient(135deg, var(--orange), #d23210)">
-        <i class="fas fa-server"></i>
-      </div>
-      <div class="deck-details">
-        <div class="deck-meta"><i class="fas fa-calendar"></i> April 2024 &middot; Sales &amp; Platform</div>
-        <h3>Multivac: Your AI Platform</h3>
-        <p>Event-driven microservice architecture, MCP &amp; A2A support, multi-cloud deployment, bridging prototype to production AI at scale</p>
-      </div>
-      <span class="deck-tag">16 slides</span>
-    </a>
-
-    <a href="ai-first-procurement/" class="deck-card">
-      <div class="deck-icon" style="background:linear-gradient(135deg, #4285F4, #1a73e8)">
-        <i class="fas fa-robot"></i>
-      </div>
-      <div class="deck-details">
-        <div class="deck-meta"><i class="fas fa-calendar"></i> October 2025 &middot; Procurement Intelligence</div>
-        <h3>Building AI with AI</h3>
-        <p>How AI-first approaches transform procurement and intelligence gathering with iterative improvement loops</p>
-      </div>
-      <span class="deck-tag">19 slides</span>
-    </a>
-
     <a href="analytics-for-ai-agents/" class="deck-card">
-      <div class="deck-icon" style="background:linear-gradient(135deg, #e73c17, #6366f1)">
-        <i class="fas fa-chart-line"></i>
-      </div>
+      <img src="images/talks/analyticsdev-banner.jpg" alt="Analytics for AI Agents" class="deck-banner-img">
       <div class="deck-details">
         <div class="deck-meta"><i class="fas fa-calendar"></i> 29 April 2026 &middot; Analytics.dev, Copenhagen</div>
         <h3>Analytics for AI Agents: From Pageviews to Prompts</h3>
@@ -392,6 +370,30 @@ a:hover{text-decoration:underline}
         <p>Five-part exploration: AI coding revolution, entropy visualization, authority models, development loops, and what AI needs from humans</p>
       </div>
       <span class="deck-tag">5 decks</span>
+    </a>
+
+    <a href="ai-first-procurement/" class="deck-card">
+      <div class="deck-icon" style="background:linear-gradient(135deg, #4285F4, #1a73e8)">
+        <i class="fas fa-robot"></i>
+      </div>
+      <div class="deck-details">
+        <div class="deck-meta"><i class="fas fa-calendar"></i> October 2025 &middot; Procurement Intelligence</div>
+        <h3>Building AI with AI</h3>
+        <p>How AI-first approaches transform procurement and intelligence gathering with iterative improvement loops</p>
+      </div>
+      <span class="deck-tag">19 slides</span>
+    </a>
+
+    <a href="multivac/" class="deck-card">
+      <div class="deck-icon" style="background:linear-gradient(135deg, var(--orange), #d23210)">
+        <i class="fas fa-server"></i>
+      </div>
+      <div class="deck-details">
+        <div class="deck-meta"><i class="fas fa-calendar"></i> April 2024 &middot; Sales &amp; Platform</div>
+        <h3>Multivac: Your AI Platform</h3>
+        <p>Event-driven microservice architecture, MCP &amp; A2A support, multi-cloud deployment, bridging prototype to production AI at scale</p>
+      </div>
+      <span class="deck-tag">16 slides</span>
     </a>
 
   </div>
