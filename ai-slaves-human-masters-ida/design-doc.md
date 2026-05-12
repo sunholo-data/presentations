@@ -70,3 +70,45 @@ A: Would entropy increase though? Base it in science - I think code will always 
 
 Q: Navigation style for presentation?
 A: Auto-play with pause
+
+---
+
+## v2 — IDA 25-min restructure (2026-05-11)
+
+The IDA Driving AI slot is **10:40–11:05, Lokale 104, "AI Tooling, Benchmarks & Evaluation"** track. Program title (locked): *"Programming Languages for AI, not humans"*. The original 5-deck series targets a longer slot; this restructure compresses it into a **3-chapter, ~14-slide** flow that fits 25 minutes with a 1–2 minute buffer.
+
+### Chapter shape
+
+1. **Case for an AI language** — `00-ai-coding-revolution.html` (4 slides). Adoption is racing toward 100%; LoCoBench shows AI codes unevenly across languages; the trust/verification gap is the problem.
+2. **What an AI language needs** — `01-entropy-explorer.html` (interactive) + `02-authority-complexity.html` (trimmed 6→4) + `04-ai-demands.html` (trimmed 5→1, top-5 demand sheet).
+3. **Proof & benchmark validation** — `03-development-loop.html` (loop diagram) + **new** `05-benchmarks-motoko.html` (AILANG-vs-Python bar chart, GLM-5 self-correction story with real verifier output, open hypothesis, close).
+
+### What got cut and why
+
+- `02` axioms slide (data-slide 0): too dense to land in time; the four axioms surface as inline captions where they're invoked.
+- `02` complexity table (data-slide 5): the demand sheet in `04` carries the same payload more punchily.
+- `04` title + tighten-loop + front-load + hidden-context slides (data-slides 0–3): all redundant with Ch2's entropy and authority decks. The demand sheet is the standalone closer.
+
+### What got added
+
+- **`05-benchmarks-motoko.html`** — new Ch3 closer. Bar chart driven by a `BENCH` const at the top of the file so numbers can be swapped right up to talk day (incl. forthcoming motoko-augmented runs). Slide 2 uses a real terminal excerpt from `motoko_explore/runs/20260507-104012-openrouter_zai_glm5/verify.txt` — credibility over polish.
+- **Bridge intro** on `00` slide 0 — one-line callback to the preceding talk in the same room ("From AI experiments to daily workflow"), pivoting to the language-the-AI-writes-in.
+
+### Playlist (presenter.html)
+
+```
+1 · Case        00-ai-coding-revolution.html
+2a · Entropy    01-entropy-explorer.html
+2b · Authority  02-authority-complexity.html
+2c · Demands    04-ai-demands.html
+3a · Loop       03-development-loop.html
+3b · Proof      05-benchmarks-motoko.html
+Contact         ../contact-mark/contact-mark.html
+```
+
+### Pre-talk verification (do these on the day)
+
+1. Walk the presenter end-to-end with a stopwatch; target ≤ 24:30 to leave Q&A buffer.
+2. Pull latest aggregate from `/Users/mark/dev/sunholo/ailang/eval_results/standard/` and update the `BENCH` array in `05-benchmarks-motoko.html` if numbers have moved.
+3. Toggle light/dark theme once per deck — confirm the new chart and terminal slide render in both.
+4. Export `05-benchmarks-motoko.html` to PDF as a print-out fallback in case the projector chokes on anything interactive.

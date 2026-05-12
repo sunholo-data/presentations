@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AILANG — Authority, Effects & AI-First Design</title>
+<title>AILANG — Making AI Code You Can Trust</title>
 <link rel="icon" type="image/svg+xml" href="/sunholo-logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -153,6 +153,47 @@ body{
   transform:translateX(-40px);
 }
 
+/* ─── Demand grid (Ch2 closer) ─── */
+.demand-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:12px 24px;max-width:900px;width:100%;
+}
+.demand-item{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 18px;
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-radius:8px;
+  opacity:0;transform:translateY(16px);
+}
+.demand-check{color:var(--orange);font-size:18px;flex-shrink:0}
+.demand-text{font-size:14px;color:var(--text);line-height:1.4}
+.demand-text .axiom-ref{
+  font-family:var(--mono);font-size:11px;
+  color:var(--text-dim);margin-left:4px;
+}
+.slide.active .demand-item:nth-child(1){animation:fadeSlideUp .4s ease .08s forwards}
+.slide.active .demand-item:nth-child(2){animation:fadeSlideUp .4s ease .16s forwards}
+.slide.active .demand-item:nth-child(3){animation:fadeSlideUp .4s ease .24s forwards}
+.slide.active .demand-item:nth-child(4){animation:fadeSlideUp .4s ease .32s forwards}
+.slide.active .demand-item:nth-child(5){animation:fadeSlideUp .4s ease .40s forwards}
+.demand-closer{
+  background:var(--surface);
+  border-left:4px solid var(--orange);
+  border-radius:0 10px 10px 0;
+  padding:18px 24px;
+  max-width:760px;width:100%;
+  font-size:15px;font-weight:600;
+  color:var(--text);text-align:center;
+  line-height:1.5;
+  margin-top:8px;
+  opacity:0;transform:translateY(14px);
+}
+.slide.active .demand-closer{animation:fadeSlideUp .5s ease .55s forwards}
+@media(max-width:900px){
+  .demand-grid{grid-template-columns:1fr}
+}
+
 /* ─── Bottom bar ─── */
 .bottom-bar{
   display:flex;align-items:center;justify-content:space-between;
@@ -200,6 +241,64 @@ body{
   letter-spacing:-.02em;
 }
 .slide-title .dim{color:var(--text-dim);font-weight:500}
+.slide-title .accent{color:var(--orange)}
+
+/* Small uppercase tag above a slide title — used to label the conceptual frame */
+.slide-eyebrow{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--orange);text-align:center;
+  margin-bottom:10px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.slide-eyebrow::before,
+.slide-eyebrow::after{
+  content:"";display:inline-block;
+  height:1px;width:36px;background:var(--orange-dim);
+}
+
+/* Neurosymbolic loop diagram (Z3 slide) */
+.z3-loop{
+  width:min(960px,100%);
+  display:grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap:10px;
+  align-items:stretch;
+  margin-top:16px;
+}
+.z3-loop-side{
+  display:flex;flex-direction:column;gap:6px;
+  padding:12px 16px;
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-radius:10px;
+  font-family:var(--mono);font-size:11.5px;line-height:1.5;
+}
+.z3-loop-side.neural{border-left:3px solid var(--orange)}
+.z3-loop-side.symbolic{border-left:3px solid var(--indigo, #818cf8)}
+.z3-loop-head{
+  font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  display:flex;align-items:center;gap:8px;
+}
+.z3-loop-side.neural .z3-loop-head{color:var(--orange)}
+.z3-loop-side.symbolic .z3-loop-head{color:#818cf8}
+.z3-loop-body{color:var(--text-dim)}
+.z3-loop-body code{
+  font-family:var(--mono);font-size:11px;color:var(--text);
+  background:var(--code-bg);padding:1px 5px;border-radius:3px;
+}
+.z3-loop-arrow{
+  display:flex;align-items:center;justify-content:center;
+  color:var(--orange);font-size:18px;
+}
+.z3-loop-arrow.back{color:var(--indigo, #818cf8)}
+
+@media (max-width:900px){
+  .z3-loop{grid-template-columns:1fr;}
+  .z3-loop-arrow{transform:rotate(90deg)}
+  .z3-loop-arrow.back{transform:rotate(-90deg)}
+}
 
 .axiom-grid{
   display:grid;grid-template-columns:repeat(4,1fr);gap:20px;
@@ -408,15 +507,22 @@ body{
   font-size:11px;font-weight:700;
   text-transform:uppercase;letter-spacing:.12em;
   font-family:var(--mono);
+  display:flex;align-items:center;gap:8px;
 }
+.code-panel-header .lg{
+  width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;
+}
+.code-panel-header .lg img{width:100%;height:100%}
 .code-panel-header.trad{
   background:var(--amber-dim);color:var(--amber);
   border-bottom:2px solid var(--amber);
 }
+.code-panel-header.trad .lg img{filter:grayscale(.5) opacity(.9)}
 .code-panel-header.ailang{
   background:var(--green-dim);color:var(--green);
   border-bottom:2px solid var(--green);
 }
+.code-panel-header.ailang .lg img{filter:brightness(0) saturate(100%) invert(56%) sepia(76%) saturate(442%) hue-rotate(86deg) brightness(95%) contrast(86%)}
 .code-panel-body{
   padding:24px;background:var(--code-bg);
   font-family:var(--mono);font-size:14px;line-height:1.7;
@@ -492,53 +598,160 @@ body{
    SLIDE 5 — Complexity Table
    ═══════════════════════════════════ */
 .complexity-table{
-  max-width:960px;width:100%;
-  border-radius:10px;overflow:hidden;
-  border:1px solid var(--code-border);
+  max-width:1000px;width:100%;
+  display:flex;flex-direction:column;gap:8px;
+  position:relative;
+  padding:0 4px;
 }
 .ct-row{
-  display:grid;grid-template-columns:1.2fr 1fr 1.3fr;
-  gap:0;
+  display:grid;grid-template-columns:1.1fr 1fr 1.1fr;
+  gap:12px;align-items:stretch;
+  position:relative;
 }
+.ct-row::after{
+  /* divider line between human and AI columns, only on data rows */
+  content:"";position:absolute;
+  left:calc(33% + 22px);right:calc(33% + 22px);
+  top:50%;height:1px;
+  background:repeating-linear-gradient(90deg,
+    var(--ghost) 0 6px, transparent 6px 12px);
+  opacity:.5;
+  pointer-events:none;
+  z-index:0;
+}
+.ct-header::after{display:none}
+
+/* Header: facing avatars instead of column titles */
 .ct-header{
-  background:var(--surface);
-  border-bottom:2px solid var(--code-border);
+  align-items:end;
+  margin-bottom:4px;padding-bottom:8px;
+  border-bottom:1px solid var(--ghost);
 }
 .ct-header .ct-cell{
-  font-size:12px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.08em;padding:14px 20px;
+  font-family:var(--mono);font-size:11px;
+  font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;
+  padding:4px 12px;
+  background:transparent;border:none;
+  display:flex;align-items:center;gap:10px;
 }
-.ct-header .ct-cell:nth-child(2){color:var(--amber)}
-.ct-header .ct-cell:nth-child(3){color:var(--green)}
-.ct-header .ct-cell .fa-solid{margin-right:6px}
+.ct-header .ct-cell:nth-child(1){color:var(--text-dim);justify-content:flex-start}
+.ct-header .ct-cell:nth-child(2){color:#f59e0b;justify-content:center}
+.ct-header .ct-cell:nth-child(3){color:var(--green);justify-content:flex-end}
+.ct-header .ct-cell .persona-icon{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.ct-header .ct-cell:nth-child(2) .persona-icon{
+  background:rgba(245,158,11,.15);color:#f59e0b;
+  border:1px solid rgba(245,158,11,.35);
+}
+.ct-header .ct-cell:nth-child(3) .persona-icon{
+  background:rgba(34,197,94,.15);color:var(--green);
+  border:1px solid rgba(34,197,94,.35);
+}
+.ct-header .ct-cell .persona-name .name{
+  display:block;color:var(--text);font-size:12px;
+  letter-spacing:.06em;
+}
+.ct-header .ct-cell .persona-name .mood{
+  display:block;font-size:9px;opacity:.7;
+  font-weight:500;letter-spacing:.04em;text-transform:none;
+  font-style:italic;
+}
 
-.ct-data{
-  opacity:0;transform:translateX(-16px);
-}
-.ct-data:nth-child(odd){background:var(--row-alt)}
+/* Data rows */
+.ct-data{opacity:0;transform:translateY(8px)}
 .ct-data .ct-cell{
-  padding:14px 20px;font-size:14px;line-height:1.4;
-  border-bottom:1px solid var(--row-border);
+  padding:12px 14px;font-size:13.5px;line-height:1.45;
+  background:var(--surface);
+  border-radius:8px;
+  border:1px solid var(--ghost);
+  display:flex;align-items:center;
+  position:relative;
+  z-index:1;
 }
+/* Center cell = the AILANG choice (the "fact") */
 .ct-data .ct-cell:first-child{
-  font-weight:600;color:var(--text);
+  background:transparent;border:1px solid var(--code-border);
+  font-family:var(--mono);font-size:12.5px;
+  color:var(--text);font-weight:600;
+  border-left:3px solid var(--orange);
+  padding-left:14px;
 }
+/* Human reaction = speech bubble pointing right (toward the fact) */
 .ct-data .ct-cell:nth-child(2){
-  font-family:var(--mono);font-size:13px;
-  color:var(--amber);font-style:italic;
+  font-family:var(--mono);font-size:12.5px;
+  color:#f59e0b;font-style:italic;
+  background:rgba(245,158,11,.06);
+  border-color:rgba(245,158,11,.25);
+  justify-content:flex-end;
+  text-align:right;
+  position:relative;
 }
+.ct-data .ct-cell:nth-child(2)::before{
+  content:"\f4ad"; /* fa-comment-dots */
+  font-family:"Font Awesome 6 Free";font-weight:900;
+  margin-right:8px;
+  font-style:normal;opacity:.55;font-size:10px;
+}
+.ct-data .ct-cell:nth-child(2)::after{
+  /* tail pointing toward center */
+  content:"";position:absolute;right:-7px;top:50%;
+  transform:translateY(-50%) rotate(45deg);
+  width:10px;height:10px;
+  background:rgba(245,158,11,.06);
+  border-right:1px solid rgba(245,158,11,.25);
+  border-bottom:1px solid rgba(245,158,11,.25);
+  z-index:-1;
+}
+/* AI reaction = terminal-style stamp pointing left (back to the fact) */
 .ct-data .ct-cell:nth-child(3){
-  font-family:var(--mono);font-size:13px;
+  font-family:var(--mono);font-size:12.5px;
   color:var(--green);font-weight:600;
+  background:rgba(34,197,94,.06);
+  border-color:rgba(34,197,94,.25);
+  position:relative;
+}
+.ct-data .ct-cell:nth-child(3)::before{
+  content:"›";color:var(--green);
+  margin-right:10px;font-weight:700;opacity:.8;
+}
+.ct-data .ct-cell:nth-child(3)::after{
+  /* tail pointing left toward fact */
+  content:"";position:absolute;left:-7px;top:50%;
+  transform:translateY(-50%) rotate(45deg);
+  width:10px;height:10px;
+  background:rgba(34,197,94,.06);
+  border-left:1px solid rgba(34,197,94,.25);
+  border-top:1px solid rgba(34,197,94,.25);
+  z-index:-1;
 }
 
-.slide.active .ct-data{animation:fadeSlideIn .4s ease forwards}
-.slide.active .ct-data:nth-child(2){animation-delay:.1s}
-.slide.active .ct-data:nth-child(3){animation-delay:.22s}
-.slide.active .ct-data:nth-child(4){animation-delay:.34s}
-.slide.active .ct-data:nth-child(5){animation-delay:.46s}
-.slide.active .ct-data:nth-child(6){animation-delay:.58s}
-.slide.active .ct-data:nth-child(7){animation-delay:.7s}
+.slide.active .ct-data{animation:rowDrop .45s ease forwards}
+.slide.active .ct-data:nth-child(2){animation-delay:.10s}
+.slide.active .ct-data:nth-child(3){animation-delay:.18s}
+.slide.active .ct-data:nth-child(4){animation-delay:.26s}
+.slide.active .ct-data:nth-child(5){animation-delay:.34s}
+.slide.active .ct-data:nth-child(6){animation-delay:.42s}
+.slide.active .ct-data:nth-child(7){animation-delay:.50s}
+.slide.active .ct-data:nth-child(8){animation-delay:.58s}
+
+@keyframes rowDrop{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.beholder-tally{
+  margin-top:8px;
+  display:flex;justify-content:center;align-items:center;gap:12px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  color:var(--text-dim);text-transform:uppercase;
+}
+.beholder-tally strong{color:var(--text);font-weight:700}
+.beholder-tally .pip-h{color:#f59e0b}
+.beholder-tally .pip-a{color:var(--green)}
 
 /* ═══════════════════════════════════
    Animations
@@ -553,11 +766,597 @@ body{
 }
 
 
+/* ═══════════════════════════════════
+   Demand → Outcome diagram (slide 6)
+   ═══════════════════════════════════ */
+.demand-flow{
+  width:min(940px,100%);
+  display:flex;flex-direction:column;gap:10px;
+}
+.df-row{
+  display:grid;
+  grid-template-columns:1fr 64px 1fr;
+  align-items:center;gap:0;
+  opacity:0;transform:translateY(10px);
+}
+.slide.active .df-row{animation:fadeSlideUp .45s ease forwards}
+.slide.active .df-row:nth-child(1){animation-delay:.10s}
+.slide.active .df-row:nth-child(2){animation-delay:.20s}
+.slide.active .df-row:nth-child(3){animation-delay:.30s}
+.slide.active .df-row:nth-child(4){animation-delay:.40s}
+.slide.active .df-row:nth-child(5){animation-delay:.50s}
+
+.df-demand,.df-outcome{
+  padding:13px 16px;border-radius:8px;
+  display:flex;align-items:center;gap:12px;
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  min-height:60px;
+}
+.df-demand{
+  border-left:3px solid var(--orange);
+}
+.df-demand .icn{
+  width:32px;height:32px;border-radius:8px;
+  background:var(--orange-dim);color:var(--orange);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;
+}
+.df-demand .copy .lbl{
+  display:block;font-family:var(--mono);font-size:10px;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:2px;
+}
+.df-demand .copy .what{
+  display:block;font-size:13.5px;font-weight:600;color:var(--text);
+  line-height:1.35;
+}
+
+.df-arrow{
+  position:relative;height:60px;
+  display:flex;align-items:center;justify-content:center;
+}
+.df-arrow svg{width:100%;height:24px;overflow:visible}
+.df-arrow .line{
+  stroke:var(--ghost);
+  stroke-width:1.5;fill:none;
+  stroke-dasharray:120;stroke-dashoffset:120;
+}
+.slide.active .df-row:nth-child(1) .df-arrow .line{animation:drawArrow .5s ease .25s forwards}
+.slide.active .df-row:nth-child(2) .df-arrow .line{animation:drawArrow .5s ease .35s forwards}
+.slide.active .df-row:nth-child(3) .df-arrow .line{animation:drawArrow .5s ease .45s forwards}
+.slide.active .df-row:nth-child(4) .df-arrow .line{animation:drawArrow .5s ease .55s forwards}
+.slide.active .df-row:nth-child(5) .df-arrow .line{animation:drawArrow .5s ease .65s forwards}
+.df-arrow .head{
+  fill:var(--orange);opacity:0;
+}
+.slide.active .df-row:nth-child(1) .df-arrow .head{animation:headIn .25s ease .7s forwards}
+.slide.active .df-row:nth-child(2) .df-arrow .head{animation:headIn .25s ease .8s forwards}
+.slide.active .df-row:nth-child(3) .df-arrow .head{animation:headIn .25s ease .9s forwards}
+.slide.active .df-row:nth-child(4) .df-arrow .head{animation:headIn .25s ease 1.0s forwards}
+.slide.active .df-row:nth-child(5) .df-arrow .head{animation:headIn .25s ease 1.1s forwards}
+
+.df-outcome{
+  border-left:3px solid var(--green);
+  background:rgba(34,197,94,.05);
+  border-color:rgba(34,197,94,.25);
+}
+.df-outcome .icn{
+  width:32px;height:32px;border-radius:8px;
+  background:rgba(34,197,94,.18);color:var(--green);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;
+}
+.df-outcome .copy .lbl{
+  display:block;font-family:var(--mono);font-size:10px;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--green);opacity:.8;margin-bottom:2px;
+}
+.df-outcome .copy .what{
+  display:block;font-size:13.5px;font-weight:600;color:var(--text);
+  line-height:1.35;
+}
+
+.df-foot{
+  width:min(940px,100%);
+  text-align:center;
+  font-family:var(--mono);font-size:11px;
+  color:var(--text-dim);letter-spacing:.06em;
+  text-transform:uppercase;
+  padding-top:6px;
+  opacity:0;
+}
+.df-foot strong{color:var(--text);font-weight:700}
+.slide.active .df-foot{animation:fadeSlideUp .5s ease 1.2s forwards}
+
+@keyframes drawArrow{
+  to{stroke-dashoffset:0}
+}
+@keyframes headIn{
+  to{opacity:1}
+}
+
+/* ═══════════════════════════════════
+   Scope-inventory diagram (slide 4)
+   ═══════════════════════════════════ */
+.scope-cols{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:24px;width:min(920px,100%);
+}
+.scope-panel{
+  position:relative;
+  border-radius:12px;
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  padding:20px;
+  display:flex;flex-direction:column;gap:14px;
+  overflow:hidden;
+}
+.scope-panel::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    radial-gradient(circle at 80% -10%, rgba(255,255,255,.03), transparent 60%);
+  pointer-events:none;
+}
+.scope-panel.implicit{border-color:rgba(245,158,11,.28)}
+.scope-panel.explicit{border-color:var(--orange-dim)}
+.scope-head{
+  display:flex;align-items:center;justify-content:space-between;
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--text-dim);
+}
+.scope-head .langtag{
+  padding:3px 8px;border-radius:4px;font-weight:700;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.scope-head .langtag img{width:14px;height:14px;display:block}
+.scope-panel.implicit .scope-head .langtag{background:rgba(245,158,11,.12);color:#f59e0b}
+.scope-panel.explicit .scope-head .langtag{background:rgba(231,60,23,.12);color:var(--orange)}
+.scope-panel.explicit .scope-head .langtag img{filter:brightness(0) saturate(100%) invert(34%) sepia(64%) saturate(2918%) hue-rotate(347deg) brightness(86%) contrast(96%)}
+.scope-import{
+  font-family:var(--mono);font-size:13px;
+  background:rgba(0,0,0,.25);
+  border:1px solid var(--code-border);
+  border-radius:6px;
+  padding:10px 12px;color:var(--text);
+}
+[data-theme="light"] .scope-import{background:rgba(0,0,0,.04)}
+.scope-import .kw{color:var(--amber)}
+.scope-import .mod{color:var(--orange);font-weight:600}
+.scope-import .sym{color:var(--green);font-weight:600}
+.scope-import .cm{color:var(--text-dim);font-style:italic}
+
+.scope-windowlabel{
+  font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--text-dim);
+  display:flex;align-items:center;gap:8px;
+}
+.scope-windowlabel::before,
+.scope-windowlabel::after{
+  content:"";flex:1;height:1px;background:var(--ghost);
+}
+.scope-window{
+  position:relative;
+  min-height:170px;
+  border:1px dashed var(--ghost);
+  border-radius:8px;
+  padding:14px;
+  display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;
+  overflow:hidden;
+}
+.scope-window::after{
+  content:attr(data-corner);
+  position:absolute;bottom:6px;right:8px;
+  font-family:var(--mono);font-size:9px;letter-spacing:.06em;
+  color:var(--text-dim);opacity:.6;
+}
+.sym-chip{
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  padding:4px 9px;border-radius:4px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--ghost);
+  color:var(--text);
+  white-space:nowrap;
+  opacity:0;transform:translateY(6px);
+}
+[data-theme="light"] .sym-chip{background:rgba(0,0,0,.03)}
+.sym-chip.named{
+  background:var(--orange-dim);
+  border-color:var(--orange);
+  color:var(--text);
+  box-shadow:0 0 0 1px var(--orange-dim);
+}
+.sym-chip.ghost{
+  color:var(--text-dim);
+  border-style:dashed;
+  border-color:rgba(245,158,11,.3);
+  background:rgba(245,158,11,.05);
+  opacity:.55;
+  font-weight:500;
+}
+.sym-chip.ghost.q::after{
+  content:" ?";color:#f59e0b;font-weight:700;
+}
+.sym-chip.more{
+  background:transparent;
+  border:1px dashed var(--text-dim);
+  color:var(--text-dim);
+  font-style:italic;
+}
+.slide.active .sym-chip{animation:chipFlick .35s ease forwards}
+.slide.active .scope-panel.implicit .sym-chip:nth-child(1){animation-delay:.10s}
+.slide.active .scope-panel.implicit .sym-chip:nth-child(2){animation-delay:.14s}
+.slide.active .scope-panel.implicit .sym-chip:nth-child(3){animation-delay:.18s}
+.slide.active .scope-panel.implicit .sym-chip:nth-child(4){animation-delay:.22s}
+.slide.active .scope-panel.implicit .sym-chip:nth-child(5){animation-delay:.26s}
+.slide.active .scope-panel.implicit .sym-chip:nth-child(6){animation-delay:.30s}
+.slide.active .scope-panel.implicit .sym-chip:nth-child(7){animation-delay:.34s}
+.slide.active .scope-panel.implicit .sym-chip:nth-child(8){animation-delay:.38s}
+.slide.active .scope-panel.implicit .sym-chip:nth-child(9){animation-delay:.42s}
+.slide.active .scope-panel.implicit .sym-chip:nth-child(10){animation-delay:.46s}
+.slide.active .scope-panel.implicit .sym-chip:nth-child(11){animation-delay:.50s}
+.slide.active .scope-panel.implicit .sym-chip:nth-child(12){animation-delay:.54s}
+.slide.active .scope-panel.implicit .sym-chip:nth-child(13){animation-delay:.58s}
+.slide.active .scope-panel.implicit .sym-chip:nth-child(14){animation-delay:.62s}
+.slide.active .scope-panel.implicit .sym-chip:nth-child(15){animation-delay:.66s}
+
+.slide.active .scope-panel.explicit .sym-chip:nth-child(1){animation-delay:.20s}
+.slide.active .scope-panel.explicit .sym-chip:nth-child(2){animation-delay:.34s}
+
+.scope-foot{
+  font-family:var(--sans);font-size:12px;color:var(--text-dim);
+  line-height:1.5;
+  padding-top:8px;border-top:1px solid var(--ghost);
+}
+.scope-foot strong{color:var(--text)}
+.scope-panel.implicit .scope-foot strong{color:#f59e0b}
+.scope-panel.explicit .scope-foot strong{color:var(--orange)}
+
+.scope-counter{
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;
+  color:var(--text-dim);
+  display:flex;align-items:center;gap:8px;
+}
+.scope-counter .num{
+  font-weight:700;color:var(--text);font-size:13px;
+  font-variant-numeric:tabular-nums;
+}
+.scope-panel.implicit .scope-counter .num{color:#f59e0b}
+.scope-panel.explicit .scope-counter .num{color:var(--orange)}
+
+@keyframes chipFlick{
+  0%{opacity:0;transform:translateY(6px)}
+  60%{opacity:1;transform:translateY(0)}
+  100%{opacity:var(--target-op,1);transform:translateY(0)}
+}
+
+/* ═══════════════════════════════════
+   Type-system error-timing diagram (slide 0)
+   ═══════════════════════════════════ */
+.timing-diagram{
+  width:min(960px,100%);
+  display:grid;
+  grid-template-columns:120px 1fr;
+  gap:8px 22px;
+  align-items:center;
+}
+.timing-row-label{
+  font-family:var(--mono);
+  font-size:12px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;
+  text-align:right;line-height:1.3;
+  padding:14px 0;
+}
+.timing-row-label .sub{
+  display:block;font-size:10px;font-weight:500;
+  color:var(--text-dim);letter-spacing:.04em;
+  margin-top:4px;text-transform:none;
+}
+.timing-row-label.dynamic{color:#f59e0b}
+.timing-row-label.static{color:var(--orange)}
+
+.timing-track{
+  position:relative;
+  height:88px;
+  background:linear-gradient(90deg,
+    rgba(255,255,255,.04) 0%,
+    rgba(255,255,255,.06) 50%,
+    rgba(255,255,255,.04) 100%);
+  border:1px solid var(--ghost);
+  border-radius:10px;
+  overflow:hidden;
+}
+[data-theme="light"] .timing-track{
+  background:linear-gradient(90deg,
+    rgba(0,0,0,.025) 0%,
+    rgba(0,0,0,.04) 50%,
+    rgba(0,0,0,.025) 100%);
+}
+.timing-track::before{
+  /* faint grid texture */
+  content:"";position:absolute;inset:0;
+  background-image:
+    repeating-linear-gradient(90deg,transparent 0,transparent 7%,rgba(255,255,255,.04) 7%,rgba(255,255,255,.04) calc(7% + 1px));
+  pointer-events:none;
+}
+[data-theme="light"] .timing-track::before{
+  background-image:
+    repeating-linear-gradient(90deg,transparent 0,transparent 7%,rgba(0,0,0,.04) 7%,rgba(0,0,0,.04) calc(7% + 1px));
+}
+
+/* Stages along the track */
+.timing-stage{
+  position:absolute;
+  top:50%;transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.04em;color:var(--text-dim);
+  white-space:nowrap;
+  opacity:0;
+}
+.slide.active .timing-stage{animation:timeStageIn .5s ease forwards}
+.timing-stage .pip{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--surface-hi);
+  border:1.5px solid var(--ghost);
+  box-shadow:0 0 0 4px rgba(255,255,255,.02);
+}
+.timing-stage.ok .pip{
+  background:rgba(34,197,94,.18);
+  border-color:rgba(34,197,94,.5);
+}
+.timing-stage .lbl{font-weight:600}
+.timing-stage .lbl .where{display:block;color:var(--text);font-size:9px;opacity:.7}
+
+/* Caret/marker for where the error lands */
+.error-marker{
+  position:absolute;
+  top:50%;transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  opacity:0;
+}
+.error-marker .burst{
+  width:34px;height:34px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-weight:700;font-size:14px;
+  position:relative;
+}
+.error-marker.dynamic .burst{
+  background:radial-gradient(circle,#ef4444 0%, rgba(239,68,68,.0) 70%);
+  color:#fff;
+  box-shadow:0 0 24px rgba(239,68,68,.55);
+}
+.error-marker.dynamic .burst::before,
+.error-marker.dynamic .burst::after{
+  /* radiating shards */
+  content:"";position:absolute;inset:-6px;
+  border-radius:50%;
+  background:conic-gradient(from 0deg,
+    transparent 0deg, rgba(239,68,68,.5) 8deg, transparent 16deg,
+    transparent 60deg, rgba(239,68,68,.45) 68deg, transparent 76deg,
+    transparent 120deg, rgba(239,68,68,.5) 128deg, transparent 136deg,
+    transparent 180deg, rgba(239,68,68,.45) 188deg, transparent 196deg,
+    transparent 240deg, rgba(239,68,68,.5) 248deg, transparent 256deg,
+    transparent 300deg, rgba(239,68,68,.45) 308deg, transparent 316deg);
+  mask:radial-gradient(circle, transparent 16px, black 17px, black 23px, transparent 24px);
+  -webkit-mask:radial-gradient(circle, transparent 16px, black 17px, black 23px, transparent 24px);
+  opacity:.9;
+}
+.error-marker.dynamic .burst::after{animation:burstSpin 3.5s linear infinite}
+.error-marker.static .burst{
+  background:rgba(231,60,23,.92);
+  color:#fff;
+  box-shadow:0 0 18px rgba(231,60,23,.55);
+}
+.error-marker.static .gate{
+  /* vertical gate bar above + below the burst */
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:3px;height:74px;
+  background:linear-gradient(180deg,
+    transparent 0%, var(--orange) 15%,
+    var(--orange) 85%, transparent 100%);
+  border-radius:2px;
+  box-shadow:0 0 12px rgba(231,60,23,.5);
+  z-index:-1;
+  opacity:0;
+}
+.slide.active .error-marker.static .gate{animation:gateDrop .45s cubic-bezier(.4,1.6,.5,1) .25s forwards}
+.error-marker .err-label{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+  padding:3px 8px;border-radius:4px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--ghost);
+  color:var(--text);
+}
+.error-marker.dynamic .err-label{color:#ef4444;border-color:rgba(239,68,68,.4)}
+.error-marker.static .err-label{color:var(--orange);border-color:var(--orange-dim)}
+.error-marker .err-detail{
+  font-family:var(--mono);font-size:9px;color:var(--text-dim);
+  margin-top:2px;letter-spacing:.04em;
+}
+
+/* connector line under each track marking when error fires */
+.timing-axis{
+  grid-column:2;
+  position:relative;
+  height:22px;
+  display:flex;align-items:flex-start;
+  font-family:var(--mono);font-size:10px;
+  color:var(--text-dim);letter-spacing:.06em;
+}
+.timing-axis .tick{
+  position:absolute;top:0;
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+}
+.timing-axis .tick::before{
+  content:"";width:1px;height:6px;background:var(--ghost);
+}
+.timing-axis .tick.compile{color:var(--orange)}
+.timing-axis .tick.runtime{color:#f59e0b}
+.timing-axis .axis-line{
+  position:absolute;left:0;right:0;top:0;
+  height:1px;background:var(--ghost);
+}
+
+/* path-traversal: animated dot that runs through the dynamic track until it hits the bomb */
+.trace-dot{
+  position:absolute;top:50%;
+  width:8px;height:8px;border-radius:50%;
+  background:#f59e0b;
+  box-shadow:0 0 12px rgba(245,158,11,.7);
+  transform:translate(-50%,-50%);
+  opacity:0;
+}
+.slide.active .trace-dot{animation:traceRun 2.4s cubic-bezier(.5,.05,.5,1) .35s forwards}
+
+/* The "compile gate slams shut" line for the static track */
+.gate-line{
+  position:absolute;top:0;bottom:0;
+  width:2px;background:var(--orange);
+  box-shadow:0 0 12px var(--orange-glow);
+  opacity:0;
+  transform-origin:top;
+}
+.slide.active .gate-line{animation:gateLine .35s ease .15s forwards}
+
+/* ── Verification loop — horizontal back-arrow + label, own grid row ── */
+.fix-loop{
+  grid-column:2;
+  position:relative;
+  height:34px;
+  pointer-events:none;
+}
+.fix-loop-curve{
+  position:absolute;
+  top:0;left:0;right:0;
+  height:18px;
+  display:block;
+  overflow:visible;
+}
+.loop-path{
+  fill:none;
+  stroke-width:2;
+  stroke-linecap:round;
+}
+.timing-row-static .loop-path{
+  stroke:var(--orange);
+  stroke-dasharray:16;stroke-dashoffset:16;
+  filter:drop-shadow(0 0 4px rgba(231,60,23,.4));
+}
+.timing-row-dynamic .loop-path{
+  stroke:#ef4444;
+  opacity:.7;
+  stroke-dasharray:84;stroke-dashoffset:84;
+}
+.slide.active .timing-row-static .loop-path{
+  animation:drawLine .5s ease 1.1s forwards;
+}
+.slide.active .timing-row-dynamic .loop-path{
+  animation:drawLine .9s ease 3.1s forwards;
+}
+@keyframes drawLine{to{stroke-dashoffset:0}}
+
+.loop-tip{
+  position:absolute;
+  top:0;
+  /* `left:X%` puts the icon's left edge at X% — apex of caret-left sits there, body trails right under the line */
+  font-size:18px;line-height:1;
+  opacity:0;
+}
+.timing-row-static .loop-tip{color:var(--orange)}
+.timing-row-dynamic .loop-tip{color:#ef4444}
+.slide.active .timing-row-static .loop-tip{
+  animation:loopFadeIn .25s ease 1.5s forwards;
+}
+.slide.active .timing-row-dynamic .loop-tip{
+  animation:loopFadeIn .25s ease 3.85s forwards;
+}
+
+.loop-label{
+  position:absolute;
+  bottom:0;
+  transform:translateX(-50%);
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.06em;text-transform:uppercase;
+  white-space:nowrap;
+  opacity:0;
+}
+.timing-row-static .loop-label{color:var(--orange);font-weight:700}
+.timing-row-dynamic .loop-label{color:var(--text-dim)}
+.slide.active .timing-row-static .loop-label{
+  animation:loopFadeIn .4s ease 1.55s forwards;
+}
+.slide.active .timing-row-dynamic .loop-label{
+  animation:loopFadeIn .4s ease 3.9s forwards;
+}
+@keyframes loopFadeIn{to{opacity:1}}
+
+.timing-legend{
+  width:min(960px,100%);
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--mono);font-size:11px;color:var(--text-dim);
+  letter-spacing:.04em;
+  margin-top:4px;
+}
+.timing-legend strong{color:var(--text);font-weight:700}
+.timing-legend .verdict{
+  padding:5px 12px;border-radius:14px;
+  font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  background:rgba(231,60,23,.1);color:var(--orange);
+  border:1px solid var(--orange-dim);
+}
+
+/* Staggered stage reveal */
+.slide.active .timing-row-dynamic .timing-stage:nth-child(1){animation-delay:.15s}
+.slide.active .timing-row-dynamic .timing-stage:nth-child(2){animation-delay:.32s}
+.slide.active .timing-row-dynamic .timing-stage:nth-child(3){animation-delay:.5s}
+.slide.active .timing-row-dynamic .error-marker{animation:errorMarkerDyn .5s ease 2.55s forwards}
+
+.slide.active .timing-row-static .timing-stage:nth-child(1){animation-delay:.15s}
+.slide.active .timing-row-static .error-marker{animation:errorMarkerStat .5s ease .5s forwards}
+
+@keyframes timeStageIn{
+  from{opacity:0;transform:translate(-50%,-50%) translateY(8px)}
+  to{opacity:1;transform:translate(-50%,-50%) translateY(0)}
+}
+@keyframes traceRun{
+  0%{left:5%;opacity:0}
+  10%{opacity:1}
+  85%{left:93%;opacity:1}
+  92%{left:93%;opacity:1;transform:translate(-50%,-50%) scale(1.4)}
+  100%{left:93%;opacity:0;transform:translate(-50%,-50%) scale(2)}
+}
+@keyframes gateLine{
+  from{opacity:0;transform:scaleY(0)}
+  to{opacity:1;transform:scaleY(1)}
+}
+@keyframes gateDrop{
+  from{opacity:0;transform:translate(-50%,-50%) scaleY(.2)}
+  to{opacity:1;transform:translate(-50%,-50%) scaleY(1)}
+}
+@keyframes errorMarkerDyn{
+  from{opacity:0;transform:translate(-50%,-50%) scale(.4)}
+  to{opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
+@keyframes errorMarkerStat{
+  from{opacity:0;transform:translate(-50%,-50%) scale(.4)}
+  to{opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
+@keyframes burstSpin{
+  to{transform:rotate(360deg)}
+}
+
 /* ─── Responsive adjustments ─── */
 @media(max-width:900px){
   .axiom-grid{grid-template-columns:repeat(2,1fr)}
   .code-compare{grid-template-columns:1fr}
   .contrast-cols{grid-template-columns:1fr}
+  .timing-diagram{grid-template-columns:1fr;gap:8px 0}
+  .timing-row-label{text-align:left;padding:4px 8px 0}
   .slide{padding:24px 24px}
 }
 </style>
@@ -571,38 +1370,76 @@ body{
   <div class="slides-viewport">
     <div class="slides-stage">
 
-    <!-- ═══ SLIDE 1: Authority Axioms ═══ -->
+    <!-- ═══ SLIDE 0: Static types — the AI's safety net ═══ -->
     <section class="slide active" data-slide="0">
-      <h1 class="slide-title">Can I Control What It's <span class="dim">Allowed</span> To Do?</h1>
-      <div class="axiom-grid">
-        <div class="axiom-card">
-          <div class="axiom-icon"><i class="fas fa-eye"></i></div>
-          <div class="axiom-number">Axiom 3</div>
-          <div class="axiom-name">Effects Are Real and Legible</div>
-          <div class="axiom-desc">"Effects define what a computation is allowed to do, not just what it computes."</div>
+      <h1 class="slide-title">Where Does the <span class="accent">Error</span> Land?</h1>
+      <p class="slide-subtitle" style="max-width:720px">The further the error fires, the longer the loop back. Static typing keeps that loop <em>tight</em>.</p>
+
+      <div class="timing-diagram">
+        <div class="timing-row-label dynamic">
+          Dynamic
+          <span class="sub">Python / JS</span>
         </div>
-        <div class="axiom-card">
-          <div class="axiom-icon"><i class="fas fa-lock"></i></div>
-          <div class="axiom-number">Axiom 4</div>
-          <div class="axiom-name">Authority Must Be Explicit</div>
-          <div class="axiom-desc">"Ambient authority is treated as a design error."</div>
+        <div class="timing-track timing-row-dynamic">
+          <div class="timing-stage ok"  style="left:8%"><span class="pip"></span><span class="lbl">parse</span></div>
+          <div class="timing-stage ok"  style="left:24%"><span class="pip"></span><span class="lbl">load</span></div>
+          <div class="timing-stage ok"  style="left:42%"><span class="pip"></span><span class="lbl">run</span></div>
+          <div class="trace-dot"></div>
+          <div class="error-marker dynamic" style="left:90%">
+            <div class="burst">!</div>
+            <div class="err-label">AttributeError</div>
+            <div class="err-detail">3 frames deep</div>
+          </div>
         </div>
-        <div class="axiom-card">
-          <div class="axiom-icon"><i class="fas fa-coins"></i></div>
-          <div class="axiom-number">Axiom 9</div>
-          <div class="axiom-name">Cost Is Part of Meaning</div>
-          <div class="axiom-desc">"Programs should make their resource implications visible to tools and agents."</div>
+
+        <!-- Dynamic verification loop — own grid row -->
+        <div class="fix-loop timing-row-dynamic">
+          <svg class="fix-loop-curve" viewBox="0 0 100 12" preserveAspectRatio="none">
+            <line class="loop-path" x1="90" y1="6" x2="6" y2="6"/>
+          </svg>
+          <div class="loop-tip" style="left:5%"><i class="fas fa-caret-left"></i></div>
+          <div class="loop-label" style="left:48%">loop back &middot; minutes &middot; redeploy</div>
         </div>
-        <div class="axiom-card">
-          <div class="axiom-icon"><i class="fas fa-door-open"></i></div>
-          <div class="axiom-number">Axiom 12</div>
-          <div class="axiom-name">The Language Is a System Boundary</div>
-          <div class="axiom-desc">"Crossing that boundary must always be explicit."</div>
+
+        <div class="timing-row-label static">
+          Static
+          <span class="sub">AILANG</span>
         </div>
+        <div class="timing-track timing-row-static">
+          <div class="timing-stage ok" style="left:8%"><span class="pip"></span><span class="lbl">parse</span></div>
+          <div class="gate-line" style="left:22%"></div>
+          <div class="error-marker static" style="left:22%">
+            <div class="gate"></div>
+            <div class="burst">!</div>
+            <div class="err-label">type error</div>
+            <div class="err-detail">line 12, col 4</div>
+          </div>
+        </div>
+
+        <!-- Static verification loop — own grid row -->
+        <div class="fix-loop timing-row-static">
+          <svg class="fix-loop-curve" viewBox="0 0 100 12" preserveAspectRatio="none">
+            <line class="loop-path" x1="22" y1="6" x2="6" y2="6"/>
+          </svg>
+          <div class="loop-tip" style="left:5%"><i class="fas fa-caret-left"></i></div>
+          <div class="loop-label" style="left:14%">tight loop &middot; ~1s</div>
+        </div>
+
+        <div class="timing-axis">
+          <div class="axis-line"></div>
+          <span class="tick compile" style="left:22%">compile&nbsp;time</span>
+          <span class="tick" style="left:55%">&nbsp;</span>
+          <span class="tick runtime" style="left:90%">runtime</span>
+        </div>
+      </div>
+
+      <div class="timing-legend">
+        <span>AILANG catches it at the gate. Python only knows once it's inside &mdash; and the fix loop pays for it.</span>
+        <span class="verdict">tight fix loop</span>
       </div>
     </section>
 
-    <!-- ═══ SLIDE 2: Effect Signature ═══ -->
+    <!-- ═══ SLIDE 1: Effect Signature ═══ -->
     <section class="slide sig-slide" data-slide="1">
       <h1 class="sig-title">AI Cannot Hallucinate a Network Call</h1>
       <div class="sig-block">
@@ -654,12 +1491,16 @@ body{
       </div>
     </section>
 
-    <!-- ═══ SLIDE 3: Z3 Contracts ═══ -->
+    <!-- ═══ SLIDE 2: Z3 Contracts (neurosymbolic loop) ═══ -->
     <section class="slide" data-slide="2">
-      <h1 class="slide-title">Pure Functions Enable <span class="dim">Mathematical Proof</span></h1>
+      <p class="slide-eyebrow">Neurosymbolic</p>
+      <h1 class="slide-title">AI writes the code. <span class="accent">Z3 proves it.</span></h1>
       <div class="z3-layout">
         <div class="z3-code-panel">
-          <div class="code-panel-header ailang">AILANG — Contracts</div>
+          <div class="code-panel-header ailang">
+            <span class="lg"><img src="../images/logos/ailang-logo.svg" alt=""></span>
+            AILANG &mdash; Contracts
+          </div>
           <div class="code-panel-body">
 <span class="cm">-- ✓ This one verifies</span>
 <span class="kw">export func</span> <span class="fn-name">calculateTax</span>(<span class="typ-name">income: int</span>) <span class="typ-name">-&gt; int</span> <span class="fx-name">! {}</span>
@@ -690,17 +1531,38 @@ body{
           </div>
         </div>
       </div>
+      <div class="z3-loop">
+        <div class="z3-loop-side neural">
+          <div class="z3-loop-head"><i class="fa-solid fa-brain"></i> Neural</div>
+          <div class="z3-loop-body">LLM writes AILANG with <code>requires</code> / <code>ensures</code></div>
+        </div>
+        <div class="z3-loop-arrow"><i class="fa-solid fa-right-long"></i></div>
+        <div class="z3-loop-side symbolic">
+          <div class="z3-loop-head"><i class="fa-solid fa-square-root-variable"></i> Symbolic</div>
+          <div class="z3-loop-body">Z3 SMT solver proves the contract for <em>all</em> inputs</div>
+        </div>
+        <div class="z3-loop-arrow back"><i class="fa-solid fa-left-long"></i></div>
+        <div class="z3-loop-side neural">
+          <div class="z3-loop-head"><i class="fa-solid fa-wand-magic-sparkles"></i> Fix</div>
+          <div class="z3-loop-body">Counterexample tells the AI exactly what to repair</div>
+        </div>
+      </div>
+
       <div class="compare-callout z3-callout">
-        <strong>Z3 proves contracts correct for all inputs — not just test cases.</strong> Pure functions + no side effects = the SMT solver can reason about every possible execution. A one-turn fix: the counterexample tells AI exactly what's wrong.
+        <strong>This is neurosymbolic programming &mdash; coupled, on purpose.</strong> The neural side writes the code. The symbolic side proves it. No tests, no sampling &mdash; the solver reasons about every possible execution and hands back a concrete counterexample when it can't.
       </div>
     </section>
 
-    <!-- ═══ SLIDE 4: Pattern Matching ═══ -->
+    <!-- ═══ SLIDE 3: Pattern Matching — fits the context window ═══ -->
     <section class="slide" data-slide="3">
-      <h1 class="slide-title">No Loops. Only Pattern Matching.</h1>
+      <h1 class="slide-title">Code the AI Can Hold in <span class="dim">One Context</span></h1>
+      <p class="slide-subtitle" style="margin-top:-4px;margin-bottom:8px">No loops. Only pattern matching. Every branch is on screen — no mutable loop state to remember.</p>
       <div class="code-compare">
         <div class="code-panel">
-          <div class="code-panel-header trad">Traditional</div>
+          <div class="code-panel-header trad">
+            <span class="lg"><img src="../images/logos/langs/python.svg" alt=""></span>
+            Python
+          </div>
           <div class="code-panel-body">
 <span class="kw">total</span> = <span class="num">0</span>
 <span class="kw">for</span> item <span class="kw">in</span> items:
@@ -709,7 +1571,10 @@ body{
           </div>
         </div>
         <div class="code-panel">
-          <div class="code-panel-header ailang">AILANG</div>
+          <div class="code-panel-header ailang">
+            <span class="lg"><img src="../images/logos/ailang-logo.svg" alt=""></span>
+            AILANG
+          </div>
           <div class="code-panel-body">
 <span class="kw">pure func</span> <span class="fn-name">total</span>(<span class="typ-name">xs: List[Item]</span>) <span class="typ-name">-&gt; int</span> {
   <span class="kw">match</span> xs {
@@ -723,41 +1588,97 @@ body{
         </div>
       </div>
       <div class="compare-callout">
-        <strong>Total, analysable iteration.</strong> No hidden termination conditions. The compiler verifies exhaustiveness — every case must be handled. One-turn fix when a branch is missing.
+        <strong>Every branch is local.</strong> The model doesn't have to track an accumulator across loop iterations or wonder if it terminates. Compiler-checked exhaustiveness means fewer tokens spent on reasoning about state — and a one-turn fix when a branch is missing.
       </div>
     </section>
 
-    <!-- ═══ SLIDE 5: Transitive Imports ═══ -->
+    <!-- ═══ SLIDE 4: Transitive Imports — bounded context ═══ -->
     <section class="slide" data-slide="4">
-      <h1 class="slide-title">Imports Are Never Transitive</h1>
-      <div class="import-code">
-<span class="kw">module</span> <span class="mod">myapp/handler</span>
-<span class="kw">import</span> <span class="mod">std/io</span> (<span class="sym">println</span>)      <span class="cm">-- only println, nothing else</span>
-<span class="kw">import</span> <span class="mod">std/fs</span> (<span class="sym">readFile</span>)    <span class="cm">-- explicit: just readFile</span>
-<span class="cm denied">-- std/net not imported → Net effect DENIED by compiler</span>
-      </div>
-      <div class="contrast-cols">
-        <div class="contrast-card warn">
-          <div class="contrast-icon"><i class="fas fa-triangle-exclamation"></i></div>
-          <div class="contrast-label">Python / JavaScript</div>
-          <div class="contrast-text"><code>import foo</code> gives you everything <code>foo</code> imported. Three levels deep, you're using symbols you never asked for.</div>
+      <h1 class="slide-title">What's in Scope Is <span class="dim">What's on Screen</span></h1>
+      <p class="slide-subtitle" style="margin-top:-4px;margin-bottom:6px">The same line of code &mdash; two very different mental loads on the AI.</p>
+
+      <div class="scope-cols">
+
+        <div class="scope-panel implicit">
+          <div class="scope-head">
+            <span>One line. What's in scope?</span>
+            <span class="langtag"><img src="../images/logos/langs/python.svg" alt="">Python</span>
+          </div>
+          <div class="scope-import">
+            <span class="kw">import</span> <span class="mod">requests</span>
+          </div>
+          <div class="scope-windowlabel">what the AI must reason about</div>
+          <div class="scope-window" data-corner="opaque scope">
+            <span class="sym-chip named">requests.get</span>
+            <span class="sym-chip named">requests.post</span>
+            <span class="sym-chip ghost q">urllib3.*</span>
+            <span class="sym-chip ghost q">charset_normalizer</span>
+            <span class="sym-chip ghost q">idna</span>
+            <span class="sym-chip ghost q">certifi.*</span>
+            <span class="sym-chip ghost q">ssl</span>
+            <span class="sym-chip ghost q">socket</span>
+            <span class="sym-chip ghost q">http.client</span>
+            <span class="sym-chip ghost q">json</span>
+            <span class="sym-chip ghost q">os.environ</span>
+            <span class="sym-chip ghost q">logging</span>
+            <span class="sym-chip ghost q">warnings</span>
+            <span class="sym-chip ghost q">io.BytesIO</span>
+            <span class="sym-chip more">&hellip; and more, transitively</span>
+          </div>
+          <div class="scope-counter">
+            <span class="num">2</span> named &middot;
+            <span class="num">12+</span> reachable through the package
+          </div>
+          <div class="scope-foot">
+            The model spends tokens <strong>guessing what else is in scope</strong>. Sometimes it hallucinates symbols that don't exist; sometimes it uses ones that do but it shouldn't.
+          </div>
         </div>
-        <div class="contrast-card safe">
-          <div class="contrast-icon"><i class="fas fa-shield-halved"></i></div>
-          <div class="contrast-label">AILANG</div>
-          <div class="contrast-text">Every symbol is explicitly requested. No transitive leakage. AI can't use what wasn't granted.</div>
+
+        <div class="scope-panel explicit">
+          <div class="scope-head">
+            <span>One line. What's in scope?</span>
+            <span class="langtag"><img src="../images/logos/ailang-logo.svg" alt="">AILANG</span>
+          </div>
+          <div class="scope-import">
+            <span class="kw">import</span> <span class="mod">std/net</span> (<span class="sym">get</span>, <span class="sym">post</span>)
+          </div>
+          <div class="scope-windowlabel">what the AI must reason about</div>
+          <div class="scope-window" data-corner="full inventory">
+            <span class="sym-chip named">get</span>
+            <span class="sym-chip named">post</span>
+          </div>
+          <div class="scope-counter">
+            <span class="num">2</span> named &middot;
+            <span class="num">2</span> reachable
+          </div>
+          <div class="scope-foot">
+            The file <strong>is</strong> the inventory. Nothing arrives transitively. Whatever the AI cannot name, it cannot call.
+          </div>
         </div>
+
       </div>
     </section>
 
-    <!-- ═══ SLIDE 6: Complexity Table ═══ -->
+    <!-- ═══ SLIDE 5: Complexity Is Relative to the Reader (Ch2 closer) ═══ -->
     <section class="slide" data-slide="5">
-      <h1 class="slide-title">Complexity Is Relative to the <span class="dim">Reader</span></h1>
+      <h1 class="slide-title">Complexity Is in the Eye of the <span class="dim">Beholder</span></h1>
+      <p class="slide-subtitle" style="margin-top:-4px;margin-bottom:8px">Every AILANG choice has two readers. Same code &mdash; two very different reactions.</p>
       <div class="complexity-table">
         <div class="ct-row ct-header">
-          <div class="ct-cell">AILANG Design Choice</div>
-          <div class="ct-cell"><i class="fas fa-user"></i> Humans Say…</div>
-          <div class="ct-cell"><i class="fas fa-robot"></i> AI Gets…</div>
+          <div class="ct-cell">The Design Choice</div>
+          <div class="ct-cell">
+            <span class="persona-icon"><i class="fas fa-user"></i></span>
+            <span class="persona-name"><span class="name">Human</span><span class="mood">grumbles</span></span>
+          </div>
+          <div class="ct-cell">
+            <span class="persona-name"><span class="name">AI&nbsp;Agent</span><span class="mood">thanks you</span></span>
+            <span class="persona-icon"><i class="fas fa-robot"></i></span>
+          </div>
+        </div>
+        <div class="ct-row ct-data">
+          <div class="ct-cell">Static, fully-inferred types</div>
+          <div class="ct-cell">"Why annotate?"</div>
+          <div class="ct-cell">Pre-runtime, parseable errors</div>
         </div>
         <div class="ct-row ct-data">
           <div class="ct-cell">No loops, only recursion</div>
@@ -772,7 +1693,7 @@ body{
         <div class="ct-row ct-data">
           <div class="ct-cell">No transitive imports</div>
           <div class="ct-cell">"Tedious"</div>
-          <div class="ct-cell">No scope confusion</div>
+          <div class="ct-cell">Bounded context window</div>
         </div>
         <div class="ct-row ct-data">
           <div class="ct-cell">No mutable state</div>
@@ -790,6 +1711,112 @@ body{
           <div class="ct-cell">Parseable feedback for self-repair</div>
         </div>
       </div>
+      <div class="beholder-tally">
+        <span class="pip-h"><i class="fas fa-user"></i> 7 complaints</span>
+        &nbsp;&middot;&nbsp;
+        <strong>Same language.</strong>
+        &nbsp;&middot;&nbsp;
+        <span class="pip-a"><i class="fas fa-robot"></i> 7 wins</span>
+      </div>
+    </section>
+
+    <!-- ═══ SLIDE 6: Takeaways for any codebase — Ch2 closer ═══ -->
+    <section class="slide" data-slide="6">
+      <h1 class="slide-title">You Don't Need a New Language to <span class="accent">Use This</span></h1>
+      <p class="slide-subtitle">What you push for &nbsp;&rarr;&nbsp; what the AI gives you back.</p>
+
+      <div class="demand-flow">
+
+        <div class="df-row">
+          <div class="df-demand">
+            <span class="icn"><i class="fas fa-shield-halved"></i></span>
+            <span class="copy"><span class="lbl">Push for</span><span class="what">Static types &mdash; errors before runtime</span></span>
+          </div>
+          <div class="df-arrow">
+            <svg viewBox="0 0 120 24" preserveAspectRatio="none">
+              <path class="line" d="M0,12 H105"/>
+              <polygon class="head" points="105,4 120,12 105,20"/>
+            </svg>
+          </div>
+          <div class="df-outcome">
+            <span class="icn"><i class="fas fa-bolt"></i></span>
+            <span class="copy"><span class="lbl">Agent gains</span><span class="what">One-turn fixes; no production surprises</span></span>
+          </div>
+        </div>
+
+        <div class="df-row">
+          <div class="df-demand">
+            <span class="icn"><i class="fas fa-gauge-high"></i></span>
+            <span class="copy"><span class="lbl">Push for</span><span class="what">Sub-second feedback loops</span></span>
+          </div>
+          <div class="df-arrow">
+            <svg viewBox="0 0 120 24" preserveAspectRatio="none">
+              <path class="line" d="M0,12 H105"/>
+              <polygon class="head" points="105,4 120,12 105,20"/>
+            </svg>
+          </div>
+          <div class="df-outcome">
+            <span class="icn"><i class="fas fa-rotate"></i></span>
+            <span class="copy"><span class="lbl">Agent gains</span><span class="what">Thousands of iterations per shift</span></span>
+          </div>
+        </div>
+
+        <div class="df-row">
+          <div class="df-demand">
+            <span class="icn"><i class="fas fa-eye"></i></span>
+            <span class="copy"><span class="lbl">Push for</span><span class="what">Explicit context &mdash; no hidden state</span></span>
+          </div>
+          <div class="df-arrow">
+            <svg viewBox="0 0 120 24" preserveAspectRatio="none">
+              <path class="line" d="M0,12 H105"/>
+              <polygon class="head" points="105,4 120,12 105,20"/>
+            </svg>
+          </div>
+          <div class="df-outcome">
+            <span class="icn"><i class="fas fa-window-restore"></i></span>
+            <span class="copy"><span class="lbl">Agent gains</span><span class="what">A context window that contains the whole story</span></span>
+          </div>
+        </div>
+
+        <div class="df-row">
+          <div class="df-demand">
+            <span class="icn"><i class="fas fa-triangle-exclamation"></i></span>
+            <span class="copy"><span class="lbl">Push for</span><span class="what">Structured, typed errors</span></span>
+          </div>
+          <div class="df-arrow">
+            <svg viewBox="0 0 120 24" preserveAspectRatio="none">
+              <path class="line" d="M0,12 H105"/>
+              <polygon class="head" points="105,4 120,12 105,20"/>
+            </svg>
+          </div>
+          <div class="df-outcome">
+            <span class="icn"><i class="fas fa-wrench"></i></span>
+            <span class="copy"><span class="lbl">Agent gains</span><span class="what">Mechanical self-repair, not pattern matching</span></span>
+          </div>
+        </div>
+
+        <div class="df-row">
+          <div class="df-demand">
+            <span class="icn"><i class="fas fa-lock"></i></span>
+            <span class="copy"><span class="lbl">Push for</span><span class="what">Effects &amp; authority called out, not assumed</span></span>
+          </div>
+          <div class="df-arrow">
+            <svg viewBox="0 0 120 24" preserveAspectRatio="none">
+              <path class="line" d="M0,12 H105"/>
+              <polygon class="head" points="105,4 120,12 105,20"/>
+            </svg>
+          </div>
+          <div class="df-outcome">
+            <span class="icn"><i class="fas fa-ban"></i></span>
+            <span class="copy"><span class="lbl">Agent gains</span><span class="what">Can't hallucinate capabilities it wasn't granted</span></span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="df-foot">
+        These are pressures, not products. <strong>You can ship most of this without changing language.</strong>
+      </div>
     </section>
 
     </div><!-- /slides-stage -->
@@ -802,7 +1829,7 @@ body{
         <i class="fas fa-chevron-left"></i>
       </button>
       <span class="step-indicator">
-        <span class="current" id="slideNum">1</span> / <span id="slideTotal">6</span>
+        <span class="current" id="slideNum">1</span> / <span id="slideTotal">7</span>
       </span>
       <button class="transport-btn" id="btnNext" title="Next slide">
         <i class="fas fa-chevron-right"></i>
@@ -819,7 +1846,7 @@ body{
 
 <script>
 (function(){
-  const TOTAL = 6;
+  const TOTAL = 7;
   let current = 0;
   let transitioning = false;
 

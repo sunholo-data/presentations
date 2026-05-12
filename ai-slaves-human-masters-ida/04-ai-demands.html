@@ -354,154 +354,31 @@ body{
   <div class="slides-viewport">
     <div class="slides-stage">
 
-    <!-- ═══ SLIDE 0: Title ═══ -->
+    <!-- (Title, tighten-loop, front-load, hidden-context slides removed for 25-min IDA cut — messages covered in Ch2 entropy + 02 decks. Deck now lands on the demand sheet only.) -->
+
+    <!-- ═══ SLIDE 0: The Demand Sheet (trimmed) ═══ -->
     <section class="slide active" data-slide="0">
-      <h1 class="slide-title">What AI <span class="accent">Demands</span> From Its Masters</h1>
-      <p class="slide-subtitle">Best practices are no longer nice-to-haves. They are requirements from the AI that writes your code.</p>
-      <div class="callout-card">
-        <div class="callout-icon"><i class="fas fa-gavel"></i></div>
-        <div class="callout-text">
-          Lessons learned building <span class="highlight">AILANG</span>: the same engineering discipline we always needed now becomes a <strong>non-negotiable demand</strong> from AI agents. These axioms apply to any language, any stack.
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ SLIDE 1: Tighten the Loop ═══ -->
-    <section class="slide" data-slide="1">
-      <h1 class="slide-title">Tighten the <span class="accent">Loop</span> or AI Quits</h1>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon"><i class="fas fa-rotate"></i></div>
-          <div class="stat-number">&lt;1s</div>
-          <div class="stat-label">Feedback cycle target</div>
-          <div class="stat-source">CI/CD, red-to-green TDD</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon"><i class="fas fa-bolt"></i></div>
-          <div class="stat-number">Build</div>
-          <div class="stat-label">Compile time is a design decision</div>
-          <div class="stat-source">Factor AI iteration into language choice</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon"><i class="fas fa-circle-exclamation"></i></div>
-          <div class="stat-number">0</div>
-          <div class="stat-label">Tolerance for unstructured errors</div>
-          <div class="stat-source">Typed, composable, machine-parseable</div>
-        </div>
-      </div>
-      <div class="closing-callout">
-        AI iterates thousands of times. Long builds, vague errors, and slow CI are a denial-of-service attack on your own AI agent.
-      </div>
-    </section>
-
-    <!-- ═══ SLIDE 2: Front-Load Decisions ═══ -->
-    <section class="slide" data-slide="2">
-      <h1 class="slide-title">Front-Load <span class="accent">Decisions</span>, Iterate at the Start</h1>
-      <div class="evolution-row">
-        <div class="evo-stage warn">
-          <div class="evo-stage-icon"><i class="fas fa-shuffle"></i></div>
-          <div class="evo-stage-title">Vague Brief</div>
-          <div class="evo-stage-desc">AI guesses intent. Builds the wrong thing. Expensive redo. O(n) cost per misalignment.</div>
-        </div>
-        <div class="evo-arrow"><i class="fas fa-right-long"></i></div>
-        <div class="evo-stage safe">
-          <div class="evo-stage-icon"><i class="fas fa-file-contract"></i></div>
-          <div class="evo-stage-title">Design Doc</div>
-          <div class="evo-stage-desc">Explicit constraints. Decision boundaries. AI iterates cheaply within guardrails. O(1) upfront.</div>
-        </div>
-      </div>
-      <div class="contrast-cols">
-        <div class="contrast-card warn">
-          <div class="contrast-icon"><i class="fas fa-triangle-exclamation"></i></div>
-          <div class="contrast-label">After-the-fact feedback</div>
-          <div class="contrast-text">Human reviews code after AI wrote it, discovers misalignment, throws it away. The most expensive loop possible.</div>
-        </div>
-        <div class="contrast-card safe">
-          <div class="contrast-icon"><i class="fas fa-clipboard-check"></i></div>
-          <div class="contrast-label">Front-loaded authority</div>
-          <div class="contrast-text">Design doc specifies where AI has freedom and where humans must decide. Iterate at the spec, not the implementation.</div>
-        </div>
-      </div>
-      <div class="closing-callout">
-        An explicit design doc is cheaper than a rewrite. Specify where AI chooses and where it doesn't.
-      </div>
-    </section>
-
-    <!-- ═══ SLIDE 3: No Hidden Context ═══ -->
-    <section class="slide" data-slide="3">
-      <h1 class="slide-title">No Hidden <span class="accent">Context</span></h1>
-      <div class="contrast-cols">
-        <div class="contrast-card warn">
-          <div class="contrast-icon"><i class="fas fa-eye-slash"></i></div>
-          <div class="contrast-label">Implicit (poison for AI)</div>
-          <div class="contrast-text">Global variables, ambient authority, transitive imports, mutable shared state. Every piece of hidden context is a trap.</div>
-          <div class="code-example"><span class="kw">import</span> os
-result = readFile(path)
-<span class="cm"># Where does readFile come from?</span>
-<span class="cm"># What effects can it have? AI has no idea.</span></div>
-        </div>
-        <div class="contrast-card safe">
-          <div class="contrast-icon"><i class="fas fa-eye"></i></div>
-          <div class="contrast-label">Explicit (AI can reason)</div>
-          <div class="contrast-text">Local scope, declared effects, explicit imports, immutable values. If AI can see it, AI can reason about it.</div>
-          <div class="code-example"><span class="kw">import</span> std/io (<span class="fn">println</span>)
-<span class="kw">import</span> std/fs (<span class="fn">readFile</span>)
-
-<span class="kw">export func</span> <span class="fn">main</span>() -> () <span class="fx">! {IO, FS}</span>
-<span class="cm">-- Every import named. Every effect declared.</span></div>
-        </div>
-      </div>
-      <div class="callout-card">
-        <div class="callout-icon"><i class="fas fa-book-open"></i></div>
-        <div class="callout-text">
-          "Self-documenting code" was for human aesthetics. AI needs all context to be <strong>machine-readable</strong>, not just human-readable. Stop pandering to human preferences &mdash; optimise for the machine that writes 90% of the code.
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ SLIDE 4: The Demand Sheet ═══ -->
-    <section class="slide" data-slide="4">
       <h1 class="slide-title">The <span class="accent">Demand</span> Sheet</h1>
       <div class="demand-grid">
         <div class="demand-item">
           <i class="fas fa-check-circle demand-check"></i>
-          <div class="demand-text">Tight validation loops (CI/CD, TDD)</div>
+          <div class="demand-text">Tight validation loops (sub-second feedback)</div>
         </div>
         <div class="demand-item">
           <i class="fas fa-check-circle demand-check"></i>
-          <div class="demand-text">Factor compile time into language choice</div>
+          <div class="demand-text">Front-load design decisions, not implementation</div>
         </div>
         <div class="demand-item">
           <i class="fas fa-check-circle demand-check"></i>
-          <div class="demand-text">Front-load design decisions</div>
+          <div class="demand-text">All context must be explicit &mdash; no hidden state</div>
         </div>
         <div class="demand-item">
           <i class="fas fa-check-circle demand-check"></i>
-          <div class="demand-text">No implicit global state</div>
-        </div>
-        <div class="demand-item">
-          <i class="fas fa-check-circle demand-check"></i>
-          <div class="demand-text">All context must be explicit</div>
-        </div>
-        <div class="demand-item">
-          <i class="fas fa-check-circle demand-check"></i>
-          <div class="demand-text">Structured, typed errors</div>
-        </div>
-        <div class="demand-item">
-          <i class="fas fa-check-circle demand-check"></i>
-          <div class="demand-text">Deterministic execution <span class="axiom-ref">Axiom 1</span></div>
+          <div class="demand-text">Structured, typed errors (parseable for self-repair)</div>
         </div>
         <div class="demand-item">
           <i class="fas fa-check-circle demand-check"></i>
           <div class="demand-text">Explicit effects &amp; authority <span class="axiom-ref">Axioms 3, 4</span></div>
-        </div>
-        <div class="demand-item">
-          <i class="fas fa-check-circle demand-check"></i>
-          <div class="demand-text">Replayable, auditable traces <span class="axiom-ref">Axiom 2</span></div>
-        </div>
-        <div class="demand-item">
-          <i class="fas fa-check-circle demand-check"></i>
-          <div class="demand-text">Cost visibility <span class="axiom-ref">Axiom 9</span></div>
         </div>
       </div>
       <div class="closing-callout">
@@ -519,7 +396,7 @@ result = readFile(path)
         <i class="fas fa-chevron-left"></i>
       </button>
       <span class="step-indicator">
-        <span class="current" id="slideNum">1</span> / <span id="slideTotal">5</span>
+        <span class="current" id="slideNum">1</span> / <span id="slideTotal">1</span>
       </span>
       <button class="transport-btn" id="btnNext" title="Next slide">
         <i class="fas fa-chevron-right"></i>
@@ -536,7 +413,7 @@ result = readFile(path)
 
 <script>
 (function(){
-  const TOTAL = 5;
+  const TOTAL = 1;
   let current = 0;
   let transitioning = false;
 

@@ -320,6 +320,239 @@ body{
 .callout-text{font-size:14px;color:var(--text);line-height:1.5}
 .callout-text .highlight{color:var(--orange);font-weight:700;font-family:var(--mono)}
 
+/* ─── Language quadrant chart (slide 3) ─── */
+.quadrant-wrap{
+  width:min(820px,100%);
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+}
+.quadrant{
+  position:relative;
+  width:100%;aspect-ratio: 1.55 / 1;
+  background:
+    linear-gradient(180deg,
+      rgba(239,68,68,.04) 0%,
+      rgba(239,68,68,.02) 35%,
+      rgba(34,197,94,.02) 65%,
+      rgba(34,197,94,.06) 100%);
+  border:1px solid var(--ghost);
+  border-radius:14px;
+  overflow:hidden;
+}
+[data-theme="light"] .quadrant{
+  background:
+    linear-gradient(180deg,
+      rgba(239,68,68,.05) 0%,
+      rgba(239,68,68,.025) 35%,
+      rgba(34,197,94,.03) 65%,
+      rgba(34,197,94,.07) 100%);
+}
+.quadrant::before{
+  /* grid */
+  content:"";position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:10% 10%;
+  pointer-events:none;
+}
+[data-theme="light"] .quadrant::before{
+  background-image:
+    linear-gradient(rgba(0,0,0,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,0,0,.04) 1px,transparent 1px);
+}
+.q-axis{
+  position:absolute;
+  background:rgba(255,255,255,.12);
+}
+[data-theme="light"] .q-axis{background:rgba(0,0,0,.18)}
+.q-axis.vert{top:0;bottom:0;left:50%;width:1px}
+.q-axis.horiz{left:0;right:0;top:50%;height:1px}
+
+/* axis labels */
+.q-lab{
+  position:absolute;font-family:var(--mono);
+  font-size:11px;letter-spacing:.06em;
+  color:var(--text-dim);text-transform:uppercase;
+}
+.q-lab.x-left{left:14px;top:50%;transform:translateY(-50%);}
+.q-lab.x-right{right:14px;top:50%;transform:translateY(-50%);}
+.q-lab.y-top{top:10px;left:50%;transform:translateX(-50%);}
+.q-lab.y-bot{bottom:10px;left:50%;transform:translateX(-50%);}
+.q-axis-name{
+  position:absolute;font-family:var(--mono);
+  font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-dim);opacity:.7;
+}
+.q-axis-name.x{bottom:10px;left:14px}
+.q-axis-name.y{top:10px;right:14px;writing-mode:vertical-rl;transform:rotate(180deg)}
+
+/* sweet-spot highlight (bottom-right) */
+.q-sweet{
+  position:absolute;right:0;bottom:0;
+  width:42%;height:42%;
+  background:radial-gradient(circle at 80% 80%,
+    rgba(34,197,94,.18) 0%,
+    rgba(34,197,94,.06) 50%,
+    transparent 80%);
+  border-top-left-radius:80% 60%;
+  pointer-events:none;
+  opacity:0;
+}
+.slide.active .q-sweet{animation:fadeIn .8s ease .9s forwards}
+
+/* Plotted languages — logo bubbles */
+.q-point{
+  position:absolute;
+  transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  color:var(--text);
+  opacity:0;
+}
+.q-point .dot{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--surface);
+  border:1.5px solid var(--ghost);
+  box-shadow:0 4px 14px rgba(0,0,0,.18);
+  display:flex;align-items:center;justify-content:center;
+}
+[data-theme="light"] .q-point .dot{box-shadow:0 4px 10px rgba(0,0,0,.08)}
+.q-point .dot img{
+  width:60%;height:60%;
+  filter:grayscale(.1);
+}
+.q-point .lab{
+  white-space:nowrap;
+  padding:2px 8px;border-radius:10px;
+  background:var(--surface);
+  border:1px solid var(--ghost);
+}
+.q-point.bad .dot{border-color:rgba(239,68,68,.55)}
+.q-point.bad{color:#ef4444}
+.q-point.mid .dot{border-color:rgba(245,158,11,.55)}
+.q-point.mid{color:#f59e0b}
+.q-point.ok .dot{border-color:rgba(99,102,241,.55)}
+.q-point.ok{color:var(--indigo)}
+
+/* AILANG: special pin — let the full-colour logo render naturally on a dark chip */
+.q-point.star{z-index:2}
+.q-point.star .dot{
+  width:48px;height:48px;
+  background:#0f1420;             /* matches the logo's dark interior so it reads as one piece */
+  border:2px solid var(--orange);
+  box-shadow:0 0 0 5px rgba(231,60,23,.18), 0 0 28px var(--orange-glow);
+  padding:3px;
+}
+.q-point.star .dot img{
+  width:100%;height:100%;
+  filter:none;                    /* keep the orange hexagon + white λ as-drawn */
+}
+.q-point.star{color:var(--orange);font-weight:700}
+.q-point.star .lab{
+  border-color:var(--orange);
+  color:var(--orange);background:rgba(231,60,23,.1);
+}
+
+.slide.active .q-point{animation:fadeSlideUp .45s ease forwards}
+.slide.active .q-point.p1{animation-delay:.15s}
+.slide.active .q-point.p2{animation-delay:.30s}
+.slide.active .q-point.p3{animation-delay:.45s}
+.slide.active .q-point.p4{animation-delay:.60s}
+.slide.active .q-point.p5{animation-delay:.75s}
+.slide.active .q-point.star{animation:starIn .55s cubic-bezier(.4,1.6,.5,1) 1.05s forwards}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes starIn{
+  from{opacity:0;transform:translate(-50%,-50%) scale(.4)}
+  to{opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
+
+/* ── AILANG design-choice callouts (below the chart) ── */
+.q-choices{
+  width:min(820px,100%);
+  display:grid;grid-template-columns:repeat(4, 1fr);
+  gap:8px;
+  margin-top:10px;
+}
+.q-choice{
+  background:var(--surface);
+  border:1px solid var(--ghost);
+  border-top:2px solid var(--orange);
+  border-radius:6px;
+  padding:8px 10px;
+  font-family:var(--mono);font-size:10.5px;line-height:1.4;
+  color:var(--text-dim);
+  opacity:0;transform:translateY(6px);
+}
+.q-choice .head{
+  color:var(--orange);font-weight:700;
+  display:block;font-size:10px;
+  letter-spacing:.06em;text-transform:uppercase;
+  margin-bottom:3px;
+}
+.slide.active .q-choice:nth-child(1){animation:fadeSlideUp .35s ease 1.4s forwards}
+.slide.active .q-choice:nth-child(2){animation:fadeSlideUp .35s ease 1.55s forwards}
+.slide.active .q-choice:nth-child(3){animation:fadeSlideUp .35s ease 1.7s forwards}
+.slide.active .q-choice:nth-child(4){animation:fadeSlideUp .35s ease 1.85s forwards}
+
+.quadrant-foot{
+  font-size:13.5px;color:var(--text);
+  text-align:center;max-width:760px;line-height:1.5;
+}
+.quadrant-foot strong{color:var(--orange);font-weight:700}
+.quadrant-foot .em{font-family:var(--mono);color:var(--text)}
+
+/* ─── Hero opening slide (big AILANG logo, like the homepage) ─── */
+.hero-stage{
+  width:min(900px,100%);
+  display:flex;flex-direction:column;align-items:center;
+  gap:28px;text-align:center;
+  position:relative;
+}
+.hero-logo{
+  width:clamp(140px, 18cqi, 220px);
+  aspect-ratio:1;
+  filter:drop-shadow(0 0 56px rgba(231,60,23,.45)) drop-shadow(0 10px 26px rgba(0,0,0,.45));
+  opacity:0;transform:scale(.6) rotate(-6deg);
+  animation:heroLogoIn .9s cubic-bezier(.3,1.5,.4,1) .15s forwards;
+}
+.hero-logo img{width:100%;height:100%;display:block}
+@keyframes heroLogoIn{to{opacity:1;transform:scale(1) rotate(0)}}
+
+.hero-eyebrow{
+  font-family:var(--mono);font-size:12px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--orange);
+  opacity:0;animation:fadeSlideUp .5s ease .7s forwards;
+}
+
+.hero-title{
+  font-size:clamp(34px,5cqi,64px);
+  font-weight:800;line-height:1.08;letter-spacing:-.025em;
+  color:var(--text);
+  opacity:0;animation:fadeSlideUp .55s ease .85s forwards;
+}
+.hero-title .grad{
+  background:linear-gradient(90deg, #e73c17 0%, #dd6b20 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+.hero-sub{
+  font-size:clamp(14px,1.7cqi,18px);
+  color:var(--text-dim);line-height:1.55;
+  max-width:640px;
+  opacity:0;animation:fadeSlideUp .55s ease 1s forwards;
+}
+.hero-sub strong{color:var(--text);font-weight:600}
+
+.hero-credit{
+  font-family:var(--mono);font-size:12px;
+  color:var(--text-dim);letter-spacing:.06em;
+  margin-top:10px;line-height:1.7;
+  opacity:0;animation:fadeSlideUp .5s ease 1.2s forwards;
+}
+.hero-credit .name{color:var(--text);font-weight:700}
+
 /* ─── Bottom bar ─── */
 .bottom-bar{
   display:flex;align-items:center;justify-content:space-between;
@@ -383,8 +616,32 @@ body{
   <div class="slides-viewport">
     <div class="slides-stage">
 
-    <!-- ═══════════ Slide 0: The AI Coding Revolution (condensed) ═══════════ -->
+    <!-- ═══════════ Slide 0: HERO — big AILANG logo opening ═══════════ -->
     <section class="slide active" data-slide="0">
+      <div class="hero-stage">
+        <div class="hero-logo">
+          <img src="../images/logos/ailang-logo.svg" alt="AILANG">
+        </div>
+        <div class="hero-eyebrow">IDA Driving AI &middot; 2026</div>
+        <h1 class="hero-title">
+          Programming Languages<br>
+          for <span class="grad">AI, not humans</span>
+        </h1>
+        <p class="hero-sub">
+          What changes when the <strong>machine</strong> is the primary author &mdash; and what an AI-first language has to look like for the code to be cheap to <strong>debug</strong>, <strong>replay</strong>, and <strong>fix</strong>.
+        </p>
+        <div class="hero-credit">
+          <span class="name">Mark Edmondson</span> &middot; Holosun ApS<br>
+          <span style="opacity:.7">ailang.sunholo.com &middot; sunholo.com</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ Slide 1: The AI Coding Revolution (condensed) ═══════════ -->
+    <section class="slide" data-slide="1">
+      <p class="slide-subtitle" style="margin-bottom:-4px;font-style:italic;opacity:.8">
+        You just heard how teams put AI coding into the daily workflow. Now look at what the AI is writing&hellip; <em>in</em>.
+      </p>
       <h1 class="slide-title">The <span class="accent">AI Coding</span> Revolution</h1>
       <div class="stats-grid">
         <div class="stat-card">
@@ -426,8 +683,8 @@ body{
       </div>
     </section>
 
-    <!-- ═══════════ Slide 1: What the Builders Say ═══════════ -->
-    <section class="slide" data-slide="1">
+    <!-- ═══════════ Slide 2: What the Builders Say ═══════════ -->
+    <section class="slide" data-slide="2">
       <h2 class="slide-title">What the <span class="accent">Builders</span> Say</h2>
       <p class="slide-subtitle" style="margin-bottom:4px">Independent voices &mdash; no AI products to sell</p>
       <div class="builders-grid">
@@ -513,8 +770,8 @@ body{
       </div>
     </section>
 
-    <!-- ═══════════ Slide 2: Does Language Matter? (LoCoBench) ═══════════ -->
-    <section class="slide" data-slide="2">
+    <!-- ═══════════ Slide 3: Does Language Matter? (LoCoBench) ═══════════ -->
+    <section class="slide" data-slide="3">
       <h1 class="slide-title">If AI Writes All the Code&hellip; Does <span class="accent">Language</span> Matter?</h1>
       <p class="slide-subtitle">LoCoBench: 8,000 scenarios, 10 languages, 12 models, 10K&ndash;1M token contexts</p>
       <div class="research-layout">
@@ -537,29 +794,54 @@ body{
       <div class="research-cite">Qiu et al. 2025, LoCoBench, Salesforce AI Research &mdash; arXiv:2509.09614</div>
     </section>
 
-    <!-- ═══════════ Slide 3: The Lesson — Explicitness Without Complexity ═══════════ -->
-    <section class="slide" data-slide="3">
+    <!-- ═══════════ Slide 4: The Lesson — Explicitness Without Complexity ═══════════ -->
+    <section class="slide" data-slide="4">
       <h1 class="slide-title">Explicitness Without <span class="accent">Complexity</span></h1>
-      <div class="contrast-cols">
-        <div class="contrast-card warn">
-          <div class="contrast-icon"><i class="fas fa-skull-crossbones"></i></div>
-          <div class="contrast-label">Complexity kills AI</div>
-          <div class="contrast-text">C, Rust score worst across every model. Headers, manual memory, macros &mdash; implicit complexity that no amount of training data overcomes.</div>
+      <div class="quadrant-wrap">
+        <div class="quadrant">
+          <div class="q-axis vert"></div>
+          <div class="q-axis horiz"></div>
+          <div class="q-sweet"></div>
+
+          <span class="q-lab x-left">runtime</span>
+          <span class="q-lab x-right">compiler</span>
+          <span class="q-lab y-top">complex</span>
+          <span class="q-lab y-bot">simple</span>
+          <span class="q-axis-name x">&larr; when do choices get locked in? &rarr;</span>
+          <span class="q-axis-name y">&larr; states the AI must hold open &rarr;</span>
+
+          <!-- C: heavy cognitive load + bugs at runtime (memory, UB, no ownership/exhaustiveness) -->
+          <div class="q-point bad p1" style="left:25%;top:18%">
+            <span class="dot"><img src="../images/logos/langs/c.svg" alt=""></span>
+            <span class="lab">C</span>
+          </div>
+          <!-- Rust: high cognitive load AND lots caught at compile (lifetimes, ownership, Result) -->
+          <div class="q-point bad p2" style="left:72%;top:18%">
+            <span class="dot"><img src="../images/logos/langs/rust.svg" alt=""></span>
+            <span class="lab">Rust</span>
+          </div>
+          <!-- TypeScript: shape types caught at compile, but adds complexity over JS -->
+          <div class="q-point mid p3" style="left:62%;top:34%">
+            <span class="dot"><img src="../images/logos/langs/typescript.svg" alt=""></span>
+            <span class="lab">TypeScript</span>
+          </div>
+          <!-- JavaScript: simple, but bugs surface at runtime -->
+          <div class="q-point ok p4" style="left:28%;top:60%">
+            <span class="dot"><img src="../images/logos/langs/javascript.svg" alt=""></span>
+            <span class="lab">JavaScript</span>
+          </div>
+          <!-- Python: simplest, bugs surface at runtime, wins on training data -->
+          <div class="q-point ok p5" style="left:20%;top:74%">
+            <span class="dot"><img src="../images/logos/langs/python.svg" alt=""></span>
+            <span class="lab">Python</span>
+          </div>
+          <!-- AILANG: engineered for the empty corner — bottom-right -->
+          <div class="q-point star" style="left:80%;top:78%">
+            <span class="dot"><img src="../images/logos/ailang-logo.svg" alt=""></span>
+            <span class="lab">AILANG</span>
+          </div>
         </div>
-        <div class="contrast-card safe">
-          <div class="contrast-icon"><i class="fas fa-bullseye"></i></div>
-          <div class="contrast-label">The sweet spot</div>
-          <div class="contrast-text">Simple structure + explicit semantics. Not types for safety's sake, but clarity for reasoning's sake. Explicitness that <em>reduces</em> complexity.</div>
-        </div>
-      </div>
-      <div class="callout-card">
-        <div class="callout-icon"><i class="fas fa-lightbulb"></i></div>
-        <div class="callout-text">
-          Training data bias is real &mdash; Python wins partly on volume. But the structural signal is consistent across all models: <strong>implicit complexity is the enemy</strong>. The answer isn't more types, it's more clarity.
-        </div>
-      </div>
-      <div class="closing-callout">
-        If AI codes best in AI-friendly languages&hellip; maybe AI should help design that language. That's <span class="accent" style="font-family:var(--mono)">AILANG</span>.
+
       </div>
     </section>
 
@@ -573,7 +855,7 @@ body{
         <i class="fas fa-chevron-left"></i>
       </button>
       <span class="step-indicator">
-        <span class="current" id="slideNum">1</span> / <span id="slideTotal">4</span>
+        <span class="current" id="slideNum">1</span> / <span id="slideTotal">5</span>
       </span>
       <button class="transport-btn" id="btnNext" title="Next slide">
         <i class="fas fa-chevron-right"></i>
@@ -590,7 +872,7 @@ body{
 
 <script>
 (function(){
-  const TOTAL = 4;
+  const TOTAL = 5;
   let current = 0;
   let transitioning = false;
 
