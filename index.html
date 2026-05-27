@@ -173,6 +173,25 @@ a:hover{text-decoration:underline}
   font-size:12px;color:var(--orange);font-weight:600;
   margin-top:8px;display:inline-block;
 }
+.event-secondary-link{
+  margin-top:-4px;margin-bottom:12px;
+  padding:0 24px;
+  text-align:right;
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.04em;
+}
+.event-secondary-link a{
+  color:var(--text-dim);
+  text-decoration:none;
+  border-bottom:1px dotted var(--ghost);
+  padding-bottom:1px;
+  transition:color .2s, border-color .2s;
+}
+.event-secondary-link a:hover{
+  color:var(--orange);
+  border-bottom-color:var(--orange-dim);
+}
+.event-secondary-link i{margin-right:5px}
 
 /* ─── Deck cards ─── */
 .deck-grid{display:flex;flex-direction:column;gap:10px}
@@ -325,15 +344,18 @@ a:hover{text-decoration:underline}
 <div class="hub-section">
   <div class="section-label"><i class="fas fa-calendar-alt"></i> Upcoming Talks</div>
 
-  <a href="ai-slaves-human-masters-ida/" class="event-card">
+  <a href="https://ida.dk/driving-ai" target="_blank" class="event-card">
     <img src="images/talks/driving-ai-banner.jpg" alt="IDA Driving AI 2026" class="event-img">
     <div class="event-details">
-      <div class="event-meta"><i class="fas fa-calendar"></i> May 27, 2026 &middot; IDA Conference, Copenhagen &middot; <a href="https://ida.dk/driving-ai" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--text-dim);text-decoration:underline">conference page</a></div>
+      <div class="event-meta"><i class="fas fa-calendar"></i> May 27, 2026 &middot; IDA Conference, Copenhagen</div>
       <h3>Programming Languages for AI, Not Humans</h3>
-      <p>25-minute talk on AILANG &mdash; how determinism, explicit effects, neurosymbolic verification, and a self-correcting agent harness (motoko) reshape how AI writes code. Deck is live; the talk is on the &ldquo;AI Tooling, Benchmarks &amp; Evaluation&rdquo; track at 10:40.</p>
-      <span class="event-cta"><i class="fas fa-play-circle"></i> Preview the deck</span>
+      <p>25-minute talk on AILANG &mdash; how determinism, explicit effects, neurosymbolic verification, and a self-correcting agent harness (motoko) reshape how AI writes code. On the &ldquo;AI Tooling, Benchmarks &amp; Evaluation&rdquo; track at 10:40.</p>
+      <span class="event-cta"><i class="fas fa-external-link-alt"></i> Conference Details</span>
     </div>
   </a>
+  <div class="event-secondary-link">
+    <a href="ai-slaves-human-masters-ida/"><i class="fas fa-play-circle"></i> Preview the deck</a>
+  </div>
 
   <a href="https://websummercamp.com/2026/news/super-early-sold-out-get-your-early-bird-now" target="_blank" class="event-card">
     <img src="images/talks/websummercamp-croatia.webp" alt="WebSummerCamp 2026, Opatija, Croatia" class="event-img">
