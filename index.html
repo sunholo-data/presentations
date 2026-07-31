@@ -231,6 +231,50 @@ a:hover{text-decoration:underline}
 }
 .deck-card:hover .deck-tag{background:var(--orange-dim);color:var(--orange)}
 
+/* ─── Template callout ─── */
+.template-card{
+  display:block;
+  padding:24px;
+  border-radius:14px;
+  border:1px solid var(--ghost);
+  background:var(--surface);
+  position:relative;overflow:hidden;
+}
+.template-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 100% 0%, var(--indigo-dim) 0%, transparent 55%);
+  pointer-events:none;
+}
+.template-card > *{position:relative}
+.template-card h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.template-card p{font-size:13px;color:var(--text-dim);line-height:1.6;max-width:62ch}
+.template-card p + p{margin-top:10px}
+.template-features{
+  display:flex;flex-wrap:wrap;gap:8px;
+  margin:16px 0 18px;
+}
+.template-features span{
+  font-family:var(--mono);font-size:10px;
+  padding:5px 10px;border-radius:8px;
+  background:var(--ghost);color:var(--text-dim);
+  letter-spacing:.03em;
+}
+.template-features i{margin-right:6px;color:var(--indigo)}
+.template-links{display:flex;flex-wrap:wrap;gap:10px}
+.template-links a{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 16px;border-radius:10px;
+  font-size:12px;font-weight:600;
+  border:1px solid var(--ghost);
+  color:var(--text);text-decoration:none;
+  transition:all .25s;
+}
+.template-links a:hover{border-color:var(--orange);color:var(--orange);text-decoration:none}
+.template-links a.primary{
+  background:var(--orange);border-color:var(--orange);color:#fff;
+}
+.template-links a.primary:hover{background:transparent;color:var(--orange)}
+
 /* ─── Podcast cards ─── */
 .podcast-card{
   display:flex;gap:20px;align-items:center;
@@ -308,6 +352,7 @@ a:hover{text-decoration:underline}
       <a href="/ailang-demos/">Demos</a>
       <a href="/vision.html">Vision</a>
       <a href="https://sunholo.com/workshops">Workshops</a>
+      <a href="https://www.sunholo.com/blog/">Blog</a>
       <a href="/presentations/" class="active">Talks</a>
       <a href="/#contact">Contact</a>
     </nav>
@@ -320,7 +365,7 @@ a:hover{text-decoration:underline}
 <!-- Hero -->
 <div class="hero">
   <h1>Talks &amp; Presentations</h1>
-  <p class="subtitle">Presentations, podcast appearances, and conversations on AI engineering, the Multivac platform, and building production-grade AI systems.</p>
+  <p class="subtitle">Presentations, podcast appearances, and conversations on AI engineering &mdash; AI-first languages, agent protocols, and building production-grade AI systems.</p>
   <div class="hero-stats">
     <div class="hero-stat">
       <i class="fas fa-chalkboard-teacher"></i>
@@ -340,32 +385,35 @@ a:hover{text-decoration:underline}
   </div>
 </div>
 
-<!-- Upcoming Talks -->
+<!-- Recent Talks -->
 <div class="hub-section">
-  <div class="section-label"><i class="fas fa-calendar-alt"></i> Upcoming Talks</div>
+  <div class="section-label"><i class="fas fa-calendar-check"></i> Recent Talks</div>
 
-  <a href="https://ida.dk/driving-ai" target="_blank" class="event-card">
-    <img src="images/talks/driving-ai-banner.jpg" alt="IDA Driving AI 2026" class="event-img">
+  <a href="https://www.sunholo.com/blog/ai-protocols-in-paradise-opatija" class="event-card">
+    <img src="images/talks/websummercamp-croatia.webp" alt="WebSummerCamp 2026, Opatija, Croatia" class="event-img">
     <div class="event-details">
-      <div class="event-meta"><i class="fas fa-calendar"></i> May 27, 2026 &middot; IDA Conference, Copenhagen</div>
-      <h3>Programming Languages for AI, Not Humans</h3>
-      <p>25-minute talk on AILANG &mdash; how determinism, explicit effects, neurosymbolic verification, and a self-correcting agent harness (motoko) reshape how AI writes code. On the &ldquo;AI Tooling, Benchmarks &amp; Evaluation&rdquo; track at 10:40.</p>
-      <span class="event-cta"><i class="fas fa-external-link-alt"></i> Conference Details</span>
+      <div class="event-meta"><i class="fas fa-calendar"></i> July 3, 2026 &middot; WebSummerCamp, Opatija, Croatia</div>
+      <h3>Build AI UIs Beyond Chat: AG-UI, A2UI and MCP Apps</h3>
+      <p>Three-hour hands-on workshop navigating the alphabet soup of AI protocols dedicated to responsive, dynamic user interfaces &mdash; the third way between a rigid form and a free-form chat box. Why data and UX are where AI applications will differentiate, now that we all share the same models.</p>
+      <span class="event-cta"><i class="fas fa-pen-nib"></i> Read the write-up</span>
     </div>
   </a>
   <div class="event-secondary-link">
-    <a href="ai-slaves-human-masters-ida/"><i class="fas fa-play-circle"></i> Preview the deck</a>
+    <a href="https://sunholo.com/workshops"><i class="fas fa-users"></i> Run this workshop with your team</a>
   </div>
 
-  <a href="https://websummercamp.com/2026/news/super-early-sold-out-get-your-early-bird-now" target="_blank" class="event-card">
-    <img src="images/talks/websummercamp-croatia.webp" alt="WebSummerCamp 2026, Opatija, Croatia" class="event-img">
+  <a href="https://www.sunholo.com/blog/ida-driving-ai-talk-2026" class="event-card">
+    <img src="images/talks/driving-ai-banner.jpg" alt="IDA Driving AI 2026" class="event-img">
     <div class="event-details">
-      <div class="event-meta"><i class="fas fa-calendar"></i> July 2&ndash;4, 2026 &middot; Opatija, Croatia</div>
-      <h3>AI Protocols for UI &amp; UX: AGUI, A2UI and MCPApps</h3>
-      <p>Talk at WebSummerCamp &mdash; navigating the alphabet soup of AI protocols dedicated to responsive, dynamic user interfaces. Why data and UX are where AI applications will differentiate, now that we all share the same models.</p>
-      <span class="event-cta"><i class="fas fa-external-link-alt"></i> Event Details</span>
+      <div class="event-meta"><i class="fas fa-calendar"></i> May 27, 2026 &middot; IDA Driving AI, Copenhagen</div>
+      <h3>Programming Languages for AI, Not Humans</h3>
+      <p>25-minute talk on AILANG &mdash; how determinism, explicit effects, neurosymbolic verification, and a self-correcting agent harness (motoko) reshape how AI writes code. Delivered on the &ldquo;AI Tooling, Benchmarks &amp; Evaluation&rdquo; track.</p>
+      <span class="event-cta"><i class="fas fa-pen-nib"></i> Read the write-up</span>
     </div>
   </a>
+  <div class="event-secondary-link">
+    <a href="ai-slaves-human-masters-ida/"><i class="fas fa-play-circle"></i> View the deck</a>
+  </div>
 </div>
 
 <!-- Slide Decks -->
@@ -434,6 +482,28 @@ a:hover{text-decoration:underline}
   </div>
 </div>
 
+<!-- Template -->
+<div class="hub-section">
+  <div class="section-label"><i class="fas fa-code"></i> Steal the Template</div>
+  <div class="template-card">
+    <h3>Death to PowerPoint &mdash; every deck here is just HTML</h3>
+    <p>The most common question after a talk isn&rsquo;t about the content, it&rsquo;s &ldquo;how did you make those slides?&rdquo; The answer: each deck is a single self-contained HTML file &mdash; inline CSS and JS, no build step, no slide software. Live demos, animated diagrams and real data render natively, and the whole thing diffs cleanly in git.</p>
+    <p>It&rsquo;s all open source, including the Claude Skill that writes new decks in the same design system and the linter that keeps them consistent. Clone it, swap the logo, and let your coding agent do the layout.</p>
+    <div class="template-features">
+      <span><i class="fas fa-file-code"></i> Self-contained HTML</span>
+      <span><i class="fas fa-circle-half-stroke"></i> Dark &amp; light themes</span>
+      <span><i class="fas fa-keyboard"></i> Keyboard navigation</span>
+      <span><i class="fas fa-chalkboard-user"></i> Presenter view &amp; timer</span>
+      <span><i class="fas fa-robot"></i> Claude Skill included</span>
+    </div>
+    <div class="template-links">
+      <a href="https://github.com/sunholo-data/presentations" target="_blank" rel="noopener" class="primary"><i class="fab fa-github"></i> View on GitHub</a>
+      <a href="https://github.com/sunholo-data/presentations/tree/main/.claude/skills/presentation-slides" target="_blank" rel="noopener"><i class="fas fa-wand-magic-sparkles"></i> The Claude Skill</a>
+      <a href="https://www.sunholo.com/blog/ida-driving-ai-talk-2026"><i class="fas fa-pen-nib"></i> Why I built it</a>
+    </div>
+  </div>
+</div>
+
 <!-- Podcasts -->
 <div class="hub-section">
   <div class="section-label"><i class="fas fa-podcast"></i> Podcast Appearances</div>
@@ -462,7 +532,7 @@ a:hover{text-decoration:underline}
 
 <!-- Footer -->
 <div class="site-footer">
-  &copy; 2025 Holosun ApS &middot; <a href="https://sunholo.com">sunholo.com</a> &middot; <a href="https://linkedin.com/company/sunholo">LinkedIn</a>
+  &copy; 2026 Holosun ApS &middot; <a href="https://sunholo.com">sunholo.com</a> &middot; <a href="https://linkedin.com/company/sunholo">LinkedIn</a>
 </div>
 
 <script>
