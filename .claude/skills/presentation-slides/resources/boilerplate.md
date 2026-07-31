@@ -45,15 +45,37 @@ Copy this skeleton when starting a new slide deck. Replace `TITLE`, slide conten
 
 /* ─── Embedded-in-presenter mode ───
    When loaded via presenter.html the presenter supplies global chrome
-   (title, tabs, clock, deck counter, timer, kbd hints). Hide our own bars
+   (title, picker, clock, deck counter, timer, kbd hints). Hide our own bars
    so the stage gets the full iframe height — otherwise the bottom of slide
    content gets clipped. */
 .in-iframe .top-bar{display:none}
 .in-iframe .bottom-bar{display:none}
+
+/* ─── Detail density (stage vs guide) ───
+   Wrap take-home prose in class="detail". Hidden on stage (the room sees the
+   sparse slide), revealed in guide mode — which is the default when this deck
+   is opened standalone, i.e. by anyone reading the published link cold. */
+html[data-density="stage"] .detail{display:none}
 </style>
 </head>
 <body>
 <script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
+<script>(function(){
+  // Detail density: stage (in presenter) vs guide (standalone reader).
+  var embedded = window !== window.top, root = document.documentElement;
+  root.setAttribute('data-density', embedded ? 'stage' : 'guide');
+  function setDensity(d){ root.setAttribute('data-density', d === 'guide' ? 'guide' : 'stage'); }
+  window.addEventListener('message', function(e){
+    if(e.data && e.data.type === 'deck-command' && e.data.action === 'set-density') setDensity(e.data.density);
+  });
+  document.addEventListener('keydown', function(e){
+    if((e.key === 'd' || e.key === 'D') && !e.metaKey && !e.ctrlKey && !e.altKey){
+      var next = root.getAttribute('data-density') === 'guide' ? 'stage' : 'guide';
+      setDensity(next);
+      if(embedded) window.parent.postMessage({type:'deck-density', density:next}, '*');
+    }
+  });
+})();</script>
 <div id="app">
 
   <!-- Top bar -->
@@ -203,8 +225,9 @@ Copy this skeleton when starting a new slide deck. Replace `TITLE`, slide conten
 - [ ] Add all animated element classes to the reset selector in `goTo()`
 - [ ] Test keyboard navigation (←→ slides, ↑↓ decks, space)
 - [ ] Test theme toggle (both modes should look polished)
-- [ ] Add deck entry to presenter.html PLAYLIST array
+- [ ] Add deck entry to presenter.html PLAYLIST array (with `minutes:`, and `group:` if the talk has blocks)
 - [ ] Verify presenter bridge works (←→ auto-advances at boundaries, ↑↓ jumps decks)
+- [ ] Add `class="detail"` prose for the standalone reader, and check the slide still fits in guide mode (press **D**)
 - [ ] Verify at 1920x1080 (projector target)
 - [ ] Check `white-space:pre` on all code containers
 - [ ] Ensure code blocks are flush-left (no HTML indentation artifacts)

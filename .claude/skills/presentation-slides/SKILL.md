@@ -222,9 +222,13 @@ presenter.html          ← Open this for the full talk
   └── 03-future.html
 ```
 
+**Never hand-write a presenter.** Copy `resources/presenter-template.html` and fill its four placeholders — `{{TITLE}}`, `{{HEADER_TITLE}}`, `{{LOGOS}}`, `{{PLAYLIST}}`, `{{PDF}}`. It is the single source of the deck picker, theme sync, density toggle, timer and PDF button; every deck folder in this repo is an instance of it. Fixing a presenter bug means fixing the template and re-instantiating, not patching five copies.
+
 **Keyboard navigation:**
 - **← →** — Navigate slides/steps within a deck only (never crosses deck boundaries)
 - **↑ ↓** — Jump between decks (↓ = next deck, ↑ = previous deck)
+- **D** — Toggle detail density (stage ↔ guide) across every deck
+- **Esc** — Close the deck jump menu
 
 **How it works:**
 - Each deck stays self-contained — works fine opened directly in a browser
@@ -232,14 +236,23 @@ presenter.html          ← Open this for the full talk
 - When embedded, decks communicate via `postMessage`:
   - ↑/↓ keys: posts `{type:'deck-nav', dir:'next'|'prev'}` → presenter switches decks
   - Theme syncs across all decks via `{type:'deck-command', action:'set-theme', theme:'light'}`
+  - Density syncs the same way via `{type:'deck-command', action:'set-density', density:'stage'|'guide'}`; a deck whose own **D** key was pressed reports back up with `{type:'deck-density', density}` so the presenter's button stays in sync
 - Playlist order is a simple JS array — edit to reorder/include/exclude per audience:
 
 ```js
 const PLAYLIST = [
-  { src: '01-entropy-explorer.html', label: 'Entropy' },
-  { src: '02-authority-complexity.html', label: 'Authority' },
+  { src: '01-entropy-explorer.html', label: 'Entropy',   minutes: 3, group: 'Talk' },
+  { src: '02-authority-complexity.html', label: 'Authority', minutes: 6, group: 'Talk' },
 ];
 ```
+
+`minutes` drives the timer (0 = off-clock). `group` is optional and becomes a heading in the jump menu — use it for workshop blocks, acts, or an appendix.
+
+### Deck picker
+
+The current-deck control sits in the middle of the top bar: prev/next arrows, the names of the adjacent decks either side, and a centre pill showing `n / total` plus the current label. Clicking the pill opens a popover jump menu grouped by `group`, with each deck's minute budget on the right.
+
+It is deliberately **space-stable** — the menu is a popover, so opening it never reflows the bar mid-talk, and the neighbour labels are width-capped with ellipsis. This replaced a row of tabs, which stopped working past about six decks (the Croatia workshop ran seventeen).
 
 **Deck files are always loaded via the presenter** — they do not need their own logos, theme toggles, or global navigation. The presenter handles all of that. Individual decks should only contain:
 - Their own slide content and within-deck navigation (slide dots, prev/next buttons if needed)
@@ -269,6 +282,60 @@ window.addEventListener('message', e=>{
   }
 });
 ```
+
+## Detail Density: Stage vs Guide
+
+The same deck serves two very different readers — the room, which needs a sparse slide behind a talking human, and the person who opens the published link cold weeks later with no narration. Density is how one file serves both.
+
+Wrap take-home prose in `class="detail"`:
+
+```html
+<div class="stat">−66.7 → +4.5</div>
+<p class="detail">That's AILANG's LoCoBench delta against Python between v0.6 and v0.9 —
+   the point where an AI-first language stopped being a toy.</p>
+```
+
+Two modes:
+- **stage** — `.detail` hidden. What the projector shows.
+- **guide** — `.detail` revealed. The laptop view, and the default for anyone opening the deck standalone.
+
+The whole mechanism, already wired into every deck by the boilerplate:
+
+```css
+html[data-density="stage"] .detail{display:none}
+```
+```js
+var embedded = window !== window.top, root = document.documentElement;
+root.setAttribute('data-density', embedded ? 'stage' : 'guide');
+```
+
+That one line is the important bit: **in the presenter iframe it defaults to stage; opened directly it defaults to guide.** So the deck the room sees stays clean, and the same URL on sunholo.com explains itself to a stranger with no extra file to maintain.
+
+Toggle it with **D** (in either the presenter or a standalone deck), or the ◦ button in the presenter's top-right, which broadcasts to every loaded deck at once. The presenter remembers the choice in `localStorage` under `presenter-density`.
+
+**Authoring rules:**
+- Design the slide for **stage** first. `.detail` is additive — a slide must never depend on it to make sense.
+- Keep `.detail` prose to a sentence or two, and give it somewhere to go: a slide that's already full in stage mode will overflow in guide mode. Prefer a footer strip or a column that's empty on stage.
+- Never put a `.detail` block inside a `data-steps` reveal sequence — the step counter won't know about it.
+- Check both modes before shipping. The linter can't see layout overflow.
+
+## PDF Export
+
+`scripts/export-pdf.mjs` produces a faithful PDF of any deck folder — one landscape page per slide.
+
+```bash
+cd scripts && npm install            # one-time, downloads a Chromium
+node export-pdf.mjs ai-slaves-human-masters-ida
+node export-pdf.mjs analytics-for-ai-agents --density=guide   # include .detail prose
+node export-pdf.mjs multivac --only=00-multivac-platform.html --scale=1
+```
+
+It is **not** `@media print`, and it can't be: decks stack slides absolutely with only `.active` visible, reveal content through CSS animations starting at `opacity:0`, and build some slides up over several `data-steps` presses. A static print captures none of that. So the script drives the real decks in headless Chrome, walks each slide to its final revealed step, screenshots at 1920×1080, and assembles the images into one PDF.
+
+- Deck order comes from that folder's `PLAYLIST`, so the PDF can never drift from the live deck order.
+- Defaults to `--density=stage` (faithful to the room). Pass `--density=guide` for a take-home handout that includes the detail prose.
+- Output lands at `<folder>/<folder>.pdf`. To expose the download button, set `const PDF = '<folder>.pdf'` next to the PLAYLIST in that folder's `presenter.html` — leave it `null` and the button stays hidden.
+- Roughly 250KB per slide at the default 2× scale. Only commit PDFs for talks that are actually published.
 
 ### Embed-aware chrome (fixes "inner page too high")
 
@@ -338,12 +405,7 @@ Time budgets should match the talk's outline doc (e.g. an `outline.md` "structur
 
 ### When porting to other presentations
 
-1. Copy the `.clock`, `.timer-block`, `.timer-deck`, `.timer-bar`, `.timer-delta` CSS blocks.
-2. Add the `<div class="clock">` to `.top-right`.
-3. Add the `<div class="timer-block">` to `.bottom-bar`.
-4. Add `minutes:` to each PLAYLIST entry.
-5. Append the `CLOCK + PER-DECK TIMER + SCHEDULE DELTA` JS block, including the `switchDeck` wrapper at the end.
-6. Verify total of all `minutes` matches the talk's target duration.
+Nothing to port — `resources/presenter-template.html` already includes the timer. Instantiate the template and give each PLAYLIST entry a `minutes` value, then check the total matches the talk's target duration.
 
 ## Existing Presentations
 

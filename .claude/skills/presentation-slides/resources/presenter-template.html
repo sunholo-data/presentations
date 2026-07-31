@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Analytics for AI Agents — From Pageviews to Prompts — Presenter</title>
+<title>{{TITLE}} — Presenter</title>
 <link rel="icon" type="image/svg+xml" href="/sunholo-logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -161,9 +161,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 
   <div class="top-bar">
     <div class="top-left">
-      <img src="../images/logos/sunholo-logo.svg" alt="Sunholo" class="top-logo">
-      <img src="../images/logos/ailang-logo.svg" alt="AILANG" class="top-logo ailang">
-      <span class="presenter-title"><span class="accent">Analytics for AI Agents</span> &mdash; From Pageviews to Prompts</span>
+{{LOGOS}}
+      <span class="presenter-title">{{HEADER_TITLE}}</span>
     </div>
     <div class="deck-picker" id="deckPicker">
       <button class="picker-nav" id="pickerPrev" title="Previous deck (↑)"><i class="fas fa-chevron-left"></i></button>
@@ -227,18 +226,12 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   //   `group`   = optional heading in the jump menu (blocks, acts, appendix).
   // ═══════════════════════════════════════════════════════════════
   const PLAYLIST = [
-    { src: '00-opening.html',                   label: 'Opening',       minutes: 1,  group: 'Talk' },
-    { src: '../about-mark/about-mark.html',     label: 'About Mark',    minutes: 1,  group: 'Talk' },
-    { src: '01-what-i-saw.html',                label: 'What I Saw',    minutes: 6,  group: 'Talk' },
-    { src: '02-what-i-found.html',              label: 'What I Found',  minutes: 11, group: 'Talk' },
-    { src: '03-whats-coming.html',              label: "What's Coming", minutes: 7,  group: 'Talk' },
-    { src: '04-close.html',                     label: 'Close',         minutes: 4,  group: 'Talk' },
-    { src: '../contact-mark/contact-mark.html', label: 'Contact',       minutes: 0,  group: 'Close' },
+{{PLAYLIST}}
   ];
 
   // Downloadable PDF for this talk, produced by `node scripts/export-pdf.mjs <folder>`.
   // Set to null when there's no PDF — the button hides itself.
-  const PDF = 'analytics-for-ai-agents.pdf';
+  const PDF = {{PDF}};
 
   // ═══════════════════════════════════════════════════════════════
 

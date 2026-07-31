@@ -1,0 +1,12 @@
+{
+  "name": "presentations-export",
+  "private": true,
+  "type": "module",
+  "description": "On-demand PDF export for any deck folder in this repo (headless Chrome → one landscape page per slide).",
+  "scripts": {
+    "pdf": "node export-pdf.mjs"
+  },
+  "dependencies": {
+    "puppeteer": "^23.0.0"
+  }
+}

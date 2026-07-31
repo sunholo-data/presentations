@@ -279,9 +279,31 @@ body{
 [data-theme="light"] .kbd{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
 
 @media(max-width:900px){.slide{padding:24px}}
+
+/* ─── Detail density (stage vs guide) ───
+   Wrap take-home prose in class="detail". Hidden on stage (the room sees the
+   sparse slide), revealed in guide mode — which is the default when this deck
+   is opened standalone, i.e. by anyone reading the published link cold. */
+html[data-density="stage"] .detail{display:none}
 </style>
 </head>
 <body>
+<script>(function(){
+  // Detail density: stage (in presenter) vs guide (standalone reader).
+  var embedded = window !== window.top, root = document.documentElement;
+  root.setAttribute('data-density', embedded ? 'stage' : 'guide');
+  function setDensity(d){ root.setAttribute('data-density', d === 'guide' ? 'guide' : 'stage'); }
+  window.addEventListener('message', function(e){
+    if(e.data && e.data.type === 'deck-command' && e.data.action === 'set-density') setDensity(e.data.density);
+  });
+  document.addEventListener('keydown', function(e){
+    if((e.key === 'd' || e.key === 'D') && !e.metaKey && !e.ctrlKey && !e.altKey){
+      var next = root.getAttribute('data-density') === 'guide' ? 'stage' : 'guide';
+      setDensity(next);
+      if(embedded) window.parent.postMessage({type:'deck-density', density:next}, '*');
+    }
+  });
+})();</script>
 <script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
 <div id="app">
 
