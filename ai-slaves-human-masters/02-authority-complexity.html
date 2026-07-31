@@ -571,20 +571,49 @@ html[data-density="stage"] .detail{display:none}
 
 <body>
 <script>(function(){
-  // Detail density: stage (in presenter) vs guide (standalone reader).
+  // ── Presenter bridge: detail density, slide reporting, hotkey relay ──
   var embedded = window !== window.top, root = document.documentElement;
+
+  // Detail density: stage (inside the presenter) vs guide (standalone reader).
   root.setAttribute('data-density', embedded ? 'stage' : 'guide');
   function setDensity(d){ root.setAttribute('data-density', d === 'guide' ? 'guide' : 'stage'); }
   window.addEventListener('message', function(e){
     if(e.data && e.data.type === 'deck-command' && e.data.action === 'set-density') setDensity(e.data.density);
   });
+
+  // Hotkeys this deck doesn't use itself. Keyboard focus lives in the iframe
+  // during a talk, so relay them up rather than letting them fall on the floor.
   document.addEventListener('keydown', function(e){
-    if((e.key === 'd' || e.key === 'D') && !e.metaKey && !e.ctrlKey && !e.altKey){
-      var next = root.getAttribute('data-density') === 'guide' ? 'stage' : 'guide';
-      setDensity(next);
-      if(embedded) window.parent.postMessage({type:'deck-density', density:next}, '*');
-    }
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    if(e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    var k = (e.key || '').toLowerCase();
+    if(k !== 'd' && k !== 'q' && k !== 'n' && k !== 'l') return;
+    if(embedded) window.parent.postMessage({type:'deck-hotkey', key:k}, '*');
+    else if(k === 'd') setDensity(root.getAttribute('data-density') === 'guide' ? 'stage' : 'guide');
   });
+
+  if(!embedded) return;
+
+  // Report which slide is showing, so the presenter can time it and tag any
+  // question captured against it. Deliberately generic — watches .slide.active
+  // instead of hooking each deck's own goTo(), so no deck has to know this exists.
+  function slides(){
+    var s = document.querySelectorAll('.slides-stage .slide');
+    return s.length ? s : document.querySelectorAll('.slide');
+  }
+  var lastIdx = null;
+  function report(){
+    var list = slides(), idx = -1;
+    for(var i = 0; i < list.length; i++) if(list[i].classList.contains('active')){ idx = i; break; }
+    if(idx === lastIdx) return;
+    lastIdx = idx;
+    window.parent.postMessage({type:'deck-slide', index:idx, total:list.length}, '*');
+  }
+  var stage = document.querySelector('.slides-stage') || document.body;
+  new MutationObserver(report).observe(stage, {
+    attributes:true, attributeFilter:['class'], subtree:true, childList:true
+  });
+  report();
 })();</script>
 <script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
 <div id="app">

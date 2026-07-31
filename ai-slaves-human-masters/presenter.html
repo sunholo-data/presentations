@@ -9,6 +9,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- Feature flags (repo-level defaults + per-talk overrides). Optional: if this
+     fails to load, presenter.html falls back to the same defaults inline. -->
+<script src="../presenter.config.js"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -212,6 +215,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
       <span class="kbd">↑</span><span class="kbd">↓</span><span class="hint-text">decks</span>
       <span style="margin:0 6px;color:var(--ghost)">|</span>
       <span class="kbd">D</span><span class="hint-text">detail</span>
+      <span class="tl-hint" style="display:none"><span style="margin:0 6px;color:var(--ghost)">|</span>
+        <span class="kbd">Q</span><span class="hint-text">question</span></span>
     </div>
   </div>
 
@@ -241,8 +246,22 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 
   // ═══════════════════════════════════════════════════════════════
 
+  // ── Feature flags ──────────────────────────────────────────────
+  // presenter.config.js supplies defaults + per-talk overrides. These
+  // literals are the fallback when it's missing, so a deck opened from a
+  // stray copy of this file still works.
+  const TALK_ID = (location.pathname.replace(/\/[^/]*$/, '').split('/').filter(Boolean).pop()) || 'talk';
+  const CFG = (function () {
+    const fallback = { picker: true, timer: true, density: true, pdf: true, talklog: false };
+    try {
+      const c = window.PRESENTER_CONFIG || {};
+      return Object.assign({}, fallback, c.defaults || {}, (c.talks || {})[TALK_ID] || {});
+    } catch (e) { return fallback; }
+  })();
+
   let currentDeck = 0;
   let frames = [];
+  let talkLog = null;   // set once assets/talklog.js loads, when the flag is on
   const viewport = document.getElementById('viewport');
   const deckNum = document.getElementById('deckNum');
   const deckTotal = document.getElementById('deckTotal');
@@ -251,7 +270,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   deckTotal.textContent = PLAYLIST.length;
 
   const pdfBtn = document.getElementById('pdfBtn');
-  if (PDF) { pdfBtn.href = PDF; pdfBtn.style.display = ''; }
+  if (PDF && CFG.pdf) { pdfBtn.href = PDF; pdfBtn.style.display = ''; }
+  if (!CFG.picker) document.getElementById('deckPicker').style.display = 'none';
+  if (!CFG.density) document.getElementById('densityToggle').style.display = 'none';
+  if (!CFG.timer) {
+    document.getElementById('clock').style.display = 'none';
+    document.querySelector('.timer-block').style.display = 'none';
+  }
 
   PLAYLIST.forEach((deck, i) => {
     const iframe = document.createElement('iframe');
@@ -335,12 +360,25 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   }
 
   window.addEventListener('message', e => {
-    if (e.data && e.data.type === 'deck-nav') {
+    if (!e.data) return;
+    if (e.data.type === 'deck-nav') {
       if (e.data.dir === 'next') switchDeck(currentDeck + 1, false);
       if (e.data.dir === 'prev') switchDeck(currentDeck - 1, true);
     }
-    if (e.data && e.data.type === 'deck-theme') setTheme(e.data.theme, false);
-    if (e.data && e.data.type === 'deck-density') setDensity(e.data.density, false);
+    if (e.data.type === 'deck-theme') setTheme(e.data.theme, false);
+    // Which slide a deck is showing — used to time slides and to tag captured
+    // questions with what was on screen when they were asked.
+    if (e.data.type === 'deck-slide' && talkLog) {
+      const i = frames.findIndex(f => f.contentWindow === e.source);
+      if (i !== -1) talkLog.onSlide(i, e.data.index);
+    }
+    // Keyboard focus lives inside the deck iframe during a talk, so decks
+    // relay the keys they don't use themselves.
+    if (e.data.type === 'deck-hotkey') {
+      const k = e.data.key;
+      if (k === 'd') { if (CFG.density) setDensity(densityToggle.classList.contains('guide') ? 'stage' : 'guide', true); }
+      else if (talkLog) talkLog.hotkey(k);
+    }
   });
 
   document.addEventListener('keydown', e => {
@@ -383,9 +421,11 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     if (broadcast !== false) frames.forEach(f => f.contentWindow.postMessage({ type: 'deck-command', action: 'set-density', density: d }, '*'));
   }
   densityToggle.addEventListener('click', () => setDensity(densityToggle.classList.contains('guide') ? 'stage' : 'guide', true));
-  setDensity(localStorage.getItem('presenter-density') || 'stage', false);
+  if (CFG.density) setDensity(localStorage.getItem('presenter-density') || 'stage', false);
 
   document.addEventListener('keydown', e => {
+    if (!CFG.density) return;
+    if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
     if ((e.key === 'd' || e.key === 'D') && !e.metaKey && !e.ctrlKey && !e.altKey) {
       setDensity(densityToggle.classList.contains('guide') ? 'stage' : 'guide', true);
     }
@@ -395,10 +435,35 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     f.addEventListener('load', () => {
       const theme = document.documentElement.getAttribute('data-theme') || 'dark';
       f.contentWindow.postMessage({ type: 'deck-command', action: 'set-theme', theme: theme }, '*');
-      const density = localStorage.getItem('presenter-density') || 'stage';
-      f.contentWindow.postMessage({ type: 'deck-command', action: 'set-density', density: density }, '*');
+      if (CFG.density) {
+        const density = localStorage.getItem('presenter-density') || 'stage';
+        f.contentWindow.postMessage({ type: 'deck-command', action: 'set-density', density: density }, '*');
+      }
     });
   });
+
+  // ── Talk log (optional) ─────────────────────────────────────────
+  // Q captures an audience question against the slide on screen, N a note,
+  // L opens the log. Loaded only when the flag is on — no cost otherwise.
+  if (CFG.talklog) {
+    const s = document.createElement('script');
+    s.src = '../assets/talklog.js';
+    s.onload = () => {
+      const hint = document.querySelector('.tl-hint');
+      if (hint) hint.style.display = '';
+      talkLog = window.TalkLog.mount({
+        talkId: TALK_ID,
+        title: document.title.replace(/\s+—\s+Presenter$/, ''),
+        playlist: PLAYLIST,
+        mountPoint: document.querySelector('.bottom-left'),
+        getDeck: () => currentDeck,
+        getDeckSpent: () => deckSpent,
+        isRunning: () => timerRunning,
+      });
+    };
+    s.onerror = () => console.warn('[presenter] talklog enabled but assets/talklog.js failed to load');
+    document.head.appendChild(s);
+  }
 
   // ═══════════════════════════════════════════════════════════════
   // CLOCK + PER-DECK TIMER + SCHEDULE DELTA
@@ -454,7 +519,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     schedDeltaEl.classList.toggle('ahead',  delta < -5);
   }
 
-  function tick(){ accumulate(); render(); }
+  function tick(){ accumulate(); render(); if (talkLog) talkLog.tick(); }
   setInterval(tick, 500);
   render();
 

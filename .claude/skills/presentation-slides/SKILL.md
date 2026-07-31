@@ -222,6 +222,17 @@ presenter.html          ← Open this for the full talk
   └── 03-future.html
 ```
 
+**Feature flags live in `presenter.config.js` at the repo root**, not in the presenter. It sets repo-wide `defaults` and per-talk overrides keyed by folder name:
+
+```js
+window.PRESENTER_CONFIG = {
+  defaults: { picker: true, timer: true, density: true, pdf: true, talklog: false },
+  talks: { 'ai-slaves-human-masters-ida': { talklog: true } },
+};
+```
+
+Flags are for turning features on and off while trying them out. Deck order, labels and `minutes` stay in each talk's PLAYLIST — that's the shape of the talk, not a toggle. The presenter carries the same defaults inline as a fallback, so a missing config file degrades to a working deck rather than a blank page.
+
 **Never hand-write a presenter.** Copy `resources/presenter-template.html` and fill its four placeholders — `{{TITLE}}`, `{{HEADER_TITLE}}`, `{{LOGOS}}`, `{{PLAYLIST}}`, `{{PDF}}`. It is the single source of the deck picker, theme sync, density toggle, timer and PDF button; every deck folder in this repo is an instance of it. Fixing a presenter bug means fixing the template and re-instantiating, not patching five copies.
 
 **Keyboard navigation:**
@@ -318,6 +329,30 @@ Toggle it with **D** (in either the presenter or a standalone deck), or the ◦ 
 - Keep `.detail` prose to a sentence or two, and give it somewhere to go: a slide that's already full in stage mode will overflow in guide mode. Prefer a footer strip or a column that's empty on stage.
 - Never put a `.detail` block inside a `data-steps` reveal sequence — the step counter won't know about it.
 - Check both modes before shipping. The linter can't see layout overflow.
+
+## Talk Log (flag: `talklog`)
+
+`assets/talklog.js`, loaded only when the flag is on. Captures what actually happened during a talk so the write-up afterwards isn't reconstructed from memory.
+
+- **Q** — capture an audience question, tagged with the deck and slide on screen
+- **N** — capture a note to self
+- **L** — open the log: timing table, slowest slides, captured entries, markdown export
+
+The export is the point. It gives you the questions with the slide that prompted them, the slowest slides, and a ready-to-paste block of `minutes:` values measured from a real run — so the next delivery is budgeted from evidence rather than a guess.
+
+State persists in `localStorage` under `talklog:<folder>`, so a mid-talk refresh loses nothing. Clear it before a repeat delivery, or you'll append to the previous run.
+
+### How slide timing works without touching decks
+
+Slide-level timing needs to know which slide is showing. Rather than hooking every deck's `goTo()`, the deck-side bridge watches for `.slide.active` changing with a `MutationObserver` and posts `{type:'deck-slide', index, total}` to the presenter. Decks don't know the talk log exists.
+
+Decks that aren't slide-based (the entropy explorer steps through scenarios, not `.slide` elements) simply report nothing and degrade to deck-level timing.
+
+### Hotkeys and iframe focus
+
+During a talk keyboard focus sits **inside the deck iframe**, so a `keydown` listener in the presenter never fires. The deck-side bridge relays the keys a deck doesn't use itself — `d`, `q`, `n`, `l` — up as `{type:'deck-hotkey', key}`. The presenter is the single authority: it acts on the key and broadcasts the result back down.
+
+If you add a presenter-level hotkey, add it to the relay list in the boilerplate too, or it will only work when focus happens to be on the presenter chrome. Both the relay and the presenter's own handler skip events originating in an `INPUT` or `TEXTAREA`, so typing a question doesn't trigger anything.
 
 ## PDF Export
 
