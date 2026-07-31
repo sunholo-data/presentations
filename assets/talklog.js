@@ -79,9 +79,10 @@ window.TalkLog = (function () {
     const KEY = 'talklog:' + talkId;
 
     // ── state ────────────────────────────────────────────────────────────
-    let entries = [];                    // {kind:'q'|'n', text, at, tSec, deck, slide}
+    let entries = [];                    // {kind:'q'|'n', text, at, tSec, deck, slide, slideTitle}
     let slideSpent = {};                 // deck index -> { slide index -> seconds }
     let slideOf = {};                    // deck index -> slide index currently showing
+    let slideTitles = {};                // "deck:slide" -> heading text, for readable labels
     let lastTick = null;
 
     try {
@@ -155,6 +156,7 @@ window.TalkLog = (function () {
             at: new Date().toISOString(),
             tSec: totalSpent(),
             deck, slide: slide === undefined ? null : slide,
+            slideTitle: slideTitles[deck + ':' + slide] || '',
           });
           save();
           renderCount();
@@ -195,7 +197,28 @@ window.TalkLog = (function () {
       lastTick = now;
     }
 
-    function onSlide(deck, index) { slideOf[deck] = index; }
+    function onSlide(deck, index, title) {
+      slideOf[deck] = index;
+      if (title) slideTitles[deck + ':' + index] = title;
+    }
+
+    // Add an entry from somewhere other than the keyboard — the co-presenter
+    // bridge uses this when the AI hears a question worth keeping.
+    function add(kind, text) {
+      text = String(text || '').trim();
+      if (!text) return;
+      const deck = opts.getDeck();
+      const slide = slideOf[deck];
+      entries.push({
+        kind: kind === 'n' ? 'n' : 'q', text,
+        at: new Date().toISOString(),
+        tSec: totalSpent(),
+        deck, slide: slide === undefined ? null : slide,
+        slideTitle: slideTitles[deck + ':' + slide] || '',
+      });
+      save();
+      renderCount();
+    }
 
     // ── log panel ────────────────────────────────────────────────────────
     function openLog() {
@@ -267,7 +290,10 @@ window.TalkLog = (function () {
     function contextLabelFor(e) {
       const d = playlist[e.deck];
       const where = d ? d.label : 'deck ' + (e.deck + 1);
-      const s = (e.slide === null || e.slide === undefined || e.slide < 0) ? '' : ', slide ' + (e.slide + 1);
+      const title = e.slideTitle || slideTitles[e.deck + ':' + e.slide];
+      const s = (e.slide === null || e.slide === undefined || e.slide < 0)
+        ? ''
+        : ', slide ' + (e.slide + 1) + (title ? ' “' + title + '”' : '');
       return fmt(e.tSec) + ' · ' + where + s;
     }
 
@@ -355,7 +381,7 @@ window.TalkLog = (function () {
       if (k === 'q' || k === 'n' || k === 'l') { e.preventDefault(); hotkey(k); }
     });
 
-    return { tick, onSlide, hotkey, isOpen };
+    return { tick, onSlide, hotkey, add, isOpen };
   }
 
   return { mount };

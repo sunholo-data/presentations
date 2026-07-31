@@ -354,6 +354,33 @@ During a talk keyboard focus sits **inside the deck iframe**, so a `keydown` lis
 
 If you add a presenter-level hotkey, add it to the relay list in the boilerplate too, or it will only work when focus happens to be on the presenter chrome. Both the relay and the presenter's own handler skip events originating in an `INPUT` or `TEXTAREA`, so typing a question doesn't trigger anything.
 
+## AI Co-Presenter (flag: `copresenter`)
+
+A headset button in the top bar opens the AILANG co-presenter in a second window — your laptop, while the deck is on the projector. It listens to the room through Gemini Live, researches in the background, and shows a trace of every tool call.
+
+**It is a bridge, not a port, and that was a deliberate call.** The co-presenter lives at `sunholo.com/ailang-demos/co-presenter/` because its Gemini Live session is driven by AILANG WASM — `ailang.wasm` alone is 39MB, plus `gemini-live-core.js` and four `pkg/sunholo/gemini_live/*.ail` modules. Copying that here would double the repo and fork the AILANG stack. So `assets/copresenter-bridge.js` opens the deployed app and talks to it over `postMessage`.
+
+That also fixes the reason the two never worked together before. The co-presenter's `getSlideContext` tool read `frame.contentDocument`, which is same-origin only — point it at a deck on another origin and it silently returned *"No slide context available."* postMessage has no such limit, so the presenter now pushes what's on screen:
+
+```
+presenter → copresenter   presenter-hello       handshake, retried until answered
+                          presenter-context     { talk, title, deck, slide{index,total,title,text} }
+copresenter → presenter   copresenter-ready     it's listening
+                          copresenter-entry     { kind:'q'|'n', text } → into the talk log
+```
+
+The last one is the nice part: a question the model logs through its `audienceQuestion` tool lands in the same markdown export as the ones you typed by hand.
+
+Messages are addressed to the exact origin from `copresenterUrl` and inbound ones are checked against it. Never widen either to `'*'` — that window holds a Gemini API key.
+
+### Two failure modes worth knowing
+
+**`innerText` is layout-dependent.** Read a slide the instant its `.active` class lands and you get an empty string, because the transition hasn't been laid out yet. The bridge waits 160ms and falls back to `textContent`. If you see empty slide context, that's the place to look.
+
+**A deck that doesn't change slide never reports.** Switching decks used to leave the presenter describing the *previous* deck's slide indefinitely. The presenter now clears its cached slide on every switch and sends `{action:'report-slide'}` to the incoming deck, which forces a fresh report.
+
+Decks that aren't slide-based (the entropy explorer steps through scenarios, not `.slide` elements) report `index: -1` and send the whole view's text instead, so the model still knows what's on screen.
+
 ## PDF Export
 
 `scripts/export-pdf.mjs` produces a faithful PDF of any deck folder — one landscape page per slide.

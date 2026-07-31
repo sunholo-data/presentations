@@ -256,7 +256,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 
   let currentDeck = 0;
   let frames = [];
-  let talkLog = null;   // set once assets/talklog.js loads, when the flag is on
+  let talkLog = null;      // set once assets/talklog.js loads, when the flag is on
+  let coPresenter = null;  // ditto for assets/copresenter-bridge.js
+  let lastSlide = { index: -1, total: 0, title: '', text: '' };  // slide on screen
   const viewport = document.getElementById('viewport');
   const deckNum = document.getElementById('deckNum');
   const deckTotal = document.getElementById('deckTotal');
@@ -351,6 +353,12 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     frame.contentWindow.postMessage({ type: 'deck-command', action: goToEnd ? 'go-last' : 'go-first' }, '*');
     deckNum.textContent = currentDeck + 1;
     updatePicker();
+    // Drop the outgoing deck's slide and ask the incoming one to speak up — a
+    // deck that doesn't change slide never reports on its own, and we'd carry
+    // on describing the previous deck to the co-presenter.
+    lastSlide = { index: -1, total: 0, title: '', text: '' };
+    frame.contentWindow.postMessage({ type: 'deck-command', action: 'report-slide' }, '*');
+    if (coPresenter) coPresenter.send();
     setTimeout(() => frame.contentWindow.focus(), 100);
   }
 
@@ -363,9 +371,16 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     if (e.data.type === 'deck-theme') setTheme(e.data.theme, false);
     // Which slide a deck is showing — used to time slides and to tag captured
     // questions with what was on screen when they were asked.
-    if (e.data.type === 'deck-slide' && talkLog) {
+    if (e.data.type === 'deck-slide') {
       const i = frames.findIndex(f => f.contentWindow === e.source);
-      if (i !== -1) talkLog.onSlide(i, e.data.index);
+      if (i === -1) return;
+      if (talkLog) talkLog.onSlide(i, e.data.index, e.data.title);
+      // Only the deck actually on screen should update what the co-presenter
+      // sees — background iframes report too as they load.
+      if (i === currentDeck) {
+        lastSlide = { index: e.data.index, total: e.data.total, title: e.data.title || '', text: e.data.text || '' };
+        if (coPresenter) coPresenter.send();
+      }
     }
     // Keyboard focus lives inside the deck iframe during a talk, so decks
     // relay the keys they don't use themselves.
@@ -457,6 +472,31 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
       });
     };
     s.onerror = () => console.warn('[presenter] talklog enabled but assets/talklog.js failed to load');
+    document.head.appendChild(s);
+  }
+
+  // ── AI co-presenter (optional) ──────────────────────────────────
+  // Opens the AILANG co-presenter in a second window and keeps it told about
+  // the slide on screen. It stays on the demos site — its Gemini Live session
+  // runs on ~39MB of AILANG WASM — so this is a postMessage bridge, not a copy.
+  if (CFG.copresenter) {
+    const s = document.createElement('script');
+    s.src = '../assets/copresenter-bridge.js';
+    s.onload = () => {
+      coPresenter = window.CoPresenterBridge.mount({
+        url: (window.PRESENTER_CONFIG || {}).copresenterUrl,
+        mountPoint: document.querySelector('.top-right'),
+        getContext: () => ({
+          talk: TALK_ID,
+          title: document.title.replace(/\s+—\s+Presenter$/, ''),
+          deck: { index: currentDeck, label: PLAYLIST[currentDeck].label },
+          slide: lastSlide,
+        }),
+        // Anything the co-presenter flags as worth keeping goes in the talk log.
+        onEntry: (kind, text) => { if (talkLog) talkLog.add(kind, text); },
+      });
+    };
+    s.onerror = () => console.warn('[presenter] copresenter enabled but assets/copresenter-bridge.js failed to load');
     document.head.appendChild(s);
   }
 

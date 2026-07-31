@@ -246,21 +246,59 @@ html[data-density="stage"] .detail{display:none}
 
   if(!embedded) return;
 
-  // Report which slide is showing, so the presenter can time it and tag any
-  // question captured against it. Deliberately generic — watches .slide.active
-  // instead of hooking each deck's own goTo(), so no deck has to know this exists.
+  // Report which slide is showing, with its heading and text, so the presenter
+  // can time it, tag a captured question against it, and tell the co-presenter
+  // what the room is looking at. Deliberately generic — watches .slide.active
+  // instead of hooking this deck's goTo(), so the deck needn't know it exists.
   function slides(){
     var s = document.querySelectorAll('.slides-stage .slide');
     return s.length ? s : document.querySelectorAll('.slide');
   }
-  var lastIdx = null;
+  function activeIndex(list){
+    for(var i = 0; i < list.length; i++) if(list[i].classList.contains('active')) return i;
+    return -1;
+  }
+  function tidy(s, n){ return (s || '').replace(/\s+/g, ' ').trim().slice(0, n); }
+
+  var lastIdx = null, pending = null;
+
+  function send(){
+    var list = slides(), idx = activeIndex(list);
+    // Decks that aren't slide-based (an interactive explorer, say) have no
+    // .slide.active at all — describe the whole view rather than nothing.
+    var el = idx >= 0 ? list[idx] : (document.querySelector('.slides-stage') || document.body);
+    var h = el && el.querySelector('h1, h2, h3, .slide-title');
+    // innerText reflects layout, so a slide caught mid-transition reads as
+    // empty; textContent doesn't care and is the right fallback here.
+    var text = el ? ((el.innerText || '').trim() || (el.textContent || '')) : '';
+    window.parent.postMessage({
+      type: 'deck-slide',
+      index: idx,
+      total: list.length,
+      title: tidy(h ? h.textContent : document.title, 120),
+      text: tidy(text, 700)
+    }, '*');
+  }
+
   function report(){
-    var list = slides(), idx = -1;
-    for(var i = 0; i < list.length; i++) if(list[i].classList.contains('active')){ idx = i; break; }
+    var idx = activeIndex(slides());
     if(idx === lastIdx) return;
     lastIdx = idx;
-    window.parent.postMessage({type:'deck-slide', index:idx, total:list.length}, '*');
+    // Let the slide transition settle before reading it.
+    clearTimeout(pending);
+    pending = setTimeout(send, 160);
   }
+
+  // The presenter asks for this when it switches to us, since a deck that
+  // hasn't changed slide would otherwise never speak up and the presenter
+  // would keep forwarding the previous deck's slide.
+  window.addEventListener('message', function(e){
+    if(e.data && e.data.type === 'deck-command' && e.data.action === 'report-slide'){
+      lastIdx = null;
+      report();
+    }
+  });
+
   var stage = document.querySelector('.slides-stage') || document.body;
   new MutationObserver(report).observe(stage, {
     attributes:true, attributeFilter:['class'], subtree:true, childList:true
