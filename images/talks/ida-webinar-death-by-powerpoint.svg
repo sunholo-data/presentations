@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <radialGradient id="glow" gradientUnits="userSpaceOnUse" cx="560" cy="30" r="340">
+      <stop offset="0%" stop-color="#e73c17" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#e73c17" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- background -->
+  <rect width="600" height="400" fill="#0f0f1a"/>
+  <rect width="600" height="400" fill="url(#grid)"/>
+  <rect width="600" height="400" fill="url(#glow)"/>
+
+  <!-- eyebrow -->
+  <text x="300" y="52" text-anchor="middle"
+        font-family="'JetBrains Mono', ui-monospace, Menlo, monospace"
+        font-size="17" letter-spacing="4" fill="#718096">IDA WEBINAR &#183; 22 OCTOBER 2026 &#183; ONLINE</text>
+
+  <!-- slide frame with code glyph -->
+  <rect x="140" y="92" width="320" height="172" rx="16" fill="#1a1a2e" stroke="#e73c17" stroke-opacity="0.45" stroke-width="2"/>
+  <text x="300" y="223" text-anchor="middle"
+        font-family="'JetBrains Mono', ui-monospace, Menlo, monospace"
+        font-size="104" font-weight="700" fill="#e73c17">&lt;/&gt;</text>
+
+  <!-- .pptx struck out -->
+  <text x="211" y="342" text-anchor="middle"
+        font-family="ui-monospace, Menlo, monospace"
+        font-size="30" fill="#718096">.pptx</text>
+  <line x1="164" y1="332" x2="258" y2="332" stroke="#e73c17" stroke-width="4"/>
+  <text x="300" y="342" text-anchor="middle"
+        font-family="ui-monospace, Menlo, monospace"
+        font-size="30" fill="#e73c17">&#8594;</text>
+  <text x="389" y="342" text-anchor="middle"
+        font-family="ui-monospace, Menlo, monospace"
+        font-size="30" font-weight="700" fill="#22c55e">.html</text>
+</svg>
