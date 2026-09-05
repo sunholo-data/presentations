@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generate the Medium, Not the File</title>
+<link rel="icon" type="image/svg+xml" href="/sunholo-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#0f0f1a;--surface:#1a1a2e;--surface-hi:#222240;
+  --orange:#e73c17;--orange-dim:rgba(231,60,23,.35);--orange-glow:rgba(231,60,23,.6);
+  --green:#22c55e;--green-dim:rgba(34,197,94,.15);
+  --red:#ef4444;--red-dim:rgba(239,68,68,.12);
+  --amber:#f59e0b;--amber-dim:rgba(245,158,11,.15);
+  --indigo:#6366f1;--indigo-dim:rgba(99,102,241,.15);
+  --teal:#1da69a;--teal-dim:rgba(29,166,154,.25);
+  --gray:#4a5568;--ghost:rgba(255,255,255,.12);
+  --text:#e2e8f0;--text-dim:#718096;
+  --code-bg:rgba(255,255,255,.03);--code-border:rgba(255,255,255,.06);
+  --row-alt:rgba(255,255,255,.02);--row-border:rgba(255,255,255,.04);
+  --bar-bg:rgba(15,15,26,.8);--bar-border:rgba(255,255,255,.06);
+  --mono:'JetBrains Mono',monospace;--sans:'Montserrat',sans-serif;
+}
+[data-theme="light"]{
+  --bg:#f5f5f0;--surface:#ffffff;--surface-hi:#f0f0ea;
+  --orange:#d4300f;--orange-dim:rgba(212,48,15,.2);--orange-glow:rgba(212,48,15,.4);
+  --green:#16a34a;--green-dim:rgba(22,163,74,.1);
+  --red:#dc2626;--red-dim:rgba(220,38,38,.08);
+  --amber:#d97706;--amber-dim:rgba(217,119,6,.1);
+  --indigo:#4f46e5;--indigo-dim:rgba(79,70,229,.12);
+  --teal:#168077;--teal-dim:rgba(22,128,119,.18);
+  --gray:#8896a4;--ghost:rgba(0,0,0,.1);
+  --text:#1a202c;--text-dim:#4a5568;
+  --code-bg:rgba(0,0,0,.03);--code-border:rgba(0,0,0,.08);
+  --row-alt:rgba(0,0,0,.025);--row-border:rgba(0,0,0,.06);
+  --bar-bg:rgba(255,255,255,.85);--bar-border:rgba(0,0,0,.08);
+}
+
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(231,60,23,.03) 0%, transparent 70%),
+    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size:100% 100%, 60px 60px, 60px 60px;
+}
+[data-theme="light"] body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(212,48,15,.03) 0%, transparent 70%),
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+  background-size:100% 100%, 60px 60px, 60px 60px;
+}
+
+#app{display:flex;flex-direction:column;height:100vh}
+
+/* ─── Slide canvas: 16:9 letterbox stage ─── */
+.slides-viewport{
+  flex:1; min-height:0;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; background:var(--bg);
+  container-type:size;
+}
+.slides-stage{
+  position:relative;
+  width:  min(100cqi, 100cqb * 16 / 9);
+  height: min(100cqb, 100cqi * 9 / 16);
+  container-type:size;
+}
+/* Hide own bars when embedded in presenter — presenter supplies global chrome */
+.in-iframe .top-bar{display:none}
+.in-iframe .bottom-bar{display:none}
+
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:4cqb 6cqi;gap:2.4cqb;
+  opacity:0;visibility:hidden;
+  transform:translateX(40px);
+  transition:opacity .45s ease, transform .45s ease, visibility .45s;
+  overflow:hidden;
+}
+.slide.active{opacity:1;visibility:visible;transform:translateX(0)}
+.slide.exit-left{transform:translateX(-40px);opacity:0}
+
+.slide-tag{
+  font-family:var(--mono);font-size:clamp(9px,1.1cqi,13px);font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--orange);
+  padding:.7cqb 1.4cqi;border-radius:20px;
+  border:1px solid var(--orange-dim);background:rgba(231,60,23,.08);
+  flex-shrink:0;
+}
+.slide-title{
+  font-size:clamp(26px,4cqi,48px);font-weight:800;letter-spacing:-.02em;
+  text-align:center;line-height:1.15;max-width:92%;flex-shrink:0;
+}
+.slide-title .accent{color:var(--orange)}
+.slide-title .dim{color:var(--text-dim);font-weight:500}
+.slide-subtitle{
+  font-size:clamp(13px,1.8cqi,21px);color:var(--text-dim);text-align:center;
+  max-width:72%;line-height:1.5;flex-shrink:0;
+}
+
+/* Take-home prose for the standalone reader */
+.detail{
+  font-size:clamp(11px,1.35cqi,16px);line-height:1.55;color:var(--text-dim);
+  max-width:80%;text-align:center;
+}
+.detail strong{color:var(--text)}
+.detail em{color:var(--orange);font-style:normal;font-weight:600}
+
+/* Code panels */
+.code{
+  font-family:var(--mono);white-space:pre;
+  background:var(--code-bg);border:1px solid var(--code-border);
+  border-radius:10px;padding:2cqb 2.4cqi;
+  font-size:clamp(10px,1.35cqi,17px);line-height:1.6;
+  overflow:hidden;text-align:left;
+}
+.kw{color:var(--text-dim)}
+.fn-name{color:var(--text);font-weight:700}
+.typ-name{color:var(--text-dim)}
+.fx-name{color:var(--orange);font-weight:700}
+.cm{color:var(--text-dim);font-style:italic}
+.num{color:var(--amber)}
+.str{color:var(--green)}
+.prompt{color:var(--green);font-weight:700}
+.flag{color:var(--orange);font-weight:700}
+.bad{color:var(--red);font-weight:700}
+.good{color:var(--green);font-weight:700}
+
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeSlideIn{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:translateX(0)}}
+
+.slide.active .slide-tag{animation:fadeSlideUp .4s ease .05s both}
+.slide.active .slide-title{animation:fadeSlideUp .5s ease .1s both}
+.slide.active .slide-subtitle{animation:fadeSlideUp .5s ease .2s both}
+
+/* ─── Bottom bar ─── */
+.bottom-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 20px;border-top:1px solid var(--bar-border);
+  flex-shrink:0;background:var(--bar-bg);backdrop-filter:blur(8px);
+}
+.transport{display:flex;align-items:center;gap:8px}
+.transport-btn{
+  width:28px;height:28px;border-radius:50%;
+  border:1px solid var(--ghost);background:transparent;
+  color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;transition:all .2s;
+}
+.transport-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}
+.transport-btn:disabled{opacity:.3;cursor:default}
+.step-indicator{font-family:var(--mono);font-size:12px;color:var(--text-dim)}
+.step-indicator .current{color:var(--text);font-weight:700}
+.slide-dots{display:flex;gap:6px}
+.slide-dot{width:8px;height:8px;border-radius:50%;background:var(--ghost);border:none;cursor:pointer;transition:all .25s}
+.slide-dot.active{background:var(--orange);transform:scale(1.3)}
+.nav-hints{display:flex;align-items:center;gap:6px}
+.kbd{
+  display:inline-block;padding:1px 5px;border-radius:3px;
+  font-family:var(--mono);font-size:9px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:var(--text-dim);
+}
+[data-theme="light"] .kbd{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
+
+/* ─── Detail density (stage vs guide) ─── */
+html[data-density="stage"] .detail{display:none}
+
+/* A slide that just fits on stage can overflow in guide mode, where the
+   .detail prose is revealed — and the squeeze is worst on a small stage
+   (a laptop window, or a deck sharing a Zoom pane). The clamp() minimums are
+   in px, so they stop shrinking while the stage keeps going. Tighten the
+   take-home text there rather than let it push past the bottom edge. */
+@container (max-height: 760px){
+  .detail{font-size:clamp(9px,1.25cqi,15px);line-height:1.4;max-width:86%}
+  .slide{gap:1.9cqb}
+}
+
+/* ─── Deck 01: generate the medium ─── */
+.chain{display:flex;align-items:stretch;justify-content:center;gap:.9cqi;width:100%;max-width:94%;flex-wrap:nowrap}
+.chain-step{
+  flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:.8cqb;
+  padding:1.8cqb .8cqi;border-radius:10px;
+  background:var(--surface);border:1px solid var(--ghost);opacity:0;
+}
+.chain-step.terminal{border-color:var(--orange-dim);background:rgba(231,60,23,.07)}
+[data-theme="light"] .chain-step.terminal{background:rgba(212,48,15,.05)}
+.slide.active .chain-step:nth-child(1){animation:fadeSlideUp .4s ease .1s both}
+.slide.active .chain-step:nth-child(2){animation:fadeSlideUp .4s ease .3s both}
+.slide.active .chain-step:nth-child(3){animation:fadeSlideUp .4s ease .5s both}
+.slide.active .chain-step:nth-child(4){animation:fadeSlideUp .4s ease .7s both}
+.slide.active .chain-step:nth-child(5){animation:fadeSlideUp .4s ease .9s both}
+.slide.active .chain-step:nth-child(6){animation:fadeSlideUp .4s ease 1.1s both}
+.chain-icon{font-size:clamp(14px,2.2cqi,28px);color:var(--text-dim)}
+.chain-step.terminal .chain-icon{color:var(--orange)}
+.chain-name{
+  font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);font-weight:700;
+  letter-spacing:.05em;text-align:center;color:var(--text);line-height:1.3;
+}
+.chain-loss{
+  font-size:clamp(8px,1cqi,12px);color:var(--red);text-align:center;line-height:1.35;
+  font-weight:600;
+}
+.chain-loss.none{color:var(--green)}
+
+.split{display:flex;gap:2.2cqi;align-items:stretch;justify-content:center;width:100%;max-width:92%}
+.split-panel{flex:1;min-width:0;display:flex;flex-direction:column;gap:1.2cqb;opacity:0}
+.slide.active .split-panel:nth-child(1){animation:fadeSlideUp .5s ease .15s both}
+.slide.active .split-panel:nth-child(2){animation:fadeSlideUp .5s ease .45s both}
+.split-head{
+  display:flex;align-items:center;gap:.9cqi;
+  font-family:var(--mono);font-size:clamp(9px,1.15cqi,14px);font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+}
+.split-panel.warn .split-head{color:var(--amber)}
+.split-panel.ok .split-head{color:var(--green)}
+.split-panel .code{flex:1;font-size:clamp(7px,1.05cqi,14px);line-height:1.5}
+.split-panel.warn .code{border-color:var(--amber-dim)}
+.split-panel.ok .code{border-color:var(--green-dim)}
+.split-foot{font-size:clamp(10px,1.3cqi,16px);color:var(--text-dim);line-height:1.5}
+.tagname{color:var(--indigo)}
+.attr{color:var(--text-dim)}
+
+.one-arrow{display:flex;align-items:center;justify-content:center;gap:2.4cqi;width:100%}
+.arrow-node{
+  display:flex;flex-direction:column;align-items:center;gap:1cqb;
+  padding:2.6cqb 3cqi;border-radius:14px;
+  background:var(--surface);border:1px solid var(--ghost);
+}
+.arrow-node.dest{border:1px solid var(--orange-dim);background:rgba(231,60,23,.07)}
+[data-theme="light"] .arrow-node.dest{background:rgba(212,48,15,.05)}
+.arrow-node i{font-size:clamp(22px,3.6cqi,48px);color:var(--text-dim)}
+.arrow-node.dest i{color:var(--orange)}
+.arrow-node span{font-family:var(--mono);font-size:clamp(10px,1.4cqi,18px);font-weight:700;letter-spacing:.05em}
+.arrow-link{display:flex;flex-direction:column;align-items:center;gap:.6cqb;color:var(--orange)}
+.arrow-link i{font-size:clamp(18px,2.6cqi,34px)}
+.arrow-link span{font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim)}
+.slide.active .one-arrow{animation:fadeSlideUp .6s ease .2s both}
+
+.ledger{display:flex;gap:2.4cqi;width:100%;max-width:88%;align-items:stretch}
+.ledger-col{
+  flex:1;min-width:0;display:flex;flex-direction:column;gap:1.1cqb;
+  padding:2.4cqb 2.2cqi;border-radius:14px;background:var(--surface);
+  border:1px solid var(--ghost);opacity:0;
+}
+.ledger-col.gain{border-top:3px solid var(--green)}
+.ledger-col.cost{border-top:3px solid var(--amber)}
+.slide.active .ledger-col:nth-child(1){animation:fadeSlideUp .5s ease .15s both}
+.slide.active .ledger-col:nth-child(2){animation:fadeSlideUp .5s ease .45s both}
+.ledger-head{
+  font-family:var(--mono);font-size:clamp(9px,1.15cqi,14px);font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4cqb;
+}
+.ledger-col.gain .ledger-head{color:var(--green)}
+.ledger-col.cost .ledger-head{color:var(--amber)}
+.ledger-item{
+  display:flex;align-items:flex-start;gap:1cqi;
+  font-size:clamp(10px,1.4cqi,18px);line-height:1.45;color:var(--text);
+}
+.ledger-item i{font-size:clamp(9px,1.15cqi,14px);margin-top:.45cqb;flex-shrink:0}
+.ledger-col.gain .ledger-item i{color:var(--green)}
+.ledger-col.cost .ledger-item i{color:var(--amber)}
+.ledger-item .ans{color:var(--text-dim);font-size:.86em}
+</style>
+</head>
+<body>
+<script>(function(){
+  // ── Presenter bridge: detail density, slide reporting, hotkey relay ──
+  var embedded = window !== window.top, root = document.documentElement;
+
+  // Detail density: stage (inside the presenter) vs guide (standalone reader).
+  root.setAttribute('data-density', embedded ? 'stage' : 'guide');
+  function setDensity(d){ root.setAttribute('data-density', d === 'guide' ? 'guide' : 'stage'); }
+  window.addEventListener('message', function(e){
+    if(e.data && e.data.type === 'deck-command' && e.data.action === 'set-density') setDensity(e.data.density);
+  });
+
+  // Hotkeys this deck doesn't use itself. Keyboard focus lives in the iframe
+  // during a talk, so relay them up rather than letting them fall on the floor.
+  document.addEventListener('keydown', function(e){
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    if(e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    var k = (e.key || '').toLowerCase();
+    if(k !== 'd' && k !== 'q' && k !== 'n' && k !== 'l') return;
+    if(embedded) window.parent.postMessage({type:'deck-hotkey', key:k}, '*');
+    else if(k === 'd') setDensity(root.getAttribute('data-density') === 'guide' ? 'stage' : 'guide');
+  });
+
+  if(!embedded) return;
+
+  // Report which slide is showing, with its heading and text, so the presenter
+  // can time it, tag a captured question against it, and tell the co-presenter
+  // what the room is looking at. Deliberately generic — watches .slide.active
+  // instead of hooking this deck's goTo(), so the deck needn't know it exists.
+  function slides(){
+    var s = document.querySelectorAll('.slides-stage .slide');
+    return s.length ? s : document.querySelectorAll('.slide');
+  }
+  function activeIndex(list){
+    for(var i = 0; i < list.length; i++) if(list[i].classList.contains('active')) return i;
+    return -1;
+  }
+  function tidy(s, n){ return (s || '').replace(/\s+/g, ' ').trim().slice(0, n); }
+
+  var lastIdx = null, pending = null;
+
+  function send(){
+    var list = slides(), idx = activeIndex(list);
+    var el = idx >= 0 ? list[idx] : (document.querySelector('.slides-stage') || document.body);
+    var h = el && el.querySelector('h1, h2, h3, .slide-title');
+    // innerText reflects layout, so a slide caught mid-transition reads as
+    // empty; textContent doesn't care and is the right fallback here.
+    var text = el ? ((el.innerText || '').trim() || (el.textContent || '')) : '';
+    window.parent.postMessage({
+      type: 'deck-slide',
+      index: idx,
+      total: list.length,
+      title: tidy(h ? h.textContent : document.title, 120),
+      text: tidy(text, 700)
+    }, '*');
+  }
+
+  function report(){
+    var idx = activeIndex(slides());
+    if(idx === lastIdx) return;
+    lastIdx = idx;
+    clearTimeout(pending);
+    pending = setTimeout(send, 160);
+  }
+
+  window.addEventListener('message', function(e){
+    if(e.data && e.data.type === 'deck-command' && e.data.action === 'report-slide'){
+      lastIdx = null;
+      report();
+    }
+  });
+
+  var stage = document.querySelector('.slides-stage') || document.body;
+  new MutationObserver(report).observe(stage, {
+    attributes:true, attributeFilter:['class'], subtree:true, childList:true
+  });
+  report();
+})();</script>
+<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
+<div id="app">
+
+  <div class="slides-viewport">
+    <div class="slides-stage">
+
+    <!-- ═══════════ 2.1 The round trip ═══════════ -->
+    <section class="slide active" data-slide="0">
+      <span class="slide-tag"><i class="fas fa-rotate"></i> The round trip</span>
+      <h1 class="slide-title">Count the <span class="accent">conversions</span></h1>
+      <div class="chain">
+        <div class="chain-step">
+          <div class="chain-icon"><i class="fas fa-lightbulb"></i></div>
+          <div class="chain-name">Idea</div>
+          <div class="chain-loss none">&mdash;</div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-icon"><i class="fas fa-file-powerpoint"></i></div>
+          <div class="chain-name">.pptx</div>
+          <div class="chain-loss">boxed into a rectangle</div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-icon"><i class="fas fa-desktop"></i></div>
+          <div class="chain-name">Their projector</div>
+          <div class="chain-loss">fonts substitute</div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-icon"><i class="fas fa-file-pdf"></i></div>
+          <div class="chain-name">Export to PDF</div>
+          <div class="chain-loss">animation flattens</div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-icon"><i class="fas fa-camera"></i></div>
+          <div class="chain-name">Screenshot</div>
+          <div class="chain-loss">links die</div>
+        </div>
+        <div class="chain-step terminal">
+          <div class="chain-icon"><i class="fas fa-mobile-screen"></i></div>
+          <div class="chain-name">Someone&rsquo;s phone</div>
+          <div class="chain-loss">unreadable</div>
+        </div>
+      </div>
+      <p class="detail">
+        Five conversions between the thought and the person. Each one is lossy, and none of them
+        are steps you chose &mdash; they&rsquo;re the tax on having picked a <em>file format</em>
+        as your output. The embedded video never travels. It never has.
+      </p>
+    </section>
+
+    <!-- ═══════════ 2.2 What an agent is actually good at ═══════════ -->
+    <section class="slide" data-slide="1">
+      <span class="slide-tag"><i class="fas fa-robot"></i> Ask for what it&rsquo;s good at</span>
+      <h1 class="slide-title">Same slide title, <span class="accent">two formats</span></h1>
+      <div class="split">
+        <div class="split-panel warn">
+          <div class="split-head"><i class="fas fa-file-zipper"></i> .pptx &mdash; a zip of XML</div>
+<div class="code">&lt;<span class="tagname">p:sp</span>&gt;
+  &lt;<span class="tagname">p:nvSpPr</span>&gt;
+    &lt;<span class="tagname">p:cNvPr</span> <span class="attr">id=</span><span class="str">"2"</span> <span class="attr">name=</span><span class="str">"Title 1"</span>/&gt;
+  &lt;/<span class="tagname">p:nvSpPr</span>&gt;
+  &lt;<span class="tagname">p:spPr</span>&gt;&lt;<span class="tagname">a:xfrm</span>&gt;
+    &lt;<span class="tagname">a:off</span> <span class="attr">x=</span><span class="str">"838200"</span> <span class="attr">y=</span><span class="str">"365125"</span>/&gt;
+    &lt;<span class="tagname">a:ext</span> <span class="attr">cx=</span><span class="str">"10515600"</span> <span class="attr">cy=</span><span class="str">"1325563"</span>/&gt;
+  &lt;/<span class="tagname">a:xfrm</span>&gt;&lt;/<span class="tagname">p:spPr</span>&gt;
+  &lt;<span class="tagname">p:txBody</span>&gt;&lt;<span class="tagname">a:p</span>&gt;&lt;<span class="tagname">a:r</span>&gt;
+    &lt;<span class="tagname">a:t</span>&gt;Generate the medium&lt;/<span class="tagname">a:t</span>&gt;
+  &lt;/<span class="tagname">a:r</span>&gt;&lt;/<span class="tagname">a:p</span>&gt;&lt;/<span class="tagname">p:txBody</span>&gt;
+&lt;/<span class="tagname">p:sp</span>&gt;</div>
+          <div class="split-foot">Coordinates in English Metric Units. Written blind &mdash; the model can&rsquo;t open it and look.</div>
+        </div>
+        <div class="split-panel ok">
+          <div class="split-head"><i class="fas fa-code"></i> HTML &mdash; the medium itself</div>
+<div class="code">&lt;<span class="tagname">h1</span> <span class="attr">class=</span><span class="str">"slide-title"</span>&gt;
+  Generate the medium
+&lt;/<span class="tagname">h1</span>&gt;</div>
+          <div class="split-foot">Renders instantly. You can see it, so the agent can be told it&rsquo;s wrong.</div>
+        </div>
+      </div>
+      <p class="detail">
+        You <em>can</em> generate <code>.pptx</code> &mdash; the libraries exist. But you&rsquo;re
+        asking a model to write a format it cannot open and judge, so the feedback loop is broken
+        before it starts. HTML and CSS are the best&#8209;represented things in its training data
+        by a wide margin. <strong>And you don&rsquo;t have to write this &mdash; only read enough of
+        it to say &ldquo;that&rsquo;s wrong.&rdquo;</strong>
+      </p>
+    </section>
+
+    <!-- ═══════════ 2.3 The final medium ═══════════ -->
+    <section class="slide" data-slide="2">
+      <span class="slide-tag"><i class="fas fa-bullseye"></i> The final medium</span>
+      <h1 class="slide-title">One arrow</h1>
+      <div class="one-arrow">
+        <div class="arrow-node">
+          <i class="fas fa-lightbulb"></i>
+          <span>IDEA</span>
+        </div>
+        <div class="arrow-link">
+          <i class="fas fa-arrow-right-long"></i>
+          <span>no conversion</span>
+        </div>
+        <div class="arrow-node dest">
+          <i class="fas fa-display"></i>
+          <span>THE SCREEN</span>
+        </div>
+      </div>
+      <p class="detail">
+        The medium your audience actually receives is a rendered page. Generate that and there is
+        nothing left in between to lose anything. <strong>Live data stays live. Links stay links.
+        The whole deck is one HTTP request.</strong>
+      </p>
+    </section>
+
+    <!-- ═══════════ 2.4 Gained / given up ═══════════ -->
+    <section class="slide" data-slide="3">
+      <span class="slide-tag"><i class="fas fa-scale-balanced"></i> Honest ledger</span>
+      <h1 class="slide-title">What you gain, <span class="dim">what you give up</span></h1>
+      <div class="ledger">
+        <div class="ledger-col gain">
+          <div class="ledger-head"><i class="fas fa-plus"></i> Gained</div>
+          <div class="ledger-item"><i class="fas fa-check"></i><span>No licence, no &ldquo;created in a newer version&rdquo;</span></div>
+          <div class="ledger-item"><i class="fas fa-check"></i><span>No font substitution &mdash; the fonts ship with the page</span></div>
+          <div class="ledger-item"><i class="fas fa-check"></i><span>Opens on anything with a browser</span></div>
+          <div class="ledger-item"><i class="fas fa-check"></i><span>Deployable to a URL, diffable in git</span></div>
+          <div class="ledger-item"><i class="fas fa-check"></i><span>The slide can <em>run things</em></span></div>
+        </div>
+        <div class="ledger-col cost">
+          <div class="ledger-head"><i class="fas fa-minus"></i> Given up</div>
+          <div class="ledger-item"><i class="fas fa-triangle-exclamation"></i><span>Corporate template compliance <span class="ans">&mdash; no answer. Sometimes you lose this one.</span></span></div>
+          <div class="ledger-item"><i class="fas fa-triangle-exclamation"></i><span>A file a colleague can edit in PowerPoint <span class="ans">&mdash; they edit the page instead</span></span></div>
+          <div class="ledger-item"><i class="fas fa-triangle-exclamation"></i><span>Animation by menu <span class="ans">&mdash; you describe it instead</span></span></div>
+          <div class="ledger-item"><i class="fas fa-triangle-exclamation"></i><span>Needs a browser, and a network for the live parts <span class="ans">&mdash; PDF export covers the room with no wifi</span></span></div>
+        </div>
+      </div>
+      <p class="detail">
+        Most of the right&#8209;hand column has an answer, and I&rsquo;ll show you the PDF export
+        later. But the first one doesn&rsquo;t. <strong>If your organisation mandates the corporate
+        template, this is a fight you may not win</strong> &mdash; take the design&#8209;system idea
+        from the next section and leave the HTML behind. It works on its own.
+      </p>
+    </section>
+    </div><!-- /slides-stage -->
+  </div><!-- /slides-viewport -->
+
+  <div class="bottom-bar">
+    <div class="transport">
+      <button class="transport-btn" id="btnPrev" title="Previous slide"><i class="fas fa-chevron-left"></i></button>
+      <span class="step-indicator"><span class="current" id="slideNum">1</span> / <span id="slideTotal">1</span></span>
+      <button class="transport-btn" id="btnNext" title="Next slide"><i class="fas fa-chevron-right"></i></button>
+    </div>
+    <div class="slide-dots" id="slideDots"></div>
+    <div class="nav-hints">
+      <span class="kbd">&larr;</span><span class="kbd">&rarr;</span>
+      <span style="font-size:11px;color:var(--text-dim);margin-left:4px">navigate</span>
+      <span class="kbd" style="margin-left:10px">D</span>
+      <span style="font-size:11px;color:var(--text-dim)">detail</span>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const TOTAL = slides.length;
+  let current = 0;
+  let transitioning = false;
+
+  const slideNum = document.getElementById('slideNum');
+  const slideTotal = document.getElementById('slideTotal');
+  const dotsContainer = document.getElementById('slideDots');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+
+  slideTotal.textContent = TOTAL;
+
+  for(let i=0;i<TOTAL;i++){
+    const d = document.createElement('button');
+    d.className = 'slide-dot' + (i===0?' active':'');
+    d.dataset.idx = i;
+    d.addEventListener('click', ()=> goTo(i));
+    dotsContainer.appendChild(d);
+  }
+
+  function goTo(n){
+    if(n<0||n>=TOTAL||n===current||transitioning) return;
+    transitioning = true;
+    const dir = n > current ? 1 : -1;
+
+    slides.forEach(s=>s.classList.remove('active','exit-left'));
+    if(current>=0 && current<TOTAL && dir>0) slides[current].classList.add('exit-left');
+    slides[n].classList.add('active');
+
+    current = n;
+    slideNum.textContent = current + 1;
+    document.querySelectorAll('.slide-dot').forEach((d,i)=>{
+      d.classList.toggle('active', i===current);
+    });
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === TOTAL - 1;
+
+    setTimeout(()=>{ transitioning = false; }, 500);
+  }
+
+  btnPrev.disabled = true;
+  if(TOTAL <= 1) btnNext.disabled = true;
+
+  // ←/→ = slides within this deck only; ↑/↓ = deck-level (parent presenter)
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key===' ') goTo(current+1);
+    if(e.key==='ArrowLeft') goTo(current-1);
+    if(e.key==='ArrowDown'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*'); }
+    if(e.key==='ArrowUp'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*'); }
+  });
+  btnPrev.addEventListener('click', ()=> goTo(current-1));
+  btnNext.addEventListener('click', ()=> goTo(current+1));
+
+  window.addEventListener('message', e=>{
+    if(e.data && e.data.type==='deck-command'){
+      if(e.data.action==='go-first') goTo(0);
+      if(e.data.action==='go-last'){ current=-1; goTo(TOTAL-1); }
+      if(e.data.action==='set-theme') setTheme(e.data.theme);
+    }
+  });
+
+  window.parent.postMessage({type:'deck-ready',total:TOTAL},'*');
+
+  function setTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+})();
+</script>
+</body>
+</html>

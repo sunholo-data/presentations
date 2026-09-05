@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond Slide Software &mdash; and Composability</title>
+<link rel="icon" type="image/svg+xml" href="/sunholo-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="../assets/blender-slide.js" defer></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#0f0f1a;--surface:#1a1a2e;--surface-hi:#222240;
+  --orange:#e73c17;--orange-dim:rgba(231,60,23,.35);--orange-glow:rgba(231,60,23,.6);
+  --green:#22c55e;--green-dim:rgba(34,197,94,.15);
+  --red:#ef4444;--red-dim:rgba(239,68,68,.12);
+  --amber:#f59e0b;--amber-dim:rgba(245,158,11,.15);
+  --indigo:#6366f1;--indigo-dim:rgba(99,102,241,.15);
+  --teal:#1da69a;--teal-dim:rgba(29,166,154,.25);
+  --gray:#4a5568;--ghost:rgba(255,255,255,.12);
+  --text:#e2e8f0;--text-dim:#718096;
+  --code-bg:rgba(255,255,255,.03);--code-border:rgba(255,255,255,.06);
+  --row-alt:rgba(255,255,255,.02);--row-border:rgba(255,255,255,.04);
+  --bar-bg:rgba(15,15,26,.8);--bar-border:rgba(255,255,255,.06);
+  --mono:'JetBrains Mono',monospace;--sans:'Montserrat',sans-serif;
+}
+[data-theme="light"]{
+  --bg:#f5f5f0;--surface:#ffffff;--surface-hi:#f0f0ea;
+  --orange:#d4300f;--orange-dim:rgba(212,48,15,.2);--orange-glow:rgba(212,48,15,.4);
+  --green:#16a34a;--green-dim:rgba(22,163,74,.1);
+  --red:#dc2626;--red-dim:rgba(220,38,38,.08);
+  --amber:#d97706;--amber-dim:rgba(217,119,6,.1);
+  --indigo:#4f46e5;--indigo-dim:rgba(79,70,229,.12);
+  --teal:#168077;--teal-dim:rgba(22,128,119,.18);
+  --gray:#8896a4;--ghost:rgba(0,0,0,.1);
+  --text:#1a202c;--text-dim:#4a5568;
+  --code-bg:rgba(0,0,0,.03);--code-border:rgba(0,0,0,.08);
+  --row-alt:rgba(0,0,0,.025);--row-border:rgba(0,0,0,.06);
+  --bar-bg:rgba(255,255,255,.85);--bar-border:rgba(0,0,0,.08);
+}
+
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(231,60,23,.03) 0%, transparent 70%),
+    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size:100% 100%, 60px 60px, 60px 60px;
+}
+[data-theme="light"] body{
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(212,48,15,.03) 0%, transparent 70%),
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+  background-size:100% 100%, 60px 60px, 60px 60px;
+}
+
+#app{display:flex;flex-direction:column;height:100vh}
+
+/* ─── Slide canvas: 16:9 letterbox stage ─── */
+.slides-viewport{
+  flex:1; min-height:0;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; background:var(--bg);
+  container-type:size;
+}
+.slides-stage{
+  position:relative;
+  width:  min(100cqi, 100cqb * 16 / 9);
+  height: min(100cqb, 100cqi * 9 / 16);
+  container-type:size;
+}
+/* Hide own bars when embedded in presenter — presenter supplies global chrome */
+.in-iframe .top-bar{display:none}
+.in-iframe .bottom-bar{display:none}
+
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:4cqb 6cqi;gap:2.4cqb;
+  opacity:0;visibility:hidden;
+  transform:translateX(40px);
+  transition:opacity .45s ease, transform .45s ease, visibility .45s;
+  overflow:hidden;
+}
+.slide.active{opacity:1;visibility:visible;transform:translateX(0)}
+.slide.exit-left{transform:translateX(-40px);opacity:0}
+
+.slide-tag{
+  font-family:var(--mono);font-size:clamp(9px,1.1cqi,13px);font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--orange);
+  padding:.7cqb 1.4cqi;border-radius:20px;
+  border:1px solid var(--orange-dim);background:rgba(231,60,23,.08);
+  flex-shrink:0;
+}
+.slide-title{
+  font-size:clamp(26px,4cqi,48px);font-weight:800;letter-spacing:-.02em;
+  text-align:center;line-height:1.15;max-width:92%;flex-shrink:0;
+}
+.slide-title .accent{color:var(--orange)}
+.slide-title .dim{color:var(--text-dim);font-weight:500}
+.slide-subtitle{
+  font-size:clamp(13px,1.8cqi,21px);color:var(--text-dim);text-align:center;
+  max-width:72%;line-height:1.5;flex-shrink:0;
+}
+
+/* Take-home prose for the standalone reader */
+.detail{
+  font-size:clamp(11px,1.35cqi,16px);line-height:1.55;color:var(--text-dim);
+  max-width:80%;text-align:center;
+}
+.detail strong{color:var(--text)}
+.detail em{color:var(--orange);font-style:normal;font-weight:600}
+
+/* Code panels */
+.code{
+  font-family:var(--mono);white-space:pre;
+  background:var(--code-bg);border:1px solid var(--code-border);
+  border-radius:10px;padding:2cqb 2.4cqi;
+  font-size:clamp(10px,1.35cqi,17px);line-height:1.6;
+  overflow:hidden;text-align:left;
+}
+.kw{color:var(--text-dim)}
+.fn-name{color:var(--text);font-weight:700}
+.typ-name{color:var(--text-dim)}
+.fx-name{color:var(--orange);font-weight:700}
+.cm{color:var(--text-dim);font-style:italic}
+.num{color:var(--amber)}
+.str{color:var(--green)}
+.prompt{color:var(--green);font-weight:700}
+.flag{color:var(--orange);font-weight:700}
+.bad{color:var(--red);font-weight:700}
+.good{color:var(--green);font-weight:700}
+
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeSlideIn{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:translateX(0)}}
+
+.slide.active .slide-tag{animation:fadeSlideUp .4s ease .05s both}
+.slide.active .slide-title{animation:fadeSlideUp .5s ease .1s both}
+.slide.active .slide-subtitle{animation:fadeSlideUp .5s ease .2s both}
+
+/* ─── Bottom bar ─── */
+.bottom-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 20px;border-top:1px solid var(--bar-border);
+  flex-shrink:0;background:var(--bar-bg);backdrop-filter:blur(8px);
+}
+.transport{display:flex;align-items:center;gap:8px}
+.transport-btn{
+  width:28px;height:28px;border-radius:50%;
+  border:1px solid var(--ghost);background:transparent;
+  color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;transition:all .2s;
+}
+.transport-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}
+.transport-btn:disabled{opacity:.3;cursor:default}
+.step-indicator{font-family:var(--mono);font-size:12px;color:var(--text-dim)}
+.step-indicator .current{color:var(--text);font-weight:700}
+.slide-dots{display:flex;gap:6px}
+.slide-dot{width:8px;height:8px;border-radius:50%;background:var(--ghost);border:none;cursor:pointer;transition:all .25s}
+.slide-dot.active{background:var(--orange);transform:scale(1.3)}
+.nav-hints{display:flex;align-items:center;gap:6px}
+.kbd{
+  display:inline-block;padding:1px 5px;border-radius:3px;
+  font-family:var(--mono);font-size:9px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:var(--text-dim);
+}
+[data-theme="light"] .kbd{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
+
+/* ─── Detail density (stage vs guide) ─── */
+html[data-density="stage"] .detail{display:none}
+
+/* A slide that just fits on stage can overflow in guide mode, where the
+   .detail prose is revealed — and the squeeze is worst on a small stage
+   (a laptop window, or a deck sharing a Zoom pane). The clamp() minimums are
+   in px, so they stop shrinking while the stage keeps going. Tighten the
+   take-home text there rather than let it push past the bottom edge. */
+@container (max-height: 760px){
+  .detail{font-size:clamp(9px,1.25cqi,15px);line-height:1.4;max-width:86%}
+  .slide{gap:1.9cqb}
+}
+
+/* ─── Deck 04: beyond slide software ─── */
+.claims{display:flex;gap:2.2cqi;align-items:stretch;justify-content:center;width:100%;max-width:90%}
+.claim{
+  flex:1;min-width:0;display:flex;flex-direction:column;gap:1.2cqb;
+  padding:2.8cqb 2.2cqi;border-radius:14px;
+  background:var(--surface);border:1px solid var(--ghost);opacity:0;
+}
+.slide.active .claim:nth-child(1){animation:fadeSlideUp .5s ease .15s both}
+.slide.active .claim:nth-child(2){animation:fadeSlideUp .5s ease .4s both}
+.slide.active .claim:nth-child(3){animation:fadeSlideUp .5s ease .65s both}
+.claim.a{border-top:3px solid var(--orange)}
+.claim.b{border-top:3px solid var(--indigo)}
+.claim.c{border-top:3px solid var(--teal)}
+.claim-ex{
+  font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);
+}
+.claim.a .claim-ex{color:var(--orange)}
+.claim.b .claim-ex{color:var(--indigo)}
+.claim.c .claim-ex{color:var(--teal)}
+.claim i{font-size:clamp(18px,2.9cqi,38px);opacity:.85}
+.claim.a i{color:var(--orange)}
+.claim.b i{color:var(--indigo)}
+.claim.c i{color:var(--teal)}
+.claim-what{font-size:clamp(14px,2.2cqi,29px);font-weight:800;line-height:1.2;letter-spacing:-.015em}
+.claim-sub{font-size:clamp(10px,1.4cqi,18px);color:var(--text-dim);line-height:1.5}
+.claim-src{
+  margin-top:auto;padding-top:1cqb;border-top:1px solid var(--ghost);
+  font-family:var(--mono);font-size:clamp(7px,.98cqi,12px);color:var(--text-dim);
+  word-break:break-all;line-height:1.4;
+}
+.claim-src b{color:var(--orange)}
+
+.reuse-wrap{display:flex;flex-direction:column;gap:1.6cqb;width:100%;max-width:82%;align-items:center}
+.reuse-wrap .code{width:100%;font-size:clamp(8px,1.18cqi,16px);line-height:1.62}
+.slide.active .reuse-wrap .code{animation:fadeSlideUp .55s ease .2s both}
+.here{color:var(--text-dim)}
+.elsewhere{color:var(--orange);font-weight:700}
+.reuse-legend{display:flex;gap:2.6cqi;align-items:center;justify-content:center;flex-wrap:wrap}
+.legend-item{
+  display:flex;align-items:center;gap:.9cqi;
+  font-family:var(--mono);font-size:clamp(9px,1.2cqi,15px);color:var(--text-dim);
+}
+.legend-swatch{width:1.4cqi;height:1.4cqi;min-width:9px;min-height:9px;border-radius:3px}
+.legend-swatch.here{background:var(--gray)}
+.legend-swatch.elsewhere{background:var(--orange)}
+.legend-item b{color:var(--text)}
+.slide.active .reuse-legend{animation:fadeSlideUp .5s ease .5s both}
+
+.spatial-exhibit{padding-left:5cqi;padding-right:5cqi}
+.spatial-layout{
+  display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);
+  align-items:center;gap:3.5cqi;width:100%;height:76%;max-width:94%;
+}
+.spatial-copy{display:flex;flex-direction:column;align-items:flex-start;gap:2cqb;text-align:left;min-width:0}
+.spatial-copy .slide-title{text-align:left;max-width:100%;font-size:clamp(26px,4.15cqi,52px)}
+.spatial-lede{font-size:clamp(12px,1.65cqi,21px);line-height:1.55;color:var(--text-dim);max-width:38ch}
+.spatial-lede strong{color:var(--text)}
+.spatial-proof{
+  display:grid;grid-template-columns:auto 1fr;gap:.7cqb 1cqi;align-items:baseline;
+  padding-top:1.2cqb;border-top:1px solid var(--ghost);width:100%;
+  font-family:var(--mono);font-size:clamp(8px,1.02cqi,13px);color:var(--text-dim);
+}
+.spatial-proof b{color:var(--orange);font-weight:700}
+.spatial-model{position:relative;width:100%;height:100%;min-height:0}
+.spatial-model sunholo-blender{
+  width:100%;height:100%;background:#000;border:1px solid var(--ghost);
+  border-radius:14px;overflow:hidden;
+}
+.spatial-model::before{
+  content:"";position:absolute;inset:14% 10%;border-radius:50%;
+  background:radial-gradient(circle,rgba(231,60,23,.13),transparent 68%);
+  filter:blur(22px);pointer-events:none;
+}
+.spatial-hint{
+  position:absolute;right:3%;bottom:4%;z-index:2;
+  font-family:var(--mono);font-size:clamp(8px,.96cqi,12px);color:var(--text-dim);
+  letter-spacing:.05em;padding:.7cqb 1.1cqi;border:1px solid var(--ghost);
+  border-radius:20px;background:rgba(15,15,26,.72);backdrop-filter:blur(8px);
+}
+.spatial-hint i{color:var(--orange);margin-right:.5cqi}
+[data-theme="light"] .spatial-hint{background:rgba(255,255,255,.78)}
+.slide.active .spatial-model{animation:fadeSlideUp .8s ease .2s both}
+</style>
+</head>
+<body>
+<script>(function(){
+  // ── Presenter bridge: detail density, slide reporting, hotkey relay ──
+  var embedded = window !== window.top, root = document.documentElement;
+
+  // Detail density: stage (inside the presenter) vs guide (standalone reader).
+  root.setAttribute('data-density', embedded ? 'stage' : 'guide');
+  function setDensity(d){ root.setAttribute('data-density', d === 'guide' ? 'guide' : 'stage'); }
+  window.addEventListener('message', function(e){
+    if(e.data && e.data.type === 'deck-command' && e.data.action === 'set-density') setDensity(e.data.density);
+  });
+
+  // Hotkeys this deck doesn't use itself. Keyboard focus lives in the iframe
+  // during a talk, so relay them up rather than letting them fall on the floor.
+  document.addEventListener('keydown', function(e){
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    if(e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    var k = (e.key || '').toLowerCase();
+    if(k !== 'd' && k !== 'q' && k !== 'n' && k !== 'l') return;
+    if(embedded) window.parent.postMessage({type:'deck-hotkey', key:k}, '*');
+    else if(k === 'd') setDensity(root.getAttribute('data-density') === 'guide' ? 'stage' : 'guide');
+  });
+
+  if(!embedded) return;
+
+  // Report which slide is showing, with its heading and text, so the presenter
+  // can time it, tag a captured question against it, and tell the co-presenter
+  // what the room is looking at. Deliberately generic — watches .slide.active
+  // instead of hooking this deck's goTo(), so the deck needn't know it exists.
+  function slides(){
+    var s = document.querySelectorAll('.slides-stage .slide');
+    return s.length ? s : document.querySelectorAll('.slide');
+  }
+  function activeIndex(list){
+    for(var i = 0; i < list.length; i++) if(list[i].classList.contains('active')) return i;
+    return -1;
+  }
+  function tidy(s, n){ return (s || '').replace(/\s+/g, ' ').trim().slice(0, n); }
+
+  var lastIdx = null, pending = null;
+
+  function send(){
+    var list = slides(), idx = activeIndex(list);
+    var el = idx >= 0 ? list[idx] : (document.querySelector('.slides-stage') || document.body);
+    var h = el && el.querySelector('h1, h2, h3, .slide-title');
+    // innerText reflects layout, so a slide caught mid-transition reads as
+    // empty; textContent doesn't care and is the right fallback here.
+    var text = el ? ((el.innerText || '').trim() || (el.textContent || '')) : '';
+    window.parent.postMessage({
+      type: 'deck-slide',
+      index: idx,
+      total: list.length,
+      title: tidy(h ? h.textContent : document.title, 120),
+      text: tidy(text, 700)
+    }, '*');
+  }
+
+  function report(){
+    var idx = activeIndex(slides());
+    if(idx === lastIdx) return;
+    lastIdx = idx;
+    clearTimeout(pending);
+    pending = setTimeout(send, 160);
+  }
+
+  window.addEventListener('message', function(e){
+    if(e.data && e.data.type === 'deck-command' && e.data.action === 'report-slide'){
+      lastIdx = null;
+      report();
+    }
+  });
+
+  var stage = document.querySelector('.slides-stage') || document.body;
+  new MutationObserver(report).observe(stage, {
+    attributes:true, attributeFilter:['class'], subtree:true, childList:true
+  });
+  report();
+})();</script>
+<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
+<div id="app">
+
+  <div class="slides-viewport">
+    <div class="slides-stage">
+
+
+    <!-- ═══════════ 5.1a Three claims ═══════════ -->
+    <section class="slide active" data-slide="0">
+      <span class="slide-tag"><i class="fas fa-wand-magic-sparkles"></i> Beyond slide software</span>
+      <h1 class="slide-title">Three things a slide <span class="dim">couldn&rsquo;t</span> do</h1>
+      <div class="claims">
+        <div class="claim a">
+          <div class="claim-ex">Exhibit A &middot; next</div>
+          <i class="fas fa-hand-pointer"></i>
+          <div class="claim-what">It can be interactive</div>
+          <div class="claim-sub">A live D3 decision&#8209;space explorer. Not a screenshot of one &mdash; I can drive it from here, and answer a question by changing the input.</div>
+          <div class="claim-src">../<b>ai-slaves-human-masters-ida</b>/01-entropy-explorer.html</div>
+        </div>
+        <div class="claim b">
+          <div class="claim-ex">Exhibit B &middot; then</div>
+          <i class="fas fa-film"></i>
+          <div class="claim-what">It can animate an argument</div>
+          <div class="claim-sub">The development loop, moving. And a joke that isn&rsquo;t one: it&rsquo;s the same loop that built the slide you watched ten minutes ago.</div>
+          <div class="claim-src">../<b>ai-slaves-human-masters-ida</b>/03-development-loop.html</div>
+        </div>
+        <div class="claim c">
+          <div class="claim-ex">Exhibit C &middot; then</div>
+          <i class="fas fa-chart-column"></i>
+          <div class="claim-what">It can render real data</div>
+          <div class="claim-sub">Benchmarks the deck draws itself, rather than a picture of a chart someone pasted in nine months ago. Change the data, reload, it&rsquo;s correct.</div>
+          <div class="claim-src">../<b>ai-slaves-human-masters-ida</b>/05-benchmarks-motoko.html</div>
+        </div>
+      </div>
+      <p class="detail">
+        Look at the file paths. <strong>None of these three are in this talk&rsquo;s folder.</strong>
+        They&rsquo;re from IDA Driving AI in May &mdash; different talk, different audience, same
+        repo, loaded live from where they already live.
+      </p>
+    </section>
+
+    <!-- ═══════════ 5.1b The composability reveal ═══════════ -->
+    <section class="slide" data-slide="1">
+      <span class="slide-tag"><i class="fas fa-layer-group"></i> Composability</span>
+      <h1 class="slide-title">A talk is a <span class="accent">JavaScript array</span></h1>
+      <div class="reuse-wrap">
+<div class="code"><span class="kw">const</span> <span class="fn-name">PLAYLIST</span> = [
+  { src: <span class="elsewhere">'../about-mark/about-mark.html'</span>,                          minutes: <span class="num">1</span>  },
+  { src: <span class="here">'00-death-by-powerpoint.html'</span>,                            minutes: <span class="num">4</span>  },
+  { src: <span class="here">'01-generate-the-medium.html'</span>,                            minutes: <span class="num">7</span>  },
+  { src: <span class="here">'02-teaching-taste.html'</span>,                                 minutes: <span class="num">8</span>  },
+  { src: <span class="here">'03-live-build.html'</span>,                                     minutes: <span class="num">11</span> },
+  { src: <span class="here">'04-beyond-slide-software.html'</span>,                          minutes: <span class="num">4</span>  },
+  { src: <span class="elsewhere">'../ai-slaves-human-masters-ida/01-entropy-explorer.html'</span>,  minutes: <span class="num">2</span>  },
+  { src: <span class="elsewhere">'../ai-slaves-human-masters-ida/03-development-loop.html'</span>,  minutes: <span class="num">1</span>  },
+  { src: <span class="elsewhere">'../ai-slaves-human-masters-ida/05-benchmarks-motoko.html'</span>, minutes: <span class="num">2</span>  },
+  { src: <span class="here">'05-three-audiences.html'</span>,                                minutes: <span class="num">6</span>  },
+  { src: <span class="here">'06-whats-next.html'</span>,                                     minutes: <span class="num">3</span>  },
+  { src: <span class="here">'07-steal-this.html'</span>,                                     minutes: <span class="num">3</span>  },
+  { src: <span class="elsewhere">'../contact-mark/contact-mark.html'</span>,                       minutes: <span class="num">0</span>  },
+];</div>
+        <div class="reuse-legend">
+          <div class="legend-item"><span class="legend-swatch here"></span> <b>8</b> written for today</div>
+          <div class="legend-item"><span class="legend-swatch elsewhere"></span> <b>5</b> borrowed from other talks, unmodified</div>
+        </div>
+      </div>
+      <p class="detail">
+        Nothing was copied. Those five entries are relative paths to files that belong to other
+        talks and are still maintained there &mdash; fix a typo once and every talk that borrows it
+        is fixed. <em>Reordering a talk is editing an array</em>, which is why I stopped dreading
+        the email asking for &ldquo;the same thing but twenty minutes.&rdquo;
+        <strong>That request now takes about a minute.</strong>
+      </p>
+    </section>
+
+    <!-- ═══════════ 5.1c Blender as a native medium ═══════════ -->
+    <section class="slide spatial-exhibit" data-slide="2">
+      <div class="spatial-layout">
+        <div class="spatial-copy">
+          <span class="slide-tag"><i class="fas fa-cube"></i> Blender + HTML</span>
+          <h1 class="slide-title">A live Blender scene in the browser</h1>
+          <p class="spatial-lede">
+            The slide contains the animated model itself. <strong>Rotate it from the stage</strong>,
+            change the camera, or let it run as a restrained loop.
+          </p>
+          <div class="spatial-proof">
+            <b>LIVE</b><span>animated GLB with camera controls</span>
+            <b>PDF</b><span>the same component supplies a fixed poster</span>
+            <b>LOAD</b><span>the model arrives only when this slide appears</span>
+          </div>
+        </div>
+        <div class="spatial-model">
+          <sunholo-blender
+            controls
+            data-src="../assets/blender/sunholo_production_core.glb"
+            data-poster="../assets/blender/sunholo_production_core.webp"
+            data-alt="Animated Sunholo production core with connected services"
+            data-camera-orbit="20deg 70deg 100%"
+            data-field-of-view="30deg">
+          </sunholo-blender>
+          <div class="spatial-hint" data-blender-hint><i class="fas fa-hand-pointer"></i> drag the production system</div>
+        </div>
+      </div>
+      <p class="detail">
+        Blender is useful here because the subject is spatial: a production AI system has a core,
+        connected services and information moving between them. The live deck uses the GLB. The PDF
+        exporter sees the compressed poster instead, so the handout stays deterministic.
+      </p>
+    </section>
+    </div><!-- /slides-stage -->
+  </div><!-- /slides-viewport -->
+
+  <div class="bottom-bar">
+    <div class="transport">
+      <button class="transport-btn" id="btnPrev" title="Previous slide"><i class="fas fa-chevron-left"></i></button>
+      <span class="step-indicator"><span class="current" id="slideNum">1</span> / <span id="slideTotal">1</span></span>
+      <button class="transport-btn" id="btnNext" title="Next slide"><i class="fas fa-chevron-right"></i></button>
+    </div>
+    <div class="slide-dots" id="slideDots"></div>
+    <div class="nav-hints">
+      <span class="kbd">&larr;</span><span class="kbd">&rarr;</span>
+      <span style="font-size:11px;color:var(--text-dim);margin-left:4px">navigate</span>
+      <span class="kbd" style="margin-left:10px">D</span>
+      <span style="font-size:11px;color:var(--text-dim)">detail</span>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const TOTAL = slides.length;
+  let current = 0;
+  let transitioning = false;
+
+  const slideNum = document.getElementById('slideNum');
+  const slideTotal = document.getElementById('slideTotal');
+  const dotsContainer = document.getElementById('slideDots');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+
+  slideTotal.textContent = TOTAL;
+
+  for(let i=0;i<TOTAL;i++){
+    const d = document.createElement('button');
+    d.className = 'slide-dot' + (i===0?' active':'');
+    d.dataset.idx = i;
+    d.addEventListener('click', ()=> goTo(i));
+    dotsContainer.appendChild(d);
+  }
+
+  function goTo(n){
+    if(n<0||n>=TOTAL||n===current||transitioning) return;
+    transitioning = true;
+    const dir = n > current ? 1 : -1;
+
+    slides.forEach(s=>s.classList.remove('active','exit-left'));
+    if(current>=0 && current<TOTAL && dir>0) slides[current].classList.add('exit-left');
+    slides[n].classList.add('active');
+
+    current = n;
+    slideNum.textContent = current + 1;
+    document.querySelectorAll('.slide-dot').forEach((d,i)=>{
+      d.classList.toggle('active', i===current);
+    });
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === TOTAL - 1;
+
+    setTimeout(()=>{ transitioning = false; }, 500);
+  }
+
+  btnPrev.disabled = true;
+  if(TOTAL <= 1) btnNext.disabled = true;
+
+  // ←/→ = slides within this deck only; ↑/↓ = deck-level (parent presenter)
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key===' ') goTo(current+1);
+    if(e.key==='ArrowLeft') goTo(current-1);
+    if(e.key==='ArrowDown'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*'); }
+    if(e.key==='ArrowUp'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*'); }
+  });
+  btnPrev.addEventListener('click', ()=> goTo(current-1));
+  btnNext.addEventListener('click', ()=> goTo(current+1));
+
+  window.addEventListener('message', e=>{
+    if(e.data && e.data.type==='deck-command'){
+      if(e.data.action==='go-first') goTo(0);
+      if(e.data.action==='go-last'){ current=-1; goTo(TOTAL-1); }
+      if(e.data.action==='set-theme') setTheme(e.data.theme);
+    }
+  });
+
+  window.parent.postMessage({type:'deck-ready',total:TOTAL},'*');
+
+  function setTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+})();
+</script>
+</body>
+</html>

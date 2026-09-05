@@ -46,5 +46,8 @@ window.PRESENTER_CONFIG = {
   talks: {
     'ai-slaves-human-masters-ida': { talklog: true, copresenter: true },
     'analytics-for-ai-agents':     { talklog: true },
+    // Webinar: talk log on to capture Q&A against the slide that prompted it.
+    // Co-presenter stays off — it wants a mic, and the room audio is already in Zoom.
+    'death-by-powerpoint':         { talklog: true },
   },
 };
