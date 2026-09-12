@@ -1,0 +1,14 @@
+/* Bundled locally with presentations by scripts/sync_topics.py. */
+.slide .topic-resources{position:relative;z-index:1;width:100%;max-width:1000px;margin:2cqi 0 0;padding:1cqi 0 0;border-top:1px solid var(--orange);text-align:left}
+.slide .topic-resources h2{font:600 1.6cqi var(--sans);margin:0 0 .8cqi;color:var(--text)}
+.slide .topic-resources ul{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2cqi;list-style:none;margin:0;padding:0}
+.slide .topic-resources li{margin:0;padding:0}
+.slide .topic-resources a{color:var(--text);text-decoration:none;font:600 1.5cqi/1.4 var(--sans);display:block}
+.slide .topic-resources small{display:block;font-size:1.1cqi;color:var(--text-dim);margin-bottom:.3cqi}
+.slide .topic-resources a:hover{text-decoration:underline}
+.slide .topic-resources a:focus-visible{outline:2px solid var(--orange);outline-offset:4px}
+.block-universe-bg~.topic-resources{background:var(--bg);padding:1cqi}
+.multivac-scene{width:100%;height:27cqi;display:block;position:relative}
+.multivac-scene img{width:100%;height:100%;object-fit:contain;display:block}
+.multivac-scene sunholo-blender{width:100%;height:100%}
+.multivac-scene-caption{font:400 1.5cqi/1.4 var(--sans);color:var(--text);text-align:center;margin:.5cqi 0 0}

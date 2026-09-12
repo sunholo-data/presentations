@@ -346,6 +346,8 @@ body{
    is opened standalone, i.e. by anyone reading the published link cold. */
 html[data-density="stage"] .detail{display:none}
 </style>
+<link rel="stylesheet" href="../assets/visuals/topic-slides.css">
+<script src="../assets/blender-slide.js" defer></script>
 </head>
 <body>
 <script>(function(){
@@ -439,10 +441,18 @@ html[data-density="stage"] .detail{display:none}
 
     <!-- ═══════════ Slide 0: Title ═══════════ -->
     <section class="slide active" data-slide="0">
-      <img src="images/sunholo-logo.svg" alt="Sunholo" style="height:80px;opacity:.8;margin-bottom:8px">
-      <h1 class="slide-title"><span class="accent">Multivac</span></h1>
-      <p class="slide-subtitle" style="font-size:clamp(18px,2.5cqi,28px);font-weight:600;color:var(--text)">Your Complete AI Platform</p>
-      <p class="slide-subtitle">From Prototype to Production in Weeks</p>
+      <h1 class="slide-title">Multivac</h1>
+      <p class="slide-subtitle">Your AI platform, built from replaceable parts</p>
+      <div class="multivac-scene">
+        <sunholo-blender
+          data-src="../assets/visuals/multivac-system/v1/scene.glb"
+          data-poster="../assets/visuals/multivac-system/v1/poster-transparent.webp"
+          data-alt="A coral production core connects varied inputs to six modules; one module withdraws and reconnects."
+          data-camera-orbit="18deg 72deg 110%">
+          <noscript><img src="../assets/visuals/multivac-system/v1/poster-transparent.webp" alt="A modular production core with one component withdrawn" width="1600" height="900"></noscript>
+        </sunholo-blender>
+      </div>
+      <p class="multivac-scene-caption">One component changes; the surrounding platform stays intact.</p>
     </section>
 
     <!-- ═══════════ Slide 1: The Gap ═══════════ -->
@@ -783,7 +793,10 @@ html[data-density="stage"] .detail{display:none}
         <p><i class="fas fa-envelope" style="color:var(--orange)"></i> <a href="mailto:multivac@sunholo.com">multivac@sunholo.com</a></p>
         <p><i class="fab fa-linkedin" style="color:var(--orange)"></i> <a href="https://linkedin.com/company/sunholo" target="_blank">linkedin.com/company/sunholo</a></p>
       </div>
-    </section>
+    <!-- TOPIC_RESOURCES_START -->
+<nav class="topic-resources" aria-label="Explore modular AI systems"><h2>Explore modular AI systems</h2><ul><li><a href="https://www.sunholo.com/ai-platform.html"><small>Service</small>Explore the Multivac platform</a></li><li><a href="https://www.sunholo.com/blog/ai-protocol-revolution"><small>Article</small>Read the protocol story</a></li><li><a href="https://www.sunholo.com/ailang-demos/"><small>Demos</small>Try the live AI demos</a></li></ul></nav>
+<!-- TOPIC_RESOURCES_END -->
+</section>
 
     </div><!-- /slides-stage -->
   </div><!-- /slides-viewport -->

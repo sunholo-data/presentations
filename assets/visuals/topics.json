@@ -1,0 +1,225 @@
+{
+  "version": 1,
+  "origin": "https://www.sunholo.com",
+  "topics": {
+    "multivac": {
+      "title": "Explore modular AI systems",
+      "description": "The platform, the protocols, and examples you can try.",
+      "asset": {
+        "id": "multivac-system",
+        "version": "v1",
+        "alt": "A coral production core connects varied inputs to six modules; one module is withdrawn from its connection.",
+        "path": "multivac-system/v1",
+        "files": {
+          "model": "scene.glb",
+          "light": "poster-light.webp",
+          "dark": "poster-dark.webp",
+          "transparent": "poster-transparent.webp",
+          "social": "social.webp"
+        },
+        "source": "design/blender/multivac-system-v1.blend",
+        "dimensions": {
+          "poster": [
+            1600,
+            900
+          ],
+          "social": [
+            1200,
+            630
+          ]
+        }
+      },
+      "links": [
+        {
+          "path": "/ai-platform.html",
+          "label": "Explore the Multivac platform",
+          "kind": "Service"
+        },
+        {
+          "path": "/presentations/multivac/",
+          "label": "See the Multivac talk",
+          "kind": "Talk"
+        },
+        {
+          "path": "/blog/ai-protocol-revolution",
+          "label": "Read the protocol story",
+          "kind": "Article"
+        },
+        {
+          "path": "/ailang-demos/",
+          "label": "Try the live AI demos",
+          "kind": "Demos"
+        },
+        {
+          "path": "/blog/ailang-cloud",
+          "label": "Explore serverless agent orchestration",
+          "kind": "Related article"
+        }
+      ]
+    },
+    "trust": {
+      "title": "Explore trust and verification",
+      "description": "How declared capabilities and verification shape the systems we build.",
+      "links": [
+        {
+          "path": "/vision.html",
+          "label": "Read Sunholo’s approach to trust",
+          "kind": "Vision"
+        },
+        {
+          "path": "/presentations/ai-slaves-human-masters-ida/",
+          "label": "See the AILANG talk",
+          "kind": "Talk"
+        },
+        {
+          "path": "/blog/wrong-question-ai-trust",
+          "label": "Read the AI trust series",
+          "kind": "Article"
+        },
+        {
+          "path": "/blog/what-is-your-ai-allowed-to-touch",
+          "label": "Explore declared capabilities",
+          "kind": "Article"
+        },
+        {
+          "path": "/blog/if-you-cant-replay-it",
+          "label": "Read about reproducible execution",
+          "kind": "Article"
+        },
+        {
+          "path": "/case-study-ailang.html",
+          "label": "Explore the AILANG case study",
+          "kind": "Case study"
+        },
+        {
+          "path": "/ailang-demos/",
+          "label": "Try the verification demos",
+          "kind": "Demos"
+        },
+        {
+          "path": "/blog/ai-freedom-tight-brief",
+          "label": "Explore decision budgets and entropy",
+          "kind": "Related article"
+        }
+      ]
+    },
+    "documents": {
+      "title": "Explore document intelligence",
+      "description": "Connect document structure to a working business workflow.",
+      "links": [
+        {
+          "path": "/case-study-ailang-parse.html",
+          "label": "Explore the AILANG Parse case study",
+          "kind": "Case study"
+        },
+        {
+          "path": "/presentations/ai-first-procurement/",
+          "label": "See the procurement talk",
+          "kind": "Talk"
+        },
+        {
+          "path": "/blog/ap-accounts-payable-ai-workflow",
+          "label": "Read the accounts payable workflow",
+          "kind": "Article"
+        },
+        {
+          "path": "/ailang-parse/",
+          "label": "Try AILANG Parse",
+          "kind": "Demo"
+        },
+        {
+          "path": "/blog/ailang-parse-launch",
+          "label": "Read the AILANG Parse launch story",
+          "kind": "Article"
+        },
+        {
+          "path": "/case-study-document-processing.html",
+          "label": "See document processing at scale",
+          "kind": "Case study"
+        }
+      ]
+    },
+    "engineering": {
+      "title": "Explore AI engineering in practice",
+      "description": "Follow the connection between engineering loops, agent behavior, and production systems.",
+      "links": [
+        {
+          "path": "/ai-engineering.html",
+          "label": "Explore AI engineering services",
+          "kind": "Service"
+        },
+        {
+          "path": "/presentations/analytics-for-ai-agents/",
+          "label": "See Analytics for AI Agents",
+          "kind": "Talk"
+        },
+        {
+          "path": "/blog/ai-loop-engineering-dark-software-factory",
+          "label": "Read the engineering loop walkthrough",
+          "kind": "Article"
+        },
+        {
+          "path": "/ailang-demos/",
+          "label": "Try the live AI demos",
+          "kind": "Demos"
+        },
+        {
+          "path": "/presentations/ai-first-procurement/",
+          "label": "See Building AI with AI",
+          "kind": "Talk"
+        },
+        {
+          "path": "/blog/cognitive-design",
+          "label": "Explore a BigQuery agent design",
+          "kind": "Related article"
+        },
+        {
+          "path": "/blog/ai-protocol-revolution",
+          "label": "Read the protocol story",
+          "kind": "Related article"
+        }
+      ]
+    }
+  },
+  "website": {
+    "ai-platform.html": "multivac",
+    "vision.html": "trust",
+    "case-study-ailang.html": "trust",
+    "case-study-ailang-parse.html": "documents",
+    "ai-engineering.html": "engineering"
+  },
+  "blog": {
+    "2025-09-20-ai-protocols.md": "multivac",
+    "2026-04-19-wrong-question-ai-trust.mdx": "trust",
+    "2026-04-26-what-is-your-ai-allowed-to-touch.mdx": "trust",
+    "2026-05-03-if-you-cant-replay-it.mdx": "trust",
+    "2026-08-03-verification-trust-abstraction.mdx": "trust",
+    "2026-04-13-ailang-parse-launch.mdx": "documents",
+    "2026-06-08-ap-accounts-payable-ai-workflow.mdx": "documents",
+    "2026-07-19-ai-loop-engineering-dark-software-factory.mdx": "engineering",
+    "2024-10-09-cognitive-design.md": "engineering"
+  },
+  "presentations": {
+    "multivac/00-multivac-platform.html": "multivac",
+    "ai-first-procurement/00-building-ai-with-ai.html": "documents",
+    "analytics-for-ai-agents/04-close.html": "engineering",
+    "ai-slaves-human-masters-ida/05-benchmarks-motoko.html": "trust"
+  },
+  "asset_sets": [
+    "multivac-system/v1",
+    "service-icons/v1"
+  ],
+  "service_icons": {
+    "path": "service-icons/v1",
+    "source": "design/blender/service-icons-v1.blend",
+    "files": {
+      "engineering": "engineering.webp",
+      "multivac": "multivac.webp",
+      "ailang": "ailang.webp"
+    },
+    "dimensions": [
+      640,
+      640
+    ]
+  }
+}
