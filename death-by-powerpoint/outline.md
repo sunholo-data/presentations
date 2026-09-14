@@ -180,7 +180,7 @@ different looks.
 
 **On screen:** A real excerpt from `SKILL.md`.
 
-> Orange accent (`#e73c17` dark / `#d4300f` light) for emphasis, never overused.
+> Orange accent (`#e73c17` dark / `#bd3012` light) for emphasis, never overused.
 > **Montserrat** for all text, **JetBrains Mono** for code and data.
 > Subtle grid background at 60px intervals.
 

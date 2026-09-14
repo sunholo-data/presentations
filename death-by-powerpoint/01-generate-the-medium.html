@@ -28,15 +28,15 @@
   --mono:'JetBrains Mono',monospace;--sans:'Montserrat',sans-serif;
 }
 [data-theme="light"]{
-  --bg:#f5f5f0;--surface:#ffffff;--surface-hi:#f0f0ea;
-  --orange:#d4300f;--orange-dim:rgba(212,48,15,.2);--orange-glow:rgba(212,48,15,.4);
+  --bg:#f6f8fa;--surface:#ffffff;--surface-hi:#f0f0ea;
+  --orange:#bd3012;--orange-dim:rgba(189,48,18,.2);--orange-glow:rgba(189,48,18,.4);
   --green:#16a34a;--green-dim:rgba(22,163,74,.1);
   --red:#dc2626;--red-dim:rgba(220,38,38,.08);
   --amber:#d97706;--amber-dim:rgba(217,119,6,.1);
   --indigo:#4f46e5;--indigo-dim:rgba(79,70,229,.12);
   --teal:#168077;--teal-dim:rgba(22,128,119,.18);
   --gray:#8896a4;--ghost:rgba(0,0,0,.1);
-  --text:#1a202c;--text-dim:#4a5568;
+  --text:#2c3e50;--text-dim:#526677;
   --code-bg:rgba(0,0,0,.03);--code-border:rgba(0,0,0,.08);
   --row-alt:rgba(0,0,0,.025);--row-border:rgba(0,0,0,.06);
   --bar-bg:rgba(255,255,255,.85);--bar-border:rgba(0,0,0,.08);
@@ -52,7 +52,7 @@ body{
 }
 [data-theme="light"] body{
   background-image:
-    radial-gradient(circle at 50% 50%, rgba(212,48,15,.03) 0%, transparent 70%),
+    radial-gradient(circle at 50% 50%, rgba(189,48,18,.03) 0%, transparent 70%),
     linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
   background-size:100% 100%, 60px 60px, 60px 60px;
@@ -193,7 +193,7 @@ html[data-density="stage"] .detail{display:none}
   background:var(--surface);border:1px solid var(--ghost);opacity:0;
 }
 .chain-step.terminal{border-color:var(--orange-dim);background:rgba(231,60,23,.07)}
-[data-theme="light"] .chain-step.terminal{background:rgba(212,48,15,.05)}
+[data-theme="light"] .chain-step.terminal{background:rgba(189,48,18,.05)}
 .slide.active .chain-step:nth-child(1){animation:fadeSlideUp .4s ease .1s both}
 .slide.active .chain-step:nth-child(2){animation:fadeSlideUp .4s ease .3s both}
 .slide.active .chain-step:nth-child(3){animation:fadeSlideUp .4s ease .5s both}
@@ -237,7 +237,7 @@ html[data-density="stage"] .detail{display:none}
   background:var(--surface);border:1px solid var(--ghost);
 }
 .arrow-node.dest{border:1px solid var(--orange-dim);background:rgba(231,60,23,.07)}
-[data-theme="light"] .arrow-node.dest{background:rgba(212,48,15,.05)}
+[data-theme="light"] .arrow-node.dest{background:rgba(189,48,18,.05)}
 .arrow-node i{font-size:clamp(22px,3.6cqi,48px);color:var(--text-dim)}
 .arrow-node.dest i{color:var(--orange)}
 .arrow-node span{font-family:var(--mono);font-size:clamp(10px,1.4cqi,18px);font-weight:700;letter-spacing:.05em}

@@ -176,7 +176,7 @@ See `resources/slide-types.md` for detailed patterns and markup for each type:
 The full design system (CSS variables, themes, typography, colors) is in `resources/design-system.md`. Key points:
 
 - **Always** support both dark and light themes via `data-theme="light"` on `<html>`
-- **Orange accent** (`#e73c17` dark / `#d4300f` light) for emphasis, never overused
+- **Orange accent** (`#e73c17` dark / `#bd3012` light) for emphasis, never overused
 - **Montserrat** for all text, **JetBrains Mono** for code and data
 - **Font Awesome 6.5.1** for icons
 - Subtle grid background at 60px intervals

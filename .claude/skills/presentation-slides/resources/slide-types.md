@@ -280,3 +280,45 @@ Code panel alongside terminal verification results with pass/fail indicators.
 .z3-note{color:var(--text-dim);font-size:11px;margin-left:8px;font-style:italic}
 .z3-counterexample{margin-top:4px;padding:8px 12px;background:var(--red-dim);border-radius:6px;color:var(--red);font-size:12px;line-height:1.6;opacity:0;transform:translateY(8px)}
 ```
+
+---
+
+## 8. Brand Illustration + Copy
+
+Sunholo's shared architectural service-study illustration beside a title and a
+short argument — the sunholo.com "layout" pattern itself (see
+https://www.sunholo.com/assets.html#layout). Pull the WebP directly from the
+live site rather than bundling a copy, so the artwork stays in sync with the
+brand kit. Pick the illustration whose subject matches the slide's message —
+`decision-budget` for bounded decisions/handovers, `engineering` for delivery
+and architecture, `multivac` for connected/modular systems, `ailang` for
+verified code — never crop, tint or add a shadow to the artwork itself.
+
+```html
+<section class="slide" data-slide="N">
+  <div class="brand-illo-layout">
+    <img class="brand-illo-img" src="https://www.sunholo.com/assets/visuals/service-studies/v2/engineering.webp" width="1536" height="1024" alt="Architectural illustration of AI engineering: connected structural forms in slate linework with an orange ink wash" loading="lazy">
+    <div class="brand-illo-copy">
+      <h1 class="slide-title" style="text-align:left;margin-bottom:16px">Give AI a clear boundary.</h1>
+      <p class="brand-illo-text">Agree which decisions it can make, and when a person takes over.</p>
+      <span class="brand-illo-rule"></span>
+      <small class="brand-illo-caption">Sunholo &middot; Decision Budget</small>
+    </div>
+  </div>
+</section>
+```
+
+```css
+.brand-illo-layout{display:grid;grid-template-columns:1fr 1fr;gap:5cqi;max-width:1200px;width:100%;align-items:center}
+.brand-illo-img{width:100%;height:auto;display:block;background:#fff;border-radius:4px}
+.brand-illo-text{font:400 1.6cqi/1.6 var(--sans);color:var(--text-dim);margin-bottom:1.4cqi}
+.brand-illo-rule{display:block;width:5cqi;height:.25cqi;background:var(--orange);margin-top:1.2cqi}
+.brand-illo-caption{display:block;margin-top:1cqi;font:400 1.1cqi var(--sans);color:var(--text-dim)}
+@container (max-width:700px){.brand-illo-layout{grid-template-columns:1fr}}
+```
+
+The illustration is a white-paper PNG/WebP, not a UI element — it reads fine
+on both themes without a `[data-theme="light"]` override. Reserve it for
+slides that genuinely echo the brand's service framing (proposals, company
+intros, the closing "work with us" slide); don't reach for it on every deck —
+most technical slides are better served by the deck's own diagrams.
