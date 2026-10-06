@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Budget</title>
+<link rel="icon" type="image/svg+xml" href="../images/logos/sunholo-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!--
+  Decision Budget — the standalone explainer. Seven slides, reusable in any talk:
+  drop it into a presenter PLAYLIST as { src: '../decision-budget/decision-budget.html' }.
+
+  The worked example is Harbour & Pine, the invented shop from the public sample pack
+  (sunholo.com/decision-budget.html). Every number on slides 5 and 7 is the delivery
+  pipeline's own output for that envelope — hours back, rungs, phases, owners — not
+  illustration. If the sample is regenerated, re-read these from roadmap.md and
+  readiness.md rather than editing the figures by hand.
+
+  Colour discipline (delegation-ladder.md, "How a rung is shown"): teal is the rung mark
+  and nothing else. Orange is the accent.
+-->
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f0f1a;--surface:#1a1a2e;--surface-hi:#222240;--orange:#e73c17;
+  --orange-dim:rgba(231,60,23,.35);--orange-soft:rgba(231,60,23,.1);
+  --ghost:rgba(255,255,255,.12);--text:#e2e8f0;--text-dim:#8a96aa;
+  --code-bg:rgba(255,255,255,.03);--code-border:rgba(255,255,255,.08);
+  --bar-bg:rgba(15,15,26,.8);--bar-border:rgba(255,255,255,.06);
+  --mono:'JetBrains Mono',monospace;--sans:'Montserrat',sans-serif;
+  --rung:#2dd4bf;--rung-dim:rgba(45,212,191,.2);
+}
+[data-theme="light"]{
+  --bg:#f5f5f0;--surface:#ffffff;--surface-hi:#f0f0ea;--orange:#d4300f;
+  --orange-dim:rgba(212,48,15,.25);--orange-soft:rgba(212,48,15,.07);
+  --ghost:rgba(0,0,0,.1);--text:#1a202c;--text-dim:#4a5568;
+  --code-bg:rgba(0,0,0,.03);--code-border:rgba(0,0,0,.09);
+  --bar-bg:rgba(255,255,255,.85);--bar-border:rgba(0,0,0,.08);
+  --rung:#0f766e;--rung-dim:rgba(15,118,110,.18);
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+body{background-image:
+  radial-gradient(circle at 50% 50%, rgba(231,60,23,.03) 0%, transparent 70%),
+  linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size:100% 100%,60px 60px,60px 60px}
+[data-theme="light"] body{background-image:
+  radial-gradient(circle at 50% 50%, rgba(212,48,15,.03) 0%, transparent 70%),
+  linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px)}
+
+/* ── Chrome ── */
+#app{display:flex;flex-direction:column;height:100%}
+.top-bar,.bottom-bar{display:flex;align-items:center;justify-content:space-between;
+  padding:8px 16px;flex-shrink:0;background:var(--bar-bg);z-index:5}
+.top-bar{border-bottom:1px solid var(--bar-border)}
+.bottom-bar{border-top:1px solid var(--bar-border)}
+.deck-title{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;color:var(--text-dim);letter-spacing:.02em}
+.deck-title .accent{color:var(--orange)}
+.top-logo{height:20px;opacity:.75}
+.theme-toggle,.transport-btn{width:28px;height:28px;border-radius:50%;border:1px solid var(--ghost);
+  background:transparent;color:var(--text-dim);cursor:pointer;font-size:12px;transition:all .25s;
+  display:flex;align-items:center;justify-content:center}
+.theme-toggle:hover,.transport-btn:hover{border-color:var(--orange);color:var(--orange)}
+.transport-btn:disabled{opacity:.3;cursor:default}
+.transport{display:flex;align-items:center;gap:10px}
+.step-indicator{font-family:var(--mono);font-size:12px;color:var(--text-dim)}
+.step-indicator .current{color:var(--text);font-weight:700}
+.slide-dots{display:flex;gap:5px;justify-content:center}
+.slide-dot{width:7px;height:7px;border-radius:50%;border:none;background:var(--ghost);cursor:pointer;transition:all .2s;padding:0}
+.slide-dot.active{background:var(--orange);width:18px;border-radius:4px}
+.nav-hints{display:flex;align-items:center;gap:4px}
+.kbd{font-family:var(--mono);font-size:10px;padding:2px 5px;border:1px solid var(--ghost);border-radius:3px;color:var(--text-dim)}
+.in-iframe .top-bar,.in-iframe .bottom-bar{display:none}
+
+/* ── Stage ── */
+.slides-viewport{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;background:var(--bg);container-type:size}
+.slides-stage{position:relative;width:min(100cqi,100cqb*16/9);height:min(100cqb,100cqi*9/16);container-type:size}
+.slide{position:absolute;inset:0;opacity:0;pointer-events:none;
+  transform:translateX(28px);transition:opacity .45s ease,transform .45s ease;
+  padding:4.5cqb 6cqi;display:flex;flex-direction:column;overflow:hidden}
+.slide.active{opacity:1;pointer-events:auto;transform:translateX(0)}
+.slide.exit-left{transform:translateX(-28px)}
+html[data-density="stage"] .detail{display:none}
+
+/* ── Type ── */
+.kicker{font-family:var(--mono);font-size:clamp(9px,1.15cqi,15px);font-weight:700;
+  text-transform:uppercase;letter-spacing:.16em;color:var(--orange);margin-bottom:1.4cqb;flex-shrink:0}
+.slide-title{font-size:clamp(24px,3.7cqi,54px);font-weight:800;line-height:1.1;
+  letter-spacing:-.025em;margin-bottom:2.6cqb;flex-shrink:0}
+.slide-title .dim{color:var(--text-dim);font-weight:500}
+.slide-title .accent{color:var(--orange)}
+.lede{font-size:clamp(13px,1.9cqi,27px);line-height:1.45;color:var(--text-dim);max-width:70cqi}
+.lede b{color:var(--text)}
+.foot{margin-top:auto;padding-top:1.6cqb;flex-shrink:0;font-size:clamp(11px,1.45cqi,20px);
+  line-height:1.4;color:var(--text-dim)}
+.foot b{color:var(--text)}
+.src{font-family:var(--mono);font-size:clamp(8px,1cqi,13px);color:var(--text-dim);letter-spacing:.04em}
+
+/* ── Speaker notes (guide density only) ── */
+.detail.fac{margin-top:1.6cqb;padding:1.4cqb 2cqi;border-left:3px solid var(--orange);
+  background:var(--code-bg);border-radius:0 6px 6px 0;flex-shrink:0;
+  font-size:clamp(10px,1.25cqi,16px);line-height:1.5;color:var(--text-dim);overflow-y:auto;max-height:30cqb}
+.detail.fac b{color:var(--text)}
+.detail.fac .lbl{font-family:var(--mono);font-size:clamp(8px,1cqi,13px);font-weight:700;
+  text-transform:uppercase;letter-spacing:.12em;color:var(--orange);display:block;margin-bottom:.4cqb}
+.detail.fac p+p{margin-top:.7cqb}
+
+/* ── Rung mark: five ascending bars, filled to the rung. Teal is used for nothing else. ── */
+.rung{display:inline-flex;align-items:flex-end;gap:.18em;font-family:var(--mono);font-weight:700;
+  color:var(--rung);white-space:nowrap;vertical-align:baseline}
+.rung i{display:block;width:.42em;border-radius:1px;background:var(--rung-dim)}
+.rung i:nth-of-type(1){height:.45em}.rung i:nth-of-type(2){height:.65em}.rung i:nth-of-type(3){height:.85em}
+.rung i:nth-of-type(4){height:1.05em}.rung i:nth-of-type(5){height:1.25em}
+.rung.r0 i:nth-of-type(-n+1),.rung.r1 i:nth-of-type(-n+2),.rung.r2 i:nth-of-type(-n+3),
+.rung.r3 i:nth-of-type(-n+4),.rung.r4 i:nth-of-type(-n+5){background:var(--rung)}
+.rung b{margin-left:.55em;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:.8em}
+
+/* ── 1 · Opening ── */
+.open{display:grid;grid-template-columns:1.35fr 1fr;gap:4cqi;align-items:center;flex:1;min-height:0}
+.open .slide-title{font-size:clamp(28px,4.6cqi,66px)}
+/* Guide density adds the notes strip, so the opening compacts to make room for it. */
+html[data-density="guide"] .open .slide-title{font-size:clamp(20px,3.3cqi,48px);margin-bottom:1.4cqb}
+html[data-density="guide"] .qs{margin-top:1.6cqb}
+html[data-density="guide"] .q{padding:1.5cqb 1.8cqi}
+html[data-density="guide"] .open-art{max-height:44cqb}
+.open-art{width:100%;max-height:62cqb;object-fit:cover;border-radius:12px;border:1px solid var(--code-border);box-shadow:0 1.5cqb 4cqb rgba(0,0,0,.35)}
+.qs{display:grid;grid-template-columns:1fr 1fr;gap:1.8cqi;margin-top:3cqb}
+.q{padding:2.2cqb 2cqi;border-radius:10px;background:var(--surface);border:1px solid var(--code-border);
+  border-top:3px solid var(--orange)}
+.q .h{font-family:var(--mono);font-size:clamp(10px,1.3cqi,18px);font-weight:700;text-transform:uppercase;
+  letter-spacing:.14em;color:var(--orange);display:flex;align-items:center;gap:.8cqi}
+.q .t{margin-top:1cqb;font-size:clamp(13px,1.9cqi,27px);font-weight:700;line-height:1.25}
+.q .s{margin-top:.8cqb;font-size:clamp(11px,1.4cqi,19px);color:var(--text-dim);line-height:1.4}
+
+/* ── 2 · The simple matrix ── */
+.m2{display:grid;grid-template-columns:auto 1fr;grid-template-rows:1fr auto;gap:1.2cqb 1.4cqi;flex:1;min-height:0}
+.m2-y{grid-row:1;grid-column:1;display:grid;grid-template-rows:1fr 1fr;gap:1.2cqi;
+  font-family:var(--mono);font-size:clamp(9px,1.15cqi,15px);font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text-dim)}
+.m2-y span{writing-mode:vertical-rl;transform:rotate(180deg);text-align:center}
+.m2-x{grid-row:2;grid-column:2;display:grid;grid-template-columns:1fr 1fr;text-align:center;
+  font-family:var(--mono);font-size:clamp(9px,1.15cqi,15px);font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text-dim)}
+.m2-grid{grid-row:1;grid-column:2;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:1.2cqi}
+.cell{border-radius:10px;padding:2.4cqb 2.2cqi;background:var(--surface);border:1px solid var(--code-border);
+  display:flex;flex-direction:column;gap:.8cqb;position:relative}
+.cell .n{font-size:clamp(15px,2.5cqi,36px);font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.cell .d{font-size:clamp(11px,1.45cqi,20px);color:var(--text-dim);line-height:1.4}
+.cell .act{margin-top:auto;font-family:var(--mono);font-size:clamp(9px,1.1cqi,15px);font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);display:flex;align-items:center;gap:.8cqi}
+.cell.goal{background:var(--orange-soft);border:2px solid var(--orange)}
+.cell.goal .n,.cell.goal .act{color:var(--orange)}
+.cell.goal::after{content:"The goal";position:absolute;top:1.8cqb;right:1.8cqi;padding:.5cqb 1.1cqi;border-radius:999px;
+  background:var(--orange);color:#fff;font-family:var(--mono);font-size:clamp(8px,1cqi,13px);font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase}
+.cell.climb{border-style:dashed;border-color:var(--orange-dim)}
+.cell .eg{font-size:clamp(10px,1.3cqi,18px);line-height:1.38;color:var(--text);padding:1cqb 1.2cqi;border-radius:6px;
+  background:var(--code-bg);border:1px solid var(--code-border)}
+.cell .eg b{font-family:var(--mono);font-size:.78em;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-right:.6cqi}
+
+/* ── 3 · Ladder ── */
+.ladder{display:grid;grid-template-columns:repeat(5,1fr);gap:1.2cqi;align-items:end;margin-top:.5cqb}
+.step{display:flex;flex-direction:column;gap:.9cqb;padding:1.8cqb 1.4cqi;border-radius:8px;
+  background:var(--surface);border:1px solid var(--code-border);border-top:3px solid var(--rung)}
+.step:nth-child(1){min-height:18cqb}.step:nth-child(2){min-height:23cqb}.step:nth-child(3){min-height:28cqb}
+.step:nth-child(4){min-height:33cqb}.step:nth-child(5){min-height:38cqb}
+.step .rung{font-size:clamp(12px,1.6cqi,22px)}
+.step .nm{font-size:clamp(14px,2cqi,28px);font-weight:800}
+.step .ds{font-size:clamp(11px,1.35cqi,19px);line-height:1.38;color:var(--text-dim)}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4cqi;margin-top:2.6cqb;flex-shrink:0}
+.rule{padding:1.5cqb 1.6cqi;border-radius:8px;background:var(--surface);border:1px solid var(--code-border);
+  font-size:clamp(11px,1.45cqi,20px);line-height:1.4;color:var(--text-dim)}
+.rule b{color:var(--text);display:block;margin-bottom:.4cqb}
+
+/* ── 4 · Budget ── */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:3cqi;flex:1;min-height:0;align-items:start}
+.col-h{font-family:var(--mono);font-size:clamp(9px,1.15cqi,15px);font-weight:700;
+  text-transform:uppercase;letter-spacing:.14em;color:var(--orange);margin-bottom:1.4cqb;display:block}
+.rows{display:flex;flex-direction:column;gap:1.2cqb}
+.row{display:flex;gap:1.6cqi;align-items:flex-start;padding:1.5cqb 1.8cqi;border-radius:8px;
+  background:var(--surface);border:1px solid var(--code-border)}
+.row i.fa-solid,.row i.fas{color:var(--orange);font-size:clamp(13px,1.8cqi,25px);width:2.4cqi;text-align:center;flex-shrink:0;margin-top:.3cqb}
+.row .t{font-size:clamp(12px,1.6cqi,22px);line-height:1.38}
+.row .t span{display:block;color:var(--text-dim);font-size:.86em;margin-top:.3cqb}
+.formula{display:flex;align-items:center;gap:1.4cqi;padding:2.2cqb 2cqi;border-radius:10px;
+  background:var(--surface);border:1px solid var(--code-border);font-size:clamp(12px,1.7cqi,24px);font-weight:700;flex-wrap:wrap}
+.formula .op{color:var(--orange);font-family:var(--mono)}
+.stat{margin-top:2cqb;display:flex;align-items:baseline;gap:1.4cqi}
+.stat .big{white-space:nowrap;font-size:clamp(34px,5.6cqi,80px);font-weight:800;letter-spacing:-.04em;color:var(--orange);line-height:1}
+.stat .lbl{font-size:clamp(12px,1.6cqi,22px);color:var(--text-dim);line-height:1.35}
+.stat .lbl b{color:var(--text)}
+
+/* ── 5 · Detailed matrix ── */
+.mx{display:grid;grid-template-columns:1fr 21cqi;gap:2.4cqi;flex:1;min-height:0}
+.mx svg{width:100%;height:100%;overflow:visible}
+.mx .q-bg{fill:var(--surface);stroke:var(--code-border)}
+.mx .q-goal{fill:var(--orange-soft);stroke:var(--orange);stroke-width:2}
+.mx .q-lab{font-family:var(--mono);font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;fill:var(--text-dim)}
+.mx .q-goal-lab{fill:var(--orange)}
+.mx .ax{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;fill:var(--text-dim)}
+.mx .tick{font-family:var(--mono);font-size:12px;fill:var(--text-dim)}
+.mx .dot{fill:var(--bg);stroke:var(--text);stroke-width:2.5}
+.mx .dot.hot{fill:var(--orange);stroke:var(--orange)}
+.mx .lab{font-family:var(--sans);font-size:14px;font-weight:600;fill:var(--text)}
+.mx .lab-h{font-family:var(--mono);font-size:12px;fill:var(--text-dim)}
+.mx .bar-on{fill:var(--rung)}.mx .bar-off{fill:var(--rung-dim)}
+.side{display:flex;flex-direction:column;gap:1.4cqb}
+.side .row{padding:1.3cqb 1.5cqi}
+.side .row .t{font-size:clamp(11px,1.35cqi,19px)}
+.held-list{display:flex;flex-direction:column;gap:.6cqb;margin-top:.6cqb;font-size:clamp(10px,1.25cqi,17px);color:var(--text-dim)}
+.held-list .rung{font-size:.85em;margin-right:.6cqi}
+
+/* ── 6 · Process ── */
+.flow{display:grid;grid-template-columns:1fr auto 1.15fr auto 1fr auto 1.15fr;align-items:stretch;gap:1.1cqi;margin-top:1cqb;flex:1;min-height:0;max-height:52cqb}
+.stage{display:flex;flex-direction:column;gap:1.1cqb;padding:2.2cqb 1.8cqi;border-radius:10px;
+  background:var(--surface);border:1px solid var(--code-border)}
+.stage.ail{border:2px solid var(--orange);background:var(--orange-soft)}
+.stage .ic{font-size:clamp(18px,2.6cqi,36px);color:var(--orange)}
+.stage .ic img{height:clamp(22px,3.4cqi,46px)}
+.stage .nm{font-size:clamp(13px,1.9cqi,27px);font-weight:800;line-height:1.15}
+.stage .ds{font-size:clamp(10px,1.3cqi,18px);line-height:1.42;color:var(--text-dim)}
+.stage ul{list-style:none;display:flex;flex-direction:column;gap:.5cqb;margin-top:auto}
+.stage li{font-family:var(--mono);font-size:clamp(9px,1.1cqi,15px);color:var(--text-dim)}
+.stage li::before{content:"› ";color:var(--orange)}
+.arrow{align-self:center;color:var(--orange);font-size:clamp(14px,2cqi,28px)}
+.who{display:inline-block;margin-top:.2cqb;font-family:var(--mono);font-size:clamp(8px,1cqi,13px);font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim)}
+.who.you{color:var(--orange)}
+
+/* ── 7 · Timeline ── */
+.gantt{display:grid;grid-template-columns:24cqi repeat(8,1fr);row-gap:1.1cqb;margin-top:.6cqb;flex-shrink:0}
+.gantt .wk{font-family:var(--mono);font-size:clamp(8px,1cqi,13px);color:var(--text-dim);text-align:left;
+  border-left:1px solid var(--code-border);padding-left:.5cqi;padding-bottom:.4cqb}
+.gantt .lane{display:flex;flex-direction:column;justify-content:center;padding-right:1.6cqi}
+.gantt .lane .k{font-family:var(--mono);font-size:clamp(8px,1cqi,13px);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange)}
+.gantt .lane .nm{font-size:clamp(11px,1.5cqi,21px);font-weight:700;line-height:1.2}
+.gantt .lane .ow{font-size:clamp(9px,1.1cqi,15px);color:var(--text-dim)}
+.gantt .bar{align-self:center;height:5.2cqb;border-radius:6px;background:var(--surface-hi);border:1px solid var(--code-border);
+  display:flex;align-items:center;justify-content:flex-start;padding:0 1.2cqi;position:relative;min-width:0}
+.gantt .bar.ai{background:var(--orange-soft);border-color:var(--orange)}
+.gantt .bar .rel{font-size:clamp(9px,1.15cqi,16px);display:flex;align-items:center;gap:.6cqi;white-space:nowrap;color:var(--text-dim)}
+.gantt .bar .rel .rung{font-size:.92em}
+.out{display:grid;grid-template-columns:auto 1fr auto;gap:3cqi;align-items:center;margin-top:auto;padding-top:2cqb;flex-shrink:0}
+.out .big{font-size:clamp(30px,5.4cqi,78px);font-weight:800;letter-spacing:-.04em;color:var(--orange);line-height:1}
+.out .lbl{font-size:clamp(11px,1.45cqi,20px);color:var(--text-dim);line-height:1.4}
+.out .lbl b{color:var(--text)}
+.cta{padding:1.8cqb 2.2cqi;border-radius:10px;background:var(--orange);color:#fff;text-decoration:none}
+.cta .a{font-size:clamp(13px,1.9cqi,27px);font-weight:800;display:block}
+.cta .b{font-family:var(--mono);font-size:clamp(9px,1.1cqi,15px);opacity:.9}
+</style>
+</head>
+<body>
+<script>(function(){
+  // ── Presenter bridge: detail density, slide reporting, hotkey relay ──
+  var embedded = window !== window.top, root = document.documentElement;
+  root.setAttribute('data-density', embedded ? 'stage' : 'guide');
+  function setDensity(d){ root.setAttribute('data-density', d === 'guide' ? 'guide' : 'stage'); }
+  window.addEventListener('message', function(e){
+    if(e.data && e.data.type === 'deck-command' && e.data.action === 'set-density') setDensity(e.data.density);
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    if(e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    var k = (e.key || '').toLowerCase();
+    if(k !== 'd' && k !== 'q' && k !== 'n' && k !== 'l') return;
+    if(embedded) window.parent.postMessage({type:'deck-hotkey', key:k}, '*');
+    else if(k === 'd') setDensity(root.getAttribute('data-density') === 'guide' ? 'stage' : 'guide');
+  });
+  if(!embedded) return;
+  function slides(){ return document.querySelectorAll('.slides-stage .slide'); }
+  function activeIndex(list){ for(var i = 0; i < list.length; i++) if(list[i].classList.contains('active')) return i; return -1; }
+  function tidy(s, n){ return (s || '').replace(/\s+/g, ' ').trim().slice(0, n); }
+  var lastIdx = null, pending = null;
+  function send(){
+    var list = slides(), idx = activeIndex(list);
+    var el = idx >= 0 ? list[idx] : document.body;
+    var h = el && el.querySelector('h1, h2, h3, .slide-title');
+    var text = el ? ((el.innerText || '').trim() || (el.textContent || '')) : '';
+    window.parent.postMessage({type:'deck-slide', index:idx, total:list.length,
+      title: tidy(h ? h.textContent : document.title, 120), text: tidy(text, 700)}, '*');
+  }
+  function report(){
+    var idx = activeIndex(slides());
+    if(idx === lastIdx) return;
+    lastIdx = idx; clearTimeout(pending); pending = setTimeout(send, 160);
+  }
+  window.addEventListener('message', function(e){
+    if(e.data && e.data.type === 'deck-command' && e.data.action === 'report-slide'){ lastIdx = null; report(); }
+  });
+  new MutationObserver(report).observe(document.querySelector('.slides-stage') || document.body,
+    {attributes:true, attributeFilter:['class'], subtree:true, childList:true});
+  report();
+})();</script>
+<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
+
+<div id="app">
+  <div class="top-bar">
+    <span class="deck-title"><img class="top-logo" src="../images/logos/sunholo-logo.svg" alt="Sunholo"><span class="accent">Decision Budget</span></span>
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button>
+  </div>
+
+  <div class="slides-viewport">
+    <div class="slides-stage">
+
+      <!-- ═══ 1 · Two questions ═══ -->
+      <section class="slide active">
+        <div class="open">
+          <div>
+            <div class="kicker">Decision Budget</div>
+            <h1 class="slide-title">Your people can only make so many decisions.<br><span class="accent">Which ones do you give to AI?</span></h1>
+            <div class="qs">
+              <div class="q">
+                <span class="h"><i class="fas fa-shield-halved"></i> Trust</span>
+                <div class="t">Which decisions can AI be trusted with?</div>
+                <div class="s">Earned on evidence, one decision at a time.</div>
+              </div>
+              <div class="q">
+                <span class="h"><i class="fas fa-scale-balanced"></i> Budget</span>
+                <div class="t">Which of them are worth handing over first?</div>
+                <div class="s">Spend it where it frees the most time and matters most.</div>
+              </div>
+            </div>
+          </div>
+          <img class="open-art" src="images/decision-budget-hero.webp" alt="Architectural study of a bounded garden, with an orange path passing through a gateway to a destination outside.">
+        </div>
+        <div class="detail fac">
+          <span class="lbl">In more detail</span>
+          <p>Every team has a budget of decisions it can make in a week. AI can take some of them. The question is never <i>"can we use AI"</i>, it is <b>which decisions do we hand over, and in what order</b>.</p>
+          <p>Treat AI like a new employee: it gets responsibility as it earns trust, and some things it is never trusted with. We work at the level of the <b>decision</b>, not the task: <i>"send the customer an update"</i> is three decisions (what may be said, to whom, and whether it goes without a person reading it), and they land in different places.</p>
+        </div>
+      </section>
+
+      <!-- ═══ 2 · Trust × impact ═══ -->
+      <section class="slide">
+        <div class="kicker">The aim, in one picture</div>
+        <h2 class="slide-title">Give AI the <span class="accent">trusted</span>, <span class="accent">high-impact</span> decisions</h2>
+        <div class="m2">
+          <div class="m2-y"><span>High impact</span><span>Low impact</span></div>
+          <div class="m2-grid">
+            <div class="cell climb">
+              <div class="n">Earn the trust</div>
+              <div class="d">Worth a lot, but not proven yet. Build the evidence and keep a person in the loop until it is.</div>
+              <div class="eg"><b>e.g.</b>Drafting replies to customers. The last pilot promised a delivery date nobody had made.</div>
+              <div class="act"><i class="fas fa-arrow-right"></i> Climb the ladder</div>
+            </div>
+            <div class="cell goal">
+              <div class="n">Give it to AI</div>
+              <div class="d">Proven, and it frees real time. This is where the budget goes first.</div>
+              <div class="eg"><b>e.g.</b>Answering “where's my order?”: sixty a week, every answer checked against the records.</div>
+              <div class="act"><i class="fas fa-check"></i> Hand it over</div>
+            </div>
+            <div class="cell">
+              <div class="n">Keep it human</div>
+              <div class="d">Neither proven nor worth the effort. Say so, and stop debating it.</div>
+              <div class="eg"><b>e.g.</b>Preparing a refund for approval: six a week, and nothing yet to check it against.</div>
+              <div class="act"><i class="fas fa-user"></i> A person decides</div>
+            </div>
+            <div class="cell">
+              <div class="n">Only if it's cheap</div>
+              <div class="d">Safe, but small. A good place to practise. Not where the budget goes.</div>
+              <div class="eg"><b>e.g.</b>Spotting when the shop's and the courier's records disagree: a six-hour rule, an hour a week.</div>
+              <div class="act"><i class="fas fa-flask"></i> Proving ground</div>
+            </div>
+          </div>
+          <div class="m2-x"><span>Not trusted yet</span><span>Trusted</span></div>
+        </div>
+        <div class="detail fac">
+          <span class="lbl">In more detail</span>
+          <p>That is the whole method in one picture. Top right is the goal. Most of the work is moving decisions from <b>top left to top right</b> by earning trust, and being honest about the bottom left, where the right answer is "a person keeps this".</p>
+        </div>
+      </section>
+
+      <!-- ═══ 3 · The ladder ═══ -->
+      <section class="slide">
+        <div class="kicker">Trust</div>
+        <h2 class="slide-title">Trust is earned, one rung at a time</h2>
+        <div class="ladder">
+          <div class="step"><span class="rung r0"><i></i><i></i><i></i><i></i><i></i><b>0</b></span><span class="nm">Held</span><span class="ds">A person decides, every time</span></div>
+          <div class="step"><span class="rung r1"><i></i><i></i><i></i><i></i><i></i><b>1</b></span><span class="nm">Instrumented</span><span class="ds">A person still decides, and each decision is recorded</span></div>
+          <div class="step"><span class="rung r2"><i></i><i></i><i></i><i></i><i></i><b>2</b></span><span class="nm">Shadow</span><span class="ds">AI decides too, in the background. Only the person's decision is used</span></div>
+          <div class="step"><span class="rung r3"><i></i><i></i><i></i><i></i><i></i><b>3</b></span><span class="nm">Proposing</span><span class="ds">AI does the work; a person approves it</span></div>
+          <div class="step"><span class="rung r4"><i></i><i></i><i></i><i></i><i></i><b>4</b></span><span class="nm">Automated</span><span class="ds">AI acts alone inside written limits. Outside them, it stops and asks</span></div>
+        </div>
+        <div class="rules">
+          <div class="rule"><b>Up only on evidence</b>A decision moves up only on proof from the rung below.</div>
+          <div class="rule"><b>Down is normal</b>A decision that fails its bar goes back a rung.</div>
+          <div class="rule"><b>Every decision has a ceiling</b>Often it is <i>held</i>. Naming what stays human is what makes the rest agreeable.</div>
+        </div>
+        <div class="detail fac">
+          <span class="lbl">In more detail</span>
+          <p>"Trusted" on the last slide means a rung on this ladder, reached on evidence. <b>Shadow is the cheapest evidence there is</b>: no risk, nothing acts on it, and it is the step everyone skips. A team that says <i>"we don't know whether AI can do this"</i> is describing an experiment it has not run.</p>
+          <p>Proposing is often the destination, not a stopping point: for judgement work, <i>AI drafts, a person decides</i> is where the productivity gain actually is.</p>
+        </div>
+      </section>
+
+      <!-- ═══ 4 · The budget ═══ -->
+      <section class="slide">
+        <div class="kicker">Budget</div>
+        <h2 class="slide-title">You can't move every decision up at once</h2>
+        <div class="split">
+          <div>
+            <span class="col-h">Each rung costs something</span>
+            <div class="rows">
+              <div class="row"><i class="fas fa-pen-to-square"></i><div class="t">A rule written down<span>What "correct" means, agreed by the person who owns it</span></div></div>
+              <div class="row"><i class="fas fa-database"></i><div class="t">A record kept<span>So you can see what was decided, and what AI would have done</span></div></div>
+              <div class="row"><i class="fas fa-ruler-combined"></i><div class="t">A measurement built<span>So the next rung is earned on evidence, not on enthusiasm</span></div></div>
+            </div>
+          </div>
+          <div>
+            <span class="col-h">So spend it where the value is</span>
+            <div class="formula">How often <span class="op">×</span> how long <span class="op">=</span> hours a week</div>
+            <p class="lede" style="margin-top:1.6cqb">Counted from your own people's week, not guessed. <b>Then your team weighs what matters</b>: hours are the floor of the value, not the whole of it.</p>
+            <div class="stat"><span class="big">8 h</span><span class="lbl"><b>a week of people's time claimed back</b><br>that is the ROI in our fictional worked example, from 4 of its 16 decisions</span></div>
+          </div>
+        </div>
+        <div class="detail fac">
+          <span class="lbl">In more detail</span>
+          <p>Climbing the ladder is work, and most of it is not AI work: writing down a standard, keeping a record. That is why it needs a budget. <b>Almost nothing is waiting on a better model; most of it is waiting on somebody writing down what correct means.</b></p>
+          <p>The worked example is Harbour &amp; Pine, an invented homewares shop from our public sample pack. 16 decisions, 9 with a volume, and 8 hours a week (a working day) on the ones AI could take unattended. A further 9.5 hours a week goes on decisions AI would draft for a person; we don't add that, because the share it frees is unknown.</p>
+        </div>
+      </section>
+
+      <!-- ═══ 5 · The detailed matrix ═══ -->
+      <section class="slide">
+        <div class="kicker">Trust × budget, decision by decision</div>
+        <h2 class="slide-title">Where the worked example's decisions land</h2>
+        <div class="mx">
+          <svg id="mx" viewBox="0 0 1100 560" preserveAspectRatio="xMidYMid meet" role="img"
+               aria-label="Ten decisions plotted by hours a week against rungs still to climb"></svg>
+          <div class="side">
+            <span class="col-h" style="margin-bottom:0">Reading it</span>
+            <div class="row"><div class="t"><b>Dot</b> = one decision<span>its current rung beside it</span></div></div>
+            <div class="row"><div class="t"><b>Up</b> = hours a week it takes today</div></div>
+            <div class="row"><div class="t"><b>Right</b> = closer to trusted<span>fewer rungs left to climb</span></div></div>
+            <div>
+              <span class="col-h" style="margin:1cqb 0 .4cqb">Off the board, by choice</span>
+              <div class="held-list">
+                <span><span class="rung r0"><i></i><i></i><i></i><i></i><i></i></span>Issuing a refund</span>
+                <span><span class="rung r0"><i></i><i></i><i></i><i></i><i></i></span>How long records are kept</span>
+                <span><span class="rung r0"><i></i><i></i><i></i><i></i><i></i></span>Real data before that is settled</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="src">Harbour &amp; Pine, a fictional shop · decisions with a recorded volume · from the public sample pack</div>
+        <div class="detail fac">
+          <span class="lbl">In more detail</span>
+          <p>The same picture as slide 2, with real output on it, the goal in the same corner: <b>close to trusted and high value is where you start</b>. Sending a status-only reply without a person reading it takes 4 hours a week and is two rungs away. Drafting replies for a person is worth 3 hours but caps at <i>proposing</i>, because a person keeps the final say.</p>
+          <p>The decisions held at rung 0 for good are not failures; they are the list that makes everything else agreeable.</p>
+        </div>
+      </section>
+
+      <!-- ═══ 6 · How we get there ═══ -->
+      <section class="slide">
+        <div class="kicker">How we get there</div>
+        <h2 class="slide-title">Start with what you already have</h2>
+        <div class="flow">
+          <div class="stage">
+            <span class="ic"><i class="fas fa-folder-open"></i></span>
+            <span class="nm">Your material</span>
+            <span class="who you">You · no new writing</span>
+            <ul><li>Design docs</li><li>Prompts &amp; runbooks</li><li>Incident reports</li><li>Spreadsheets</li></ul>
+          </div>
+          <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+          <div class="stage ail">
+            <span class="ic"><img src="../images/logos/ailang-logo.svg" alt="AILANG"></span>
+            <span class="nm">Read and mapped in AILANG</span>
+            <span class="ds">Every decision found, traced to the line it came from, and the gaps listed</span>
+            <ul><li>AILANG Parse reads the documents</li><li>Each decision placed on a rung</li></ul>
+          </div>
+          <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+          <div class="stage">
+            <span class="ic"><i class="fas fa-people-group"></i></span>
+            <span class="nm">Workshops</span>
+            <span class="who you">You · the people who decide</span>
+            <span class="ds">Your people settle what only they can: limits, owners, what stays human</span>
+          </div>
+          <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+          <div class="stage ail">
+            <span class="ic"><i class="fas fa-file-shield"></i></span>
+            <span class="nm">One source, every output</span>
+            <span class="ds">A document for governance and a machine-readable specification for engineers, generated together so they can't drift</span>
+            <ul><li>Rules proved, not just tested</li></ul>
+          </div>
+        </div>
+        <p class="foot" style="margin-top:2.6cqb"><b>An open question is a finding</b>: it gets an owner and a date, not a guess.</p>
+        <div class="detail fac">
+          <span class="lbl">In more detail</span>
+          <p>We do the preparation, so workshop time goes on the decisions only your people can settle. How many workshops depends on how much there is to settle. The pipeline is built in <b>AILANG</b>, our own language for AI-written code: the consistency rules on every specification are proved by a solver, so they hold for every input, not just the ones someone thought to test.</p>
+          <p>The output is useful without us. Build it yourselves, or hand it to another supplier.</p>
+        </div>
+      </section>
+
+      <!-- ═══ 7 · The timeline ═══ -->
+      <section class="slide">
+        <div class="kicker">What you get</div>
+        <h2 class="slide-title">A prioritised timeline of AI work</h2>
+        <div class="gantt" id="gantt"></div>
+        <div class="out">
+          <span class="big">8 h / wk</span>
+          <span class="lbl"><b>Claimed back: ROI starts inside 30 days.</b> In the fictional worked example, four decisions run as a simple rule this month and the first two phases land by week 3; the full 8 hours once the evidence is in.</span>
+          <a class="cta" href="https://www.sunholo.com/decision-budget.html" target="_blank" rel="noopener">
+            <span class="a">Bring us one workflow</span>
+            <span class="b">sunholo.com/decision-budget</span>
+          </a>
+        </div>
+        <div class="detail fac">
+          <span class="lbl">In more detail</span>
+          <p>The first thing to build is usually <b>a standard and a record, then the automation</b>. Each phase says what it releases: which decision moves up a rung once it lands. A standard written in two weeks makes a whole class of decisions checkable.</p>
+          <p>Generated from the same source as the specification: the full roadmap, envelope and readiness view are in the sample pack on the website.</p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="transport">
+      <button class="transport-btn" id="btnPrev" title="Previous"><i class="fas fa-chevron-left"></i></button>
+      <span class="step-indicator"><span class="current" id="slideNum">1</span> / <span id="slideTotal">7</span></span>
+      <button class="transport-btn" id="btnNext" title="Next"><i class="fas fa-chevron-right"></i></button>
+    </div>
+    <div class="slide-dots" id="slideDots"></div>
+    <div class="nav-hints"><span class="kbd">←</span><span class="kbd">→</span><span class="kbd">D</span></div>
+  </div>
+</div>
+
+<script>
+// ── Slide 5: the matrix, drawn from the Harbour & Pine envelope ──
+// hours = volume.per_week × volume.minutes_each / 60; climb = ceiling − current rung.
+(function(){
+  const D = [
+    {n:'Answer "where\'s my order?" unchecked',   h:4,    cur:2, climb:2},
+    {n:'Shop or courier: who is right?',    h:2,    cur:2, climb:2},
+    {n:'Draft replies to approve',   h:3,    cur:0, climb:3, dy:-24},
+    {n:'What to do when records clash',      h:3,    cur:0, climb:3, dy:22},
+    {n:'What makes a reply correct',      h:2,    cur:0, climb:3},
+    {n:'Records disagree?',      h:1,    cur:3, climb:1},
+    {n:'Is it really the customer?',          h:1,    cur:4, climb:0},
+    {n:'Status or promise?',           h:40/60,cur:1, climb:2},
+    {n:'Prepare a refund for approval',h:48/60,cur:0, climb:3},
+  ];
+  // Columns by rungs still to climb — closer to trusted is further right, as on slide 2.
+  // Spaced for the labels, which run right of each dot.
+  const COL = {3:96, 2:372, 1:632, 0:862};
+  const X0=70, X1=1090, Y0=16, Y1=480, YM=4.5;
+  const x = c => COL[c];
+  const y = h => Y1 - h / YM * (Y1 - Y0);
+  const xs = 344, ys = y(1.5);
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.getElementById('mx');
+  const el = (t, a, txt) => { const e = document.createElementNS(ns, t);
+    for (const k in a) e.setAttribute(k, a[k]); if (txt != null) e.textContent = txt; svg.appendChild(e); return e; };
+  // quadrants: top-right is the goal (close to trusted, high value) — the same corner as slide 2
+  el('rect',{x:X0,y:Y0,width:xs-X0,height:ys-Y0,rx:10,class:'q-bg'});
+  el('rect',{x:xs+8,y:Y0,width:X1-xs-8,height:ys-Y0,rx:10,class:'q-goal'});
+  el('rect',{x:X0,y:ys+8,width:xs-X0,height:Y1-ys-8,rx:10,class:'q-bg'});
+  el('rect',{x:xs+8,y:ys+8,width:X1-xs-8,height:Y1-ys-8,rx:10,class:'q-bg'});
+  el('text',{x:X0+16,y:Y0+28,class:'q-lab'},'Earn the trust');
+  el('text',{x:X1-16,y:Y0+28,class:'q-lab q-goal-lab','text-anchor':'end'},'Do first');
+  el('text',{x:X0+16,y:Y1-14,class:'q-lab'},'Keep it human');
+  el('text',{x:X1-16,y:Y1-14,class:'q-lab','text-anchor':'end'},'Proving ground');
+  // axes
+  for (let c = 0; c <= 3; c++) el('text',{x:x(c),y:Y1+24,class:'tick','text-anchor':'middle'},String(c));
+  for (let h = 1; h <= 4; h++) el('text',{x:X0-12,y:y(h)+4,class:'tick','text-anchor':'end'},h+' h');
+  el('text',{x:(X0+X1)/2,y:Y1+54,class:'ax','text-anchor':'middle'},'Closer to trusted  →   (rungs still to climb)');
+  el('text',{x:16,y:(Y0+Y1)/2,class:'ax','text-anchor':'middle',transform:`rotate(-90 16 ${(Y0+Y1)/2})`},'Hours a week  →');
+  // dots, each with its current rung mark
+  D.forEach(d => {
+    const cx = x(d.climb), cy = y(d.h) + (d.dy || 0), hot = d.climb <= 2 && d.h >= 1.5;
+    el('circle',{cx,cy,r:9,class:'dot'+(hot?' hot':'')});
+    const lx = cx + 18;
+    el('text',{x:lx,y:cy-2,class:'lab'},d.n);
+    for (let i = 0; i < 5; i++)
+      el('rect',{x:lx+i*7,y:cy+16-(5+i*2.6),width:5,height:5+i*2.6,rx:1,class:i<=d.cur?'bar-on':'bar-off'});
+    const hrs = d.h >= 1 ? d.h+' h/wk' : Math.round(d.h*60)+' min/wk';
+    el('text',{x:lx+42,y:cy+16,class:'lab-h'},hrs);
+  });
+})();
+
+// ── Slide 7: the roadmap, as the pipeline scheduled it (roadmap.md, Harbour & Pine) ──
+(function(){
+  const P = [
+    {k:'Enabler',     n:'The reply standard',            o:'Support lead',     s:0, e:2, rel:'Correct replies',  r:3},
+    {k:'Measurement', n:'The conversation record',       o:'Engineering lead', s:0, e:3, rel:'What to do when records clash',  r:3},
+    {k:'AI use case', n:'Order-status shadow run',      o:'Engineering lead', s:3, e:7, rel:'"Where\'s my order?" unchecked',     r:4, ai:true},
+    {k:'AI use case', n:'The handover clock',            o:'Engineering lead', s:7, e:8, rel:'Handover timing',          r:4, ai:true},
+  ];
+  const g = document.getElementById('gantt');
+  let h = '<span class="wk" style="border:0;padding:0">◆ releases, on its rung</span>';
+  for (let w = 1; w <= 8; w++) h += `<span class="wk">wk ${w}</span>`;
+  const mark = r => `<span class="rung r${r}">${'<i></i>'.repeat(5)}</span>`;
+  P.forEach(p => {
+    h += `<div class="lane"><span class="k">${p.k}</span><span class="nm">${p.n}</span><span class="ow">${p.o}</span></div>`;
+    // A one-week bar is too short for its label, so the label sits just before it.
+    const short = p.e - p.s < 2;
+    const rel = `<span class="rel">${mark(p.r)} ${p.rel}</span>`;
+    if (p.s > 0) h += `<span style="grid-column:span ${p.s};align-self:center;display:flex;justify-content:flex-end;padding-right:1cqi">${short ? rel : ''}</span>`;
+    h += `<div class="bar${p.ai?' ai':''}" style="grid-column:span ${p.e-p.s}">${short ? '' : rel}</div>`;
+    if (p.e < 8) h += `<span style="grid-column:span ${8-p.e}"></span>`;
+  });
+  g.innerHTML = h;
+})();
+
+// ── Navigation ──
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const TOTAL = slides.length;
+  let current = 0, transitioning = false;
+  const slideNum = document.getElementById('slideNum');
+  const dots = document.getElementById('slideDots');
+  const btnPrev = document.getElementById('btnPrev'), btnNext = document.getElementById('btnNext');
+  const themeToggle = document.getElementById('themeToggle');
+  document.getElementById('slideTotal').textContent = TOTAL;
+  for (let i = 0; i < TOTAL; i++){
+    const d = document.createElement('button');
+    d.className = 'slide-dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dots.appendChild(d);
+  }
+  function goTo(n){
+    if (n < 0 || n >= TOTAL || n === current || transitioning) return;
+    transitioning = true;
+    const dir = n > current ? 1 : -1;
+    slides.forEach(s => s.classList.remove('active','exit-left'));
+    if (dir > 0 && slides[current]) slides[current].classList.add('exit-left');
+    slides[n].classList.add('active');
+    current = n;
+    slideNum.textContent = current + 1;
+    document.querySelectorAll('.slide-dot').forEach((d,i) => d.classList.toggle('active', i === current));
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === TOTAL - 1;
+    setTimeout(() => { transitioning = false; }, 500);
+  }
+  btnPrev.addEventListener('click', () => goTo(current - 1));
+  btnNext.addEventListener('click', () => goTo(current + 1));
+  btnPrev.disabled = true;
+  document.addEventListener('keydown', e => {
+    if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    if (e.key === 'ArrowRight' || e.key === ' ') goTo(current + 1);
+    if (e.key === 'ArrowLeft') goTo(current - 1);
+    if (e.key === 'ArrowDown'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*'); }
+    if (e.key === 'ArrowUp'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*'); }
+  });
+  window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'deck-command'){
+      if (e.data.action === 'go-first') goTo(0);
+      if (e.data.action === 'next') goTo(current + 1);
+      if (e.data.action === 'prev') goTo(current - 1);
+      if (e.data.action === 'go-last'){ current = -1; goTo(TOTAL - 1); }
+      if (e.data.action === 'set-theme') setTheme(e.data.theme);
+    }
+  });
+  window.parent.postMessage({type:'deck-ready',total:TOTAL},'*');
+  function setTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+    themeToggle.innerHTML = theme === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    try { localStorage.setItem('slides-theme', theme); } catch(e){}
+    window.parent.postMessage({type:'deck-theme',theme:theme},'*');
+  }
+  themeToggle.addEventListener('click', () =>
+    setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light'));
+  try { const saved = localStorage.getItem('slides-theme'); if (saved) setTheme(saved); } catch(e){}
+})();
+</script>
+</body>
+</html>
