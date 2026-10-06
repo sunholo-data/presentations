@@ -227,7 +227,7 @@ html[data-density="stage"] .detail{display:none}
       });
     });
 
-    if(dir>0) slides[current].classList.add('exit-left');
+    if(dir>0 && slides[current]) slides[current].classList.add('exit-left');
     slides[n].classList.add('active');
 
     current = n;
@@ -258,6 +258,8 @@ html[data-density="stage"] .detail{display:none}
   window.addEventListener('message', e=>{
     if(e.data && e.data.type==='deck-command'){
       if(e.data.action==='go-first') goTo(0);
+      if(e.data.action==='next') goTo(current+1);
+      if(e.data.action==='prev') goTo(current-1);
       if(e.data.action==='go-last'){ current=-1; goTo(TOTAL-1); }
       if(e.data.action==='set-theme') setTheme(e.data.theme);
     }

@@ -153,6 +153,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .pdf-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.03em;color:var(--text-dim);border:1px solid var(--ghost);border-radius:999px;padding:4px 11px;cursor:pointer;text-decoration:none;transition:all .2s}
 .pdf-btn:hover{border-color:var(--orange);color:var(--orange)}
 .pdf-btn i{font-size:11px}
+.slide-nav{display:flex;align-items:center;gap:6px}
 .nav-hints{display:flex;align-items:center;gap:6px}
 .kbd{display:inline-block;padding:1px 5px;border-radius:3px;font-family:var(--mono);font-size:9px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--text-dim)}
 [data-theme="light"] .kbd{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
@@ -195,6 +196,11 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     <div class="bottom-left">
       <a class="pdf-btn" id="pdfBtn" download title="Download the whole talk as a PDF (one page per slide)" style="display:none"><i class="fa-solid fa-file-pdf"></i> PDF</a>
       <div class="nav-info">Deck <span class="current" id="deckNum">1</span> / <span id="deckTotal">1</span></div>
+      <div class="slide-nav">
+        <button class="picker-nav" id="slidePrev" title="Previous slide (←)"><i class="fas fa-chevron-left"></i></button>
+        <span class="nav-info">Slide <span class="current" id="slideNum">–</span> / <span id="slideTotal">–</span></span>
+        <button class="picker-nav" id="slideNext" title="Next slide (→)"><i class="fas fa-chevron-right"></i></button>
+      </div>
     </div>
     <div class="timer-block">
       <div class="timer-deck">
@@ -356,6 +362,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     // deck that doesn't change slide never reports on its own, and we'd carry
     // on describing the previous deck to the co-presenter.
     lastSlide = { index: -1, total: 0, title: '', text: '' };
+    updateSlideNav();
     frame.contentWindow.postMessage({ type: 'deck-command', action: 'report-slide' }, '*');
     if (coPresenter) coPresenter.send();
     setTimeout(() => frame.contentWindow.focus(), 100);
@@ -378,6 +385,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
       // sees — background iframes report too as they load.
       if (i === currentDeck) {
         lastSlide = { index: e.data.index, total: e.data.total, title: e.data.title || '', text: e.data.text || '' };
+        updateSlideNav();
         if (coPresenter) coPresenter.send();
       }
     }
@@ -390,9 +398,33 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     }
   });
 
+  // ── Slide navigation ──
+  // ←/→ only reach a deck when focus is inside its iframe, and on load (or
+  // after clicking the bar) focus is here. So the presenter forwards them, and
+  // the bottom bar carries slide buttons and a counter fed by 'deck-slide'.
+  const slideNumEl = document.getElementById('slideNum');
+  const slideTotalEl = document.getElementById('slideTotal');
+  const slidePrevBtn = document.getElementById('slidePrev');
+  const slideNextBtn = document.getElementById('slideNext');
+  function stepSlide(action) {
+    frames[currentDeck].contentWindow.postMessage({ type: 'deck-command', action: action }, '*');
+  }
+  function updateSlideNav() {
+    const known = lastSlide.index >= 0 && lastSlide.total > 0;
+    slideNumEl.textContent = known ? lastSlide.index + 1 : '–';
+    slideTotalEl.textContent = known ? lastSlide.total : '–';
+    slidePrevBtn.disabled = known && lastSlide.index === 0;
+    slideNextBtn.disabled = known && lastSlide.index === lastSlide.total - 1;
+  }
+  slidePrevBtn.addEventListener('click', () => stepSlide('prev'));
+  slideNextBtn.addEventListener('click', () => stepSlide('next'));
+
   document.addEventListener('keydown', e => {
+    if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
     if (e.key === 'ArrowDown') { e.preventDefault(); switchDeck(currentDeck + 1, false); }
     if (e.key === 'ArrowUp') { e.preventDefault(); switchDeck(currentDeck - 1, true); }
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); stepSlide('next'); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); stepSlide('prev'); }
   });
 
   viewport.addEventListener('click', () => {

@@ -236,7 +236,7 @@ Flags are for turning features on and off while trying them out. Deck order, lab
 **Never hand-write a presenter.** Copy `resources/presenter-template.html` and fill its four placeholders — `{{TITLE}}`, `{{HEADER_TITLE}}`, `{{LOGOS}}`, `{{PLAYLIST}}`, `{{PDF}}`. It is the single source of the deck picker, theme sync, density toggle, timer and PDF button; every deck folder in this repo is an instance of it. Fixing a presenter bug means fixing the template and re-instantiating, not patching five copies.
 
 **Keyboard navigation:**
-- **← →** — Navigate slides/steps within a deck only (never crosses deck boundaries)
+- **← →** — Navigate slides/steps within a deck only (never crosses deck boundaries). The presenter forwards them as `{type:'deck-command', action:'next'|'prev'}`, so they work whether focus is in the deck or on the presenter chrome; its bottom bar also has slide buttons and a counter fed by `deck-slide`. A deck must handle `next`/`prev` or it only moves when clicked into.
 - **↑ ↓** — Jump between decks (↓ = next deck, ↑ = previous deck)
 - **D** — Toggle detail density (stage ↔ guide) across every deck
 - **Esc** — Close the deck jump menu
@@ -288,6 +288,8 @@ Add message listener for presenter commands (theme sync, jump to first/last):
 window.addEventListener('message', e=>{
   if(e.data && e.data.type==='deck-command'){
     if(e.data.action==='go-first') goTo(0);
+    if(e.data.action==='next') goTo(current+1);
+    if(e.data.action==='prev') goTo(current-1);
     if(e.data.action==='go-last'){ current=-1; goTo(TOTAL-1); }
     if(e.data.action==='set-theme') setTheme(e.data.theme);
   }
