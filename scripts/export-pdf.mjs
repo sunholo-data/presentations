@@ -104,7 +104,10 @@ async function activeIndex(page) {
 }
 
 async function captureDeck(page, deck) {
-  const url = pathToFileURL(join(DECK_DIR, deck.src)).href;
+  // Keep a playlist query (timeline.html?session=2) as a query: pathToFileURL
+  // would percent-encode the "?" into the file name and load nothing.
+  const [file, query] = deck.src.split('?');
+  const url = pathToFileURL(join(DECK_DIR, file)).href + (query ? `?${query}` : '');
   await page.goto(url, { waitUntil: 'networkidle0', timeout: GOTO_TIMEOUT }).catch(() => {});
   // Fonts + first entrance animation.
   await page.evaluate(() => (document.fonts ? document.fonts.ready : null)).catch(() => {});
