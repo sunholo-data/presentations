@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>What__TITLE__#39;s Next __TITLE__mdash; The Speech Annotator</title>
+<title>What&#39;s Next &mdash; The Speech Annotator</title>
 <link rel="icon" type="image/svg+xml" href="/sunholo-logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -362,51 +362,51 @@ html[data-density="stage"] .detail{display:none}
         <div class="layer on">
           <span class="layer-badge"><i class="fas fa-circle-check"></i> on right now</span>
           <div class="layer-what">The talk log</div>
-          <div class="layer-sub">Press <b>Q</b> for an audience question, <b>N</b> for a note. Each one is stamped with the deck and slide on screen.</div>
+          <div class="layer-sub">Press <b>Q</b> to log a question, <b>N</b> for a note. Each one records the slide on screen.</div>
           <div class="layer-list">
-            <div class="layer-item"><i class="fas fa-check"></i><span>per&#8209;slide dwell time, measured</span></div>
-            <div class="layer-item"><i class="fas fa-check"></i><span>markdown export for the write&#8209;up</span></div>
+            <div class="layer-item"><i class="fas fa-check"></i><span>time spent on each slide</span></div>
+            <div class="layer-item"><i class="fas fa-check"></i><span>Markdown file for the write&#8209;up</span></div>
             <div class="layer-item"><i class="fas fa-check"></i><span>no API key, no mic</span></div>
           </div>
         </div>
         <div class="layer exp">
           <span class="layer-badge"><i class="fas fa-flask"></i> experimental</span>
           <div class="layer-what">The co&#8209;presenter</div>
-          <div class="layer-sub">A second window listening through Gemini Live. Silent unless addressed by name, researching in the background.</div>
+          <div class="layer-sub">It listens through Gemini Live in a second window. It stays quiet until named, and looks things up.</div>
           <div class="layer-list">
-            <div class="layer-item"><i class="fas fa-code"></i><span><b>getSlideContext</b> &mdash; what&rsquo;s on screen</span></div>
+            <div class="layer-item"><i class="fas fa-code"></i><span><b>getSlideContext</b> &mdash; sees the slide</span></div>
             <div class="layer-item"><i class="fas fa-code"></i><span><b>audienceQuestion</b> &mdash; logs what it hears</span></div>
-            <div class="layer-item"><i class="fas fa-code"></i><span>live transcript + tool&#8209;call trace</span></div>
+            <div class="layer-item"><i class="fas fa-code"></i><span>shows what it hears and does</span></div>
           </div>
         </div>
         <div class="layer soon">
           <span class="layer-badge"><i class="fas fa-hourglass-half"></i> not built</span>
           <div class="layer-what">The speech annotator</div>
-          <div class="layer-sub">Close the loop: the transcript writes the slide&rsquo;s take&#8209;home prose, from what you actually said.</div>
+          <div class="layer-sub">It would turn what you actually said into each slide&rsquo;s written notes.</div>
           <div class="layer-list">
-            <div class="layer-item"><i class="fas fa-arrow-right"></i><span>transcript &times; slide context</span></div>
-            <div class="layer-item"><i class="fas fa-arrow-right"></i><span>&rarr; generated <b>.detail</b> prose</span></div>
-            <div class="layer-item"><i class="fas fa-arrow-right"></i><span>&rarr; a PR against the deck</span></div>
+            <div class="layer-item"><i class="fas fa-arrow-right"></i><span>what you said + the slide</span></div>
+            <div class="layer-item"><i class="fas fa-arrow-right"></i><span>&rarr; new <b>.detail</b> text</span></div>
+            <div class="layer-item"><i class="fas fa-arrow-right"></i><span>&rarr; a PR to the deck</span></div>
           </div>
         </div>
       </div>
       <p class="detail">
-        The first two columns exist. The talk log is running for this webinar &mdash; every question
-        you ask is being filed against whichever slide prompted it. <strong>The third column is the
-        interesting one, and it is honestly not built.</strong>
+        The first two columns exist. The talk log is running in this webinar. It files each
+        question you ask under the slide that prompted it. <strong>The third column is the
+        interesting one. It is not built yet.</strong>
       </p>
     </section>
 
     <!-- ═══════════ 8.2 The experiments ═══════════ -->
     <section class="slide" data-slide="1">
       <span class="slide-tag"><i class="fas fa-flask"></i> The parts we already have</span>
-      <h1 class="slide-title">Four voice experiments, <span class="dim">looking for a job</span></h1>
+      <h1 class="slide-title">Four voice experiments, <span class="dim">waiting for a use</span></h1>
       <div class="exps">
         <div class="exp-row">
           <i class="fas fa-ear-listen exp-ico"></i>
           <div class="exp-body">
             <div class="exp-name">ambient_assistant</div>
-            <div class="exp-desc">Always listening, proactive audio, completely silent until you say its name. No wake&#8209;word detection &mdash; the model decides.</div>
+            <div class="exp-desc">Always listening, using proactive audio. Silent until you say its name. The model decides, not a wake&#8209;word detector.</div>
           </div>
           <span class="exp-tag">mic &middot; tools</span>
         </div>
@@ -414,7 +414,7 @@ html[data-density="stage"] .detail{display:none}
           <i class="fas fa-comment-dots exp-ico"></i>
           <div class="exp-body">
             <div class="exp-name">gemini_live &middot; speak</div>
-            <div class="exp-desc">Voice agent with contract&#8209;verified tool calling. The arithmetic it does out loud is checked before it&rsquo;s spoken.</div>
+            <div class="exp-desc">A voice agent with contract&#8209;checked tools. Any sums it says aloud are checked first.</div>
           </div>
           <span class="exp-tag">verified</span>
         </div>
@@ -422,7 +422,7 @@ html[data-density="stage"] .detail{display:none}
           <i class="fas fa-file-lines exp-ico"></i>
           <div class="exp-body">
             <div class="exp-name">voice_docparse</div>
-            <div class="exp-desc">Talk to a document. Voice in, DocParse tools invoked live, answers about DOCX, PPTX, XLSX and PDF.</div>
+            <div class="exp-desc">Talk to a document. It uses DocParse to answer about DOCX, PPTX, XLSX and PDF files.</div>
           </div>
           <span class="exp-tag">in&#8209;browser</span>
         </div>
@@ -430,44 +430,43 @@ html[data-density="stage"] .detail{display:none}
           <i class="fas fa-headset exp-ico"></i>
           <div class="exp-body">
             <div class="exp-name">co_presenter.ail</div>
-            <div class="exp-desc">The Gemini Live session driven by AILANG compiled to WASM &mdash; which is exactly why the presenter <em>bridges</em> to it rather than shipping it.</div>
+            <div class="exp-desc">The Gemini Live session, run by AILANG compiled to WASM. It is big, so the presenter <em>links</em> to it instead of including it.</div>
           </div>
           <span class="exp-tag">~39MB wasm</span>
         </div>
       </div>
       <p class="detail">
-        All four live in the <code>ailang-demos</code> repo, built for other reasons. That&rsquo;s
-        usually how this goes: <strong>you don&rsquo;t plan the feature, you notice you already have
-        four fifths of it lying around.</strong> The bridge between the two repos is
-        <code>postMessage</code>, not a copy &mdash; fix one, both improve.
+        All four are in the <code>ailang-demos</code> repo. I built them for other reasons.
+        <strong>This happens a lot: you find you already have four fifths of a feature.</strong>
+        The two repos talk through <code>postMessage</code> instead of copying code. Fix one, and both improve.
       </p>
     </section>
 
     <!-- ═══════════ 8.3 What it would take ═══════════ -->
     <section class="slide" data-slide="2">
-      <span class="slide-tag"><i class="fas fa-road"></i> Honest about the gap</span>
+      <span class="slide-tag"><i class="fas fa-road"></i> What is missing</span>
       <h1 class="slide-title">What it would <span class="accent">take</span></h1>
       <div class="future">
         <div class="future-col want">
           <div class="future-head"><i class="fas fa-star"></i> what you&rsquo;d get</div>
           <div class="future-item"><i class="fas fa-circle"></i><span>Speaker notes written from the talk you <em>gave</em>, not the one you planned</span></div>
-          <div class="future-item"><i class="fas fa-circle"></i><span>Every question filed against the slide that caused it, automatically</span></div>
-          <div class="future-item"><i class="fas fa-circle"></i><span>Timings measured from a real run, pasted straight back into the playlist</span></div>
-          <div class="future-item"><i class="fas fa-circle"></i><span>The deck improves each time you give it. <span class="q">The talk becomes its own data.</span></span></div>
+          <div class="future-item"><i class="fas fa-circle"></i><span>Each question filed under its slide, automatically</span></div>
+          <div class="future-item"><i class="fas fa-circle"></i><span>Real timings from a real talk, copied into the playlist</span></div>
+          <div class="future-item"><i class="fas fa-circle"></i><span>The deck gets better each time you give it. <span class="q">Each talk feeds the next.</span></span></div>
         </div>
         <div class="future-col gap">
           <div class="future-head"><i class="fas fa-triangle-exclamation"></i> what&rsquo;s in the way</div>
-          <div class="future-item"><i class="fas fa-circle"></i><span>Tracing stops at the tool call &mdash; we want <code>--emit-trace</code> inside WASM, which AILANG doesn&rsquo;t expose yet</span></div>
-          <div class="future-item"><i class="fas fa-circle"></i><span>A live mic in a webinar is a second thing that can fail, and it&rsquo;s the one you can&rsquo;t hide</span></div>
+          <div class="future-item"><i class="fas fa-circle"></i><span>We can only trace up to the tool call. We need <code>--emit-trace</code> inside WASM. AILANG doesn&rsquo;t offer it yet</span></div>
+          <div class="future-item"><i class="fas fa-circle"></i><span>A live mic can fail too. In a webinar, you can&rsquo;t hide that</span></div>
           <div class="future-item"><i class="fas fa-circle"></i><span>Transcripts of a whole talk are personal data. Whose? Kept where?</span></div>
-          <div class="future-item"><i class="fas fa-circle"></i><span>A model that writes your speaker notes will write them <em>confidently wrong</em> sometimes</span></div>
+          <div class="future-item"><i class="fas fa-circle"></i><span>An AI that writes your notes will sometimes be <em>wrong, and sound sure</em></span></div>
         </div>
       </div>
       <p class="detail">
-        I&rsquo;m showing you the roadmap rather than a demo because <strong>the right&#8209;hand
-        column is real and I haven&rsquo;t solved it.</strong> The last row is the one that worries
-        me: this whole talk argues for a linter because prose alone can&rsquo;t be trusted &mdash;
-        and there is no linter for &ldquo;that&rsquo;s not what I said.&rdquo;
+        I&rsquo;m showing a plan, not a demo. <strong>The right&#8209;hand column is real, and I
+        haven&rsquo;t solved it.</strong> The last row worries me most. This talk argues for a linter,
+        an automatic checker, because you can&rsquo;t trust written rules alone. But there is no
+        linter for &ldquo;that&rsquo;s not what I said.&rdquo;
       </p>
     </section>
     </div><!-- /slides-stage -->

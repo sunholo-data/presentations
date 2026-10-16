@@ -72,9 +72,13 @@ async function readPlaylist() {
   if (start === -1 || end === -1) throw new Error(`No PLAYLIST in ${FOLDER}/presenter.html`);
   const block = html.slice(start, end);
   const decks = [];
-  const re = /src:\s*'([^']+)'[^}]*?label:\s*(?:'([^']*)'|"([^"]*)")/g;
+  const re = /src:\s*'([^']+)'[^}]*?label:\s*(?:'([^']*)'|"([^"]*)")([^}]*)/g;
+  // Labels are JS string literals, so decode \uXXXX escapes the way the browser would.
+  const unescape = (s) => s.replace(/\\u([0-9a-fA-F]{4})/g, (_, h) => String.fromCharCode(parseInt(h, 16)));
   let m;
-  while ((m = re.exec(block))) decks.push({ src: m[1], label: m[2] ?? m[3] });
+  while ((m = re.exec(block))) {
+    decks.push({ src: m[1], label: unescape(m[2] ?? m[3]) });
+  }
   if (!decks.length) throw new Error('Could not parse PLAYLIST from presenter.html');
   return decks;
 }
