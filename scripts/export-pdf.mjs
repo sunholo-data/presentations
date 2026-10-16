@@ -53,13 +53,16 @@ const args = Object.fromEntries(
 
 const FOLDER = positional[0];
 if (!FOLDER) {
-  console.error('Usage: node export-pdf.mjs <deck-folder> [--density=stage|guide] [--scale=N] [--only=a.html,b.html] [--out=path.pdf]');
+  console.error('Usage: node export-pdf.mjs <deck-folder> [--density=stage|guide] [--theme=dark|light] [--scale=N] [--only=a.html,b.html] [--out=path.pdf]');
   process.exit(1);
 }
 const DECK_DIR = resolve(REPO_ROOT, FOLDER);
 const SCALE = Number(args.scale ?? 2);
 const DENSITY = args.density === 'guide' ? 'guide' : 'stage';
-const OUT = args.out ? resolve(String(args.out)) : join(DECK_DIR, `${basename(DECK_DIR)}.pdf`);
+const THEME = args.theme === 'light' ? 'light' : 'dark';
+// Dark keeps the plain name; light gets a suffix so the presenter can offer both.
+const OUT = args.out ? resolve(String(args.out))
+  : join(DECK_DIR, `${basename(DECK_DIR)}${THEME === 'light' ? '-light' : ''}.pdf`);
 const ONLY = args.only ? String(args.only).split(',').map((s) => s.trim()) : null;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -122,6 +125,7 @@ async function captureDeck(page, deck) {
   await page.evaluate(() => document.body.classList.add('in-iframe')).catch(() => {});
   // Decks default to guide when loaded standalone; pin the requested density.
   await page.evaluate((d) => document.documentElement.setAttribute('data-density', d), DENSITY).catch(() => {});
+  await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), THEME).catch(() => {});
   await sleep(SHOT_MS);
 
   const info = await readDeckInfo(page);
@@ -139,11 +143,21 @@ async function captureDeck(page, deck) {
 
   const shots = [];
   for (let i = 0; i < count; i++) {
-    // Advance to this slide's final revealed step.
+    // Advance to this slide's final revealed step. Decks disagree on what
+    // data-steps counts (reveals after the first view, or views in total), so
+    // press until the slide changes, then step back: entering a slide
+    // backwards lands on its last step.
     const steps = info.steps[i] ?? 1;
-    for (let s = 0; s < steps - 1; s++) {
-      await page.keyboard.press('ArrowRight');
-      await sleep(STEP_MS);
+    if (steps > 1) {
+      for (let s = 0; s < steps; s++) {
+        await page.keyboard.press('ArrowRight');
+        await sleep(STEP_MS);
+        if ((await activeIndex(page)) !== i) {
+          await page.keyboard.press('ArrowLeft');
+          await sleep(SLIDE_MS);
+          break;
+        }
+      }
     }
     await sleep(SHOT_MS);
     shots.push(await page.screenshot({ type: 'png' }));
@@ -195,7 +209,7 @@ async function assemblePdf(browser, shots) {
 async function main() {
   let decks = await readPlaylist();
   if (ONLY) decks = decks.filter((d) => ONLY.some((o) => d.src.endsWith(o) || d.label === o));
-  console.log(`Exporting ${decks.length} deck(s) from ${FOLDER} → ${OUT}\n(scale ${SCALE}×, ${W}×${H} stage, ${DENSITY} density)\n`);
+  console.log(`Exporting ${decks.length} deck(s) from ${FOLDER} → ${OUT}\n(scale ${SCALE}×, ${W}×${H} stage, ${DENSITY} density, ${THEME} theme)\n`);
 
   const browser = await puppeteer.launch({
     headless: 'new',

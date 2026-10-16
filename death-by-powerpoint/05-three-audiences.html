@@ -212,30 +212,36 @@ html[data-density="stage"] .detail{display:none}
   font-size:.85em;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.35cqb}
 .reader-solved{color:var(--green);font-weight:700}
 
-.density{display:flex;gap:2.4cqi;align-items:stretch;width:100%;max-width:88%}
-.dmock{
-  flex:1;min-width:0;display:flex;flex-direction:column;gap:1cqb;
-  padding:2.2cqb 2cqi;border-radius:12px;
+/* 6.2 One slide, three readers: the engine slide as each reader gets it */
+.views{display:flex;gap:2.4cqi;align-items:stretch;width:100%;max-width:90%}
+.view{
+  flex:1;min-width:0;display:flex;flex-direction:column;gap:1.3cqb;
+  padding:2cqb 1.6cqi;border-radius:12px;
   background:var(--surface);border:1px solid var(--ghost);opacity:0;
 }
-.slide.active .dmock:nth-child(1){animation:fadeSlideUp .5s ease .15s both}
-.slide.active .dmock:nth-child(2){animation:fadeSlideUp .5s ease .45s both}
-.dmock-mode{
-  font-family:var(--mono);font-size:clamp(8px,1.08cqi,13px);font-weight:700;
-  letter-spacing:.12em;text-transform:uppercase;
+.view.room{border-top:3px solid var(--orange)}
+.view.cold{border-top:3px solid var(--indigo)}
+.view.pdf{border-top:3px solid var(--teal)}
+.slide.active .view:nth-child(1){animation:fadeSlideUp .5s ease .15s both}
+.slide.active .view:nth-child(2){animation:fadeSlideUp .5s ease .4s both}
+.slide.active .view:nth-child(3){animation:fadeSlideUp .5s ease .65s both}
+.view-head{display:flex;align-items:center;gap:.8cqi;font-size:clamp(11px,1.6cqi,20px);font-weight:800;letter-spacing:-.01em}
+.view.room .view-head i{color:var(--orange)}
+.view.cold .view-head i{color:var(--indigo)}
+.view.pdf .view-head i{color:var(--teal)}
+.mini{
+  aspect-ratio:16/10;border-radius:6px;overflow:hidden;
+  display:flex;flex-direction:column;gap:.6cqb;padding:1cqb .9cqi;
+  background:#0d0d14;border:1px solid var(--ghost);color:#e8e8f0;
 }
-.dmock.stage .dmock-mode{color:var(--orange)}
-.dmock.guide .dmock-mode{color:var(--indigo)}
-.dmock-stat{font-family:var(--mono);font-size:clamp(15px,2.6cqi,34px);font-weight:700;letter-spacing:-.02em}
-.dmock-prose{font-size:clamp(9px,1.25cqi,16px);color:var(--text-dim);line-height:1.55}
-.dmock-prose.ghosted{opacity:.18;font-style:italic}
-.dmock-who{
-  margin-top:auto;padding-top:1cqb;border-top:1px solid var(--ghost);
-  font-size:clamp(9px,1.18cqi,15px);color:var(--text-dim);line-height:1.4;
-}
-.density-mech{display:flex;flex-direction:column;gap:.9cqb;width:100%;max-width:88%}
-.density-mech .code{font-size:clamp(8px,1.15cqi,15px)}
-.slide.active .density-mech{animation:fadeSlideUp .5s ease .7s both}
+.mini.page{background:#fff;color:#1a1a24;border-color:#d4d4dc;border-radius:2px;position:relative}
+.mini-title{font-size:clamp(7px,.95cqi,12px);font-weight:800;line-height:1.2}
+.mini img{flex:1;min-height:0;width:100%;object-fit:contain;background:#fff;border-radius:3px}
+.mini-note{font-size:clamp(6px,.72cqi,9px);line-height:1.35;color:#a0a0b4}
+.mini.page .mini-note{color:#55556a}
+.mini-pg{position:absolute;right:.7cqi;bottom:.5cqb;font-family:var(--mono);font-size:clamp(6px,.65cqi,8px);color:#8a8a9a}
+.view-gets{font-size:clamp(10px,1.3cqi,17px);color:var(--text-dim);line-height:1.45}
+.view-gets b{color:var(--text)}
 .press-d{
   display:inline-flex;align-items:center;gap:1cqi;
   padding:1.1cqb 2cqi;border-radius:20px;
@@ -390,42 +396,49 @@ html[data-density="stage"] .detail{display:none}
       <p class="detail">
         Usually you pick one of two bad options. One file serves all three badly. Or you keep
         three files, and two of them go out of date. <strong>The next two slides show one file
-        that serves all three.</strong> It takes about four lines of code.
+        that serves all three.</strong>
       </p>
     </section>
 
-    <!-- ═══════════ 6.2 Density: stage vs guide ═══════════ -->
+    <!-- ═══════════ 6.2 One slide, three readers ═══════════ -->
     <section class="slide" data-slide="1">
       <span class="slide-tag"><i class="fas fa-circle-half-stroke"></i> Detail</span>
-      <h1 class="slide-title">The same slide, <span class="accent">twice</span></h1>
-      <div class="density">
-        <div class="dmock stage">
-          <div class="dmock-mode"><i class="fas fa-chalkboard"></i> stage</div>
-          <div class="dmock-stat">&minus;66.7 &rarr; +4.5</div>
-          <div class="dmock-prose ghosted">AILANG&rsquo;s success&#8209;rate gap to Python, on Claude Sonnet 4.5. From v0.3.10 to v0.13.0, it went from sixty&#8209;odd points behind to ahead.</div>
-          <div class="dmock-who">What the screen shows. You say the sentence out loud.</div>
+      <h1 class="slide-title">One slide, <span class="accent">three readers</span></h1>
+      <div class="views">
+        <div class="view room">
+          <div class="view-head"><i class="fas fa-chalkboard-user"></i> The room</div>
+          <div class="mini">
+            <div class="mini-title">A working engine, inside the slide</div>
+            <img src="../assets/otto-engine/poster.webp" alt="">
+          </div>
+          <div class="view-gets">A big picture and a title. <b>You do the talking.</b></div>
         </div>
-        <div class="dmock guide">
-          <div class="dmock-mode"><i class="fas fa-book-open"></i> guide</div>
-          <div class="dmock-stat">&minus;66.7 &rarr; +4.5</div>
-          <div class="dmock-prose">AILANG&rsquo;s success&#8209;rate gap to Python, on Claude Sonnet 4.5. From v0.3.10 to v0.13.0, it went from sixty&#8209;odd points behind to ahead.</div>
-          <div class="dmock-who">What the link shows. The sentence is written down.</div>
+        <div class="view cold">
+          <div class="view-head"><i class="fas fa-link"></i> The link, later</div>
+          <div class="mini">
+            <div class="mini-title">A working engine, inside the slide</div>
+            <img src="../assets/otto-engine/poster.webp" alt="">
+            <div class="mini-note">A teaching tool from AIPLA. An AI agent built it from a physics brief and written drawing rules.</div>
+          </div>
+          <div class="view-gets">The same slide, <b>plus the words you said out loud.</b></div>
         </div>
-      </div>
-      <div class="density-mech">
-<div class="code"><span class="cm">/* the entire hiding mechanism */</span>
-html[<span class="fx-name">data-density</span>=<span class="str">"stage"</span>] .<span class="fn-name">detail</span> { display: none }
-
-<span class="cm">// and the line that picks the default for you</span>
-root.<span class="fn-name">setAttribute</span>(<span class="str">'data-density'</span>, embedded ? <span class="str">'stage'</span> : <span class="str">'guide'</span>);</div>
+        <div class="view pdf">
+          <div class="view-head"><i class="fas fa-file-pdf"></i> The PDF</div>
+          <div class="mini page">
+            <div class="mini-title">A working engine, inside the slide</div>
+            <img src="../assets/otto-engine/poster.webp" alt="">
+            <div class="mini-note">A teaching tool from AIPLA. An AI agent built it from a physics brief and written drawing rules.</div>
+            <span class="mini-pg">p.&nbsp;22</span>
+          </div>
+          <div class="view-gets">A still picture and the notes. <b>Easy to keep and forward.</b></div>
+        </div>
       </div>
       <div class="press-d"><i class="fas fa-hand-pointer"></i> press <span class="keycap">D</span> now. Every slide in this talk has both.</div>
       <p class="detail">
-        The extra text sits in <code>class="detail"</code>. The <em>stage</em> setting hides it,
-        and <em>guide</em> shows it. In my talk the deck starts in stage. Open the link yourself
-        and it starts in guide. One file, one link, nothing extra to update.
+        This is the engine slide from section&nbsp;5, as each reader gets it. It is one file.
+        The extra words sit in hidden <em>detail</em> text. On stage they are hidden. Open the link
+        yourself and they show. The PDF is the same view, saved as pages.
         <strong>You can read this only because detail is switched on.</strong>
-        In the live talk, this slide shows just the comparison.
       </p>
     </section>
 

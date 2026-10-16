@@ -243,13 +243,10 @@ html[data-density="stage"] .detail{display:none}
 .spatial-copy .slide-title{text-align:left;max-width:100%;font-size:clamp(26px,4.15cqi,52px)}
 .spatial-lede{font-size:clamp(12px,1.65cqi,21px);line-height:1.55;color:var(--text-dim);max-width:38ch}
 .spatial-lede strong{color:var(--text)}
-.spatial-proof{
-  display:grid;grid-template-columns:auto 1fr;gap:.7cqb 1cqi;align-items:baseline;
-  padding-top:1.2cqb;border-top:1px solid var(--ghost);width:100%;
-  font-family:var(--mono);font-size:clamp(8px,1.02cqi,13px);color:var(--text-dim);
-}
-.spatial-proof b{color:var(--orange);font-weight:700}
 .spatial-exhibit .spatial-layout{grid-template-columns:minmax(0,.52fr) minmax(0,1.48fr);gap:3cqi}
+/* Guide mode shows the .detail prose under the layout; give it room. The
+   engine rescales to whatever box it gets. */
+html[data-density="guide"] .spatial-exhibit .spatial-layout{height:62%}
 .spatial-exhibit .spatial-copy .slide-title{font-size:clamp(22px,3.3cqi,42px)}
 .spatial-exhibit .spatial-copy{gap:1.6cqb}
 .spatial-model{position:relative;width:100%;height:100%;min-height:0;display:flex;align-items:center;justify-content:center}
@@ -431,14 +428,8 @@ html[data-density="stage"] .detail{display:none}
           <span class="slide-tag"><i class="fas fa-gears"></i> Live model</span>
           <h1 class="slide-title">A working engine, inside the slide</h1>
           <p class="spatial-lede">
-            Not a picture. A four&#8209;stroke engine simulation runs in the slide.
-            <strong>Drag the compression ratio</strong> and the p&#8209;V diagram redraws.
+            Not a picture. <strong>Drag the compression ratio</strong> and the graph redraws.
           </p>
-          <div class="spatial-proof">
-            <b>LIVE</b><span>the real simulation, run during the talk</span>
-            <b>SPEC</b><span>an AI agent drew it from written drawing rules</span>
-            <b>PDF</b><span>the PDF handout shows a still image</span>
-          </div>
           <a class="engine-credit" href="https://aipla.ku.dk" target="_blank" rel="noopener">
             <img src="../assets/otto-engine/aipla-ku-logo.svg" alt="University of Copenhagen seal">
             <span><b>AIPLA</b> &middot; University of Copenhagen<br>aipla.ku.dk</span>

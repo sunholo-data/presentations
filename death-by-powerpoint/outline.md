@@ -397,13 +397,17 @@ Say the line: *"I did not build this for today."*
 - Usually you pick one of two bad options. One file serves all three badly. Or you keep
   three files, and two of them go out of date.
 
-### 6.2 Detail: the same slide, twice (2 min)
+### 6.2 One slide, three readers (2 min)
 
-**On screen:** The same slide, twice: "stage", then "guide" with its `.detail` text shown.
+**On screen:** The engine slide from §5, three times, one per reader from 6.1.
+*The room*: a big picture and a title, you do the talking. *The link, later*: the same
+slide plus the words you said out loud. *The PDF*: a still picture and the notes, easy to
+keep and forward.
 
 **Narrative:**
-- The extra text sits in `class="detail"`. One line of CSS hides it on stage.
-- In my talk the deck starts in stage. Open the link yourself and it starts in guide.
+- This is the slide you saw ten minutes ago. One file serves all three readers.
+- The extra words sit in hidden "detail" text. On stage they're hidden. Open the link
+  yourself and they show. The PDF is the same view, saved as pages.
 - **Do it live: press `D`, here, on this slide.** Two seconds beats any slide about it.
 
 ### 6.3 The PDF comes from the live deck (1.5 min)
@@ -493,7 +497,7 @@ engine" and one drag of the slider.
       append to the rehearsal run.
 - [ ] Re-run the timings after a rehearsal and paste the measured `minutes:` back into the
       PLAYLIST. The numbers above are estimates, not evidence.
-- [x] PDF exported 15 Oct (`node export-pdf.mjs death-by-powerpoint --density=guide`, 29 pages) and
+- [x] PDF exported 15 Oct (`node export-pdf.mjs death-by-powerpoint --density=guide`, 29 pages; plus `--theme=light` for the light PDF) and
       `const PDF` wired in `presenter.html`. **Re-export after any deck edit** — the PDF is a
       snapshot, and a stale one is worse than none.
 - [ ] Zoom: share the *browser window*, not the tab, so switching decks doesn't drop the
