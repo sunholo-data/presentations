@@ -212,30 +212,36 @@ html[data-density="stage"] .detail{display:none}
   font-size:.85em;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.35cqb}
 .reader-solved{color:var(--green);font-weight:700}
 
-.density{display:flex;gap:2.4cqi;align-items:stretch;width:100%;max-width:88%}
-.dmock{
-  flex:1;min-width:0;display:flex;flex-direction:column;gap:1cqb;
-  padding:2.2cqb 2cqi;border-radius:12px;
+/* 6.2 One slide, three readers: the engine slide as each reader gets it */
+.views{display:flex;gap:2.4cqi;align-items:stretch;width:100%;max-width:90%}
+.view{
+  flex:1;min-width:0;display:flex;flex-direction:column;gap:1.3cqb;
+  padding:2cqb 1.6cqi;border-radius:12px;
   background:var(--surface);border:1px solid var(--ghost);opacity:0;
 }
-.slide.active .dmock:nth-child(1){animation:fadeSlideUp .5s ease .15s both}
-.slide.active .dmock:nth-child(2){animation:fadeSlideUp .5s ease .45s both}
-.dmock-mode{
-  font-family:var(--mono);font-size:clamp(8px,1.08cqi,13px);font-weight:700;
-  letter-spacing:.12em;text-transform:uppercase;
+.view.room{border-top:3px solid var(--orange)}
+.view.cold{border-top:3px solid var(--indigo)}
+.view.pdf{border-top:3px solid var(--teal)}
+.slide.active .view:nth-child(1){animation:fadeSlideUp .5s ease .15s both}
+.slide.active .view:nth-child(2){animation:fadeSlideUp .5s ease .4s both}
+.slide.active .view:nth-child(3){animation:fadeSlideUp .5s ease .65s both}
+.view-head{display:flex;align-items:center;gap:.8cqi;font-size:clamp(11px,1.6cqi,20px);font-weight:800;letter-spacing:-.01em}
+.view.room .view-head i{color:var(--orange)}
+.view.cold .view-head i{color:var(--indigo)}
+.view.pdf .view-head i{color:var(--teal)}
+.mini{
+  aspect-ratio:16/10;border-radius:6px;overflow:hidden;
+  display:flex;flex-direction:column;gap:.6cqb;padding:1cqb .9cqi;
+  background:#0d0d14;border:1px solid var(--ghost);color:#e8e8f0;
 }
-.dmock.stage .dmock-mode{color:var(--orange)}
-.dmock.guide .dmock-mode{color:var(--indigo)}
-.dmock-stat{font-family:var(--mono);font-size:clamp(15px,2.6cqi,34px);font-weight:700;letter-spacing:-.02em}
-.dmock-prose{font-size:clamp(9px,1.25cqi,16px);color:var(--text-dim);line-height:1.55}
-.dmock-prose.ghosted{opacity:.18;font-style:italic}
-.dmock-who{
-  margin-top:auto;padding-top:1cqb;border-top:1px solid var(--ghost);
-  font-size:clamp(9px,1.18cqi,15px);color:var(--text-dim);line-height:1.4;
-}
-.density-mech{display:flex;flex-direction:column;gap:.9cqb;width:100%;max-width:88%}
-.density-mech .code{font-size:clamp(8px,1.15cqi,15px)}
-.slide.active .density-mech{animation:fadeSlideUp .5s ease .7s both}
+.mini.page{background:#fff;color:#1a1a24;border-color:#d4d4dc;border-radius:2px;position:relative}
+.mini-title{font-size:clamp(7px,.95cqi,12px);font-weight:800;line-height:1.2}
+.mini img{flex:1;min-height:0;width:100%;object-fit:contain;background:#fff;border-radius:3px}
+.mini-note{font-size:clamp(6px,.72cqi,9px);line-height:1.35;color:#a0a0b4}
+.mini.page .mini-note{color:#55556a}
+.mini-pg{position:absolute;right:.7cqi;bottom:.5cqb;font-family:var(--mono);font-size:clamp(6px,.65cqi,8px);color:#8a8a9a}
+.view-gets{font-size:clamp(10px,1.3cqi,17px);color:var(--text-dim);line-height:1.45}
+.view-gets b{color:var(--text)}
 .press-d{
   display:inline-flex;align-items:center;gap:1cqi;
   padding:1.1cqb 2cqi;border-radius:20px;
@@ -247,21 +253,6 @@ html[data-density="stage"] .detail{display:none}
   display:inline-block;padding:.3cqb .9cqi;border-radius:4px;
   border:1px solid var(--orange-dim);background:var(--bg);color:var(--orange);
 }
-
-.pdf-why{display:flex;flex-direction:column;gap:1.2cqb;width:100%;max-width:82%}
-.pdf-row{
-  display:flex;align-items:flex-start;gap:1.4cqi;
-  font-size:clamp(10px,1.42cqi,19px);line-height:1.5;opacity:0;
-}
-.slide.active .pdf-row:nth-child(1){animation:fadeSlideIn .45s ease .2s both}
-.slide.active .pdf-row:nth-child(2){animation:fadeSlideIn .45s ease .4s both}
-.slide.active .pdf-row:nth-child(3){animation:fadeSlideIn .45s ease .6s both}
-.pdf-row i{flex-shrink:0;margin-top:.4cqb;font-size:clamp(9px,1.2cqi,15px)}
-.pdf-row.no i{color:var(--red)}
-.pdf-row.yes i{color:var(--green)}
-.pdf-row b{font-weight:700}
-.pdf-cmd{width:100%;max-width:82%}
-.slide.active .pdf-cmd{animation:fadeSlideUp .5s ease .75s both}
 
 .artefact{
   display:flex;align-items:center;gap:1.6cqi;
@@ -276,6 +267,22 @@ html[data-density="stage"] .detail{display:none}
 }
 .artefact-url span{color:var(--text-dim);font-weight:400}
 .slide.active .artefact{animation:fadeSlideUp .55s ease .2s both}
+.pdf-flow{display:flex;align-items:stretch;justify-content:center;gap:2cqi;width:100%;max-width:90%;margin-top:4cqb}
+.pdf-step{
+  flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:1.4cqb;
+  padding:4cqb 2cqi;border:1px solid var(--ghost);border-radius:14px;background:var(--surface);
+}
+.pdf-step > i{font-size:clamp(22px,4cqi,52px);color:var(--text-dim)}
+.pdf-step.out{border-color:var(--orange-dim)}
+.pdf-step.out > i{color:var(--orange)}
+.pdf-step-what{font-size:clamp(14px,2.2cqi,28px);font-weight:700;color:var(--text)}
+.pdf-step-sub{font-family:var(--mono);font-size:clamp(9px,1.3cqi,16px);color:var(--text-dim)}
+.pdf-arrow{align-self:center;font-size:clamp(16px,2.4cqi,30px);color:var(--orange)}
+.pdf-line{margin-top:4cqb;font-size:clamp(14px,2.1cqi,26px);color:var(--text-dim);text-align:center}
+.pdf-line strong{color:var(--text)}
+.slide.active .pdf-step{animation:fadeSlideUp .5s ease both}
+.slide.active .pdf-step:nth-of-type(2){animation-delay:.15s}
+.slide.active .pdf-step:nth-of-type(3){animation-delay:.3s}
 </style>
 </head>
 <body>
@@ -370,106 +377,115 @@ html[data-density="stage"] .detail{display:none}
         <div class="reader room">
           <i class="fas fa-chalkboard-user"></i>
           <div class="reader-who">The room, right now</div>
-          <div class="reader-wants">Wants a sparse slide behind a talking human. Six words and a picture. Anything more competes with you.</div>
-          <div class="reader-usually"><b>Usually</b><span class="reader-solved">This one you get right</span> &mdash; it&rsquo;s the only reader most decks are designed for.</div>
+          <div class="reader-wants">Wants a simple slide while you talk. Six words and a picture. Anything more pulls attention from you.</div>
+          <div class="reader-usually"><b>Usually</b><span class="reader-solved">You get this one right.</span> Most decks are made only for this reader.</div>
         </div>
         <div class="reader cold">
           <i class="fas fa-link"></i>
           <div class="reader-who">Someone opening the link in six weeks</div>
-          <div class="reader-wants">Wants prose that explains itself. There is no narrator. They weren&rsquo;t there, and they never will be.</div>
-          <div class="reader-usually"><b>Usually</b>They get a deck of orphaned bullet points that meant something once.</div>
+          <div class="reader-wants">Wants text that explains itself. Nobody is there to talk them through it. They missed the talk.</div>
+          <div class="reader-usually"><b>Usually</b>They get bullet points that only made sense with you talking.</div>
         </div>
         <div class="reader pdf">
           <i class="fas fa-envelope"></i>
           <div class="reader-who">&ldquo;Can you send me the slides?&rdquo;</div>
-          <div class="reader-wants">Wants one file they can keep, forward, and search. Probably wants to print two of the pages.</div>
-          <div class="reader-usually"><b>Usually</b>A 40MB attachment that bounces, or a link to a login screen.</div>
+          <div class="reader-wants">Wants one file to keep, forward and search. Maybe prints two pages.</div>
+          <div class="reader-usually"><b>Usually</b>A 40MB attachment that bounces, or a link to a login page.</div>
         </div>
       </div>
       <p class="detail">
-        The normal options are both bad: serve all three badly from one artefact, or maintain three
-        artefacts and let two of them rot. <strong>The next two slides are how one file serves all
-        three</strong> &mdash; and the mechanism is about four lines of code, which is the point.
+        Usually you pick one of two bad options. One file serves all three badly. Or you keep
+        three files, and two of them go out of date. <strong>The next two slides show one file
+        that serves all three.</strong>
       </p>
     </section>
 
-    <!-- ═══════════ 6.2 Density: stage vs guide ═══════════ -->
+    <!-- ═══════════ 6.2 One slide, three readers ═══════════ -->
     <section class="slide" data-slide="1">
-      <span class="slide-tag"><i class="fas fa-circle-half-stroke"></i> Density</span>
-      <h1 class="slide-title">The same slide, <span class="accent">twice</span></h1>
-      <div class="density">
-        <div class="dmock stage">
-          <div class="dmock-mode"><i class="fas fa-chalkboard"></i> stage</div>
-          <div class="dmock-stat">&minus;66.7 &rarr; +4.5</div>
-          <div class="dmock-prose ghosted">That&rsquo;s AILANG&rsquo;s LoCoBench delta against Python between v0.6 and v0.9 &mdash; the point where an AI&#8209;first language stopped being a toy.</div>
-          <div class="dmock-who">What the projector shows. You supply the sentence out loud.</div>
+      <span class="slide-tag"><i class="fas fa-circle-half-stroke"></i> Detail</span>
+      <h1 class="slide-title">One slide, <span class="accent">three readers</span></h1>
+      <div class="views">
+        <div class="view room">
+          <div class="view-head"><i class="fas fa-chalkboard-user"></i> The room</div>
+          <div class="mini">
+            <div class="mini-title">A working engine, inside the slide</div>
+            <img src="../assets/otto-engine/poster.webp" alt="">
+          </div>
+          <div class="view-gets">A big picture and a title. <b>You do the talking.</b></div>
         </div>
-        <div class="dmock guide">
-          <div class="dmock-mode"><i class="fas fa-book-open"></i> guide</div>
-          <div class="dmock-stat">&minus;66.7 &rarr; +4.5</div>
-          <div class="dmock-prose">That&rsquo;s AILANG&rsquo;s LoCoBench delta against Python between v0.6 and v0.9 &mdash; the point where an AI&#8209;first language stopped being a toy.</div>
-          <div class="dmock-who">What the link shows a stranger. The sentence is written down.</div>
+        <div class="view cold">
+          <div class="view-head"><i class="fas fa-link"></i> The link, later</div>
+          <div class="mini">
+            <div class="mini-title">A working engine, inside the slide</div>
+            <img src="../assets/otto-engine/poster.webp" alt="">
+            <div class="mini-note">A teaching tool from AIPLA. An AI agent built it from a physics brief and written drawing rules.</div>
+          </div>
+          <div class="view-gets">The same slide, <b>plus the words you said out loud.</b></div>
+        </div>
+        <div class="view pdf">
+          <div class="view-head"><i class="fas fa-file-pdf"></i> The PDF</div>
+          <div class="mini page">
+            <div class="mini-title">A working engine, inside the slide</div>
+            <img src="../assets/otto-engine/poster.webp" alt="">
+            <div class="mini-note">A teaching tool from AIPLA. An AI agent built it from a physics brief and written drawing rules.</div>
+            <span class="mini-pg">p.&nbsp;22</span>
+          </div>
+          <div class="view-gets">A still picture and the notes. <b>Easy to keep and forward.</b></div>
         </div>
       </div>
-      <div class="density-mech">
-<div class="code"><span class="cm">/* the entire hiding mechanism */</span>
-html[<span class="fx-name">data-density</span>=<span class="str">"stage"</span>] .<span class="fn-name">detail</span> { display: none }
-
-<span class="cm">// and the line that picks the default for you</span>
-root.<span class="fn-name">setAttribute</span>(<span class="str">'data-density'</span>, embedded ? <span class="str">'stage'</span> : <span class="str">'guide'</span>);</div>
-      </div>
-      <div class="press-d"><i class="fas fa-hand-pointer"></i> press <span class="keycap">D</span> now &mdash; every slide in this talk has both</div>
+      <div class="press-d"><i class="fas fa-hand-pointer"></i> press <span class="keycap">D</span> now. Every slide in this talk has both.</div>
       <p class="detail">
-        Take&#8209;home prose lives in <code>class="detail"</code>, and the default is chosen by
-        context: inside the presenter it&rsquo;s <em>stage</em>, opened directly by a stranger
-        it&rsquo;s <em>guide</em>. Same file, same URL, no second artefact to maintain.
-        <strong>The paragraph you are reading right now only exists because you pressed D</strong>
-        &mdash; on the projector, this slide is a comparison and nothing else.
+        This is the engine slide from section&nbsp;5, as each reader gets it. It is one file.
+        The extra words sit in hidden <em>detail</em> text. On stage they are hidden. Open the link
+        yourself and they show. The PDF is the same view, saved as pages.
+        <strong>You can read this only because detail is switched on.</strong>
       </p>
     </section>
 
     <!-- ═══════════ 6.3 The PDF ═══════════ -->
     <section class="slide" data-slide="2">
-      <span class="slide-tag"><i class="fas fa-file-pdf"></i> The handover</span>
-      <h1 class="slide-title">The PDF is <span class="accent">generated</span>, not exported</h1>
-      <div class="pdf-why">
-        <div class="pdf-row no">
-          <i class="fas fa-xmark"></i>
-          <span><b>It can&rsquo;t be a print stylesheet.</b> Slides are stacked absolutely with only one visible, revealed by animation from <code>opacity:0</code>, and some build up over several presses. A static print captures none of that.</span>
+      <span class="slide-tag"><i class="fas fa-file-pdf"></i> The PDF</span>
+      <h1 class="slide-title">The PDF comes from the <span class="accent">live deck</span></h1>
+      <div class="pdf-flow">
+        <div class="pdf-step">
+          <i class="fas fa-display"></i>
+          <div class="pdf-step-what">The live deck</div>
+          <div class="pdf-step-sub">the same slide list as this talk</div>
         </div>
-        <div class="pdf-row yes">
-          <i class="fas fa-check"></i>
-          <span><b>So drive the real deck.</b> Headless Chrome opens it, walks every slide to its final revealed state, screenshots at 1920&times;1080, and assembles the pages.</span>
+        <i class="fas fa-arrow-right pdf-arrow"></i>
+        <div class="pdf-step">
+          <i class="fas fa-camera"></i>
+          <div class="pdf-step-what">A script photographs it</div>
+          <div class="pdf-step-sub">every slide, fully built</div>
         </div>
-        <div class="pdf-row yes">
-          <i class="fas fa-check"></i>
-          <span><b>Order comes from the same PLAYLIST as the live talk</b> &mdash; so the PDF cannot drift from what you actually presented. That&rsquo;s not a nice&#8209;to&#8209;have; it&rsquo;s the thing that makes it survive.</span>
+        <i class="fas fa-arrow-right pdf-arrow"></i>
+        <div class="pdf-step out">
+          <i class="fas fa-file-pdf"></i>
+          <div class="pdf-step-what">The PDF</div>
+          <div class="pdf-step-sub">plus the notes I said out loud</div>
         </div>
       </div>
-      <div class="pdf-cmd">
-<div class="code"><span class="prompt">$</span> node export-pdf.mjs death-by-powerpoint <span class="flag">--density=guide</span>
-  <span class="cm">→ death-by-powerpoint.pdf — with the take-home prose included</span></div>
-      </div>
+      <p class="pdf-line">One command. <strong>The PDF always matches the talk.</strong></p>
       <p class="detail">
-        And note what <code>--density=guide</code> does for the person who emailed you: they asked
-        for the slides and they get <em>the slides plus the sentences you said out loud</em>.
-        <strong>Better than what they asked for, from the same source file, for free.</strong>
+        The command is <code>node export-pdf.mjs death-by-powerpoint --density=guide</code>.
+        A normal print can&rsquo;t do this, because the slides animate in. So the script opens
+        the real deck in Chrome and takes a picture of each finished slide.
+        <strong>Whoever asked for the slides gets them, plus what I said.</strong>
       </p>
     </section>
 
     <!-- ═══════════ 6.4 The URL is the artefact ═══════════ -->
     <section class="slide" data-slide="3">
       <span class="slide-tag"><i class="fas fa-globe"></i> Where it lives</span>
-      <h1 class="slide-title">The deck doesn&rsquo;t get <span class="dim">attached</span>.<br>It gets <span class="accent">deployed</span>.</h1>
+      <h1 class="slide-title">Don&rsquo;t <span class="dim">attach</span> the deck.<br><span class="accent">Put it online</span>.</h1>
       <div class="artefact">
         <i class="fas fa-link"></i>
         <div class="artefact-url">sunholo.com/presentations<span>/death-by-powerpoint/</span></div>
       </div>
       <p class="detail">
-        It&rsquo;s a static site, so it costs nothing to host and it will still open in ten years
-        &mdash; no runtime to patch, no database, no login. <strong>This one will be live before the
-        Q&amp;A finishes</strong>, which is a promise I can make because publishing is a git push
-        and nothing else.
+        It is just plain web files, so hosting costs nothing. It will still open in ten years.
+        No server to update, no database, no login. <strong>This deck will be online before the
+        Q&amp;A ends.</strong> Publishing is one git push, so I can promise that.
       </p>
     </section>
     </div><!-- /slides-stage -->

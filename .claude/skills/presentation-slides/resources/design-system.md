@@ -2,6 +2,8 @@
 
 > **Slide canvas:** 16:9 stage at 1920×1080, letterboxed inside `.slides-viewport`. Use container query units (`cqi` / `cqb`) for type and padding so they scale with the stage. Full details in the parent SKILL.md → "Slide Canvas & Dimensions".
 
+> **Brand alignment:** `--orange`, `--text` and `--text-dim` in the light theme, and `--bg`, match the current sunholo.com tokens (`Action orange #BD3012`, `Ink #2C3E50`, `Muted slate #526677`, `Pale ground #F6F8FA` — see https://www.sunholo.com/assets.html#colours). The dark theme (default) is this skill's own presentation mode for projected talks — sunholo.com doesn't define a dark palette, so `--bg`/`--surface`/`--surface-hi`/`--text`/`--text-dim` there are this skill's own values; only its orange (`#E73C17`) and sans font (Montserrat) are brand tokens. `--green`/`--red`/`--amber`/`--gray` and any deck-local accents (e.g. indigo, teal) are semantic colours for diagrams, outside the 8-colour brand palette — keep them to genuine technical/comparison visuals, per the brand guide's "Actions, diagrams and motion" section. `--mono` (JetBrains Mono) is a deliberate legibility choice for code-heavy slides; the brand guide's generic fallback is "a system monospace font".
+
 ## CSS Variables
 
 ### Dark Theme (default `:root`)
@@ -39,12 +41,12 @@
 
 ```css
 [data-theme="light"]{
-  --bg:#f5f5f0;
+  --bg:#f6f8fa;
   --surface:#ffffff;
   --surface-hi:#f0f0ea;
-  --orange:#d4300f;
-  --orange-dim:rgba(212,48,15,.2);
-  --orange-glow:rgba(212,48,15,.4);
+  --orange:#bd3012;
+  --orange-dim:rgba(189,48,18,.2);
+  --orange-glow:rgba(189,48,18,.4);
   --green:#16a34a;
   --green-dim:rgba(22,163,74,.1);
   --red:#dc2626;
@@ -53,8 +55,8 @@
   --amber-dim:rgba(217,119,6,.1);
   --gray:#8896a4;
   --ghost:rgba(0,0,0,.1);
-  --text:#1a202c;
-  --text-dim:#4a5568;
+  --text:#2c3e50;
+  --text-dim:#526677;
   --code-bg:rgba(0,0,0,.03);
   --code-border:rgba(0,0,0,.08);
   --row-alt:rgba(0,0,0,.025);
@@ -79,7 +81,7 @@ body{
 /* Light */
 [data-theme="light"] body{
   background-image:
-    radial-gradient(circle at 50% 50%, rgba(212,48,15,.03) 0%, transparent 70%),
+    radial-gradient(circle at 50% 50%, rgba(189,48,18,.03) 0%, transparent 70%),
     linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
   background-size: 100% 100%, 60px 60px, 60px 60px;

@@ -233,22 +233,21 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   const PLAYLIST = [
     { src: '../about-mark/about-mark.html',                            label: 'Who',              minutes: 1,  group: 'Open' },      // reused
     { src: '00-death-by-powerpoint.html',                             label: '1 · Death by PPT', minutes: 4,  group: 'Open' },
-    { src: '01-generate-the-medium.html',                             label: '2 · The Medium',   minutes: 7,  group: 'Argument' },
+    { src: '01-generate-the-medium.html',                             label: '2 · The Medium',   minutes: 6,  group: 'Argument' },
     { src: '02-teaching-taste.html',                                  label: '3 · Taste + Lint', minutes: 8,  group: 'Argument' },
-    { src: '03-live-build.html',                                      label: '4 · Live Build',   minutes: 11, group: 'Demo' },
-    { src: '04-beyond-slide-software.html',                           label: '5 · Beyond Slides',minutes: 4,  group: 'Exhibits' },
-    { src: '../ai-slaves-human-masters-ida/01-entropy-explorer.html', label: 'A · Interactive',  minutes: 2,  group: 'Exhibits' },  // reused
+    { src: '03-live-build.html',                                      label: '4 · Live Build',   minutes: 12, group: 'Demo' },
+    { src: '04-beyond-slide-software.html',                           label: '5 · Beyond Slides',minutes: 5,  group: 'Exhibits' },
     { src: '../ai-slaves-human-masters-ida/03-development-loop.html', label: 'B · Animated',     minutes: 1,  group: 'Exhibits' },  // reused
-    { src: '../ai-slaves-human-masters-ida/05-benchmarks-motoko.html',label: 'C · Real Data',    minutes: 2,  group: 'Exhibits' },  // reused
     { src: '05-three-audiences.html',                                 label: '6 · 3 Audiences',  minutes: 6,  group: 'Payoff' },
-    { src: '06-whats-next.html',                                      label: '7 · What\u2019s Next',  minutes: 3,  group: 'Payoff' },
-    { src: '07-steal-this.html',                                      label: '8 · Steal This',   minutes: 3,  group: 'Payoff' },
+    { src: '07-steal-this.html',                                      label: '7 · Steal This',   minutes: 2,  group: 'Payoff' },
     { src: '../contact-mark/contact-mark.html',                       label: 'Contact',          minutes: 0,  group: 'Close' },     // reused
   ];
 
   // Downloadable PDF for this talk, produced by `node scripts/export-pdf.mjs <folder>`.
   // Set to null when there's no PDF — the button hides itself.
+  // PDF_LIGHT (from `--theme=light`) is offered while the light theme is on.
   const PDF = 'death-by-powerpoint.pdf';
+  const PDF_LIGHT = 'death-by-powerpoint-light.pdf';
 
   // ═══════════════════════════════════════════════════════════════
 
@@ -279,6 +278,11 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 
   const pdfBtn = document.getElementById('pdfBtn');
   if (PDF && CFG.pdf) { pdfBtn.href = PDF; pdfBtn.style.display = ''; }
+  // Pick the PDF at click time so it matches whatever theme is on screen.
+  pdfBtn.addEventListener('click', () => {
+    const light = document.documentElement.getAttribute('data-theme') === 'light';
+    pdfBtn.href = light && PDF_LIGHT ? PDF_LIGHT : PDF;
+  });
   if (!CFG.picker) document.getElementById('deckPicker').style.display = 'none';
   if (!CFG.density) document.getElementById('densityToggle').style.display = 'none';
   if (!CFG.timer) {
@@ -402,10 +406,22 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     }
   });
 
+  // Focus starts on this page, not in a deck, and returns here whenever a
+  // toolbar button is clicked. Decks only hear keys pressed inside them, so
+  // hand the slide keys to the deck on screen and move focus into it.
+  const SLIDE_KEYS = ['ArrowRight', 'ArrowLeft', ' ', 'PageDown', 'PageUp'];
   document.addEventListener('keydown', e => {
     if (e.key === 'ArrowDown') { e.preventDefault(); switchDeck(currentDeck + 1, false); }
     if (e.key === 'ArrowUp') { e.preventDefault(); switchDeck(currentDeck - 1, true); }
+    if (SLIDE_KEYS.includes(e.key) && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      if (e.target && (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable)) return;
+      e.preventDefault();
+      const frame = frames[currentDeck];
+      try { frame.contentDocument.dispatchEvent(new KeyboardEvent('keydown', { key: e.key, bubbles: true })); } catch (_) {}
+      frame.contentWindow.focus();
+    }
   });
+  frames[0].addEventListener('load', () => { if (currentDeck === 0) frames[0].contentWindow.focus(); });
 
   viewport.addEventListener('click', () => {
     const frame = frames[currentDeck];

@@ -397,10 +397,22 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     }
   });
 
+  // Focus starts on this page, not in a deck, and returns here whenever a
+  // toolbar button is clicked. Decks only hear keys pressed inside them, so
+  // hand the slide keys to the deck on screen and move focus into it.
+  const SLIDE_KEYS = ['ArrowRight', 'ArrowLeft', ' ', 'PageDown', 'PageUp'];
   document.addEventListener('keydown', e => {
     if (e.key === 'ArrowDown') { e.preventDefault(); switchDeck(currentDeck + 1, false); }
     if (e.key === 'ArrowUp') { e.preventDefault(); switchDeck(currentDeck - 1, true); }
+    if (SLIDE_KEYS.includes(e.key) && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      if (e.target && (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable)) return;
+      e.preventDefault();
+      const frame = frames[currentDeck];
+      try { frame.contentDocument.dispatchEvent(new KeyboardEvent('keydown', { key: e.key, bubbles: true })); } catch (_) {}
+      frame.contentWindow.focus();
+    }
   });
+  frames[0].addEventListener('load', () => { if (currentDeck === 0) frames[0].contentWindow.focus(); });
 
   viewport.addEventListener('click', () => {
     const frame = frames[currentDeck];

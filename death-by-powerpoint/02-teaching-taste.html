@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Teaching the Agent Taste — Design System __TITLE__amp; Linter</title>
+<title>Teaching the Agent Taste — Design System &amp; Linter</title>
 <link rel="icon" type="image/svg+xml" href="/sunholo-logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -245,58 +245,109 @@ html[data-density="stage"] .detail{display:none}
 }
 .rules-note em{color:var(--orange);font-style:normal;font-weight:700}
 
-.ba{display:flex;flex-direction:column;gap:1.4cqb;width:100%;max-width:80%}
-.ba-row{display:flex;flex-direction:column;gap:.6cqb;opacity:0}
-.slide.active .ba-row:nth-child(1){animation:fadeSlideUp .5s ease .15s both}
-.slide.active .ba-row:nth-child(2){animation:fadeSlideUp .5s ease .45s both}
-.ba-head{
-  font-family:var(--mono);font-size:clamp(9px,1.15cqi,14px);font-weight:700;
-  letter-spacing:.06em;display:flex;align-items:center;gap:.8cqi;
-}
-.ba-row.wrong .ba-head{color:var(--red)}
-.ba-row.right .ba-head{color:var(--green)}
-.ba-row.wrong .code{border-color:var(--red-dim);background:var(--red-dim)}
-.ba-row.right .code{border-color:var(--green-dim);background:var(--green-dim)}
-.ba-why{font-size:clamp(10px,1.35cqi,17px);color:var(--text-dim);line-height:1.45}
 
-.lint{display:flex;gap:2.2cqi;width:100%;max-width:92%;align-items:stretch}
-.lint-col{flex:1;min-width:0;display:flex;flex-direction:column;gap:1cqb;opacity:0}
-.slide.active .lint-col:nth-child(1){animation:fadeSlideUp .5s ease .15s both}
-.slide.active .lint-col:nth-child(2){animation:fadeSlideUp .5s ease .45s both}
-.lint-head{
-  font-family:var(--mono);font-size:clamp(9px,1.15cqi,14px);font-weight:700;
-  letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);
-  display:flex;align-items:center;gap:.8cqi;
-}
-.lint-head i{color:var(--orange)}
-.lint-col .code{flex:1;font-size:clamp(7px,1.02cqi,14px);line-height:1.55}
-.term{
-  font-family:var(--mono);white-space:pre;flex:1;
-  background:#0a0a12;border:1px solid var(--code-border);border-radius:10px;
-  padding:2cqb 2.2cqi;font-size:clamp(7px,1.02cqi,14px);line-height:1.6;
-  color:#cbd5e1;overflow:hidden;text-align:left;
-}
-[data-theme="light"] .term{background:#1a1a2e;color:#e2e8f0}
-.term .ok{color:#22c55e}
-.term .err{color:#ef4444;font-weight:700}
-.term .dimt{color:#64748b}
-.term .path{color:#f59e0b}
+/* ─── Section 3 rebuild: skills for non-coders ─── */
+.words-tag{color:var(--indigo);border-color:var(--indigo-dim);background:var(--indigo-dim)}
+.tmpl-tag{color:var(--amber);border-color:var(--amber-dim);background:var(--amber-dim)}
+.check-tag{color:var(--green);border-color:var(--green-dim);background:var(--green-dim)}
 
-.principle{display:flex;gap:3cqi;align-items:stretch;justify-content:center;width:100%;max-width:80%}
-.principle-half{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:1.2cqb;
-  padding:3cqb 2.4cqi;border-radius:14px;background:var(--surface);
-  border:1px solid var(--ghost);opacity:0;
+.skill-flow{display:flex;align-items:center;justify-content:center;gap:1.6cqi;width:100%;max-width:94%}
+.sf-card{
+  flex:0 0 22%;display:flex;flex-direction:column;align-items:center;text-align:center;gap:1.2cqb;
+  padding:3cqb 1.6cqi;border-radius:14px;background:var(--surface);border:1px solid var(--ghost);opacity:0;
 }
-.slide.active .principle-half:nth-child(1){animation:fadeSlideUp .5s ease .2s both}
-.slide.active .principle-half:nth-child(2){animation:fadeSlideUp .5s ease .5s both}
-.principle-half i{font-size:clamp(20px,3.2cqi,42px)}
-.principle-half.taste{border-top:3px solid var(--indigo)}
-.principle-half.taste i{color:var(--indigo)}
-.principle-half.physics{border-top:3px solid var(--green)}
-.principle-half.physics i{color:var(--green)}
-.principle-what{font-size:clamp(16px,2.6cqi,34px);font-weight:800;letter-spacing:-.02em}
-.principle-how{font-size:clamp(11px,1.45cqi,18px);color:var(--text-dim);line-height:1.5;text-align:center}
+.sf-card > i{font-size:clamp(20px,3cqi,40px);color:var(--text-dim)}
+.sf-what{font-size:clamp(13px,1.9cqi,24px);font-weight:700}
+.sf-quote{font-size:clamp(11px,1.45cqi,18px);color:var(--text-dim);line-height:1.45}
+.sf-arrow{font-size:clamp(14px,2.2cqi,28px);color:var(--orange);flex:none}
+.sf-folder{
+  flex:1;display:flex;flex-direction:column;gap:1.1cqb;padding:2.4cqb 2cqi;border-radius:14px;
+  background:var(--surface);border:1px solid var(--orange-dim);opacity:0;
+}
+.sf-folder-name{font-family:var(--mono);font-weight:700;font-size:clamp(11px,1.5cqi,19px);color:var(--orange);margin-bottom:.4cqb}
+.sf-file{display:flex;flex-direction:column;gap:.2cqb;padding-left:1.2cqi;border-left:3px solid var(--ghost)}
+.sf-file span:last-child{font-size:clamp(10px,1.35cqi,17px);color:var(--text)}
+.sf-fn{font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);color:var(--text-dim)}
+.sf-file.words{border-left-color:var(--indigo)}
+.sf-file.tmpl{border-left-color:var(--amber)}
+.sf-file.check{border-left-color:var(--green)}
+.sf-line{font-size:clamp(13px,2cqi,25px);color:var(--text-dim)}
+.sf-line strong{color:var(--text)}
+.slide.active .sf-card:nth-of-type(1){animation:fadeSlideUp .45s ease .15s both}
+.slide.active .sf-card:nth-of-type(2){animation:fadeSlideUp .45s ease .35s both}
+.slide.active .sf-folder{animation:fadeSlideUp .45s ease .55s both}
+
+.three{display:flex;gap:2.2cqi;width:100%;max-width:90%;align-items:stretch}
+.three-col{
+  flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:1.3cqb;
+  padding:3.4cqb 2cqi;border-radius:14px;background:var(--surface);border:1px solid var(--ghost);
+  border-top:4px solid var(--c);opacity:0;
+}
+.three-col.words{--c:var(--indigo)}
+.three-col.tmpl{--c:var(--amber)}
+.three-col.check{--c:var(--green)}
+.three-col > i{font-size:clamp(22px,3.4cqi,44px);color:var(--c)}
+.three-what{font-size:clamp(16px,2.5cqi,32px);font-weight:800;letter-spacing:-.02em}
+.three-for{font-family:var(--mono);font-size:clamp(9px,1.2cqi,15px);text-transform:uppercase;letter-spacing:.1em;color:var(--c);font-weight:700}
+.three-eg{font-size:clamp(11px,1.5cqi,19px);color:var(--text);line-height:1.45;flex:1}
+.three-how{font-size:clamp(10px,1.3cqi,16px);color:var(--text-dim);border-top:1px solid var(--ghost);padding-top:1.2cqb;width:100%}
+.slide.active .three-col:nth-child(1){animation:fadeSlideUp .45s ease .15s both}
+.slide.active .three-col:nth-child(2){animation:fadeSlideUp .45s ease .35s both}
+.slide.active .three-col:nth-child(3){animation:fadeSlideUp .45s ease .55s both}
+
+.tmpl-flow{display:flex;align-items:center;justify-content:center;gap:2.4cqi;width:100%;max-width:90%}
+.tmpl-card{
+  flex:0 0 32%;display:flex;flex-direction:column;gap:1.3cqb;padding:3cqb 2.2cqi;border-radius:14px;
+  background:var(--surface);border:1px solid var(--ghost);border-top:4px solid var(--amber);opacity:0;
+}
+.tmpl-head{font-size:clamp(13px,1.9cqi,24px);font-weight:700;display:flex;gap:1cqi;align-items:center}
+.tmpl-head i{color:var(--amber)}
+.tmpl-item{font-size:clamp(11px,1.45cqi,18px);color:var(--text);display:flex;gap:1cqi;align-items:baseline}
+.tmpl-item i{color:var(--green);font-size:.85em}
+.tmpl-mid{display:flex;flex-direction:column;align-items:center;gap:1.2cqb;text-align:center;
+  font-family:var(--mono);font-size:clamp(9px,1.15cqi,14px);color:var(--text-dim);line-height:1.5}
+.tmpl-out{flex:1;display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2cqi;align-items:center}
+.tmpl-out .mock{opacity:0}
+.tmpl-out-label{grid-column:1/-1;text-align:center;font-family:var(--mono);font-size:clamp(9px,1.15cqi,14px);
+  color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em}
+.slide.active .tmpl-card{animation:fadeSlideUp .45s ease .15s both}
+.slide.active .tmpl-out .mock:nth-child(1){animation:fadeSlideUp .45s ease .45s both}
+.slide.active .tmpl-out .mock:nth-child(2){animation:fadeSlideUp .45s ease .6s both}
+.slide.active .tmpl-out .mock:nth-child(3){animation:fadeSlideUp .45s ease .75s both}
+
+.loop{display:flex;align-items:stretch;justify-content:center;gap:1.1cqi;width:100%;max-width:94%}
+.loop-step{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:1.2cqb;
+  padding:2.8cqb 1.2cqi;border-radius:12px;background:var(--surface);border:1px solid var(--ghost);
+  font-size:clamp(10px,1.4cqi,18px);line-height:1.4;opacity:0;
+}
+.loop-step > i{font-size:clamp(16px,2.4cqi,30px);color:var(--text-dim)}
+.loop-step.fail{border-color:var(--red-dim);background:var(--red-dim)}
+.loop-step.fail > i{color:var(--red)}
+.loop-step.pass{border-color:var(--green-dim);background:var(--green-dim)}
+.loop-step.pass > i{color:var(--green)}
+.loop-arrow{align-self:center;color:var(--orange);font-size:clamp(11px,1.6cqi,20px);flex:none}
+.loop-line{font-size:clamp(13px,2cqi,25px);color:var(--text-dim);text-align:center}
+.loop-line strong{color:var(--text)}
+.slide.active .loop-step:nth-of-type(1){animation:fadeSlideUp .4s ease .1s both}
+.slide.active .loop-step:nth-of-type(2){animation:fadeSlideUp .4s ease .3s both}
+.slide.active .loop-step:nth-of-type(3){animation:fadeSlideUp .4s ease .5s both}
+.slide.active .loop-step:nth-of-type(4){animation:fadeSlideUp .4s ease .7s both}
+.slide.active .loop-step:nth-of-type(5){animation:fadeSlideUp .4s ease .9s both}
+
+.decide{display:grid;grid-template-columns:auto auto;gap:2cqb 3cqi;align-items:center;max-width:86%}
+.dq{font-size:clamp(14px,2.1cqi,27px);font-weight:600;text-align:right}
+.d-yes{display:flex;align-items:center;gap:1.4cqi;color:var(--text-dim);font-size:clamp(12px,1.7cqi,22px)}
+.d-tag{font-family:var(--mono);font-size:clamp(9px,1.15cqi,14px);text-transform:uppercase;letter-spacing:.1em;min-width:3cqi}
+.d-ans{min-width:22cqi;display:inline-flex;align-items:center;gap:1cqi;padding:1.3cqb 1.8cqi;border-radius:10px;font-weight:700;
+  font-size:clamp(13px,1.9cqi,24px);background:var(--surface);border:1px solid var(--ghost);border-left:4px solid var(--c);color:var(--text)}
+.d-ans i{color:var(--c)}
+.d-ans.words{--c:var(--indigo)}
+.d-ans.tmpl{--c:var(--amber)}
+.d-ans.check{--c:var(--green)}
+.slide.active .decide > *{animation:fadeSlideUp .45s ease both}
+.slide.active .decide > :nth-child(n+3){animation-delay:.3s}
+.slide.active .decide > :nth-child(n+5){animation-delay:.6s}
 </style>
 </head>
 <body>
@@ -397,7 +448,7 @@ html[data-density="stage"] .detail{display:none}
           </div>
         </div>
         <div class="drift-row good">
-          <div class="drift-label"><i class="fas fa-check"></i> Same prompt, design system in the repo</div>
+          <div class="drift-label"><i class="fas fa-check"></i> Same prompt, using the slides skill</div>
           <div class="mocks">
             <div class="mock house"><div class="mock-bar sm"></div><div class="mock-bar lg"></div><div class="mock-bar md"></div></div>
             <div class="mock house"><div class="mock-bar sm"></div><div class="mock-bar lg"></div><div class="mock-bar md"></div></div>
@@ -406,123 +457,170 @@ html[data-density="stage"] .detail{display:none}
         </div>
       </div>
       <p class="detail">
-        A deck isn&rsquo;t eleven images. It&rsquo;s <strong>one thing, seen eleven times</strong> &mdash;
-        and drift is what makes an AI&#8209;built deck feel cheap. Left alone, a model regresses to the
-        mean of its training data: gradient hero, three cards, a stock icon. It&rsquo;s fine.
+        A deck is not eleven separate pictures. It is <strong>one thing, seen eleven times</strong>.
+        If every slide looks a bit different, an AI&#8209;built deck feels cheap. With no guidance,
+        the model makes the average slide: a colour gradient, three boxes, a stock icon. It looks fine.
         <em>Fine is the problem.</em>
       </p>
     </section>
 
-    <!-- ═══════════ 3.2 A design system written in prose ═══════════ -->
+    <!-- ═══════════ 3.2 What a skill is ═══════════ -->
     <section class="slide" data-slide="1">
-      <span class="slide-tag"><i class="fas fa-feather"></i> Guidance, in English</span>
-      <h1 class="slide-title">The design system is a <span class="accent">document</span>, not a config file</h1>
+      <span class="slide-tag"><i class="fas fa-folder-open"></i> Claude Code skills</span>
+      <h1 class="slide-title">A skill is a <span class="accent">folder of know&#8209;how</span></h1>
+      <div class="skill-flow">
+        <div class="sf-card">
+          <i class="fas fa-user"></i>
+          <div class="sf-what">You ask</div>
+          <div class="sf-quote">&ldquo;Make me a slide about our Q3 results.&rdquo;</div>
+        </div>
+        <i class="fas fa-arrow-right sf-arrow"></i>
+        <div class="sf-card">
+          <i class="fas fa-robot"></i>
+          <div class="sf-what">Claude Code</div>
+          <div class="sf-quote">&ldquo;That&rsquo;s a slides job. I&rsquo;ll open the slides skill.&rdquo;</div>
+        </div>
+        <i class="fas fa-arrow-right sf-arrow"></i>
+        <div class="sf-folder">
+          <div class="sf-folder-name"><i class="fas fa-folder-open"></i> presentation-slides/</div>
+          <div class="sf-file"><span class="sf-fn">SKILL.md</span><span>when to use it, and the steps</span></div>
+          <div class="sf-file words"><span class="sf-fn">design-system.md</span><span>our look, in plain words</span></div>
+          <div class="sf-file tmpl"><span class="sf-fn">boilerplate.md</span><span>a deck that already works</span></div>
+          <div class="sf-file check"><span class="sf-fn">lint-slides.mjs</span><span>automatic checks</span></div>
+        </div>
+      </div>
+      <p class="sf-line">Write it once. <strong>Every request after that uses it.</strong></p>
+      <p class="detail">
+        A skill is a folder of instructions for Claude Code. The first lines say what it is for.
+        When your request matches, Claude opens the folder and follows it. The instructions are
+        plain English, so you don&rsquo;t need to code to write one.
+      </p>
+    </section>
+
+    <!-- ═══════════ 3.3 Three things inside ═══════════ -->
+    <section class="slide" data-slide="2">
+      <span class="slide-tag"><i class="fas fa-layer-group"></i> Inside the skill</span>
+      <h1 class="slide-title">Three things keep every slide <span class="accent">the same</span></h1>
+      <div class="three">
+        <div class="three-col words">
+          <i class="fas fa-feather"></i>
+          <div class="three-what">Rules in words</div>
+          <div class="three-for">for taste</div>
+          <div class="three-eg">&ldquo;Orange is for emphasis. Never overused.&rdquo;</div>
+          <div class="three-how">The AI uses judgement</div>
+        </div>
+        <div class="three-col tmpl">
+          <i class="fas fa-clone"></i>
+          <div class="three-what">Templates</div>
+          <div class="three-for">for structure</div>
+          <div class="three-eg">&ldquo;Start from a deck that already works.&rdquo;</div>
+          <div class="three-how">Never a blank page</div>
+        </div>
+        <div class="three-col check">
+          <i class="fas fa-circle-check"></i>
+          <div class="three-what">Automatic checks</div>
+          <div class="three-for">for hard rules</div>
+          <div class="three-eg">&ldquo;Text falls off the slide? Fail.&rdquo;</div>
+          <div class="three-how">Same answer every time</div>
+        </div>
+      </div>
+      <p class="detail">
+        Each part does a different job. Words guide the AI where taste matters. A template
+        means it never starts from scratch. Checks catch the mistakes that must never reach
+        the screen. You need all three.
+      </p>
+    </section>
+
+    <!-- ═══════════ 3.4 Rules in words ═══════════ -->
+    <section class="slide" data-slide="3">
+      <span class="slide-tag words-tag"><i class="fas fa-feather"></i> 1 &middot; Rules in words</span>
+      <h1 class="slide-title">Write your taste down in <span class="accent">plain words</span></h1>
       <div class="rules">
         <div class="rules-src"><i class="fas fa-file-lines"></i> excerpt &middot; .claude/skills/presentation-slides/SKILL.md</div>
         <div class="rule-line"><span><span class="swatch"></span><b>Orange accent</b> (<code>#e73c17</code> dark / <code>#bd3012</code> light) for emphasis, <b>never overused</b>.</span></div>
         <div class="rule-line"><span><b>Montserrat</b> for all text, <b>JetBrains Mono</b> for code and data.</span></div>
         <div class="rule-line"><span>Subtle grid background at 60px intervals. Always support dark and light.</span></div>
         <div class="rules-note">
-          &ldquo;Never overused&rdquo; is not a number. It&rsquo;s a <em>judgement</em> &mdash; and
-          judgement is exactly what the model is good at. So write it in the language judgement
-          comes in.
+          &ldquo;Never overused&rdquo; is not a number. It needs <em>judgement</em>, and the AI is good at that.
         </div>
       </div>
       <p class="detail">
-        Anyone in this webinar can write this document about their own brand this afternoon. It is
-        the brand guidelines you already have, addressed for the first time to a reader who will
-        actually follow them. <strong>This is the takeaway even if you never write a line of HTML
-        &mdash; a written design system is how you get consistent output from any agent, doing
-        anything.</strong>
+        This is the brand guide you already have. The difference is that this reader actually
+        follows it. <strong>You can write one for your own brand this afternoon.</strong> It works
+        for any AI task, not only slides.
       </p>
     </section>
 
-    <!-- ═══════════ 3.3 The rule that earns its keep ═══════════ -->
-    <section class="slide" data-slide="2">
-      <span class="slide-tag"><i class="fas fa-ruler-combined"></i> One rule, most of the value</span>
-      <h1 class="slide-title">Never measure against the <span class="dim">window</span>.<br>Measure against the <span class="accent">slide</span>.</h1>
-      <div class="ba">
-        <div class="ba-row wrong">
-          <div class="ba-head"><i class="fas fa-xmark"></i> WRONG &mdash; sized against the browser window</div>
-<div class="code"><span class="fn-name">max-height</span>: <span class="bad">calc(100vh - 320px)</span>;   <span class="cm">/* guesses the chrome height */</span></div>
-          <div class="ba-why">On a tall window the slide&rsquo;s content runs off the bottom of the stage. No scrollbar appears. You find out on the projector.</div>
-        </div>
-        <div class="ba-row right">
-          <div class="ba-head"><i class="fas fa-check"></i> RIGHT &mdash; sized against the 16:9 stage</div>
-<div class="code"><span class="fn-name">max-height</span>: <span class="good">70cqb</span>;                 <span class="cm">/* 70% of the slide's height */</span></div>
-          <div class="ba-why">Every deck is a fixed 16:9 stage, letterboxed to fit whatever it&rsquo;s shown on. Design once; it looks the same everywhere.</div>
-        </div>
-      </div>
-      <p class="detail">
-        <code>cqb</code> means <em>1% of the slide&rsquo;s height</em>. That is the whole
-        explanation, and it is the single highest&#8209;value rule in the system: it fixes the
-        failure everyone in this webinar has watched happen live &mdash; content sliding off the
-        bottom edge on a projector with the wrong aspect ratio.
-      </p>
-    </section>
-
-    <!-- ═══════════ 3.4 The linter ═══════════ -->
-    <section class="slide" data-slide="3">
-      <span class="slide-tag"><i class="fas fa-shield-halved"></i> Keeping it honest</span>
-      <h1 class="slide-title">Written rules get followed <span class="dim">most of the time</span></h1>
-      <div class="lint">
-        <div class="lint-col">
-          <div class="lint-head"><i class="fas fa-gear"></i> .claude/settings.json</div>
-<div class="code"><span class="str">"PostToolUse"</span>: [{
-  <span class="str">"matcher"</span>: <span class="str">"Write|Edit|MultiEdit"</span>,
-  <span class="str">"hooks"</span>: [{
-    <span class="str">"type"</span>: <span class="str">"command"</span>,
-    <span class="str">"command"</span>: <span class="str">"node scripts/lint-slides.mjs"</span>
-  }]
-}]</div>
-        </div>
-        <div class="lint-col">
-          <div class="lint-head"><i class="fas fa-terminal"></i> what the agent sees</div>
-<div class="term"><span class="dimt">$</span> node lint-slides.mjs
-
-<span class="err">&#10007;</span> Slide stage-safe sizing violations:
-
-  <span class="path">02-teaching-taste.html:214</span>
-    rule:  <span class="err">calc-with-viewport</span>
-    line:  max-height:calc(100vh - 320px)
-    fix:   calc() with viewport units
-           double-counts chrome the stage
-           already excludes. Use cqb.
-
-<span class="err">1 violation(s).  exit 2</span>
-<span class="dimt">&hellip; agent reads this, fixes it, retries</span>
-<span class="ok">&#10003; clean</span></div>
-        </div>
-      </div>
-      <p class="detail">
-        Most of the time isn&rsquo;t good enough when the failure is invisible until you&rsquo;re on
-        stage. So the mechanical half gets enforced in code: the script scans every
-        <code>&lt;style&gt;</code> block, the hook runs it after <em>every</em> edit the agent makes,
-        non&#8209;zero exit, the agent fixes its own mistake. <strong>No human in that loop.</strong>
-        It only inspects the new text, so a legacy violation elsewhere doesn&rsquo;t block today&rsquo;s work.
-      </p>
-    </section>
-
-    <!-- ═══════════ 3.5 The general principle ═══════════ -->
+    <!-- ═══════════ 3.5 Templates ═══════════ -->
     <section class="slide" data-slide="4">
-      <span class="slide-tag"><i class="fas fa-scale-balanced"></i> Take this bit with you</span>
-      <h1 class="slide-title">Where to draw the <span class="accent">line</span></h1>
-      <div class="principle">
-        <div class="principle-half taste">
-          <i class="fas fa-feather"></i>
-          <div class="principle-what">Prose for taste</div>
-          <div class="principle-how">Anything needing judgement. &ldquo;Never overused.&rdquo; &ldquo;One idea per slide.&rdquo; Write it the way you&rsquo;d brief a designer.</div>
+      <span class="slide-tag tmpl-tag"><i class="fas fa-clone"></i> 2 &middot; Templates</span>
+      <h1 class="slide-title">Never start from a <span class="accent">blank page</span></h1>
+      <div class="tmpl-flow">
+        <div class="tmpl-card">
+          <div class="tmpl-head"><i class="fas fa-clone"></i> The template deck</div>
+          <div class="tmpl-item"><i class="fas fa-check"></i> the 16:9 slide shape</div>
+          <div class="tmpl-item"><i class="fas fa-check"></i> dark and light themes</div>
+          <div class="tmpl-item"><i class="fas fa-check"></i> keyboard and clicker keys</div>
+          <div class="tmpl-item"><i class="fas fa-check"></i> the presenter view and timer</div>
         </div>
-        <div class="principle-half physics">
-          <i class="fas fa-shield-halved"></i>
-          <div class="principle-what">Linter for physics</div>
-          <div class="principle-how">Anything mechanical and checkable. Forbidden units. Missing alt text. Contrast ratios. Fail loudly.</div>
+        <div class="tmpl-mid">
+          <i class="fas fa-arrow-right sf-arrow"></i>
+          <span>the AI copies it,<br>then writes only<br>the new content</span>
+        </div>
+        <div class="tmpl-out">
+          <div class="mock house"><div class="mock-bar sm"></div><div class="mock-bar lg"></div><div class="mock-bar md"></div></div>
+          <div class="mock house"><div class="mock-bar sm"></div><div class="mock-bar lg"></div><div class="mock-bar md"></div></div>
+          <div class="mock house"><div class="mock-bar sm"></div><div class="mock-bar lg"></div><div class="mock-bar md"></div></div>
+          <div class="tmpl-out-label">every new talk</div>
         </div>
       </div>
       <p class="detail">
-        Nothing in this split is about slides. <strong>Every agent workflow you build should be cut
-        along the same line</strong> &mdash; and the failure mode to watch for is trying to write
-        taste as a rule, or trusting prose to enforce physics.
+        The hard parts are solved once, in the template. The AI copies a deck that already
+        works and changes only the content. That is faster, and it can&rsquo;t forget the
+        theme switch or the keyboard keys.
+      </p>
+    </section>
+
+    <!-- ═══════════ 3.6 Automatic checks ═══════════ -->
+    <section class="slide" data-slide="5">
+      <span class="slide-tag check-tag"><i class="fas fa-circle-check"></i> 3 &middot; Automatic checks</span>
+      <h1 class="slide-title">A check gives <span class="accent">the same answer</span> every time</h1>
+      <div class="loop">
+        <div class="loop-step"><i class="fas fa-robot"></i><span>The AI edits a slide</span></div>
+        <i class="fas fa-arrow-right loop-arrow"></i>
+        <div class="loop-step"><i class="fas fa-bolt"></i><span>The check runs by itself</span></div>
+        <i class="fas fa-arrow-right loop-arrow"></i>
+        <div class="loop-step fail"><i class="fas fa-xmark"></i><span>&ldquo;Text is sized to the window, not the slide&rdquo;</span></div>
+        <i class="fas fa-arrow-right loop-arrow"></i>
+        <div class="loop-step"><i class="fas fa-wrench"></i><span>The AI fixes it</span></div>
+        <i class="fas fa-arrow-right loop-arrow"></i>
+        <div class="loop-step pass"><i class="fas fa-check"></i><span>Pass</span></div>
+      </div>
+      <p class="loop-line">A check is a tiny program. <strong>Same file in, same answer out.</strong> You can&rsquo;t talk it round.</p>
+      <p class="detail">
+        Written rules get followed most of the time. That is not enough when you only see the
+        mistake on stage. So the simple rules are checked by code, after every edit, with no
+        human in the loop. My example: text sized to the browser window falls off the bottom on
+        a projector. The check catches it every time.
+      </p>
+    </section>
+
+    <!-- ═══════════ 3.7 Which one do I use ═══════════ -->
+    <section class="slide" data-slide="6">
+      <span class="slide-tag"><i class="fas fa-signs-post"></i> Take this bit with you</span>
+      <h1 class="slide-title">Which one do <span class="accent">I use?</span></h1>
+      <div class="decide">
+        <div class="dq">Can a computer check it with a yes or no?</div>
+        <div class="d-yes"><span class="d-tag">yes</span><i class="fas fa-arrow-right"></i><span class="d-ans check"><i class="fas fa-circle-check"></i> Automatic check</span></div>
+        <div class="dq">Is it the same structure every time?</div>
+        <div class="d-yes"><span class="d-tag">yes</span><i class="fas fa-arrow-right"></i><span class="d-ans tmpl"><i class="fas fa-clone"></i> Template</span></div>
+        <div class="dq">Everything else</div>
+        <div class="d-yes"><span class="d-tag">&nbsp;</span><i class="fas fa-arrow-right"></i><span class="d-ans words"><i class="fas fa-feather"></i> Rules in words</span></div>
+      </div>
+      <p class="detail">
+        This works for any job you give an AI, not only slides. Reports, emails and contracts
+        all have taste, structure and hard rules. Two mistakes to avoid: don&rsquo;t turn taste
+        into a strict rule, and don&rsquo;t trust words alone for a hard rule.
       </p>
     </section>
     </div><!-- /slides-stage -->

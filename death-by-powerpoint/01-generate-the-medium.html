@@ -374,12 +374,12 @@ html[data-density="stage"] .detail{display:none}
         <div class="chain-step">
           <div class="chain-icon"><i class="fas fa-desktop"></i></div>
           <div class="chain-name">Their projector</div>
-          <div class="chain-loss">fonts substitute</div>
+          <div class="chain-loss">wrong fonts</div>
         </div>
         <div class="chain-step">
           <div class="chain-icon"><i class="fas fa-file-pdf"></i></div>
           <div class="chain-name">Export to PDF</div>
-          <div class="chain-loss">animation flattens</div>
+          <div class="chain-loss">animation is lost</div>
         </div>
         <div class="chain-step">
           <div class="chain-icon"><i class="fas fa-camera"></i></div>
@@ -393,9 +393,9 @@ html[data-density="stage"] .detail{display:none}
         </div>
       </div>
       <p class="detail">
-        Five conversions between the thought and the person. Each one is lossy, and none of them
-        are steps you chose &mdash; they&rsquo;re the tax on having picked a <em>file format</em>
-        as your output. The embedded video never travels. It never has.
+        Five conversions sit between your idea and the person. Each one loses something. You
+        chose none of them. They are the price of making a <em>file format</em> your output.
+        The embedded video never arrives. It never has.
       </p>
     </section>
 
@@ -418,28 +418,27 @@ html[data-density="stage"] .detail{display:none}
     &lt;<span class="tagname">a:t</span>&gt;Generate the medium&lt;/<span class="tagname">a:t</span>&gt;
   &lt;/<span class="tagname">a:r</span>&gt;&lt;/<span class="tagname">a:p</span>&gt;&lt;/<span class="tagname">p:txBody</span>&gt;
 &lt;/<span class="tagname">p:sp</span>&gt;</div>
-          <div class="split-foot">Coordinates in English Metric Units. Written blind &mdash; the model can&rsquo;t open it and look.</div>
+          <div class="split-foot">Positions in English Metric Units. The model can&rsquo;t open it to check.</div>
         </div>
         <div class="split-panel ok">
-          <div class="split-head"><i class="fas fa-code"></i> HTML &mdash; the medium itself</div>
+          <div class="split-head"><i class="fas fa-code"></i> HTML &mdash; the page itself</div>
 <div class="code">&lt;<span class="tagname">h1</span> <span class="attr">class=</span><span class="str">"slide-title"</span>&gt;
   Generate the medium
 &lt;/<span class="tagname">h1</span>&gt;</div>
-          <div class="split-foot">Renders instantly. You can see it, so the agent can be told it&rsquo;s wrong.</div>
+          <div class="split-foot">Shows up at once. You can see it, so you can tell the agent it&rsquo;s wrong.</div>
         </div>
       </div>
       <p class="detail">
-        You <em>can</em> generate <code>.pptx</code> &mdash; the libraries exist. But you&rsquo;re
-        asking a model to write a format it cannot open and judge, so the feedback loop is broken
-        before it starts. HTML and CSS are the best&#8209;represented things in its training data
-        by a wide margin. <strong>And you don&rsquo;t have to write this &mdash; only read enough of
-        it to say &ldquo;that&rsquo;s wrong.&rdquo;</strong>
+        You <em>can</em> make <code>.pptx</code> files. The tools exist. But the model can&rsquo;t
+        open the file and check its own work. HTML and CSS are the code behind web pages. The
+        model has seen far more of them than almost anything else. <strong>You don&rsquo;t have
+        to write it. You only read enough to say &ldquo;that&rsquo;s wrong.&rdquo;</strong>
       </p>
     </section>
 
     <!-- ═══════════ 2.3 The final medium ═══════════ -->
     <section class="slide" data-slide="2">
-      <span class="slide-tag"><i class="fas fa-bullseye"></i> The final medium</span>
+      <span class="slide-tag"><i class="fas fa-bullseye"></i> The real output</span>
       <h1 class="slide-title">One arrow</h1>
       <div class="one-arrow">
         <div class="arrow-node">
@@ -456,38 +455,38 @@ html[data-density="stage"] .detail{display:none}
         </div>
       </div>
       <p class="detail">
-        The medium your audience actually receives is a rendered page. Generate that and there is
-        nothing left in between to lose anything. <strong>Live data stays live. Links stay links.
-        The whole deck is one HTTP request.</strong>
+        Your audience ends up looking at a page on a screen. Make that page directly. Then
+        nothing sits in between to lose anything. <strong>Live data stays live. Links stay links.
+        The whole deck arrives as one file.</strong>
       </p>
     </section>
 
     <!-- ═══════════ 2.4 Gained / given up ═══════════ -->
     <section class="slide" data-slide="3">
-      <span class="slide-tag"><i class="fas fa-scale-balanced"></i> Honest ledger</span>
+      <span class="slide-tag"><i class="fas fa-scale-balanced"></i> The honest list</span>
       <h1 class="slide-title">What you gain, <span class="dim">what you give up</span></h1>
       <div class="ledger">
         <div class="ledger-col gain">
           <div class="ledger-head"><i class="fas fa-plus"></i> Gained</div>
           <div class="ledger-item"><i class="fas fa-check"></i><span>No licence, no &ldquo;created in a newer version&rdquo;</span></div>
-          <div class="ledger-item"><i class="fas fa-check"></i><span>No font substitution &mdash; the fonts ship with the page</span></div>
+          <div class="ledger-item"><i class="fas fa-check"></i><span>No swapped fonts &mdash; the page brings its own</span></div>
           <div class="ledger-item"><i class="fas fa-check"></i><span>Opens on anything with a browser</span></div>
-          <div class="ledger-item"><i class="fas fa-check"></i><span>Deployable to a URL, diffable in git</span></div>
+          <div class="ledger-item"><i class="fas fa-check"></i><span>Shared as a link, tracked in git</span></div>
           <div class="ledger-item"><i class="fas fa-check"></i><span>The slide can <em>run things</em></span></div>
         </div>
         <div class="ledger-col cost">
           <div class="ledger-head"><i class="fas fa-minus"></i> Given up</div>
-          <div class="ledger-item"><i class="fas fa-triangle-exclamation"></i><span>Corporate template compliance <span class="ans">&mdash; no answer. Sometimes you lose this one.</span></span></div>
+          <div class="ledger-item"><i class="fas fa-triangle-exclamation"></i><span>Your company template <span class="ans">&mdash; your brand, yes (section 3). The .pptx master file, no.</span></span></div>
           <div class="ledger-item"><i class="fas fa-triangle-exclamation"></i><span>A file a colleague can edit in PowerPoint <span class="ans">&mdash; they edit the page instead</span></span></div>
           <div class="ledger-item"><i class="fas fa-triangle-exclamation"></i><span>Animation by menu <span class="ans">&mdash; you describe it instead</span></span></div>
-          <div class="ledger-item"><i class="fas fa-triangle-exclamation"></i><span>Needs a browser, and a network for the live parts <span class="ans">&mdash; PDF export covers the room with no wifi</span></span></div>
+          <div class="ledger-item"><i class="fas fa-triangle-exclamation"></i><span>Needs a browser, and internet for the live parts <span class="ans">&mdash; a PDF covers rooms with no wifi</span></span></div>
         </div>
       </div>
       <p class="detail">
-        Most of the right&#8209;hand column has an answer, and I&rsquo;ll show you the PDF export
-        later. But the first one doesn&rsquo;t. <strong>If your organisation mandates the corporate
-        template, this is a fight you may not win</strong> &mdash; take the design&#8209;system idea
-        from the next section and leave the HTML behind. It works on its own.
+        Most of the right&#8209;hand column has an answer. I&rsquo;ll show you the PDF export
+        later. <strong>If your organisation insists on the template file, you may lose that
+        fight.</strong> Take the design system from the next section anyway. That is the part
+        that carries your brand.
       </p>
     </section>
     </div><!-- /slides-stage -->

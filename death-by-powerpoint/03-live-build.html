@@ -370,11 +370,11 @@ html[data-density="stage"] .detail{display:none}
         </div>
         <div class="watch-item">
           <div class="watch-num">02</div>
-          <div class="watch-text">The agent <b>reads the design system first</b>, before it writes anything.</div>
+          <div class="watch-text">The agent <b>reads the design system first</b>. Then it writes.</div>
         </div>
         <div class="watch-item">
           <div class="watch-num">03</div>
-          <div class="watch-text">The linter fires on the edit and the agent <b>fixes its own mistake</b>.</div>
+          <div class="watch-text">The linter flags a mistake. The agent <b>fixes it by itself</b>.</div>
         </div>
         <div class="watch-item">
           <div class="watch-num">04</div>
@@ -383,9 +383,9 @@ html[data-density="stage"] .detail{display:none}
         </div>
       </div>
       <p class="detail">
-        If you only remember one of these, make it number three. Everything else here is
-        convenience; <em>a check the agent cannot talk its way past</em> is the part that makes
-        this trustworthy enough to put on a projector.
+        If you remember one of these, make it number three. The rest is convenience.
+        <em>The agent cannot skip or argue with the check.</em> That is why I trust
+        this enough to show it on a big screen.
       </p>
     </section>
 
@@ -393,22 +393,21 @@ html[data-density="stage"] .detail{display:none}
     <section class="slide" data-slide="1">
       <div class="hold">
         <div class="hold-badge"><span class="hold-dot"></span> Live &middot; building a slide</div>
-        <h1 class="hold-title">Switching to the repo</h1>
+        <h1 class="hold-title">Over to the live demo</h1>
         <div class="prompt-card">
-          <div class="prompt-label"><i class="fas fa-keyboard"></i> the prompt, verbatim &mdash; copy it out of the recording</div>
-          <div class="prompt-text">Add a slide to the death-by-powerpoint deck:<br>
-a two-column comparison of what we gain and<br>
-what we give up. Match the deck&rsquo;s design system.<span class="cursor"></span></div>
+          <div class="prompt-label"><i class="fas fa-keyboard"></i> the exact prompt. Copy it from the recording</div>
+          <div class="prompt-text">Add one slide to the steal-this deck. List the three<br>
+files to copy to start: the design system, the linter,<br>
+one working deck. Match the deck&rsquo;s design system.<span class="cursor"></span></div>
         </div>
         <div class="hold-foot">
-          Watching: <b>SKILL.md</b> &rarr; the agent writes HTML &rarr; the lint hook fires &rarr; reload.
+          Watch: <b>SKILL.md</b> &rarr; the agent writes HTML &rarr; the linter checks it &rarr; reload.
         </div>
       </div>
       <p class="detail">
-        This slide is deliberately a holding card. If the demo goes wrong, the honest move is to
-        come back here, say so, and go straight to the next slide &mdash; which explains the whole
-        loop without needing the demo to have worked. <strong>Nobody has ever enjoyed watching
-        someone debug live.</strong>
+        This slide stays up while I work in the editor. If the demo breaks, I come back here
+        and say so. Then I go to the next slide. It explains the whole process, even if the
+        demo failed. <strong>Nobody enjoys watching someone fix bugs live.</strong>
       </p>
     </section>
 
@@ -420,7 +419,7 @@ what we give up. Match the deck&rsquo;s design system.<span class="cursor"></spa
         <div class="loop-node human">
           <i class="fas fa-comment"></i>
           <div class="loop-name">ASK</div>
-          <div class="loop-sub">One sentence of English</div>
+          <div class="loop-sub">One sentence in English</div>
         </div>
         <div class="loop-node agent">
           <i class="fas fa-book-open"></i>
@@ -430,26 +429,26 @@ what we give up. Match the deck&rsquo;s design system.<span class="cursor"></spa
         <div class="loop-node agent">
           <i class="fas fa-pen-nib"></i>
           <div class="loop-name">WRITE</div>
-          <div class="loop-sub">HTML into a real file in a real repo</div>
+          <div class="loop-sub">HTML into a real file in git</div>
         </div>
         <div class="loop-node check">
           <i class="fas fa-shield-halved"></i>
           <div class="loop-name">LINT</div>
-          <div class="loop-sub">Hook runs automatically on the edit</div>
+          <div class="loop-sub">Runs by itself after each edit</div>
         </div>
         <div class="loop-node check">
           <i class="fas fa-arrows-rotate"></i>
           <div class="loop-name">RELOAD</div>
-          <div class="loop-sub">The deploy</div>
+          <div class="loop-sub">Published</div>
         </div>
       </div>
       <div class="loop-back">
         <i class="fas fa-arrow-left-long"></i> lint fails &rarr; the agent reads the error &rarr; fixes it &rarr; retries
       </div>
       <p class="detail">
-        Nothing in that loop was specific to slides. It is <strong>an agent, a written standard, and
-        a check that fails loudly</strong> &mdash; and you can point it at anything your team
-        produces repeatedly. The slide is now a file in git. It has a diff. Someone can review it.
+        Nothing in that loop is only for slides. It is <strong>an agent, written rules, and a
+        check that fails loudly</strong>. Use it for anything your team makes again and again.
+        The slide is now a file in git. You can see what changed, and someone can review it.
       </p>
     </section>
     </div><!-- /slides-stage -->
