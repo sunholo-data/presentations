@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Claude Code workshop</title>
+<link rel="icon" type="image/svg+xml" href="../images/logos/sunholo-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!--
+-->
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f0f1a;--surface:#1a1a2e;--surface-hi:#222240;--orange:#e73c17;
+  --orange-dim:rgba(231,60,23,.35);--orange-soft:rgba(231,60,23,.1);
+  --ghost:rgba(255,255,255,.12);--text:#e2e8f0;--text-dim:#8a96aa;
+  --code-bg:rgba(255,255,255,.03);--code-border:rgba(255,255,255,.08);
+  --bar-bg:rgba(15,15,26,.8);--bar-border:rgba(255,255,255,.06);
+  --mono:'JetBrains Mono',monospace;--sans:'Montserrat',sans-serif;
+  --rung:#2dd4bf;--rung-dim:rgba(45,212,191,.2);
+}
+[data-theme="light"]{
+  --bg:#f6f8fa;--surface:#ffffff;--surface-hi:#f0f0ea;--orange:#bd3012;
+  --orange-dim:rgba(189,48,18,.25);--orange-soft:rgba(189,48,18,.07);
+  --ghost:rgba(0,0,0,.1);--text:#2c3e50;--text-dim:#526677;
+  --code-bg:rgba(0,0,0,.03);--code-border:rgba(0,0,0,.09);
+  --bar-bg:rgba(255,255,255,.85);--bar-border:rgba(0,0,0,.08);
+  --rung:#0f766e;--rung-dim:rgba(15,118,110,.18);
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+body{background-image:
+  radial-gradient(circle at 50% 50%, rgba(231,60,23,.03) 0%, transparent 70%),
+  linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size:100% 100%,60px 60px,60px 60px}
+[data-theme="light"] body{background-image:
+  radial-gradient(circle at 50% 50%, rgba(189,48,18,.03) 0%, transparent 70%),
+  linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px)}
+
+/* ── Chrome ── */
+#app{display:flex;flex-direction:column;height:100%}
+.top-bar,.bottom-bar{display:flex;align-items:center;justify-content:space-between;
+  padding:8px 16px;flex-shrink:0;background:var(--bar-bg);z-index:5}
+.top-bar{border-bottom:1px solid var(--bar-border)}
+.bottom-bar{border-top:1px solid var(--bar-border)}
+.deck-title{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;color:var(--text-dim);letter-spacing:.02em}
+.deck-title .accent{color:var(--orange)}
+.top-logo{height:20px;opacity:.75}
+.theme-toggle,.transport-btn{width:28px;height:28px;border-radius:50%;border:1px solid var(--ghost);
+  background:transparent;color:var(--text-dim);cursor:pointer;font-size:12px;transition:all .25s;
+  display:flex;align-items:center;justify-content:center}
+.theme-toggle:hover,.transport-btn:hover{border-color:var(--orange);color:var(--orange)}
+.transport-btn:disabled{opacity:.3;cursor:default}
+.transport{display:flex;align-items:center;gap:10px}
+.step-indicator{font-family:var(--mono);font-size:12px;color:var(--text-dim)}
+.step-indicator .current{color:var(--text);font-weight:700}
+.slide-dots{display:flex;gap:5px;justify-content:center}
+.slide-dot{width:7px;height:7px;border-radius:50%;border:none;background:var(--ghost);cursor:pointer;transition:all .2s;padding:0}
+.slide-dot.active{background:var(--orange);width:18px;border-radius:4px}
+.nav-hints{display:flex;align-items:center;gap:4px}
+.kbd{font-family:var(--mono);font-size:10px;padding:2px 5px;border:1px solid var(--ghost);border-radius:3px;color:var(--text-dim)}
+.in-iframe .top-bar,.in-iframe .bottom-bar{display:none}
+
+/* ── Stage ── */
+.slides-viewport{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;background:var(--bg);container-type:size}
+.slides-stage{position:relative;width:min(100cqi,100cqb*16/9);height:min(100cqb,100cqi*9/16);container-type:size}
+.slide{position:absolute;inset:0;opacity:0;pointer-events:none;
+  transform:translateX(28px);transition:opacity .45s ease,transform .45s ease;
+  padding:4.5cqb 6cqi;display:flex;flex-direction:column;overflow:hidden}
+.slide.active{opacity:1;pointer-events:auto;transform:translateX(0)}
+.slide.exit-left{transform:translateX(-28px)}
+html[data-density="stage"] .detail{display:none}
+
+/* ── Type ── */
+.kicker{font-family:var(--mono);font-size:clamp(9px,1.15cqi,15px);font-weight:700;
+  text-transform:uppercase;letter-spacing:.16em;color:var(--orange);margin-bottom:1.4cqb;flex-shrink:0}
+.slide-title{font-size:clamp(24px,3.7cqi,54px);font-weight:800;line-height:1.1;
+  letter-spacing:-.025em;margin-bottom:2.6cqb;flex-shrink:0}
+.slide-title .dim{color:var(--text-dim);font-weight:500}
+.slide-title .accent{color:var(--orange)}
+.lede{font-size:clamp(13px,1.9cqi,27px);line-height:1.45;color:var(--text-dim);max-width:70cqi}
+.lede b{color:var(--text)}
+.foot{margin-top:auto;padding-top:1.6cqb;flex-shrink:0;font-size:clamp(11px,1.45cqi,20px);
+  line-height:1.4;color:var(--text-dim)}
+.foot b{color:var(--text)}
+.src{font-family:var(--mono);font-size:clamp(8px,1cqi,13px);color:var(--text-dim);letter-spacing:.04em}
+
+/* ── Speaker notes (guide density only) ── */
+.detail.fac{margin-top:1.6cqb;padding:1.4cqb 2cqi;border-left:3px solid var(--orange);
+  background:var(--code-bg);border-radius:0 6px 6px 0;flex-shrink:0;
+  font-size:clamp(10px,1.25cqi,16px);line-height:1.5;color:var(--text-dim);overflow-y:auto;max-height:30cqb}
+.detail.fac b{color:var(--text)}
+.detail.fac .lbl{font-family:var(--mono);font-size:clamp(8px,1cqi,13px);font-weight:700;
+  text-transform:uppercase;letter-spacing:.12em;color:var(--orange);display:block;margin-bottom:.4cqb}
+.detail.fac p+p{margin-top:.7cqb}
+
+
+/* ── Workshop components ── */
+.centre{height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 3cqi}
+.big-title{font-size:clamp(30px,5.4cqi,78px);font-weight:800;line-height:1.05;letter-spacing:-.03em}
+.big-title .accent{color:var(--orange)}
+.fill{flex:1;min-height:0;display:flex;flex-direction:column}
+.cols{display:grid;gap:1.6cqi;flex:1;min-height:0}
+.cols.c2{grid-template-columns:1fr 1fr}.cols.c3{grid-template-columns:repeat(3,1fr)}
+.card{padding:2.4cqb 2cqi;border-radius:10px;background:var(--surface);border:1px solid var(--code-border);
+  display:flex;flex-direction:column;gap:1.1cqb;min-height:0}
+.card.hot{border:2px solid var(--orange);background:var(--orange-soft)}
+.card .h{font-family:var(--mono);font-size:clamp(9px,1.15cqi,15px);font-weight:700;text-transform:uppercase;
+  letter-spacing:.14em;color:var(--orange);display:flex;align-items:center;gap:.8cqi}
+.card .t{font-size:clamp(14px,2.1cqi,30px);font-weight:800;line-height:1.2}
+.card .s{font-size:clamp(11px,1.5cqi,21px);line-height:1.45;color:var(--text-dim)}
+.card ul{list-style:none;display:flex;flex-direction:column;gap:.9cqb}
+.card li{font-size:clamp(11px,1.55cqi,22px);line-height:1.35;padding-left:1.8cqi;position:relative}
+.card li::before{content:"›";position:absolute;left:0;color:var(--orange);font-weight:800}
+.card.dim li{color:var(--text-dim)}
+.loop{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:1.4cqi;align-items:stretch}
+.arrow{align-self:center;color:var(--orange);font-size:clamp(14px,2.2cqi,30px)}
+.num{font-size:clamp(28px,4.6cqi,66px);font-weight:800;color:var(--orange);line-height:1;letter-spacing:-.03em}
+.prompt{font-family:var(--mono);font-size:clamp(11px,1.5cqi,21px);line-height:1.5;padding:1.6cqb 1.8cqi;border-radius:8px;
+  background:var(--code-bg);border:1px solid var(--code-border);border-left:3px solid var(--orange)}
+.prompt .cm{color:var(--text-dim)}
+.foot a{color:var(--orange);font-weight:700}
+.proof{display:flex;gap:1.2cqi;align-items:baseline;font-size:clamp(11px,1.5cqi,21px);line-height:1.4;color:var(--text-dim)}
+.proof b{font-family:var(--mono);font-size:.8em;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);flex-shrink:0}
+.proof span b{font-family:var(--sans);font-size:1em;letter-spacing:0;text-transform:none;color:var(--text)}
+
+/* Tree: one column per tier, nodes as chips */
+.tree{display:grid;grid-template-columns:repeat(8,1fr);gap:.9cqi;flex:1;min-height:0}
+.tier{display:flex;flex-direction:column;gap:.8cqb;padding:1.4cqb .8cqi;border-radius:8px;background:var(--code-bg);border:1px solid var(--code-border)}
+.tier .tn{font-family:var(--mono);font-size:clamp(8px,1cqi,13px);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--orange)}
+.tier .tl{font-size:clamp(10px,1.35cqi,19px);font-weight:800;line-height:1.15;margin-bottom:.4cqb}
+.chip{font-size:clamp(9px,1.12cqi,16px);line-height:1.25;padding:.9cqb .8cqi;border-radius:6px;background:var(--surface);border:1px solid var(--code-border)}
+.chip.goal{background:var(--orange);color:#fff;border-color:var(--orange);font-weight:700}
+.chip.cap{border:2px dashed var(--orange)}
+.branches{margin-top:1.4cqb;display:flex;flex-wrap:wrap;gap:.7cqi;align-items:center;flex-shrink:0}
+.branches .lbl{font-family:var(--mono);font-size:clamp(8px,1cqi,13px);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin-right:.6cqi}
+.branches .chip{background:transparent;border-style:dashed}
+
+/* Agenda */
+.agenda{display:grid;grid-template-columns:auto 1fr auto;gap:1cqb 2cqi;align-items:baseline;flex:1;min-height:0;align-content:start}
+.agenda .tm{font-family:var(--mono);font-size:clamp(11px,1.45cqi,20px);font-weight:700;color:var(--orange)}
+.agenda .it{font-size:clamp(12px,1.65cqi,23px);line-height:1.3}
+.agenda .it span{color:var(--text-dim)}
+.agenda .tr{font-family:var(--mono);font-size:clamp(9px,1.1cqi,15px);color:var(--text-dim);text-align:right}
+.agenda .brk{color:var(--text-dim)}
+
+/* Share flow */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:1.2cqi;align-items:stretch}
+.step{display:flex;flex-direction:column;gap:.8cqb;padding:2cqb 1.4cqi;border-radius:10px;background:var(--surface);border:1px solid var(--code-border);position:relative}
+.step .ic{font-size:clamp(16px,2.4cqi,34px);color:var(--orange)}
+.step .nm{font-size:clamp(13px,1.8cqi,26px);font-weight:800}
+.step .ds{font-size:clamp(10px,1.3cqi,18px);line-height:1.4;color:var(--text-dim)}
+.step.hot{border:2px solid var(--orange);background:var(--orange-soft)}
+
+
+/* Vertical balance: content sits as one centred block; nothing stretches to fill */
+.slide{justify-content:center}
+.slide .foot{margin-top:3.4cqb}
+.cols,.tree{flex:0 0 auto}
+.tree{align-items:start}
+.card{min-height:22cqb}
+.card .prompt{margin-top:1cqb}
+
+
+/* Rung mark (Decision Budget): five ascending bars, filled to the rung. Teal is used for nothing else. */
+.rung{display:inline-flex;align-items:flex-end;gap:.18em;font-family:var(--mono);font-weight:700;color:var(--rung);white-space:nowrap}
+.rung i{display:block;width:.42em;border-radius:1px;background:var(--rung-dim)}
+.rung i:nth-of-type(1){height:.45em}.rung i:nth-of-type(2){height:.65em}.rung i:nth-of-type(3){height:.85em}
+.rung i:nth-of-type(4){height:1.05em}.rung i:nth-of-type(5){height:1.25em}
+.rung.r0 i:nth-of-type(-n+1),.rung.r1 i:nth-of-type(-n+2),.rung.r2 i:nth-of-type(-n+3),
+.rung.r3 i:nth-of-type(-n+4),.rung.r4 i:nth-of-type(-n+5){background:var(--rung)}
+.rung b{margin-left:.55em;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:.8em}
+.ladder{display:grid;grid-template-columns:auto 1fr 1fr;gap:1.1cqb 2.4cqi;align-items:baseline}
+.ladder .rung{font-size:clamp(11px,1.5cqi,21px)}
+.ladder .what{font-size:clamp(11px,1.45cqi,20px);color:var(--text-dim);line-height:1.35}
+.ladder .cc{font-size:clamp(12px,1.6cqi,22px);line-height:1.35}
+.ladder .hd{font-family:var(--mono);font-size:clamp(9px,1.1cqi,15px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--orange)}
+
+/* Animation */
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.slide.active .card,.slide.active .step,.slide.active .tier{animation:up .5s ease both}
+.slide.active .card:nth-child(2),.slide.active .step:nth-child(2),.slide.active .tier:nth-child(2){animation-delay:.1s}
+.slide.active .card:nth-child(3),.slide.active .step:nth-child(3),.slide.active .tier:nth-child(3){animation-delay:.2s}
+.slide.active .step:nth-child(4),.slide.active .tier:nth-child(4){animation-delay:.3s}
+.slide.active .step:nth-child(5),.slide.active .tier:nth-child(5){animation-delay:.4s}
+.slide.active .tier:nth-child(6){animation-delay:.5s}.slide.active .tier:nth-child(7){animation-delay:.6s}
+</style>
+</head>
+<body>
+<script>(function(){
+  // ── Presenter bridge: detail density, slide reporting, hotkey relay ──
+  var embedded = window !== window.top, root = document.documentElement;
+  root.setAttribute('data-density', embedded ? 'stage' : 'guide');
+  function setDensity(d){ root.setAttribute('data-density', d === 'guide' ? 'guide' : 'stage'); }
+  window.addEventListener('message', function(e){
+    if(e.data && e.data.type === 'deck-command' && e.data.action === 'set-density') setDensity(e.data.density);
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    if(e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    var k = (e.key || '').toLowerCase();
+    if(k !== 'd' && k !== 'q' && k !== 'n' && k !== 'l') return;
+    if(embedded) window.parent.postMessage({type:'deck-hotkey', key:k}, '*');
+    else if(k === 'd') setDensity(root.getAttribute('data-density') === 'guide' ? 'stage' : 'guide');
+  });
+  if(!embedded) return;
+  function slides(){ return document.querySelectorAll('.slides-stage .slide'); }
+  function activeIndex(list){ for(var i = 0; i < list.length; i++) if(list[i].classList.contains('active')) return i; return -1; }
+  function tidy(s, n){ return (s || '').replace(/\s+/g, ' ').trim().slice(0, n); }
+  var lastIdx = null, pending = null;
+  function send(){
+    var list = slides(), idx = activeIndex(list);
+    var el = idx >= 0 ? list[idx] : document.body;
+    var h = el && el.querySelector('h1, h2, h3, .slide-title');
+    var text = el ? ((el.innerText || '').trim() || (el.textContent || '')) : '';
+    window.parent.postMessage({type:'deck-slide', index:idx, total:list.length,
+      title: tidy(h ? h.textContent : document.title, 120), text: tidy(text, 700)}, '*');
+  }
+  function report(){
+    var idx = activeIndex(slides());
+    if(idx === lastIdx) return;
+    lastIdx = idx; clearTimeout(pending); pending = setTimeout(send, 160);
+  }
+  window.addEventListener('message', function(e){
+    if(e.data && e.data.type === 'deck-command' && e.data.action === 'report-slide'){ lastIdx = null; report(); }
+  });
+  new MutationObserver(report).observe(document.querySelector('.slides-stage') || document.body,
+    {attributes:true, attributeFilter:['class'], subtree:true, childList:true});
+  report();
+})();</script>
+<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
+
+<div id="app">
+  <div class="top-bar">
+    <span class="deck-title"><img class="top-logo" src="../images/logos/sunholo-logo.svg" alt="Sunholo"><span class="accent">Claude Code workshop</span></span>
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button>
+  </div>
+
+  <div class="slides-viewport">
+    <div class="slides-stage">
+      <!-- 0 · Title -->
+      <section class="slide active" data-slide="0">
+        <div class="centre">
+          <div class="kicker">Claude Code workshop</div>
+          <h1 class="big-title">From chat <span class="accent">to agent</span></h1>
+          <p class="lede" style="margin-top:3cqb">One day, one skill tree. By the end, everyone has used a skill someone else wrote, and <b>contributed one of their own</b> to the team.</p>
+          <div class="detail fac"><span class="lbl">Facilitator</span>
+            <p>Before starting: is everyone's Code tab open on a folder? Anyone who isn't goes to the install table now. The welcome block runs in parallel with that.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 1 · The shift -->
+      <section class="slide" data-slide="1">
+        <div class="kicker">The shift</div>
+        <h2 class="slide-title">Same model. <span class="accent">Different job.</span></h2>
+        <div class="cols c2">
+          <div class="card dim">
+            <div class="h"><i class="fa-regular fa-comments"></i> Chat</div>
+            <div class="t">You carry everything in and out</div>
+            <ul>
+              <li>You paste the text in</li>
+              <li>You copy the answer out</li>
+              <li>You re-explain the rules every time</li>
+              <li>It can't check its own work against anything</li>
+            </ul>
+          </div>
+          <div class="card hot">
+            <div class="h"><i class="fa-solid fa-robot"></i> Agent</div>
+            <div class="t">It works where your work is</div>
+            <ul>
+              <li>Reads and writes the files in a folder</li>
+              <li>Runs commands, and shows you each change</li>
+              <li>Follows rules written down once: <b>CLAUDE.md</b></li>
+              <li>Uses shared <b>skills</b>, and connects to data with <b>MCP</b></li>
+            </ul>
+          </div>
+        </div>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Don't sell it. Ask: <b>what was the last thing you pasted into a chat, and what did you do with the answer?</b> Two answers from the room, then point at the right-hand column.</p>
+        </div>
+      </section>
+
+      <!-- 2 · How the day works -->
+      <section class="slide" data-slide="2">
+        <div class="kicker">How the day works</div>
+        <h2 class="slide-title">Every exercise is <span class="accent">the same loop</span></h2>
+        <div class="loop">
+          <div class="card"><div class="num">1</div><div class="t">Predict</div><div class="s">Before you send it: what will Claude do?</div></div>
+          <i class="fa-solid fa-arrow-right arrow"></i>
+          <div class="card"><div class="num">2</div><div class="t">Run</div><div class="s">Send it. Watch what it reads, runs and changes.</div></div>
+          <i class="fa-solid fa-arrow-right arrow"></i>
+          <div class="card"><div class="num">3</div><div class="t">Explain</div><div class="s">Where you were wrong is where the learning is.</div></div>
+        </div>
+        <div class="prompt" style="margin-top:3cqb"><span class="cm"># in the workshop folder, in the Code tab</span><br>start the workshop</div>
+        <p class="foot">Your <b>progress board</b> shows the tree: mark a node done with one line on how you showed it, and the next ones unlock. The <b>workshop guide</b> skill in your Code tab sets each task. Stuck? It asks what you tried; ask twice and it explains.</p>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Progress is private and per person. The room view is where people are, never a ranking. Nobody is behind; people are on different nodes.</p>
+        </div>
+      </section>
+
+      <!-- 3 · The tree -->
+      <section class="slide" data-slide="3">
+        <div class="kicker">The map</div>
+        <h2 class="slide-title">A skill tree, <span class="dim">not a slide sequence</span></h2>
+        <div class="tree">
+          <div class="tier"><span class="tn">0 · before</span><span class="tl">Setup</span><span class="chip">Desktop + Code tab</span><span class="chip">Git + GitHub</span></div>
+          <div class="tier"><span class="tn">1</span><span class="tl">Chat → agent</span><span class="chip">Folder is context</span><span class="chip">Permissions &amp; diffs</span><span class="chip">Plan first</span><span class="chip">Trust per action</span><span class="chip">Models</span><span class="chip">Sessions</span></div>
+          <div class="tier"><span class="tn">2</span><span class="tl">Rules</span><span class="chip">CLAUDE.md</span><span class="chip">Team conventions &amp; data</span><span class="chip">Allow · ask · deny</span><span class="chip cap">One real task</span></div>
+          <div class="tier"><span class="tn">3</span><span class="tl">Git</span><span class="chip">Git as undo</span><span class="chip">Clone, branch, push</span></div>
+          <div class="tier"><span class="tn">4</span><span class="tl">Skills</span><span class="chip">Use one</span><span class="chip">How it's built</span><span class="chip">Write your own</span></div>
+          <div class="tier"><span class="tn">5</span><span class="tl">Connect</span><span class="chip">Paste vs connect</span><span class="chip">Remote MCP</span><span class="chip">Your own key</span><span class="chip">GA4 via BigQuery</span></div>
+          <div class="tier"><span class="tn">6</span><span class="tl">Share</span><span class="chip">Team skills repo</span><span class="chip goal">Skill by pull request</span></div>
+          <div class="tier"><span class="tn">7 · follow-up</span><span class="tl">Team layer</span><span class="chip">Review before merge</span><span class="chip">Skill routing</span></div>
+        </div>
+        <div class="branches"><span class="lbl">Branches · early finishers &amp; homework</span><span class="chip">Checking the work</span><span class="chip">Data files</span><span class="chip">Hooks</span><span class="chip">Subagents</span><span class="chip">Running on a schedule</span><span class="chip">Team plugin</span></div>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Source: <b>tree/tree.yaml</b>. The <i>I can…</i> sentence on every node was the pre-session self-assessment. Read back the distribution: which tiers the room already has, which nobody has.</p>
+        </div>
+      </section>
+
+      <!-- 3b · Progress board -->
+      <section class="slide" data-slide="3b">
+        <div class="kicker">Your progress board</div>
+        <h2 class="slide-title">Mark it done. <span class="accent">Say how.</span></h2>
+        <div class="cols c3" style="flex:0 0 auto">
+          <div class="card"><div class="h"><i class="fa-solid fa-diagram-project"></i> My progress</div>
+            <div class="s">The tree as boxes and arrows. An arrow means <b>do this first</b>. Orange boxes are unlocked: start there.</div></div>
+          <div class="card hot"><div class="h"><i class="fa-solid fa-pen"></i> One line of proof</div>
+            <div class="s">"Done" needs a line on <b>how you showed it</b>. Everyone can read it, so the room learns from each other's evidence.</div></div>
+          <div class="card"><div class="h"><i class="fa-solid fa-people-group"></i> The room</div>
+            <div class="s">Who's where, box by box. Right now, mark everything you <b>already</b> can: that's our starting point.</div></div>
+        </div>
+        <p class="foot"><a class="board-link" href="https://claude.ai/artifact/5Gc3G9GxCMrT2anwpdmaq1" target="_blank" rel="noopener">Open the progress board</a> · the link is in the session chat</p>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Put the board's room view on the projector during welcome. The distribution replaces the self-assessment readback: which tiers the room already has, which nobody has. Leave it up during hands-on blocks.</p>
+        </div>
+      </section>
+
+      <!-- 4 · Agenda -->
+      <section class="slide" data-slide="4">
+        <div class="kicker">Today</div>
+        <h2 class="slide-title">Six hours, <span class="accent">five tiers</span></h2>
+        <div class="agenda">
+          <span class="tm">09:00</span><span class="it">Welcome <span>· the tree as the survey · install table</span></span><span class="tr">tier 0</span>
+          <span class="tm">09:30</span><span class="it">Chat to agent <span>· files, diffs, plan mode, models, trust per action</span></span><span class="tr">tier 1</span>
+          <span class="tm">10:45</span><span class="it">Rules <span>· CLAUDE.md, our conventions, then allow · ask · deny</span></span><span class="tr">tier 2</span>
+          <span class="tm">11:30</span><span class="it">Git <span>· undo, then clone, branch, push</span></span><span class="tr">tier 3</span>
+          <span class="tm brk">12:00</span><span class="it brk">Lunch</span><span class="tr"></span>
+          <span class="tm">12:30</span><span class="it">Skills <span>· use one, read one, start your own</span></span><span class="tr">tier 4</span>
+          <span class="tm">13:30</span><span class="it">MCP <span>· connect instead of paste</span></span><span class="tr">tier 5</span>
+          <span class="tm">14:15</span><span class="it">One real task each, shown to the room <span>· homework</span></span><span class="tr">capstone</span>
+        </div>
+        <p class="foot">Sharing skills through the team repository (tier 6) opens the <b>follow-up session</b>, after you've written one.</p>
+      </section>
+
+      <!-- 5 · Tier 1 -->
+      <section class="slide" data-slide="5">
+        <div class="kicker">Tier 1 · chat to agent</div>
+        <h2 class="slide-title">The folder <span class="accent">is the context</span></h2>
+        <div class="cols c2" style="flex:0 0 auto">
+          <div class="card"><div class="h"><i class="fa-solid fa-folder-open"></i> Try</div>
+            <div class="prompt">Read @samples/tagging-plan.md and @samples/daily-sessions.csv.<br>Why did sign-ups drop on 15 September?</div>
+            <div class="s"><b>Predict first:</b> what will it be able to explain, and what will it guess?</div></div>
+          <div class="card"><div class="h"><i class="fa-solid fa-shield-halved"></i> Then</div>
+            <ul><li><b>Manual</b> mode: read the diff, reject one change, say why</li><li><b>Plan</b> mode: agree the approach before anything changes</li><li>Same task, two <b>models</b>: what did you trade?</li></ul></div>
+        </div>
+        <p class="proof" style="margin-top:3cqb"><b>Proof</b><span>a file Claude changed that <b>you</b> opened and checked · one change rejected and re-asked</span></p>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>The sample hides an unexplained spike on 19 Sept. Watch for whether Claude admits it can't see the cause or invents one, and ask the room which it did.</p>
+        </div>
+      </section>
+
+      <!-- 5b · Trust ladder -->
+      <section class="slide" data-slide="5b">
+        <div class="kicker">Tier 1 · trust</div>
+        <h2 class="slide-title">Trust is earned <span class="accent">per action</span></h2>
+        <div class="ladder">
+          <span class="hd">Rung</span><span class="hd">What it means</span><span class="hd">In Claude Code</span>
+          <span class="rung r0"><i></i><i></i><i></i><i></i><i></i><b>Held</b></span><span class="what">A person decides, always</span><span class="cc"><b>Deny</b> rule: never, in any mode</span>
+          <span class="rung r1"><i></i><i></i><i></i><i></i><i></i><b>Instrumented</b></span><span class="what">See what would happen</span><span class="cc"><b>Plan</b> mode: nothing changes</span>
+          <span class="rung r2"><i></i><i></i><i></i><i></i><i></i><b>Shadow</b></span><span class="what">It decides; nothing counts yet</span><span class="cc">A <b>branch</b>: nothing counts until merged</span>
+          <span class="rung r3"><i></i><i></i><i></i><i></i><i></i><b>Proposing</b></span><span class="what">It acts; you approve first</span><span class="cc"><b>Manual</b> mode, and <b>ask</b> rules</span>
+          <span class="rung r4"><i></i><i></i><i></i><i></i><i></i><b>Automated</b></span><span class="what">Unattended inside limits</span><span class="cc"><b>Accept edits</b> / <b>Auto</b> + <b>allow</b> rules. Ask and deny still hold.</span>
+        </div>
+        <p class="foot">Commit: automated. <b>Push: always asks</b>, even in Auto. Changing who can access the cloud project: denied. One session, three rungs.</p>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Same task three times: Manual, Accept edits, Auto. Everyone predicts the number of prompts first. The ladder is the Decision Budget's; promotion is "Yes, and don't ask again" after you've changed nothing several times. Down is a normal move.</p>
+        </div>
+      </section>
+
+      <!-- 6 · Tier 2 -->
+      <section class="slide" data-slide="6">
+        <div class="kicker">Tier 2 · rules</div>
+        <h2 class="slide-title">Write it down once. <span class="accent">Everyone gets it.</span></h2>
+        <div class="cols c2">
+          <div class="card"><div class="h"><i class="fa-solid fa-file-lines"></i> CLAUDE.md</div>
+            <div class="t">Standing instructions for a folder</div>
+            <div class="s">Same request, before and after one rule. If the behaviour didn't change, the rule didn't work.</div></div>
+          <div class="card hot"><div class="h"><i class="fa-solid fa-people-group"></i> Our conventions</div>
+            <div class="t">Written together, now</div>
+            <ul><li><b>Data first:</b> what may go to a model, and what may not</li><li>Where our files live, and how they're named</li><li>Who checks what before it leaves the team</li><li>Then the <b>settings</b> that enforce it</li></ul></div>
+        </div>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Start the conventions from the group's data rule in <b>overlay/</b>. Everyone adds one line. This file is the first shared artefact of the day; it gets corrected after a week of real use.</p>
+        </div>
+      </section>
+
+      <!-- 7 · Tier 3 -->
+      <section class="slide" data-slide="7">
+        <div class="kicker">Tier 3 · git</div>
+        <h2 class="slide-title">Git is the undo button <span class="dim">and the way we share</span></h2>
+        <div class="cols c2" style="flex:0 0 auto">
+          <div class="card"><div class="h"><i class="fa-solid fa-rotate-left"></i> Undo</div>
+            <div class="prompt">Commit this with a message that says why.<br>Show me what changed since the last commit.<br>Put the file back the way it was.</div></div>
+          <div class="card"><div class="h"><i class="fa-solid fa-code-branch"></i> Share</div>
+            <div class="prompt">Clone the practice repository.<br>Make a branch for my change, commit, push it.</div></div>
+        </div>
+        <p class="foot">You ask in words; Claude runs the git commands. <b>Read each one before you approve it.</b> Sign in to GitHub yourself: never paste a password or token into the chat.</p>
+      </section>
+
+      <!-- 8 · Tier 4 -->
+      <section class="slide" data-slide="8">
+        <div class="kicker">Tier 4 · skills</div>
+        <h2 class="slide-title">Someone else's know-how, <span class="accent">in a folder</span></h2>
+        <div class="cols c3">
+          <div class="card"><div class="h">1 · Use one</div>
+            <div class="s">Clone <b>presentation-template</b>. Ask for a three-slide deck on anything. You get the author's design rules without knowing them.</div>
+            <div class="prompt">github.com/sunholo-data/<br>presentation-template</div></div>
+          <div class="card"><div class="h">2 · Read one</div>
+            <div class="s"><b>SKILL.md</b>: a <b>description</b> that decides when it's used, then instructions. Optional resources and scripts beside it.</div>
+            <div class="prompt">.claude/skills/&lt;name&gt;/SKILL.md</div></div>
+          <div class="card hot"><div class="h">3 · Write one</div>
+            <div class="s">Something you do every week. Written so a colleague gets the right result <b>without asking you</b>.</div></div>
+        </div>
+        <p class="foot">This deck is built on the same template and its skill.</p>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Skills in a repo load only when the session is opened on that folder. That limit is why tier 6 exists, and why a plugin is the next step later.</p>
+        </div>
+      </section>
+
+      <!-- 9 · Tier 5 -->
+      <section class="slide" data-slide="9">
+        <div class="kicker">Tier 5 · connect</div>
+        <h2 class="slide-title">Connect the source <span class="dim">instead of pasting the export</span></h2>
+        <div class="cols c2">
+          <div class="card"><div class="h"><i class="fa-solid fa-cloud"></i> Today · remote</div>
+            <div class="t">Google Developer Knowledge</div>
+            <div class="s">Google's own documentation as a tool Claude searches. Hosted by Google; nothing to install. A lent API key today, your own key after.</div></div>
+          <div class="card hot"><div class="h"><i class="fa-solid fa-database"></i> Homework · GA4 data</div>
+            <div class="t">BigQuery, read-only</div>
+            <div class="s">Google's own BigQuery server, over a GA4 export. You reach only the datasets you were <b>granted</b>: the data rule, enforced. Today: the practice sample.</div></div>
+        </div>
+        <p class="proof" style="margin-top:2.4cqb"><b>Ask</b><span>every time: <b>what just left my laptop, and where did it go?</b></span></p>
+      </section>
+
+      <!-- 10 · Tier 6 -->
+      <section class="slide" data-slide="10">
+        <div class="kicker">Tier 6 · share</div>
+        <h2 class="slide-title">One repository. <span class="accent">Everyone gets the same version.</span></h2>
+        <div class="flow">
+          <div class="step"><i class="fa-solid fa-download ic"></i><span class="nm">Clone</span><span class="ds">the team skills repo, once</span></div>
+          <div class="step"><i class="fa-solid fa-code-branch ic"></i><span class="nm">Branch</span><span class="ds">add or improve a skill</span></div>
+          <div class="step hot"><i class="fa-solid fa-code-pull-request ic"></i><span class="nm">Pull request</span><span class="ds">a named reviewer checks it</span></div>
+          <div class="step"><i class="fa-solid fa-code-merge ic"></i><span class="nm">Merge</span><span class="ds">it becomes the team's version</span></div>
+          <div class="step"><i class="fa-solid fa-rotate ic"></i><span class="nm">Pull</span><span class="ds">everyone, including the other group</span></div>
+        </div>
+        <p class="foot">Two groups, two ways of working, <b>one set of skills</b>. A disagreement becomes a review comment instead of a second template.</p>
+      </section>
+
+      <!-- 10b · Worked example -->
+      <section class="slide" data-slide="10b">
+        <div class="kicker">An example, end to end</div>
+        <h2 class="slide-title">Why did sign-ups <span class="accent">drop to zero?</span></h2>
+        <div class="cols c3" style="flex:0 0 auto">
+          <div class="card"><div class="h">What I asked</div>
+            <div class="prompt">Read @samples/tagging-plan.md and @samples/daily-sessions.csv. Why do newsletter sign-ups drop to zero on 15 September? Show me the lines you used.</div></div>
+          <div class="card"><div class="h">What it did</div>
+            <ul><li>Read both files</li><li>Found the change log entry: <b>newsletter_signup</b> renamed to <b>sign_up</b> on 15 Sept</li><li>Pointed at the first zero in the CSV, the same day</li></ul></div>
+          <div class="card hot"><div class="h">How I checked</div>
+            <ul><li>Opened the change log line myself</li><li>Found the first zero in the CSV myself</li><li>Asked about the spike on 19 Sept: it said <b>it couldn't tell</b>, which is the right answer</li></ul></div>
+        </div>
+        <p class="foot">An illustration using the made-up files in <b>samples/</b>: run it yourself and compare. Your real task follows the same three columns.</p>
+      </section>
+
+      <!-- 11 · Capstone -->
+      <section class="slide" data-slide="11">
+        <div class="kicker">Capstone</div>
+        <h2 class="slide-title">One real task, <span class="accent">end to end</span></h2>
+        <div class="cols c3" style="flex:0 0 auto">
+          <div class="card"><div class="num">1</div><div class="t">What you asked</div></div>
+          <div class="card"><div class="num">2</div><div class="t">What it did</div></div>
+          <div class="card hot"><div class="num">3</div><div class="t">How you checked it</div></div>
+        </div>
+        <p class="foot">Two minutes each. The third column is the one that matters: <b>a result you haven't checked is a guess</b>, however well written.</p>
+      </section>
+
+      <!-- 12 · Homework -->
+      <section class="slide" data-slide="12">
+        <div class="kicker">Before the follow-up</div>
+        <h2 class="slide-title">Homework</h2>
+        <div class="cols c2">
+          <div class="card"><div class="h">Everyone</div>
+            <ul><li>Finish your skill</li><li>Connect BigQuery and ask the GA4 sample one real question. <b>Bring the error</b> if it fails.</li><li>Make your own Developer Knowledge key</li><li>One thing our conventions got wrong</li></ul></div>
+          <div class="card"><div class="h">Follow-up session</div>
+            <ul><li>Homework errors, fixed together</li><li>Everyone installs the team skills repo</li><li>Each group merges a skill after review; the other group uses it</li><li>Many skills, one entry point</li><li>After lunch: your own decisions</li></ul></div>
+        </div>
+      </section>
+
+      <!-- 13 · Close -->
+      <section class="slide" data-slide="13">
+        <div class="centre">
+          <div class="kicker">Close</div>
+          <h2 class="big-title">Same sheet, <span class="accent">second time</span></h2>
+          <p class="lede" style="margin-top:3cqb">Answer the <i>I can…</i> sentences again: yes, partly, no. The difference from this morning is the day.</p>
+          <div class="detail fac"><span class="lbl">Facilitator</span>
+            <p>Collect the sheets. Revoke nothing yet: the lent keys stay valid until the follow-up.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="transport">
+      <button class="transport-btn" id="btnPrev" title="Previous"><i class="fas fa-chevron-left"></i></button>
+      <span class="step-indicator"><span class="current" id="slideNum">1</span> / <span id="slideTotal">4</span></span>
+      <button class="transport-btn" id="btnNext" title="Next"><i class="fas fa-chevron-right"></i></button>
+    </div>
+    <div class="slide-dots" id="slideDots"></div>
+    <div class="nav-hints"><span class="kbd">←</span><span class="kbd">→</span><span class="kbd">D</span></div>
+  </div>
+</div>
+
+<script>
+// ── Navigation ──
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const TOTAL = slides.length;
+  let current = 0, transitioning = false;
+  const slideNum = document.getElementById('slideNum');
+  const dots = document.getElementById('slideDots');
+  const btnPrev = document.getElementById('btnPrev'), btnNext = document.getElementById('btnNext');
+  const themeToggle = document.getElementById('themeToggle');
+  document.getElementById('slideTotal').textContent = TOTAL;
+  for (let i = 0; i < TOTAL; i++){
+    const d = document.createElement('button');
+    d.className = 'slide-dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dots.appendChild(d);
+  }
+  function goTo(n){
+    if (n < 0 || n >= TOTAL || n === current || transitioning) return;
+    transitioning = true;
+    const dir = n > current ? 1 : -1;
+    slides.forEach(s => s.classList.remove('active','exit-left'));
+    if (dir > 0 && slides[current]) slides[current].classList.add('exit-left');
+    slides[n].classList.add('active');
+    current = n;
+    slideNum.textContent = current + 1;
+    document.querySelectorAll('.slide-dot').forEach((d,i) => d.classList.toggle('active', i === current));
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === TOTAL - 1;
+    setTimeout(() => { transitioning = false; }, 500);
+  }
+  btnPrev.addEventListener('click', () => goTo(current - 1));
+  btnNext.addEventListener('click', () => goTo(current + 1));
+  btnPrev.disabled = true;
+  document.addEventListener('keydown', e => {
+    if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    if (e.key === 'ArrowRight' || e.key === ' ') goTo(current + 1);
+    if (e.key === 'ArrowLeft') goTo(current - 1);
+    if (e.key === 'ArrowDown'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*'); }
+    if (e.key === 'ArrowUp'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*'); }
+  });
+  window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'deck-command'){
+      if (e.data.action === 'go-first') goTo(0);
+      if (e.data.action === 'next') goTo(current + 1);
+      if (e.data.action === 'prev') goTo(current - 1);
+      if (e.data.action === 'go-last'){ current = -1; goTo(TOTAL - 1); }
+      if (e.data.action === 'set-theme') setTheme(e.data.theme);
+    }
+  });
+  window.parent.postMessage({type:'deck-ready',total:TOTAL},'*');
+  function setTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+    themeToggle.innerHTML = theme === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    try { localStorage.setItem('slides-theme', theme); } catch(e){}
+    window.parent.postMessage({type:'deck-theme',theme:theme},'*');
+  }
+  themeToggle.addEventListener('click', () =>
+    setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light'));
+  let saved = null; try { saved = localStorage.getItem('slides-theme'); } catch(e){} setTheme(saved || 'light');
+})();
+</script>
+</body>
+</html>
