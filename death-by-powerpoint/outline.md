@@ -438,12 +438,26 @@ command: `node export-pdf.mjs death-by-powerpoint --density=guide`.
 
 ## 7 · Steal this (2 min) — `07-steal-this.html`
 
-*One slide: the close. Before it, the slide the agent built live, if there is one.*
+*Two slides: how to trust it, then the close. Before them, the slide the agent built live, if there is one.*
 
 **Where to start:** this is the slide the agent added in the live build (§4.2). It lists
 the three files to copy: the design system, the linter, one working deck. If it was built
 live and looks right, show it here (~0.5 min) and say "that's where you start." If it
 wasn't built, or you rolled it back, skip it. Don't explain what's missing.
+
+### 7.2 Five questions before you trust it (~1 min)
+
+**On screen:** A three-column table: *Ask* / *The rule* / *In this workflow*, then a link
+pill to the trust series (["Can I trust AI?" is the wrong question](https://markedmondson.substack.com/p/can-i-trust-ai-is-the-wrong-question)).
+- What may it touch? · "Undeclared capability means denied capability." · Only the deck you named; it opens a pull request, a person merges.
+- Can you replay it? · "If you can't replay AI, you shouldn't ship AI." · The deck is text in git; every change can be diffed and rolled back.
+- Can you see what it did? · "Self-reports are a performance. Action logs are evidence." · Judge the diff, the screenshots and the lint report.
+- Were decisions made up front? · "You pay at design time, at runtime, or in the postmortem." · The skill decides the look once.
+- Can it say "I don't know"? · "Any AI that can't say 'I don't know' may be lying to you." · No invented facts or quotes; missing input → "BLOCKED".
+
+**Say:** Don't read the table. One line: *"Hallucination is a risk when nobody checks the
+work. These five questions are how I decide what to hand to an AI. The series is linked."*
+This slide pre-empts the host's hallucination question (Q&A prep, Q4).
 
 ### 7.1 Close (1.5 min)
 
@@ -498,7 +512,7 @@ engine" and one drag of the slider.
       append to the rehearsal run.
 - [ ] Re-run the timings after a rehearsal and paste the measured `minutes:` back into the
       PLAYLIST. The numbers above are estimates, not evidence.
-- [x] PDF exported 15 Oct (`node export-pdf.mjs death-by-powerpoint --density=guide`, 29 pages; plus `--theme=light` for the light PDF) and
+- [x] PDF exported 15 Oct (`node export-pdf.mjs death-by-powerpoint --density=guide`, 30 pages; plus `--theme=light` for the light PDF) and
       `const PDF` wired in `presenter.html`. **Re-export after any deck edit** — the PDF is a
       snapshot, and a stale one is worse than none.
 - [ ] Zoom: share the *browser window*, not the tab, so switching decks doesn't drop the
@@ -549,6 +563,7 @@ engine" and one drag of the slider.
   trust moves one rung at a time, on evidence: Held → Instrumented → Shadow → Proposing →
   Automated. Slides sit at **Proposing**: the AI does the work and a person approves it. A
   decision moves up only on proof from the rung below, and goes back down when it fails.
+- The trust slide (§7.2) is the visual for this answer. Go back to it if needed.
 - For more: the six-part Substack series on AI delegation, trust and authority, starting
   with ["Can I trust AI?" is the wrong question](https://markedmondson.substack.com/p/can-i-trust-ai-is-the-wrong-question)
   (20 Apr 2026).
