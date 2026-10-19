@@ -185,16 +185,17 @@ Bottom label: "Same prompt, using the slides skill".
 
 ### 3.2 A skill is a folder of know-how (1 min)
 
-**On screen:** You ask ("Make me a slide about our Q3 results.") → Claude Code ("That's a
+**On screen:** You ask ("Make me a slide about our Q3 results.") → Your AI agent ("That's a
 slides job. I'll open the slides skill.") → the folder `presentation-slides/`:
 `SKILL.md` (when to use it, and the steps), `design-system.md` (our look, in plain words),
 `boilerplate.md` (a deck that already works), `lint-slides.mjs` (automatic checks).
 Bottom line: *Write it once. Every request after that uses it.*
 
 **Narrative:**
-- A skill is a folder of instructions for Claude Code.
-- The first lines say what it is for. When your request matches, Claude opens the folder
+- A skill is a folder of instructions for your AI agent.
+- The first lines say what it is for. When your request matches, the agent opens the folder
   and follows it.
+- We use Claude Code. The folder format is an open standard, so it isn't tied to one tool.
 - You don't pick it. You just ask for a slide.
 - The instructions are plain English. You don't need to code to write one.
 
@@ -437,12 +438,26 @@ command: `node export-pdf.mjs death-by-powerpoint --density=guide`.
 
 ## 7 · Steal this (2 min) — `07-steal-this.html`
 
-*One slide: the close. Before it, the slide the agent built live, if there is one.*
+*Two slides: how to trust it, then the close. Before them, the slide the agent built live, if there is one.*
 
 **Where to start:** this is the slide the agent added in the live build (§4.2). It lists
 the three files to copy: the design system, the linter, one working deck. If it was built
 live and looks right, show it here (~0.5 min) and say "that's where you start." If it
 wasn't built, or you rolled it back, skip it. Don't explain what's missing.
+
+### 7.2 Five questions before you trust it (~1 min)
+
+**On screen:** A three-column table: *Ask* / *The rule* / *In this workflow*, then a link
+pill to the trust series (["Can I trust AI?" is the wrong question](https://markedmondson.substack.com/p/can-i-trust-ai-is-the-wrong-question)).
+- What may it touch? · "Undeclared capability means denied capability." · Only the deck you named; it opens a pull request, a person merges.
+- Can you replay it? · "If you can't replay AI, you shouldn't ship AI." · The deck is text in git; every change can be diffed and rolled back.
+- Can you see what it did? · "Self-reports are a performance. Action logs are evidence." · Judge the diff, the screenshots and the lint report.
+- Were decisions made up front? · "You pay at design time, at runtime, or in the postmortem." · The skill decides the look once.
+- Can it say "I don't know"? · "Any AI that can't say 'I don't know' may be lying to you." · No invented facts or quotes; missing input → "BLOCKED".
+
+**Say:** Don't read the table. One line: *"Hallucination is a risk when nobody checks the
+work. These five questions are how I decide what to hand to an AI. The series is linked."*
+This slide pre-empts the host's hallucination question (Q&A prep, Q4).
 
 ### 7.1 Close (1.5 min)
 
@@ -497,10 +512,58 @@ engine" and one drag of the slider.
       append to the rehearsal run.
 - [ ] Re-run the timings after a rehearsal and paste the measured `minutes:` back into the
       PLAYLIST. The numbers above are estimates, not evidence.
-- [x] PDF exported 15 Oct (`node export-pdf.mjs death-by-powerpoint --density=guide`, 29 pages; plus `--theme=light` for the light PDF) and
+- [x] PDF exported 15 Oct (`node export-pdf.mjs death-by-powerpoint --density=guide`, 30 pages; plus `--theme=light` for the light PDF) and
       `const PDF` wired in `presenter.html`. **Re-export after any deck edit** — the PDF is a
       snapshot, and a stale one is worse than none.
 - [ ] Zoom: share the *browser window*, not the tab, so switching decks doesn't drop the
       share. Test the screen-share swap to the editor once, cold, before the webinar.
 - [ ] Leave the co-presenter flag **off** for a webinar. It needs a mic, and the room
       audio is already going through Zoom. The talk no longer mentions it.
+
+## Q&A prep (questions sent in advance by the IDA host)
+
+**1. What does a deck like this cost in tokens?**
+- Measured from the session logs for this deck's final polish pass (15–19 Oct 2026, Claude
+  Opus 5.5): about 365 model calls; 171k tokens written; 1.2M tokens put into the cache;
+  45M tokens read back from the cache. At API list prices that comes to roughly **$20**. The
+  same session also did unrelated work (merging, a memory hunt), so the polish itself cost less.
+- The first draft (September) was built on another machine, so we have no log for it. Don't
+  quote a number for it.
+- Most of the bill is the agent **re-reading** the deck and the skill on every step, not
+  writing. Cache reads are cheap, which is why the total stays low.
+- The live demo runs on **Haiku** on purpose: about 40× cheaper per token than Opus, and
+  good enough for a single slide with a skill to follow. Use a stronger model as the work
+  gets harder: a whole deck, an argument, a working engine.
+- Record the demo's own cost after the dry run (`/cost` in the session) and quote it here: ____
+
+**2. Does it only work with Claude?**
+- No. The skill is a folder of plain-English instructions plus a template and a checker
+  script. The folder format is an open standard that other coding agents also read. The
+  checker is ordinary code that any agent can run.
+- We use Claude Code because it is what we use every day. The method is the point: rules in
+  words, a template that works, automatic checks.
+
+**3. How do I sell this to management that likes the old way, or finds AI PowerPoint "good enough"?**
+- Don't sell the method. Ship one deck they actually use, and send a link instead of an
+  attachment.
+- "Good enough" is fine for a one-off. Aim at the decks you make **again and again**: the
+  monthly report, the client pitch, the brand deck. That is where a skill you write once pays off.
+- Show the three readers (§6): the same deck works in the room, read cold, and as a PDF.
+- Start small: the agent drafts and a person approves every slide. Raise trust only on
+  evidence (see Q4).
+
+**4. LLMs hallucinate. How does this reduce the risk?**
+- Hallucination is a risk when no one checks the work. Here the loop checks every time: the
+  rules in the skill say not to invent facts or quotes; the checker catches layout mistakes;
+  the agent looks at its own screenshots; and a person reads every slide before it ships.
+  The name on the deck is the person who is responsible for it.
+- Be honest about the limit: the checker catches layout, not truth. Facts come from the
+  sources you give the agent, and a person checks the numbers.
+- Bridge to the **Decision Budget** ladder (sunholo.com/presentations/decision-budget/):
+  trust moves one rung at a time, on evidence: Held → Instrumented → Shadow → Proposing →
+  Automated. Slides sit at **Proposing**: the AI does the work and a person approves it. A
+  decision moves up only on proof from the rung below, and goes back down when it fails.
+- The trust slide (§7.2) is the visual for this answer. Go back to it if needed.
+- For more: the six-part Substack series on AI delegation, trust and authority, starting
+  with ["Can I trust AI?" is the wrong question](https://markedmondson.substack.com/p/can-i-trust-ai-is-the-wrong-question)
+  (20 Apr 2026).

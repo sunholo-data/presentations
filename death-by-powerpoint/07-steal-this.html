@@ -251,6 +251,22 @@ html[data-density="stage"] .detail{display:none}
 .final-scene .final{text-align:left;max-width:66%}
 .final-scene .final-links{justify-content:flex-start;max-width:68%}
 .final-scene .detail{text-align:left;margin-left:0;max-width:61%}
+/* ─── Trust: five questions from the series ─── */
+.trust{display:grid;grid-template-columns:auto 1fr 1.25fr;column-gap:2.2cqi;row-gap:1.1cqb;
+  width:100%;max-width:88%;align-items:baseline;text-align:left}
+.trust-h{font-family:var(--mono);font-size:clamp(8px,1cqi,13px);font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text-dim);padding-bottom:.4cqb;border-bottom:1px solid var(--ghost)}
+.trust-q{font-size:clamp(11px,1.6cqi,21px);font-weight:700;line-height:1.3;white-space:nowrap}
+.trust-q i{color:var(--orange);width:1.4em}
+.trust-said{font-size:clamp(9px,1.25cqi,16px);color:var(--text-dim);font-style:italic;line-height:1.4}
+.trust-here{font-size:clamp(9px,1.3cqi,17px);line-height:1.4}
+.trust-here b{color:var(--orange);font-weight:700}
+.slide.active .trust{animation:fadeSlideUp .55s ease .2s both}
+.series-link{font-family:var(--mono);font-size:clamp(9px,1.15cqi,15px);color:var(--text-dim);
+  text-decoration:none;border:1px solid var(--ghost);border-radius:22px;padding:1cqb 2cqi;background:var(--surface)}
+.series-link:hover{border-color:var(--orange);color:var(--orange)}
+.series-link i{color:var(--orange);margin-right:.6em}
+.series-link b{color:var(--text)}
 </style>
 </head>
 <body>
@@ -337,8 +353,45 @@ html[data-density="stage"] .detail{display:none}
   <div class="slides-viewport">
     <div class="slides-stage">
 
+    <!-- ═══════════ 7.2 How do you trust it? ═══════════ -->
+    <section class="slide active" data-slide="0">
+      <span class="slide-tag"><i class="fas fa-shield-halved"></i> Trust, not hope</span>
+      <h1 class="slide-title">Five questions before you <span class="accent">trust it</span></h1>
+      <div class="trust">
+        <div class="trust-h">Ask</div><div class="trust-h">The rule</div><div class="trust-h">In this workflow</div>
+
+        <div class="trust-q"><i class="fas fa-lock"></i> What may it touch?</div>
+        <div class="trust-said">&ldquo;Undeclared capability means denied capability.&rdquo;</div>
+        <div class="trust-here">Only the deck you named. It opens a pull request; <b>a person merges</b>.</div>
+
+        <div class="trust-q"><i class="fas fa-rotate"></i> Can you replay it?</div>
+        <div class="trust-said">&ldquo;If you can&rsquo;t replay AI, you shouldn&rsquo;t ship AI.&rdquo;</div>
+        <div class="trust-here">The deck is text in git. Every change can be <b>diffed and rolled back</b>.</div>
+
+        <div class="trust-q"><i class="fas fa-eye"></i> Can you see what it did?</div>
+        <div class="trust-said">&ldquo;Self-reports are a performance. Action logs are evidence.&rdquo;</div>
+        <div class="trust-here">Judge the <b>diff, the screenshots and the lint report</b>, not its explanation.</div>
+
+        <div class="trust-q"><i class="fas fa-compass-drafting"></i> Were decisions made up front?</div>
+        <div class="trust-said">&ldquo;You pay at design time, at runtime, or in the postmortem.&rdquo;</div>
+        <div class="trust-here">The skill <b>decides the look once</b>, before anyone asks for a slide.</div>
+
+        <div class="trust-q"><i class="fas fa-door-open"></i> Can it say &ldquo;I don&rsquo;t know&rdquo;?</div>
+        <div class="trust-said">&ldquo;Any AI that can&rsquo;t say &lsquo;I don&rsquo;t know&rsquo; may be lying to you.&rdquo;</div>
+        <div class="trust-here">No invented facts or quotes. <b>Missing input? It says &ldquo;BLOCKED&rdquo;.</b></div>
+      </div>
+      <a class="series-link" href="https://markedmondson.substack.com/p/can-i-trust-ai-is-the-wrong-question"><i class="fas fa-pen-nib"></i><b>&ldquo;Can I trust AI?&rdquo; is the wrong question</b> &middot; six-part series on markedmondson.substack.com</a>
+      <p class="detail">
+        Hallucination is a risk when nobody checks the work. These are the five questions from my
+        series on AI delegation, trust and authority, applied to slides. The rules on the right are written into the repo&rsquo;s instructions file, which every agent reads first. The checker catches layout,
+        not truth: facts come from the sources you give it, and a person checks the numbers.
+        Trust then moves up one rung at a time, on evidence: slides sit at <em>proposing</em>,
+        where the AI does the work and a person approves it.
+      </p>
+    </section>
+
     <!-- ═══════════ 7.3 Close ═══════════ -->
-    <section class="slide final-scene active" data-slide="0">
+    <section class="slide final-scene" data-slide="1">
       <sunholo-blender
         data-background
         data-src="../assets/blender/sunholo_spacetime_ghosts_starfield.glb"
