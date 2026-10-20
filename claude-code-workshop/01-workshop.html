@@ -533,9 +533,9 @@ html[data-density="stage"] .detail{display:none}
           <div class="card"><div class="h"><i class="fa-solid fa-code-branch"></i> Share</div>
             <div class="prompt">Make a branch called practice/&lt;my-username&gt;, commit, push it.<br>Now push that commit straight to main.</div></div>
         </div>
-        <p class="foot">You ask in words; Claude runs the git commands. <b>Read each one before you approve it.</b> The push to main is refused: <b>main only changes through a pull request</b>. Sign in to GitHub yourself, never in the chat.</p>
+        <p class="foot">You ask in words; Claude runs the git commands. Commits go straight through (they stay on your laptop and can be undone); <b>a push always stops for you to read</b>. The push to main is refused: <b>main only changes through a pull request</b>. Sign in to GitHub yourself, never in the chat.</p>
         <div class="detail fac"><span class="lbl">Facilitator</span>
-          <p>Everyone needs Write access to this repository (invites accepted) and GitHub sign-in working. On Macs that means GitHub CLI and <b>gh auth login</b> in the terminal pane. Read GitHub's refusal aloud: that is the ruleset doing its job.</p>
+          <p>Everyone needs Write access to this repository (invites accepted) and GitHub sign-in working. On Macs that means GitHub CLI and <b>gh auth login</b> in the terminal pane. Read GitHub's refusal aloud: that is the ruleset doing its job. Without Write access, every push fails with "permission denied" instead, which spoils the point.</p>
         </div>
       </section>
 
