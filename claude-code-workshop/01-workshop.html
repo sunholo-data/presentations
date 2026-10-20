@@ -140,7 +140,19 @@ html[data-density="stage"] .detail{display:none}
 .proof span b{font-family:var(--sans);font-size:1em;letter-spacing:0;text-transform:none;color:var(--text)}
 
 /* Tree: one column per tier, nodes as chips */
-.tree{display:grid;grid-template-columns:repeat(8,1fr);gap:.9cqi;flex:1;min-height:0}
+.tree{display:grid;grid-template-columns:repeat(9,1fr);gap:.7cqi;flex:1;min-height:0}
+.tree .chip{font-size:clamp(8px,.9cqi,13px);padding:.6cqb .6cqi}
+.chip.core{background:var(--orange-soft);border:1.5px solid var(--orange);font-weight:600}
+.chip.st{background:transparent;border:1.5px dashed var(--orange)}
+.chip.later{background:transparent;color:var(--text-dim)}
+.chip.adv{background:transparent;color:var(--text-dim);border-style:dotted}
+.treekey{display:flex;flex-wrap:wrap;align-items:center;gap:.5cqi 1cqi;margin:1.4cqb 0 0;font-size:clamp(9px,1cqi,14px);color:var(--text-dim)}
+.treekey .chip{font-size:clamp(8px,.9cqi,13px);padding:.3cqb .6cqi}
+.blockstrip{display:flex;flex-direction:column;gap:.6cqb;margin-top:1.6cqb;padding:1.2cqb 1.4cqi;border-radius:8px;border:1.5px solid var(--orange);background:var(--orange-soft);flex-shrink:0}
+.blockstrip .bk{font:700 clamp(8px,.95cqi,13px) var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--orange)}
+.blockstrip .bk-row{font-size:clamp(10px,1.15cqi,16px);line-height:1.75;display:block}
+.blockstrip .chip{display:inline-block;font-size:clamp(9px,1cqi,14px);line-height:1.3;padding:.2cqb .6cqi;margin:0 .3cqi .2cqb 0}
+.blockstrip .bk-regroup{color:var(--text-dim)}
 .tier{display:flex;flex-direction:column;gap:.8cqb;padding:1.4cqb .8cqi;border-radius:8px;background:var(--code-bg);border:1px solid var(--code-border)}
 .tier .tn{font-family:var(--mono);font-size:clamp(8px,1cqi,13px);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--orange)}
 .tier .tl{font-size:clamp(10px,1.35cqi,19px);font-weight:800;line-height:1.15;margin-bottom:.4cqb}
@@ -261,8 +273,23 @@ html[data-density="stage"] .detail{display:none}
           <p class="lede" style="margin-top:3cqb">One day, one skill tree. By the end, everyone has used a skill someone else wrote, and <b>contributed one of their own</b> to the team.</p>
           <div class="detail fac"><span class="lbl">Facilitator</span>
             <p><b>Before the day, collect two things from everyone:</b> the <b>email they sign in to Claude with</b> (invite each to the progress board as <b>Editor</b> from its Share menu, with the public link <b>off</b>; Viewer or Commenter can't save) and their <b>GitHub username</b> (add as a collaborator with <b>Write</b> on this repository). Both invitations must be accepted before the day.</p>
-            <p>Then start here, on the projector: the next four slides take the room from an installed app to the guide running in the workshop folder. Anyone who hasn't installed Claude Desktop goes to the install table now.</p>
+            <p>Then start here, sharing your screen: the next four slides take everyone from an installed app to the guide running in the workshop folder. Anyone who hasn't installed Claude Desktop goes to the help channel now.</p>
           </div>
+        </div>
+      </section>
+
+      <!-- 0b · Who's here -->
+      <section class="slide" data-slide="0b">
+        <div class="kicker">Before anything else</div>
+        <h2 class="slide-title">Who's here? <span class="accent">Answer in the chat.</span></h2>
+        <div class="loop" style="grid-template-columns:1fr 1fr 1fr">
+          <div class="card"><div class="num">1</div><div class="t">Who are you?</div><div class="s">Your name, and what you do day to day.</div></div>
+          <div class="card"><div class="num">2</div><div class="t">AI last week</div><div class="s">One thing you used AI for. Anything counts, even a failed attempt.</div></div>
+          <div class="card hot"><div class="num">3</div><div class="t">What would you like it to do?</div><div class="s">One task you'd hand over if you trusted it.</div></div>
+        </div>
+        <div class="prompt" style="margin-top:2.4cqb">Also: the <b>email you sign in to Claude with</b>, so you can be invited to the progress board.</div>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Give it three minutes, then read a few answers aloud. Question 3 is the seed of everyone's real task at the end of the day: note who said what. Invite each email to the progress board as <b>Editor</b> from its Share menu (public link off) while the setup slides run.</p>
         </div>
       </section>
 
@@ -293,7 +320,7 @@ html[data-density="stage"] .detail{display:none}
           </div>
         </div>
         <div class="detail fac"><span class="lbl">Facilitator</span>
-          <p>Don't sell it. Ask: <b>what was the last thing you pasted into a chat, and what did you do with the answer?</b> Two answers from the room, then point at the right-hand column.</p>
+          <p>Don't sell it. Ask: <b>what was the last thing you pasted into a chat, and what did you do with the answer?</b> Two answers in the chat, then point at the right-hand column.</p>
         </div>
       </section>
 
@@ -313,7 +340,7 @@ html[data-density="stage"] .detail{display:none}
         </div>
         <p class="foot">The Code tab works <b>inside the folder you choose</b>, and only there unless you let it out. That is the whole difference from Chat.</p>
         <div class="detail fac"><span class="lbl">Facilitator</span>
-          <p>Do it on the projector, one step at a time, and wait. Anyone whose Code tab asks to upgrade goes to the install table: their plan doesn't include it.</p>
+          <p>Do it on your shared screen, one step at a time, and wait for thumbs up in the chat. Anyone whose Code tab asks to upgrade goes to the help channel: their plan doesn't include it.</p>
         </div>
       </section>
 
@@ -338,7 +365,7 @@ html[data-density="stage"] .detail{display:none}
           </ol>
         </div>
         <div class="detail fac"><span class="lbl">Facilitator</span>
-          <p>Point at each on the projector. The icons along the top right open a terminal, the changes made, a preview and the files; mention them, don't teach them yet. Demo <b>!git --version</b> here: the setup proof, and the room's first command. Desktop moves fast: check these labels against the current version the day before.</p>
+          <p>Point at each on your shared screen. The icons along the top right open a terminal, the changes made, a preview and the files; mention them, don't teach them yet. Demo <b>!git --version</b> here: the setup proof, and the room's first command. Desktop moves fast: check these labels against the current version the day before.</p>
         </div>
       </section>
 
@@ -397,17 +424,10 @@ html[data-density="stage"] .detail{display:none}
       <section class="slide" data-slide="3">
         <div class="kicker">The map</div>
         <h2 class="slide-title">A skill tree, <span class="dim">not a slide sequence</span></h2>
-        <div class="tree">
-          <div class="tier"><span class="tn">0 · before</span><span class="tl">Setup</span><span class="chip">Desktop + Code tab</span><span class="chip">Git + GitHub</span><span class="chip">Clone the workshop</span></div>
-          <div class="tier"><span class="tn">1</span><span class="tl">Chat → agent</span><span class="chip">Folder is context</span><span class="chip">Permissions &amp; diffs</span><span class="chip">Plan first</span><span class="chip">Trust per action</span><span class="chip">Models</span><span class="chip">Sessions</span></div>
-          <div class="tier"><span class="tn">2</span><span class="tl">Rules</span><span class="chip">CLAUDE.md</span><span class="chip">Team conventions &amp; data</span><span class="chip">Allow · ask · deny</span><span class="chip cap">One real task</span></div>
-          <div class="tier"><span class="tn">3</span><span class="tl">Git</span><span class="chip">Git as undo</span><span class="chip">Clone, branch, push</span></div>
-          <div class="tier"><span class="tn">4</span><span class="tl">Skills</span><span class="chip">Use one</span><span class="chip">How it's built</span><span class="chip">Write your own</span><span class="chip">One PR each</span></div>
-          <div class="tier"><span class="tn">5</span><span class="tl">Connect</span><span class="chip">Paste vs connect</span><span class="chip">Remote MCP</span><span class="chip">Your own key</span><span class="chip">GA4 via BigQuery</span></div>
-          <div class="tier"><span class="tn">6</span><span class="tl">Share</span><span class="chip">Team skills repo</span><span class="chip goal">Skill by pull request</span></div>
-          <div class="tier"><span class="tn">7 · follow-up</span><span class="tl">Team layer</span><span class="chip">Review before merge</span><span class="chip">Skill routing</span></div>
-        </div>
-        <div class="branches"><span class="lbl">Branches · stretch &amp; advanced</span><span class="chip">Checking the work</span><span class="chip">Data files</span><span class="chip">Hooks</span><span class="chip">Subagents</span><span class="chip">Running on a schedule</span><span class="chip">Team plugin</span></div>
+        <!-- tree:begin -->
+        <div class="tree"><div class="tier"><span class="tn">0</span><span class="tl">Setup</span><span class="chip core">Claude Desktop, Code tab</span><span class="chip core">Git and a GitHub account</span><span class="chip core">Get the workshop</span></div><div class="tier"><span class="tn">1</span><span class="tl">Chat → agent</span><span class="chip core">Chat versus agent</span><span class="chip core">The folder is the context</span><span class="chip core">Permissions and reviewing changes</span><span class="chip st">Plan before acting</span><span class="chip core">Trust is earned per action</span><span class="chip st">Choosing a model</span><span class="chip st">Sessions and context</span></div><div class="tier"><span class="tn">2</span><span class="tl">Rules</span><span class="chip core">CLAUDE.md — standing instructions</span><span class="chip core">Team conventions and data handling</span><span class="chip core">Your rules — allow, ask, deny</span></div><div class="tier"><span class="tn">3</span><span class="tl">Git</span><span class="chip core">Git as undo</span><span class="chip core">Clone, branch, push</span></div><div class="tier"><span class="tn">4</span><span class="tl">Skills</span><span class="chip core">Use someone else's skill</span><span class="chip st">How a skill is built</span><span class="chip later">Write your own skill</span><span class="chip core">Your skill, in everyone's copy</span></div><div class="tier"><span class="tn">5</span><span class="tl">Connect</span><span class="chip core">Connectors and MCP</span><span class="chip core">Add a remote MCP server</span><span class="chip st">Make your own API key</span><span class="chip later">GA4 data through BigQuery</span></div><div class="tier"><span class="tn">6</span><span class="tl">Share</span><span class="chip later">The team's skills repository</span><span class="chip later">Contribute a skill by pull request</span><span class="chip core">One real task, end to end</span></div><div class="tier"><span class="tn">7</span><span class="tl">Team layer</span><span class="chip later">A review before anything is shared</span><span class="chip later">Many skills, one entry point</span></div><div class="tier"><span class="tn">+</span><span class="tl">Branches</span><span class="chip st">Checking the work</span><span class="chip st">Spreadsheets and data files</span><span class="chip adv">Hooks</span><span class="chip adv">Subagents and parallel sessions</span><span class="chip adv">Running without you</span><span class="chip adv">Run a GA4 server yourself</span><span class="chip adv">Team skills in every folder</span></div></div>
+        <p class="treekey"><span class="chip core">core</span> everyone, today <span class="chip st">stretch</span> if you finish early <span class="chip later">later</span> homework or follow-up <span class="chip adv">advanced</span> optional</p>
+<!-- tree:end -->
         <div class="detail fac"><span class="lbl">Facilitator</span>
           <p>Source: <b>tree/tree.yaml</b>. The <i>I can…</i> sentence on every node was the pre-session self-assessment. Read back the distribution: which tiers the room already has, which nobody has.</p>
         </div>
@@ -429,7 +449,7 @@ html[data-density="stage"] .detail{display:none}
         </div>
         <p class="foot">Every box on the board says which it is. The guide offers core first; ask it for more whenever you like.</p>
         <div class="detail fac"><span class="lbl">Facilitator</span>
-          <p>Say it plainly: finishing the core is doing well. Developers will race ahead; point them at advanced rather than the next block, so the room stays together. Board, The room: "N of M have reached the core".</p>
+          <p>Say it plainly: finishing the core is doing well. Developers will race ahead; point them at advanced rather than the next block, so the group stays together. Board, The room: "N of M have reached the core".</p>
         </div>
       </section>
 
@@ -450,7 +470,7 @@ html[data-density="stage"] .detail{display:none}
         </div>
         <p class="foot"><a class="board-link" href="https://claude.ai/artifact/5Gc3G9GxCMrT2anwpdmaq1" target="_blank" rel="noopener">Open the progress board</a> · open it from your <b>email invitation</b>, signed in to Claude with that address</p>
         <div class="detail fac"><span class="lbl">Facilitator</span>
-          <p>Saving needs an <b>Editor</b> invitation to the email they use for Claude, and no public link on the board. Anyone whose board says <i>View only</i> isn't invited yet, or is signed in with another address: invite them now from the Share menu. Put the board's room view on the projector during welcome. The distribution replaces the self-assessment readback: which tiers the room already has, which nobody has. Leave it up during hands-on blocks.</p>
+          <p>Saving needs an <b>Editor</b> invitation to the email they use for Claude, and no public link on the board. Anyone whose board says <i>View only</i> isn't invited yet, or is signed in with another address: invite them now from the Share menu. Share the board's room view during welcome. The distribution replaces the self-assessment readback: which tiers the room already has, which nobody has. Bring it back up at the end of each block: it tells you when to regroup.</p>
         </div>
       </section>
 
@@ -466,7 +486,7 @@ html[data-density="stage"] .detail{display:none}
           <span class="tm brk">12:00</span><span class="it brk">Lunch</span><span class="tr"></span>
           <span class="tm">12:30</span><span class="it">Skills <span>· use one, read one, start your own</span></span><span class="tr">tier 4</span>
           <span class="tm">13:30</span><span class="it">MCP <span>· connect instead of paste</span></span><span class="tr">tier 5</span>
-          <span class="tm">14:15</span><span class="it">One real task each, shown to the room <span>· homework</span></span><span class="tr">capstone</span>
+          <span class="tm">14:15</span><span class="it">One real task each, shown to the group <span>· homework</span></span><span class="tr">capstone</span>
         </div>
         <p class="foot">Sharing skills through the team repository (tier 6) opens the <b>follow-up session</b>, after you've written one.</p>
       </section>
@@ -484,7 +504,7 @@ html[data-density="stage"] .detail{display:none}
         </div>
         <p class="proof" style="margin-top:3cqb"><b>Proof</b><span>a file Claude changed that <b>you</b> opened and checked · one change rejected and re-asked</span></p>
         <div class="detail fac"><span class="lbl">Facilitator</span>
-          <p>The sample hides an unexplained spike on 19 Sept. Watch for whether Claude admits it can't see the cause or invents one, and ask the room which it did.</p>
+          <p>The sample hides an unexplained spike on 19 Sept. Watch for whether Claude admits it can't see the cause or invents one, and ask the group which it did.</p>
         </div>
       </section>
 
@@ -501,6 +521,9 @@ html[data-density="stage"] .detail{display:none}
           <span class="rung r4"><i></i><i></i><i></i><i></i><i></i><b>Automated</b></span><span class="what">Unattended inside limits</span><span class="cc"><b>Accept edits</b> / <b>Auto</b> + <b>allow</b> rules. Ask and deny still hold.</span>
         </div>
         <p class="foot">Commit: automated. <b>Push: always asks</b>, even in Auto. Changing who can access the cloud project: denied. One session, three rungs.</p>
+        <!-- block:2:begin -->
+        <div class="blockstrip"><span class="bk">Block 2 · Chat to agent</span><span class="bk-row"><b>Predict together, in the chat:</b> how many times will Claude stop and ask in <b>Manual</b>? In <b>Accept edits</b>? In <b>Auto</b>? Write your three numbers down.</span><span class="bk-row"><b>Finish:</b> <span class="chip core">Chat versus agent</span><span class="chip core">The folder is the context</span><span class="chip core">Permissions and reviewing changes</span><span class="chip core">Trust is earned per action</span> <b>Done early:</b> <span class="chip st">Plan before acting</span><span class="chip st">Choosing a model</span><span class="chip st">Sessions and context</span><span class="chip st">Spreadsheets and data files</span></span><span class="bk-row bk-regroup">We regroup when the board shows most of us have finished block 2.</span></div>
+<!-- block:2:end -->
         <div class="detail fac"><span class="lbl">Facilitator</span>
           <p>Same task three times: Manual, Accept edits, Auto. Everyone predicts the number of prompts first. The ladder is the Decision Budget's; promotion is "Yes, and don't ask again" after you've changed nothing several times. Down is a normal move.</p>
         </div>
@@ -518,6 +541,9 @@ html[data-density="stage"] .detail{display:none}
             <div class="t">Written together, now</div>
             <ul><li><b>Data first:</b> what may go to a model, and what may not</li><li>Where our files live, and how they're named</li><li>Who checks what before it leaves the team</li><li>Then the <b>settings</b> that enforce it</li></ul></div>
         </div>
+        <!-- block:3:begin -->
+        <div class="blockstrip"><span class="bk">Block 3 · Rules</span><span class="bk-row"><b>Predict together, in the chat:</b> you ask the same question again in the same session. Will the rule apply?</span><span class="bk-row"><b>Finish:</b> <span class="chip core">CLAUDE.md — standing instructions</span><span class="chip core">Team conventions and data handling</span><span class="chip core">Your rules — allow, ask, deny</span> <b>Done early:</b> help someone, or pick an advanced box</span><span class="bk-row bk-regroup">We regroup when the board shows most of us have finished block 3.</span></div>
+<!-- block:3:end -->
         <div class="detail fac"><span class="lbl">Facilitator</span>
           <p>Start the conventions from the group's data rule in <b>overlay/</b>. Everyone adds one line. This file is the first shared artefact of the day; it gets corrected after a week of real use.</p>
         </div>
@@ -533,9 +559,12 @@ html[data-density="stage"] .detail{display:none}
           <div class="card"><div class="h"><i class="fa-solid fa-code-branch"></i> Share</div>
             <div class="prompt">Make a branch called practice/&lt;my-username&gt;, commit, push it.<br>Now push that commit straight to main.</div></div>
         </div>
-        <p class="foot">You ask in words; Claude runs the git commands. <b>Read each one before you approve it.</b> The push to main is refused: <b>main only changes through a pull request</b>. Sign in to GitHub yourself, never in the chat.</p>
+        <p class="foot">You ask in words; Claude runs the git commands. Commits go straight through (they stay on your laptop and can be undone); <b>a push always stops for you to read</b>. The push to main is refused: <b>main only changes through a pull request</b>. Sign in to GitHub yourself, never in the chat.</p>
+        <!-- block:4:begin -->
+        <div class="blockstrip"><span class="bk">Block 4 · Git</span><span class="bk-row"><b>Predict together, in the chat:</b> you ask <i>"undo the last commit's change"</i>. What happens to the file? What happens to the history: is the commit deleted, or is a new one added?</span><span class="bk-row"><b>Finish:</b> <span class="chip core">Git as undo</span><span class="chip core">Clone, branch, push</span> <b>Done early:</b> help someone, or pick an advanced box</span><span class="bk-row bk-regroup">We regroup when the board shows most of us have finished block 4.</span></div>
+<!-- block:4:end -->
         <div class="detail fac"><span class="lbl">Facilitator</span>
-          <p>Everyone needs Write access to this repository (invites accepted) and GitHub sign-in working. On Macs that means GitHub CLI and <b>gh auth login</b> in the terminal pane. Read GitHub's refusal aloud: that is the ruleset doing its job.</p>
+          <p>Everyone needs Write access to this repository (invites accepted) and GitHub sign-in working. On Macs that means GitHub CLI and <b>gh auth login</b> in the terminal pane. Read GitHub's refusal aloud: that is the ruleset doing its job. Without Write access, every push fails with "permission denied" instead, which spoils the point.</p>
         </div>
       </section>
 
@@ -568,14 +597,16 @@ html[data-density="stage"] .detail{display:none}
           <i class="fa-solid fa-arrow-right arrow"></i>
           <div class="card"><div class="num">2</div><div class="t">Propose</div><div class="s">Push, and open a pull request. One line on what it does.</div></div>
           <i class="fa-solid fa-arrow-right arrow"></i>
-          <div class="card hot"><div class="num">3</div><div class="t">Merge</div><div class="s">On the projector, one by one. Only the facilitator can.</div></div>
+          <div class="card hot"><div class="num">3</div><div class="t">Merge</div><div class="s">On the shared screen, one by one. Only the facilitator can.</div></div>
           <i class="fa-solid fa-arrow-right arrow"></i>
           <div class="card"><div class="num">4</div><div class="t">Pull</div><div class="s">Switch to main, pull, new session, type <b>/</b>. Run someone else's.</div></div>
         </div>
         <div class="prompt" style="margin-top:3cqb">.claude/skills/&lt;your-github-username&gt;/SKILL.md</div>
-        <p class="foot"><b>Predict:</b> after you open your pull request, when does your skill reach your neighbour's laptop?</p>
+        <!-- block:5:begin -->
+        <div class="blockstrip"><span class="bk">Block 5 · Skills</span><span class="bk-row"><b>Predict together, in the chat:</b> after you push and open a pull request, will your skill appear in your neighbour's Code tab? When will it?</span><span class="bk-row"><b>Finish:</b> <span class="chip core">Use someone else's skill</span><span class="chip core">Your skill, in everyone's copy</span> <b>Done early:</b> <span class="chip st">How a skill is built</span></span><span class="bk-row bk-regroup">We regroup when the board shows most of us have finished block 5.</span></div>
+<!-- block:5:end -->
         <div class="detail fac"><span class="lbl">Facilitator</span>
-          <p>One folder each means every PR merges cleanly in any order. Merge with the room watching, reading each description aloud. Afterwards, show <b>git log --oneline</b> on the projector: every merge is there with a name on it. The same moves in the follow-up go to the group's own repository, for real.</p>
+          <p>One folder each means every PR merges cleanly in any order. Merge with everyone watching your screen, reading each description aloud. Afterwards, show <b>git log --oneline</b> on your screen: every merge is there with a name on it. The same moves in the follow-up go to the group's own repository, for real.</p>
         </div>
       </section>
 
@@ -592,7 +623,10 @@ html[data-density="stage"] .detail{display:none}
             <div class="s">Google's own BigQuery server, over a GA4 export. You reach only the datasets you were <b>granted</b>: the data rule, enforced. Today: the practice sample.</div></div>
         </div>
         <p class="proof" style="margin-top:2.4cqb"><b>Ask</b><span>every time: <b>what just left my laptop, and where did it go?</b></span></p>
-      </section>
+        <!-- block:6:begin -->
+        <div class="blockstrip"><span class="bk">Block 6 · Connect</span><span class="bk-row"><b>Predict together, in the chat:</b> you ask the same question in a new session, with the connector on and no file. What will Claude fetch? More than your export, or less?</span><span class="bk-row"><b>Finish:</b> <span class="chip core">Connectors and MCP</span><span class="chip core">Add a remote MCP server</span> <b>Done early:</b> <span class="chip st">Make your own API key</span></span><span class="bk-row bk-regroup">We regroup when the board shows most of us have finished block 6.</span></div>
+<!-- block:6:end -->
+        </section>
 
       <!-- 10 · Tier 6 -->
       <section class="slide" data-slide="10">
@@ -633,7 +667,10 @@ html[data-density="stage"] .detail{display:none}
           <div class="card hot"><div class="num">3</div><div class="t">How you checked it</div></div>
         </div>
         <p class="foot">Two minutes each. The third column is the one that matters: <b>a result you haven't checked is a guess</b>, however well written.</p>
-      </section>
+        <!-- block:7:begin -->
+        <div class="blockstrip"><span class="bk">Block 7 · One real task</span><span class="bk-row"><b>Finish:</b> <span class="chip core">One real task, end to end</span> <b>Done early:</b> <span class="chip st">Checking the work</span></span><span class="bk-row bk-regroup">We regroup when the board shows most of us have finished block 7.</span></div>
+<!-- block:7:end -->
+        </section>
 
       <!-- 12 · Homework -->
       <section class="slide" data-slide="12">
