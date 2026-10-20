@@ -238,7 +238,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   //   `group`   = optional heading in the jump menu (blocks, acts, appendix).
   // ═══════════════════════════════════════════════════════════════
   const PLAYLIST = [
-    { src: '01-workshop.html', label: 'Claude Code workshop', minutes: 0 },
+    { src: '../about-mark/about-mark.html', label: 'About Mark', minutes: 1, group: 'Welcome' },
+    { src: '01-workshop.html', label: 'Claude Code workshop', minutes: 0, group: 'Workshop' },
+    { src: '../contact-mark/contact-mark.html', label: 'Contact', minutes: 0, group: 'Close' },
     { src: '02-reference.html', label: 'Reference: one slide per box', minutes: 0, group: 'Appendix' },
   ];
 
