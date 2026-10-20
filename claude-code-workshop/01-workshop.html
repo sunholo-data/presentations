@@ -152,6 +152,7 @@ html[data-density="stage"] .detail{display:none}
 .blockstrip .bk{font:700 clamp(8px,.95cqi,13px) var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--orange)}
 .blockstrip .bk-row{font-size:clamp(10px,1.15cqi,16px);line-height:1.75;display:block}
 .blockstrip .chip{display:inline-block;font-size:clamp(9px,1cqi,14px);line-height:1.3;padding:.2cqb .6cqi;margin:0 .3cqi .2cqb 0}
+.card .s .chip{display:inline-block;font-size:clamp(9px,1cqi,14px);line-height:1.3;padding:.2cqb .6cqi;margin:0 .3cqi .5cqb 0;vertical-align:baseline}
 .blockstrip .bk-regroup{color:var(--text-dim)}
 .tier{display:flex;flex-direction:column;gap:.8cqb;padding:1.4cqb .8cqi;border-radius:8px;background:var(--code-bg);border:1px solid var(--code-border)}
 .tier .tn{font-family:var(--mono);font-size:clamp(8px,1cqi,13px);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--orange)}
@@ -273,7 +274,7 @@ html[data-density="stage"] .detail{display:none}
           <p class="lede" style="margin-top:3cqb">One day, one skill tree. By the end, everyone has used a skill someone else wrote, and <b>contributed one of their own</b> to the team.</p>
           <div class="detail fac"><span class="lbl">Facilitator</span>
             <p><b>Before the day, collect two things from everyone:</b> the <b>email they sign in to Claude with</b> (invite each to the progress board as <b>Editor</b> from its Share menu, with the public link <b>off</b>; Viewer or Commenter can't save) and their <b>GitHub username</b> (add as a collaborator with <b>Write</b> on this repository). Both invitations must be accepted before the day.</p>
-            <p>Then start here, sharing your screen: the next four slides take everyone from an installed app to the guide running in the workshop folder. Anyone who hasn't installed Claude Desktop goes to the help channel now.</p>
+            <p>Then start here, sharing your screen: after "Who's here" and the shift, four setup slides take everyone from an installed app to the guide running in the workshop folder. Anyone who hasn't installed Claude Desktop goes to the help channel now.</p>
           </div>
         </div>
       </section>
@@ -425,7 +426,7 @@ html[data-density="stage"] .detail{display:none}
         <div class="kicker">The map</div>
         <h2 class="slide-title">A skill tree, <span class="dim">not a slide sequence</span></h2>
         <!-- tree:begin -->
-        <div class="tree"><div class="tier"><span class="tn">0</span><span class="tl">Setup</span><span class="chip core">Claude Desktop, Code tab</span><span class="chip core">Git and a GitHub account</span><span class="chip core">Get the workshop</span></div><div class="tier"><span class="tn">1</span><span class="tl">Chat → agent</span><span class="chip core">Chat versus agent</span><span class="chip core">The folder is the context</span><span class="chip core">Permissions and reviewing changes</span><span class="chip st">Plan before acting</span><span class="chip core">Trust is earned per action</span><span class="chip st">Choosing a model</span><span class="chip st">Sessions and context</span></div><div class="tier"><span class="tn">2</span><span class="tl">Rules</span><span class="chip core">CLAUDE.md — standing instructions</span><span class="chip core">Team conventions and data handling</span><span class="chip core">Your rules — allow, ask, deny</span><span class="chip st">What else settings can do</span></div><div class="tier"><span class="tn">3</span><span class="tl">Git</span><span class="chip core">Git as undo</span><span class="chip core">Clone, branch, push</span></div><div class="tier"><span class="tn">4</span><span class="tl">Skills</span><span class="chip core">Use someone else's skill</span><span class="chip st">How a skill is built</span><span class="chip later">Write your own skill</span><span class="chip core">Your skill, in everyone's copy</span></div><div class="tier"><span class="tn">5</span><span class="tl">Connect</span><span class="chip core">Connectors and MCP</span><span class="chip core">Add a remote MCP server</span><span class="chip st">Make your own API key</span><span class="chip later">GA4 data through BigQuery</span></div><div class="tier"><span class="tn">6</span><span class="tl">Share</span><span class="chip later">The team's skills repository</span><span class="chip later">Contribute a skill by pull request</span><span class="chip core">One real task, end to end</span></div><div class="tier"><span class="tn">7</span><span class="tl">Team layer</span><span class="chip later">A review before anything is shared</span><span class="chip later">Many skills, one entry point</span></div><div class="tier"><span class="tn">+</span><span class="tl">Branches</span><span class="chip st">Checking the work</span><span class="chip st">Spreadsheets and data files</span><span class="chip adv">Hooks</span><span class="chip adv">Subagents and parallel sessions</span><span class="chip adv">Running without you</span><span class="chip adv">Run a GA4 server yourself</span><span class="chip adv">Team skills in every folder</span></div></div>
+        <div class="tree"><div class="tier"><span class="tn">0</span><span class="tl">Setup</span><span class="chip core">Claude Desktop, Code tab</span><span class="chip core">Git and a GitHub account</span><span class="chip core">Get the workshop</span></div><div class="tier"><span class="tn">1</span><span class="tl">Chat → agent</span><span class="chip core">Chat versus agent</span><span class="chip core">The folder is the context</span><span class="chip core">Permissions and reviewing changes</span><span class="chip st">Plan before acting</span><span class="chip core">Trust is earned per action</span><span class="chip st">Choosing a model</span><span class="chip st">Sessions and context</span></div><div class="tier"><span class="tn">2</span><span class="tl">Rules</span><span class="chip core">CLAUDE.md — standing instructions</span><span class="chip core">Team conventions and data handling</span><span class="chip core">Your rules — allow, ask, deny</span><span class="chip st">What else settings can do</span></div><div class="tier"><span class="tn">3</span><span class="tl">Git</span><span class="chip core">Git as undo</span><span class="chip core">Clone, branch, push</span></div><div class="tier"><span class="tn">4</span><span class="tl">Skills</span><span class="chip core">Use someone else's skill</span><span class="chip st">How a skill is built</span><span class="chip later">Write your own skill</span><span class="chip core">Your skill, in everyone's copy</span></div><div class="tier"><span class="tn">5</span><span class="tl">Connect</span><span class="chip core">Connectors and MCP</span><span class="chip core">Add a remote MCP server</span><span class="chip later">Make your own API key</span><span class="chip later">GA4 data through BigQuery</span></div><div class="tier"><span class="tn">6</span><span class="tl">Share</span><span class="chip later">The team's skills repository</span><span class="chip later">Contribute a skill by pull request</span><span class="chip core">One real task, end to end</span></div><div class="tier"><span class="tn">7</span><span class="tl">Team layer</span><span class="chip later">A review before anything is shared</span><span class="chip later">Many skills, one entry point</span></div><div class="tier"><span class="tn">+</span><span class="tl">Branches</span><span class="chip st">Checking the work</span><span class="chip st">Spreadsheets and data files</span><span class="chip adv">Hooks</span><span class="chip adv">Subagents and parallel sessions</span><span class="chip adv">Running without you</span><span class="chip adv">Run a GA4 server yourself</span><span class="chip adv">Team skills in every folder</span></div></div>
         <p class="treekey"><span class="chip core">core</span> everyone, today <span class="chip st">stretch</span> if you finish early <span class="chip later">later</span> homework or follow-up <span class="chip adv">advanced</span> optional</p>
 <!-- tree:end -->
         <div class="detail fac"><span class="lbl">Facilitator</span>
@@ -441,11 +442,23 @@ html[data-density="stage"] .detail{display:none}
           <div class="card hot"><div class="h"><i class="fa-solid fa-flag-checkered"></i> Core · everyone, today</div>
             <div class="s">The minimum we all reach: work with files and permissions, write the rules down, undo with git, use a skill, <b>one pull request each</b>, connect a source, <b>one real task</b>. We do it together, block by block.</div></div>
           <div class="card"><div class="h"><i class="fa-solid fa-person-running"></i> Stretch · if you finish a block early</div>
-            <div class="s">Plan mode, models, how a skill is built, your own API key, checking the work. Optional, never a race.</div></div>
+            <div class="s">
+<!-- band:stretch:begin -->
+              Optional, never a race.<br><span class="chip st">Plan before acting</span><span class="chip st">Choosing a model</span><span class="chip st">Sessions and context</span><span class="chip st">What else settings can do</span><span class="chip st">How a skill is built</span><span class="chip st">Checking the work</span><span class="chip st">Spreadsheets and data files</span>
+<!-- band:stretch:end -->
+            </div></div>
           <div class="card"><div class="h"><i class="fa-solid fa-house"></i> Homework · everyone, before the follow-up</div>
-            <div class="s">Any core you didn't finish, then your own skill and GA4 through BigQuery. Follow-up work we do <b>together</b>.</div></div>
+            <div class="s">
+<!-- band:homework:begin -->
+              Any core you didn't finish first, then:<br><span class="chip later">Write your own skill</span><span class="chip later">Make your own API key</span><span class="chip later">GA4 data through BigQuery</span>
+<!-- band:homework:end -->
+            </div></div>
           <div class="card"><div class="h"><i class="fa-solid fa-code"></i> Advanced · if you want more</div>
-            <div class="s">Hooks, subagents, running on a schedule, a GA4 server of your own, a team plugin. For anyone at home in code. Never expected.</div></div>
+            <div class="s">
+<!-- band:advanced:begin -->
+              For anyone at home in code. Never expected.<br><span class="chip adv">Hooks</span><span class="chip adv">Subagents and parallel sessions</span><span class="chip adv">Running without you</span><span class="chip adv">Run a GA4 server yourself</span><span class="chip adv">Team skills in every folder</span>
+<!-- band:advanced:end -->
+            </div></div>
         </div>
         <p class="foot">Every box on the board says which it is. The guide offers core first; ask it for more whenever you like.</p>
         <div class="detail fac"><span class="lbl">Facilitator</span>
@@ -477,18 +490,20 @@ html[data-density="stage"] .detail{display:none}
       <!-- 4 · Agenda -->
       <section class="slide" data-slide="4">
         <div class="kicker">Today</div>
-        <h2 class="slide-title">Six hours, <span class="accent">five tiers</span></h2>
+        <h2 class="slide-title">Six hours, <span class="accent">seven blocks</span></h2>
         <div class="agenda">
-          <span class="tm">09:00</span><span class="it">Welcome <span>· set up together · the tree as the survey</span></span><span class="tr">tier 0</span>
-          <span class="tm">09:30</span><span class="it">Chat to agent <span>· files, diffs, plan mode, models, trust per action</span></span><span class="tr">tier 1</span>
-          <span class="tm">10:45</span><span class="it">Rules <span>· CLAUDE.md, our conventions, then allow · ask · deny</span></span><span class="tr">tier 2</span>
-          <span class="tm">11:30</span><span class="it">Git <span>· undo, then clone, branch, push</span></span><span class="tr">tier 3</span>
+<!-- agenda:begin -->
+          <span class="tm">09:00</span><span class="it">Setup <span>· who's here · set up together</span></span><span class="tr">block 1</span>
+          <span class="tm">09:30</span><span class="it">Chat to agent <span>· files, diffs, trust per action</span></span><span class="tr">block 2</span>
+          <span class="tm">10:45</span><span class="it">Rules <span>· CLAUDE.md, our conventions, allow · ask · deny</span></span><span class="tr">block 3</span>
+          <span class="tm">11:30</span><span class="it">Git <span>· undo, then clone, branch, push</span></span><span class="tr">block 4</span>
           <span class="tm brk">12:00</span><span class="it brk">Lunch</span><span class="tr"></span>
-          <span class="tm">12:30</span><span class="it">Skills <span>· use one, read one, start your own</span></span><span class="tr">tier 4</span>
-          <span class="tm">13:30</span><span class="it">MCP <span>· connect instead of paste</span></span><span class="tr">tier 5</span>
-          <span class="tm">14:15</span><span class="it">One real task each, shown to the group <span>· homework</span></span><span class="tr">capstone</span>
+          <span class="tm">12:30</span><span class="it">Skills <span>· use one, then one pull request each</span></span><span class="tr">block 5</span>
+          <span class="tm">13:30</span><span class="it">Connect <span>· connect instead of paste</span></span><span class="tr">block 6</span>
+          <span class="tm">14:15</span><span class="it">One real task <span>· each, shown to the group · homework</span></span><span class="tr">block 7</span>
+<!-- agenda:end -->
         </div>
-        <p class="foot">Sharing skills through the team repository (tier 6) opens the <b>follow-up session</b>, after you've written one.</p>
+        <p class="foot">Sharing skills through the team repository opens the <b>follow-up session</b>, after everyone has written one.</p>
       </section>
 
       <!-- 5 · Tier 1 -->
@@ -497,7 +512,7 @@ html[data-density="stage"] .detail{display:none}
         <h2 class="slide-title">The folder <span class="accent">is the context</span></h2>
         <div class="cols c2" style="flex:0 0 auto">
           <div class="card"><div class="h"><i class="fa-solid fa-folder-open"></i> Try</div>
-            <div class="prompt">Read @samples/tagging-plan.md and @samples/daily-sessions.csv.<br>Why did sign-ups drop on 15 September?</div>
+            <div class="prompt">Read @samples/tagging-plan.md and @samples/daily-sessions.csv.<br>Why did newsletter sign-ups drop to zero, and what explains the jump in sessions on 19 September?</div>
             <div class="s"><b>Predict first:</b> what will it be able to explain, and what will it guess?</div></div>
           <div class="card"><div class="h"><i class="fa-solid fa-shield-halved"></i> Then</div>
             <ul><li><b>Manual</b> mode: read the diff, reject one change, say why</li><li><b>Plan</b> mode: agree the approach before anything changes</li><li>Same task, two <b>models</b>: what did you trade?</li></ul></div>
@@ -520,12 +535,12 @@ html[data-density="stage"] .detail{display:none}
           <span class="rung r3"><i></i><i></i><i></i><i></i><i></i><b>Proposing</b></span><span class="what">It acts; you approve first</span><span class="cc"><b>Manual</b> mode, and <b>ask</b> rules</span>
           <span class="rung r4"><i></i><i></i><i></i><i></i><i></i><b>Automated</b></span><span class="what">Unattended inside limits</span><span class="cc"><b>Accept edits</b> / <b>Auto</b> + <b>allow</b> rules. Ask and deny still hold.</span>
         </div>
-        <p class="foot">Commit: automated. <b>Push: always asks</b>, even in Auto. Changing who can access the cloud project: denied. One session, three rungs.</p>
+        <p class="foot">Commit: automated. Push: asks, once block 3's rules say so, even in Auto. Changing who can access the cloud project: denied. One session, three rungs.</p>
         <!-- block:2:begin -->
         <div class="blockstrip"><span class="bk">Block 2 · Chat to agent</span><span class="bk-row"><b>Predict together, in the chat:</b> how many times will Claude stop and ask in <b>Manual</b>? In <b>Accept edits</b>? In <b>Auto</b>? Write your three numbers down.</span><span class="bk-row"><b>Finish:</b> <span class="chip core">Chat versus agent</span><span class="chip core">The folder is the context</span><span class="chip core">Permissions and reviewing changes</span><span class="chip core">Trust is earned per action</span> <b>Done early:</b> <span class="chip st">Plan before acting</span><span class="chip st">Choosing a model</span><span class="chip st">Sessions and context</span><span class="chip st">Spreadsheets and data files</span></span><span class="bk-row bk-regroup">We regroup when the board shows most of us have finished block 2.</span></div>
 <!-- block:2:end -->
         <div class="detail fac"><span class="lbl">Facilitator</span>
-          <p>Same task three times: Manual, Accept edits, Auto. Everyone predicts the number of prompts first. The ladder is the Decision Budget's; promotion is "Yes, and don't ask again" after you've changed nothing several times. Down is a normal move.</p>
+          <p>Same task three times: Manual, Accept edits, Auto. Everyone predicts the number of prompts first. The ladder is the Decision Budget's; promotion is <b>Always allow</b> after you've changed nothing several times. Down is a normal move.</p>
         </div>
       </section>
 
@@ -555,11 +570,11 @@ html[data-density="stage"] .detail{display:none}
         <h2 class="slide-title">Git is the undo button <span class="dim">and the way we share</span></h2>
         <div class="cols c2" style="flex:0 0 auto">
           <div class="card"><div class="h"><i class="fa-solid fa-rotate-left"></i> Undo</div>
-            <div class="prompt">Commit this with a message that says why.<br>Show me what changed since the last commit.<br>Put the file back the way it was.</div></div>
+            <div class="prompt">Commit this with a message that says why.<br>Show me what changed since the last commit.<br>Undo that last change, with a new commit.</div></div>
           <div class="card"><div class="h"><i class="fa-solid fa-code-branch"></i> Share</div>
             <div class="prompt">Make a branch called practice/&lt;my-username&gt;, commit, push it.<br>Now push that commit straight to main.</div></div>
         </div>
-        <p class="foot">You ask in words; Claude runs the git commands. Commits go straight through (they stay on your laptop and can be undone); <b>a push always stops for you to read</b>. The push to main is refused: <b>main only changes through a pull request</b>. Sign in to GitHub yourself, never in the chat.</p>
+        <p class="foot">You ask; Claude runs git, and in Manual each command asks first. Read a push twice. A push to main is refused: <b>main only changes through a pull request</b>. Sign in to GitHub yourself, never in the chat.</p>
         <!-- block:4:begin -->
         <div class="blockstrip"><span class="bk">Block 4 · Git</span><span class="bk-row"><b>Predict together, in the chat:</b> you ask <i>"undo the last commit's change"</i>. What happens to the file? What happens to the history: is the commit deleted, or is a new one added?</span><span class="bk-row"><b>Finish:</b> <span class="chip core">Git as undo</span><span class="chip core">Clone, branch, push</span> <b>Done early:</b> help someone, or pick an advanced box</span><span class="bk-row bk-regroup">We regroup when the board shows most of us have finished block 4.</span></div>
 <!-- block:4:end -->
@@ -579,8 +594,8 @@ html[data-density="stage"] .detail{display:none}
           <div class="card"><div class="h">2 · Read one</div>
             <div class="s"><b>SKILL.md</b>: a <b>description</b> that decides when it's used, then instructions. Optional resources and scripts beside it.</div>
             <div class="prompt">.claude/skills/&lt;name&gt;/SKILL.md</div></div>
-          <div class="card hot"><div class="h">3 · Write one</div>
-            <div class="s">Something you do every week. Written so a colleague gets the right result <b>without asking you</b>.</div></div>
+          <div class="card hot"><div class="h">3 · Then write one</div>
+            <div class="s">Something you do every week, so a colleague gets the right result <b>without asking you</b>. A small one today, by pull request; a full one is homework.</div></div>
         </div>
         <p class="foot">This deck is built on the same template and its skill.</p>
         <div class="detail fac"><span class="lbl">Facilitator</span>
@@ -601,7 +616,7 @@ html[data-density="stage"] .detail{display:none}
           <i class="fa-solid fa-arrow-right arrow"></i>
           <div class="card"><div class="num">4</div><div class="t">Pull</div><div class="s">Switch to main, pull, new session, type <b>/</b>. Run someone else's.</div></div>
         </div>
-        <div class="prompt" style="margin-top:3cqb">.claude/skills/&lt;your-github-username&gt;/SKILL.md</div>
+        <div class="prompt" style="margin-top:3cqb">.claude/skills/&lt;your-github-username&gt;-&lt;skill-name&gt;/SKILL.md</div>
         <!-- block:5:begin -->
         <div class="blockstrip"><span class="bk">Block 5 · Skills</span><span class="bk-row"><b>Predict together, in the chat:</b> after you push and open a pull request, will your skill appear in your neighbour's Code tab? When will it?</span><span class="bk-row"><b>Finish:</b> <span class="chip core">Use someone else's skill</span><span class="chip core">Your skill, in everyone's copy</span> <b>Done early:</b> <span class="chip st">How a skill is built</span></span><span class="bk-row bk-regroup">We regroup when the board shows most of us have finished block 5.</span></div>
 <!-- block:5:end -->
@@ -620,11 +635,14 @@ html[data-density="stage"] .detail{display:none}
             <div class="s">Google's own documentation as a tool Claude searches. Hosted by Google; nothing to install. A lent API key today, your own key after.</div></div>
           <div class="card hot"><div class="h"><i class="fa-solid fa-database"></i> Homework · GA4 data</div>
             <div class="t">BigQuery, read-only</div>
-            <div class="s">Google's own BigQuery server, over a GA4 export. You reach only the datasets you were <b>granted</b>: the data rule, enforced. Today: the practice sample.</div></div>
+            <div class="s">Google's own BigQuery server, over a GA4 export. You reach only the datasets you were <b>granted</b>: the data rule, enforced. On a practice copy of Google's GA4 sample.</div></div>
         </div>
         <p class="proof" style="margin-top:2.4cqb"><b>Ask</b><span>every time: <b>what just left my laptop, and where did it go?</b></span></p>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>The connectors box needs one connector everyone has on and the group's data rule allows (a calendar or a shared drive folder). Check before the day which ones the plan offers. The lent Developer Knowledge keys go to each person privately, never in the meeting chat.</p>
+        </div>
         <!-- block:6:begin -->
-        <div class="blockstrip"><span class="bk">Block 6 · Connect</span><span class="bk-row"><b>Predict together, in the chat:</b> you ask the same question in a new session, with the connector on and no file. What will Claude fetch? More than your export, or less?</span><span class="bk-row"><b>Finish:</b> <span class="chip core">Connectors and MCP</span><span class="chip core">Add a remote MCP server</span> <b>Done early:</b> <span class="chip st">Make your own API key</span></span><span class="bk-row bk-regroup">We regroup when the board shows most of us have finished block 6.</span></div>
+        <div class="blockstrip"><span class="bk">Block 6 · Connect</span><span class="bk-row"><b>Predict together, in the chat:</b> you ask the same question in a new session, with the connector on and no file. What will Claude fetch? More than your export, or less?</span><span class="bk-row"><b>Finish:</b> <span class="chip core">Connectors and MCP</span><span class="chip core">Add a remote MCP server</span> <b>Done early:</b> help someone, or pick an advanced box</span><span class="bk-row bk-regroup">We regroup when the board shows most of us have finished block 6.</span></div>
 <!-- block:6:end -->
         </section>
 
@@ -678,9 +696,17 @@ html[data-density="stage"] .detail{display:none}
         <h2 class="slide-title">Homework</h2>
         <div class="cols c2">
           <div class="card"><div class="h">Everyone</div>
-            <ul><li><b>Any core box you didn't finish</b>, first</li><li>Finish your skill</li><li>Connect BigQuery and ask the GA4 sample one real question. <b>Bring the error</b> if it fails.</li><li>Make your own Developer Knowledge key</li><li>One thing our conventions got wrong</li></ul></div>
+            <ul>
+<!-- homework:begin -->
+              <li><b>Any core box you didn't finish</b>, first</li><li>Write your own skill</li><li>Make your own API key</li><li>GA4 data through BigQuery</li><li>One thing our conventions got wrong</li>
+<!-- homework:end -->
+            </ul></div>
           <div class="card"><div class="h">Follow-up session</div>
-            <ul><li>Homework errors, fixed together</li><li>Everyone installs the team skills repo</li><li>Each group merges a skill after review; the other group uses it</li><li>Many skills, one entry point</li><li>After lunch: your own decisions</li></ul></div>
+            <ul>
+<!-- followup:begin -->
+              <li>Homework errors, fixed together</li><li>The team's skills repository</li><li>Contribute a skill by pull request</li><li>A review before anything is shared</li><li>Many skills, one entry point</li>
+<!-- followup:end -->
+            </ul></div>
         </div>
       </section>
 
