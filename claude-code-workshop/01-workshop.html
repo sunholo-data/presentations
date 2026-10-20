@@ -107,6 +107,7 @@ html[data-density="stage"] .detail{display:none}
 .big-title .accent{color:var(--orange)}
 .fill{flex:1;min-height:0;display:flex;flex-direction:column}
 .cols{display:grid;gap:1.6cqi;flex:1;min-height:0}
+.copy-btn{margin-top:1cqb;align-self:flex-start;font:600 clamp(11px,1.2cqi,16px) var(--sans);color:var(--orange);background:var(--surface);border:1.5px solid var(--orange);border-radius:6px;padding:.5cqb 1.2cqi;cursor:pointer}
 .shot{display:block;max-width:100%;height:auto;border-radius:10px;border:1px solid var(--code-border);box-shadow:0 2px 14px rgba(0,0,0,.08);background:#fff}
 .shotwrap{display:flex;align-items:center;justify-content:center;min-height:0}
 .steps{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:1.6cqb}
@@ -356,11 +357,11 @@ html[data-density="stage"] .detail{display:none}
         <div class="kicker">Setup, together · 4 of 4</div>
         <h2 class="slide-title">From here, <span class="accent">Claude sets itself up</span></h2>
         <div class="loop">
-          <div class="card"><div class="num">1</div><div class="t">Ask for the course</div><div class="prompt">Clone https://github.com/sunholo-data/claude-code-workshop into this folder.</div></div>
+          <div class="card"><div class="num">1</div><div class="t">Ask for the course</div><div class="prompt copyable">Clone https://github.com/sunholo-data/claude-code-workshop into this folder.</div><button type="button" class="copy-btn">Copy</button></div>
           <i class="fa-solid fa-arrow-right arrow"></i>
           <div class="card"><div class="num">2</div><div class="t">Read, then allow</div><div class="s">It shows the <b>git clone</b> command first. Your first approval of the day.</div></div>
           <i class="fa-solid fa-arrow-right arrow"></i>
-          <div class="card"><div class="num">3</div><div class="t">New session</div><div class="s"><b>+ New</b>, on the new <b>claude-code-workshop</b> folder. Then type:</div><div class="prompt">start the workshop</div></div>
+          <div class="card"><div class="num">3</div><div class="t">New session</div><div class="s"><b>+ New</b>, on the new <b>claude-code-workshop</b> folder. Then type:</div><div class="prompt copyable">start the workshop</div><button type="button" class="copy-btn">Copy</button></div>
         </div>
         <p class="foot">The guide asks to create <b>progress.md</b>, your own record. Allow it. Git not working yet? On the GitHub page: <b>Code → Download ZIP</b>, unzip, open that folder.</p>
         <div class="detail fac"><span class="lbl">Facilitator</span>
@@ -703,6 +704,15 @@ html[data-density="stage"] .detail{display:none}
     setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light'));
   let saved = null; try { saved = localStorage.getItem('slides-theme'); } catch(e){} setTheme(saved || 'light');
 })();
+</script>
+<script>
+document.querySelectorAll('.copy-btn').forEach(b => b.addEventListener('click', async e => {
+  e.stopPropagation();
+  const t = b.previousElementSibling.textContent;
+  try { await navigator.clipboard.writeText(t); b.textContent = 'Copied'; }
+  catch { const r = document.createRange(); r.selectNodeContents(b.previousElementSibling); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); b.textContent = 'Selected: press ⌘C'; }
+  setTimeout(() => { b.textContent = 'Copy'; }, 1800);
+}));
 </script>
 </body>
 </html>
