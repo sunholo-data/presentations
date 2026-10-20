@@ -298,12 +298,12 @@ html[data-density="stage"] .detail{display:none}
         <div class="kicker">Setup, together · 1 of 4</div>
         <h2 class="slide-title">Open the app. <span class="accent">Open a folder.</span></h2>
         <div class="cols c2" style="flex:0 0 auto;align-items:center">
-          <div class="shotwrap" style="flex-direction:column;gap:2cqb"><img class="shot" src="images/setup/install-claude-desktop.png" alt="The claude.com/download page with a Download for macOS button" style="max-height:30cqb"><img class="shot" src="images/setup/code-tab.png" alt="The Code button at the top left of Claude Desktop, next to the Chat button" style="max-height:20cqb"></div>
+          <div class="shotwrap" style="flex-direction:column;gap:2cqb"><img class="shot" src="images/setup/code-tab.png" alt="The Code button at the top left of Claude Desktop, next to the Chat button" style="max-height:22cqb"><img class="shot" src="images/setup/select-folder.png" alt="The folder menu under the message box: recent folders, and Open folder" style="max-height:30cqb"></div>
           <div class="card">
             <ol class="steps">
               <li><b>claude.com/download</b>, install, and sign in with your work account, on a paid plan.</li>
               <li>Click the <b>&lt;/&gt;</b> Code button at the top left (<b>⌥⌘→</b>). The speech bubbles next to it are the Chat you already know.</li>
-              <li><b>+ New</b>. Under the message box: <b>This computer</b>, then the folder button. Make and pick an empty folder: <b>claude-test</b> in Documents.</li>
+              <li><b>+ New</b>. Under the message box: <b>This computer</b>, then the folder button and <b>Open folder…</b> Make and pick an empty folder: <b>claude-test</b> in Documents.</li>
             </ol>
           </div>
         </div>
@@ -321,7 +321,7 @@ html[data-density="stage"] .detail{display:none}
           <div class="card"><div class="h"><i class="fa-solid fa-table-columns"></i> Left</div>
             <div class="s"><b>+ New</b> starts a session. Past sessions are listed underneath, grouped by folder. A dot means one is waiting for you.</div></div>
           <div class="card hot"><div class="h"><i class="fa-regular fa-message"></i> Middle</div>
-            <div class="s">The conversation. Claude shows each file it reads and each command it wants to run, with <b>Deny</b> and <b>Allow</b>. Start a message with <b>!</b> to run a command yourself.</div></div>
+            <div class="s">The conversation. Claude shows each file it reads and each command it wants to run, with <b>Deny</b> and <b>Allow</b>. Start a message with <b>!</b> to run a command yourself.</div><img class="shot" src="images/setup/git-version.png" alt="!git --version sent, and its output: git version 2.39.3" style="max-height:8cqb;margin-top:1.4cqb"></div>
           <div class="card"><div class="h"><i class="fa-solid fa-sliders"></i> Right</div>
             <div class="s"><b>Environment</b>: which folder and branch. <b>Context</b>: how full this session is. <b>Connectors</b>: what it's connected to.</div></div>
         </div>
@@ -340,7 +340,7 @@ html[data-density="stage"] .detail{display:none}
       <section class="slide" data-slide="1c">
         <div class="kicker">Setup, together · 3 of 4</div>
         <h2 class="slide-title">Auto is the default. <span class="accent">Switch to Manual.</span></h2>
-        <div class="shotwrap"><img class="shot" src="images/setup/select-folder-mode-model.png" alt="The bar under the message box: This computer, the folder, the mode menu open with Auto ticked, and the model" style="max-height:35cqb"></div>
+        <div class="shotwrap" style="gap:2cqi"><img class="shot" src="images/setup/select-mode.png" alt="The mode menu open under the message box, with Auto ticked" style="max-height:34cqb"><img class="shot" src="images/setup/select-model.png" alt="The model menu: Opus, Fable, Sonnet, Haiku, and Effort" style="max-height:34cqb"></div>
         <div class="cols c2" style="flex:0 0 auto;margin-top:2cqb">
           <div class="card hot"><div class="h"><i class="fa-solid fa-hand"></i> Mode: the button that says Auto</div>
             <ul><li><b>Manual</b>: asks before every change. <b>Today's start</b></li><li><b>Accept edits</b> and <b>Plan</b>: later this morning</li><li><b>Auto</b>: off until you've earned it</li><li><b>Bypass permissions</b>: never, today</li></ul></div>
@@ -359,13 +359,13 @@ html[data-density="stage"] .detail{display:none}
         <div class="loop">
           <div class="card"><div class="num">1</div><div class="t">Ask for the course</div><div class="prompt copyable">Clone https://github.com/sunholo-data/claude-code-workshop into this folder, then tell me how to start the workshop.</div><button type="button" class="copy-btn">Copy</button></div>
           <i class="fa-solid fa-arrow-right arrow"></i>
-          <div class="card"><div class="num">2</div><div class="t">Read, then allow</div><div class="s">It shows the <b>git clone</b> command first: your first approval of the day. Then it tells you how to start, from the README.</div></div>
+          <div class="card"><div class="num">2</div><div class="t">Read, then allow</div><img class="shot" src="images/setup/git-clone-permission.png" alt="Claude asking to run git clone, with Deny and Always allow" style="max-height:20cqb;margin:1cqb 0"><div class="s">Your first approval. Then it tells you how to start.</div></div>
           <i class="fa-solid fa-arrow-right arrow"></i>
           <div class="card"><div class="num">3</div><div class="t">New session</div><div class="s"><b>+ New</b>, on the new <b>claude-code-workshop</b> folder. Then type:</div><div class="prompt copyable">start the workshop</div><button type="button" class="copy-btn">Copy</button></div>
         </div>
         <p class="foot">The guide asks to create <b>progress.md</b>, your own record. Allow it. Git not working yet? On the GitHub page: <b>Code → Download ZIP</b>, unzip, open that folder.</p>
         <div class="detail fac"><span class="lbl">Facilitator</span>
-          <p>Predict first: will it ask before cloning? The clone is the first approval, so read the command aloud together. Anyone stuck on git uses the ZIP and fixes git at the install table during the next block.</p>
+          <p>The big button may say <b>Always allow</b>, which saves a rule for that folder ("Saves to local project settings"). Check the arrow beside it for a one-time option, and talk through which to pick: the trust ladder in miniature. Predict first: will it ask before cloning? The clone is the first approval, so read the command aloud together. Anyone stuck on git uses the ZIP and fixes git at the install table during the next block.</p>
         </div>
       </section>
 
