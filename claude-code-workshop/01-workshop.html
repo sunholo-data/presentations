@@ -251,7 +251,7 @@ html[data-density="stage"] .detail{display:none}
           <h1 class="big-title">From chat <span class="accent">to agent</span></h1>
           <p class="lede" style="margin-top:3cqb">One day, one skill tree. By the end, everyone has used a skill someone else wrote, and <b>contributed one of their own</b> to the team.</p>
           <div class="detail fac"><span class="lbl">Facilitator</span>
-            <p>Before starting: is everyone's Code tab open on a folder? Anyone who isn't goes to the install table now. The welcome block runs in parallel with that.</p>
+            <p>Start here, on the projector: the next four slides take the room from an installed app to the guide running in the workshop folder. Anyone who hasn't installed Claude Desktop goes to the install table now.</p>
           </div>
         </div>
       </section>
@@ -287,6 +287,79 @@ html[data-density="stage"] .detail{display:none}
         </div>
       </section>
 
+      <!-- 1a · Open the app -->
+      <section class="slide" data-slide="1a">
+        <div class="kicker">Setup, together · 1 of 4</div>
+        <h2 class="slide-title">Open the app. <span class="accent">Open a folder.</span></h2>
+        <div class="loop">
+          <div class="card"><div class="num">1</div><div class="t">Claude Desktop</div><div class="s">From <b>claude.com/download</b>. Sign in with your work account, on a paid plan.</div></div>
+          <i class="fa-solid fa-arrow-right arrow"></i>
+          <div class="card"><div class="num">2</div><div class="t">The Code tab</div><div class="s">The <b>&lt;/&gt;</b> button at the top left. The speech bubbles next to it are the Chat you already know.</div></div>
+          <i class="fa-solid fa-arrow-right arrow"></i>
+          <div class="card"><div class="num">3</div><div class="t">A folder</div><div class="s"><b>+ New</b>, then <b>This computer</b>, then <b>Select folder</b>. Make an empty one: <b>claude-test</b> in Documents.</div></div>
+        </div>
+        <p class="foot">The Code tab works <b>inside the folder you choose</b>, and only there unless you let it out. That is the whole difference from Chat.</p>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Do it on the projector, one step at a time, and wait. Anyone whose Code tab asks to upgrade goes to the install table: their plan doesn't include it.</p>
+        </div>
+      </section>
+
+      <!-- 1b · Tour -->
+      <section class="slide" data-slide="1b">
+        <div class="kicker">Setup, together · 2 of 4</div>
+        <h2 class="slide-title">Where things are <span class="dim">in the Code tab</span></h2>
+        <div class="cols c3" style="flex:0 0 auto">
+          <div class="card"><div class="h"><i class="fa-solid fa-table-columns"></i> Left</div>
+            <div class="s"><b>+ New</b> starts a session. Past sessions are listed underneath, grouped by folder. A dot means one is waiting for you.</div></div>
+          <div class="card hot"><div class="h"><i class="fa-regular fa-message"></i> Middle</div>
+            <div class="s">The conversation. Claude shows each file it reads and each command it wants to run. Requests to approve appear here, with <b>Deny</b> and <b>Allow</b>.</div></div>
+          <div class="card"><div class="h"><i class="fa-solid fa-sliders"></i> Right</div>
+            <div class="s"><b>Environment</b>: which folder and branch. <b>Context</b>: how full this session is. <b>Connectors</b>: what it's connected to.</div></div>
+        </div>
+        <div class="cols c2" style="flex:0 0 auto;margin-top:2cqb">
+          <div class="card"><div class="h"><i class="fa-solid fa-shield-halved"></i> Under the box, left</div>
+            <div class="s">The <b>mode</b>: how much Claude may do without asking. Next slide.</div></div>
+          <div class="card"><div class="h"><i class="fa-solid fa-microchip"></i> Under the box, right</div>
+            <div class="s">The <b>model</b>, and how hard it thinks. Next slide too.</div></div>
+        </div>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Point at each on the projector. The icons along the top right open a terminal, the changes made, a preview and the files; mention them, don't teach them yet. Desktop moves fast: check these labels against the current version the day before.</p>
+        </div>
+      </section>
+
+      <!-- 1c · Mode and model -->
+      <section class="slide" data-slide="1c">
+        <div class="kicker">Setup, together · 3 of 4</div>
+        <h2 class="slide-title">Manual, not Auto. <span class="accent">Then a model.</span></h2>
+        <div class="cols c2" style="flex:0 0 auto">
+          <div class="card hot"><div class="h"><i class="fa-solid fa-hand"></i> Mode: Manual</div>
+            <ul><li><b>Manual</b>: asks before every change and every command. <b>Today's start.</b></li><li><b>Accept edits</b>: changes files without asking; still asks to run things</li><li><b>Plan</b>: reads and proposes; changes nothing</li><li><b>Auto</b>: decides for itself. <b>Off until you've earned it</b>, later this morning</li></ul></div>
+          <div class="card"><div class="h"><i class="fa-solid fa-microchip"></i> Model</div>
+            <ul><li><b>Opus</b>: the strongest; slower, uses your plan fastest</li><li><b>Sonnet</b>: the everyday choice. <b>Use it today</b></li><li><b>Haiku</b>: quick and light; fine for small, clear jobs</li><li>Effort (<b>Low</b> to <b>High</b>): how long it thinks before acting</li></ul></div>
+        </div>
+        <p class="foot">If the mode says <b>Auto</b>, click it and choose <b>Manual</b>. The workshop folder also starts in Manual, through its settings file.</p>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Check every screen says Manual before moving on. Auto comes back in "trust per action", where they turn it on themselves and count what still asks. Model choice is its own node later; today everyone on the same model keeps comparisons fair.</p>
+        </div>
+      </section>
+
+      <!-- 1d · Self-setup -->
+      <section class="slide" data-slide="1d">
+        <div class="kicker">Setup, together · 4 of 4</div>
+        <h2 class="slide-title">From here, <span class="accent">Claude sets itself up</span></h2>
+        <div class="loop">
+          <div class="card"><div class="num">1</div><div class="t">Ask for the course</div><div class="prompt">Clone https://github.com/sunholo-data/claude-code-workshop into this folder.</div></div>
+          <i class="fa-solid fa-arrow-right arrow"></i>
+          <div class="card"><div class="num">2</div><div class="t">Read, then allow</div><div class="s">It shows the <b>git clone</b> command first. Your first approval of the day.</div></div>
+          <i class="fa-solid fa-arrow-right arrow"></i>
+          <div class="card"><div class="num">3</div><div class="t">New session</div><div class="s"><b>+ New</b>, on the new <b>claude-code-workshop</b> folder. Then type:</div><div class="prompt">start the workshop</div></div>
+        </div>
+        <p class="foot">The guide asks to create <b>progress.md</b>, your own record. Allow it. Git not working yet? On the GitHub page: <b>Code → Download ZIP</b>, unzip, open that folder.</p>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Predict first: will it ask before cloning? The clone is the first approval, so read the command aloud together. Anyone stuck on git uses the ZIP and fixes git at the install table during the next block.</p>
+        </div>
+      </section>
+
       <!-- 2 · How the day works -->
       <section class="slide" data-slide="2">
         <div class="kicker">How the day works</div>
@@ -310,7 +383,7 @@ html[data-density="stage"] .detail{display:none}
         <div class="kicker">The map</div>
         <h2 class="slide-title">A skill tree, <span class="dim">not a slide sequence</span></h2>
         <div class="tree">
-          <div class="tier"><span class="tn">0 · before</span><span class="tl">Setup</span><span class="chip">Desktop + Code tab</span><span class="chip">Git + GitHub</span></div>
+          <div class="tier"><span class="tn">0 · before</span><span class="tl">Setup</span><span class="chip">Desktop + Code tab</span><span class="chip">Git + GitHub</span><span class="chip">Clone the workshop</span></div>
           <div class="tier"><span class="tn">1</span><span class="tl">Chat → agent</span><span class="chip">Folder is context</span><span class="chip">Permissions &amp; diffs</span><span class="chip">Plan first</span><span class="chip">Trust per action</span><span class="chip">Models</span><span class="chip">Sessions</span></div>
           <div class="tier"><span class="tn">2</span><span class="tl">Rules</span><span class="chip">CLAUDE.md</span><span class="chip">Team conventions &amp; data</span><span class="chip">Allow · ask · deny</span><span class="chip cap">One real task</span></div>
           <div class="tier"><span class="tn">3</span><span class="tl">Git</span><span class="chip">Git as undo</span><span class="chip">Clone, branch, push</span></div>
@@ -348,7 +421,7 @@ html[data-density="stage"] .detail{display:none}
         <div class="kicker">Today</div>
         <h2 class="slide-title">Six hours, <span class="accent">five tiers</span></h2>
         <div class="agenda">
-          <span class="tm">09:00</span><span class="it">Welcome <span>· the tree as the survey · install table</span></span><span class="tr">tier 0</span>
+          <span class="tm">09:00</span><span class="it">Welcome <span>· set up together · the tree as the survey</span></span><span class="tr">tier 0</span>
           <span class="tm">09:30</span><span class="it">Chat to agent <span>· files, diffs, plan mode, models, trust per action</span></span><span class="tr">tier 1</span>
           <span class="tm">10:45</span><span class="it">Rules <span>· CLAUDE.md, our conventions, then allow · ask · deny</span></span><span class="tr">tier 2</span>
           <span class="tm">11:30</span><span class="it">Git <span>· undo, then clone, branch, push</span></span><span class="tr">tier 3</span>
