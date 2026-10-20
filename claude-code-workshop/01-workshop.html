@@ -107,6 +107,11 @@ html[data-density="stage"] .detail{display:none}
 .big-title .accent{color:var(--orange)}
 .fill{flex:1;min-height:0;display:flex;flex-direction:column}
 .cols{display:grid;gap:1.6cqi;flex:1;min-height:0}
+.copy-btn{margin-top:1cqb;align-self:flex-start;font:600 clamp(11px,1.2cqi,16px) var(--sans);color:var(--orange);background:var(--surface);border:1.5px solid var(--orange);border-radius:6px;padding:.5cqb 1.2cqi;cursor:pointer}
+.shot{display:block;max-width:100%;height:auto;border-radius:10px;border:1px solid var(--code-border);box-shadow:0 2px 14px rgba(0,0,0,.08);background:#fff}
+.shotwrap{display:flex;align-items:center;justify-content:center;min-height:0}
+.steps{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:1.6cqb}
+.steps li{font-size:clamp(12px,1.6cqi,24px);line-height:1.45}
 .cols.c2{grid-template-columns:1fr 1fr}.cols.c3{grid-template-columns:repeat(3,1fr)}
 .card{padding:2.4cqb 2cqi;border-radius:10px;background:var(--surface);border:1px solid var(--code-border);
   display:flex;flex-direction:column;gap:1.1cqb;min-height:0}
@@ -251,7 +256,8 @@ html[data-density="stage"] .detail{display:none}
           <h1 class="big-title">From chat <span class="accent">to agent</span></h1>
           <p class="lede" style="margin-top:3cqb">One day, one skill tree. By the end, everyone has used a skill someone else wrote, and <b>contributed one of their own</b> to the team.</p>
           <div class="detail fac"><span class="lbl">Facilitator</span>
-            <p>Before starting: is everyone's Code tab open on a folder? Anyone who isn't goes to the install table now. The welcome block runs in parallel with that.</p>
+            <p><b>Before the day, collect two things from everyone:</b> the <b>email they sign in to Claude with</b> (invite each to the progress board as <b>Editor</b> from its Share menu, with the public link <b>off</b>; Viewer or Commenter can't save) and their <b>GitHub username</b> (add as a collaborator with <b>Write</b> on this repository). Both invitations must be accepted before the day.</p>
+            <p>Then start here, on the projector: the next four slides take the room from an installed app to the guide running in the workshop folder. Anyone who hasn't installed Claude Desktop goes to the install table now.</p>
           </div>
         </div>
       </section>
@@ -287,6 +293,82 @@ html[data-density="stage"] .detail{display:none}
         </div>
       </section>
 
+      <!-- 1a · Open the app -->
+      <section class="slide" data-slide="1a">
+        <div class="kicker">Setup, together · 1 of 4</div>
+        <h2 class="slide-title">Open the app. <span class="accent">Open a folder.</span></h2>
+        <div class="cols c2" style="flex:0 0 auto;align-items:center">
+          <div class="shotwrap" style="flex-direction:column;gap:2cqb"><img class="shot" src="images/setup/code-tab.png" alt="The Code button at the top left of Claude Desktop, next to the Chat button" style="max-height:22cqb"><img class="shot" src="images/setup/select-folder.png" alt="The folder menu under the message box: recent folders, and Open folder" style="max-height:30cqb"></div>
+          <div class="card">
+            <ol class="steps">
+              <li><b>claude.com/download</b>, install, and sign in with your work account, on a paid plan.</li>
+              <li>Click the <b>&lt;/&gt;</b> Code button at the top left (<b>⌥⌘→</b>). The speech bubbles next to it are the Chat you already know.</li>
+              <li><b>+ New</b>. Under the message box: <b>This computer</b>, then the folder button and <b>Open folder…</b> Make and pick an empty folder: <b>claude-test</b> in Documents.</li>
+            </ol>
+          </div>
+        </div>
+        <p class="foot">The Code tab works <b>inside the folder you choose</b>, and only there unless you let it out. That is the whole difference from Chat.</p>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Do it on the projector, one step at a time, and wait. Anyone whose Code tab asks to upgrade goes to the install table: their plan doesn't include it.</p>
+        </div>
+      </section>
+
+      <!-- 1b · Tour -->
+      <section class="slide" data-slide="1b">
+        <div class="kicker">Setup, together · 2 of 4</div>
+        <h2 class="slide-title">Where things are <span class="dim">in the Code tab</span></h2>
+        <div class="cols c3" style="flex:0 0 auto">
+          <div class="card"><div class="h"><i class="fa-solid fa-table-columns"></i> Left</div>
+            <div class="s"><b>+ New</b> starts a session. Past sessions are listed underneath, grouped by folder. A dot means one is waiting for you.</div></div>
+          <div class="card hot"><div class="h"><i class="fa-regular fa-message"></i> Middle</div>
+            <div class="s">The conversation. Claude shows each file it reads and each command it wants to run, with <b>Deny</b> and <b>Allow</b>. Start a message with <b>!</b> to run a command yourself.</div><img class="shot" src="images/setup/git-version.png" alt="!git --version sent, and its output: git version 2.39.3" style="max-height:8cqb;margin-top:1.4cqb"></div>
+          <div class="card"><div class="h"><i class="fa-solid fa-sliders"></i> Right</div>
+            <div class="s"><b>Environment</b>: which folder and branch. <b>Context</b>: how full this session is. <b>Connectors</b>: what it's connected to.</div></div>
+        </div>
+        <div class="cols c2" style="flex:0 0 auto;margin-top:2cqb">
+          <div class="card"><div class="h"><i class="fa-solid fa-shield-halved"></i> Under the box, left</div>
+            <div class="s">The <b>folder</b>, and the <b>mode</b>: how much Claude may do without asking. Next slide.</div></div>
+          <div class="card"><div class="h"><i class="fa-solid fa-microchip"></i> Under the box, right</div>
+            <div class="s">The <b>model</b>, and how hard it thinks. Next slide too.</div></div>
+        </div>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Point at each on the projector. The icons along the top right open a terminal, the changes made, a preview and the files; mention them, don't teach them yet. Demo <b>!git --version</b> here: the setup proof, and the room's first command. Desktop moves fast: check these labels against the current version the day before.</p>
+        </div>
+      </section>
+
+      <!-- 1c · Mode and model -->
+      <section class="slide" data-slide="1c">
+        <div class="kicker">Setup, together · 3 of 4</div>
+        <h2 class="slide-title">Auto is the default. <span class="accent">Switch to Manual.</span></h2>
+        <div class="shotwrap" style="gap:2cqi"><img class="shot" src="images/setup/select-mode.png" alt="The mode menu open under the message box, with Auto ticked" style="max-height:34cqb"><img class="shot" src="images/setup/select-model.png" alt="The model menu: Opus, Fable, Sonnet, Haiku, and Effort" style="max-height:34cqb"></div>
+        <div class="cols c2" style="flex:0 0 auto;margin-top:2cqb">
+          <div class="card hot"><div class="h"><i class="fa-solid fa-hand"></i> Mode: the button that says Auto</div>
+            <ul><li><b>Manual</b>: asks before every change. <b>Today's start</b></li><li><b>Accept edits</b> and <b>Plan</b>: later this morning</li><li><b>Auto</b>: off until you've earned it</li><li><b>Bypass permissions</b>: never, today</li></ul></div>
+          <div class="card"><div class="h"><i class="fa-solid fa-microchip"></i> Model: bottom right</div>
+            <ul><li><b>Sonnet</b>: the everyday choice. <b>Use it today</b></li><li><b>Opus</b>: strongest, slower, uses your plan fastest</li><li><b>Haiku</b>: quick, for small, clear jobs</li><li>Effort: how long it thinks first</li></ul></div>
+        </div>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Check every screen says Manual before moving on. The mode is per session: a new session may start in Auto again, until the workshop folder's settings take over (they set Manual). Auto comes back in "trust per action", where they turn it on themselves and count what still asks. Everyone on the same model keeps comparisons fair.</p>
+        </div>
+      </section>
+
+      <!-- 1d · Self-setup -->
+      <section class="slide" data-slide="1d">
+        <div class="kicker">Setup, together · 4 of 4</div>
+        <h2 class="slide-title">From here, <span class="accent">Claude sets itself up</span></h2>
+        <div class="loop">
+          <div class="card"><div class="num">1</div><div class="t">Ask for the course</div><div class="prompt copyable">Clone https://github.com/sunholo-data/claude-code-workshop into this folder, then tell me how to start the workshop.</div><button type="button" class="copy-btn">Copy</button></div>
+          <i class="fa-solid fa-arrow-right arrow"></i>
+          <div class="card"><div class="num">2</div><div class="t">Read, then allow</div><img class="shot" src="images/setup/git-clone-permission.png" alt="Claude asking to run git clone, with Deny and Always allow" style="max-height:20cqb;margin:1cqb 0"><div class="s">Your first approval. Then it tells you how to start.</div></div>
+          <i class="fa-solid fa-arrow-right arrow"></i>
+          <div class="card"><div class="num">3</div><div class="t">New session</div><div class="s"><b>+ New</b> → folder → <b>Open folder…</b> → <b>claude-code-workshop</b>. Send, then <b>Trust workspace</b>:</div><div class="prompt copyable">start the workshop</div><button type="button" class="copy-btn">Copy</button></div>
+        </div>
+        <p class="foot">The guide asks to create <b>progress.md</b>: allow it. No git yet? GitHub page → <b>Code → Download ZIP</b>.</p>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Stuck points: the folder button still says <b>claude-test</b> (open the folder inside it); "This workspace isn't trusted" (trusting loads the course's settings, skill and CLAUDE.md: say so first; if the question never appears, quit and reopen Claude Desktop); the big button may say <b>Always allow</b>, which saves a rule. Predict first: will it ask before cloning?</p>
+        </div>
+      </section>
+
       <!-- 2 · How the day works -->
       <section class="slide" data-slide="2">
         <div class="kicker">How the day works</div>
@@ -299,7 +381,7 @@ html[data-density="stage"] .detail{display:none}
           <div class="card"><div class="num">3</div><div class="t">Explain</div><div class="s">Where you were wrong is where the learning is.</div></div>
         </div>
         <div class="prompt" style="margin-top:3cqb"><span class="cm"># in the workshop folder, in the Code tab</span><br>start the workshop</div>
-        <p class="foot">Your <b>progress board</b> shows the tree: mark a node done with one line on how you showed it, and the next ones unlock. The <b>workshop guide</b> skill in your Code tab sets each task. Stuck? It asks what you tried; ask twice and it explains.</p>
+        <p class="foot">Your <b>progress board</b> shows the tree: mark a node done with one line on what you noticed, and the next ones unlock. The <b>workshop guide</b> skill in your Code tab sets each task. Stuck? It asks what you tried; ask twice and it explains.</p>
         <div class="detail fac"><span class="lbl">Facilitator</span>
           <p>Progress is private and per person. The room view is where people are, never a ranking. Nobody is behind; people are on different nodes.</p>
         </div>
@@ -310,11 +392,11 @@ html[data-density="stage"] .detail{display:none}
         <div class="kicker">The map</div>
         <h2 class="slide-title">A skill tree, <span class="dim">not a slide sequence</span></h2>
         <div class="tree">
-          <div class="tier"><span class="tn">0 · before</span><span class="tl">Setup</span><span class="chip">Desktop + Code tab</span><span class="chip">Git + GitHub</span></div>
+          <div class="tier"><span class="tn">0 · before</span><span class="tl">Setup</span><span class="chip">Desktop + Code tab</span><span class="chip">Git + GitHub</span><span class="chip">Clone the workshop</span></div>
           <div class="tier"><span class="tn">1</span><span class="tl">Chat → agent</span><span class="chip">Folder is context</span><span class="chip">Permissions &amp; diffs</span><span class="chip">Plan first</span><span class="chip">Trust per action</span><span class="chip">Models</span><span class="chip">Sessions</span></div>
           <div class="tier"><span class="tn">2</span><span class="tl">Rules</span><span class="chip">CLAUDE.md</span><span class="chip">Team conventions &amp; data</span><span class="chip">Allow · ask · deny</span><span class="chip cap">One real task</span></div>
           <div class="tier"><span class="tn">3</span><span class="tl">Git</span><span class="chip">Git as undo</span><span class="chip">Clone, branch, push</span></div>
-          <div class="tier"><span class="tn">4</span><span class="tl">Skills</span><span class="chip">Use one</span><span class="chip">How it's built</span><span class="chip">Write your own</span></div>
+          <div class="tier"><span class="tn">4</span><span class="tl">Skills</span><span class="chip">Use one</span><span class="chip">How it's built</span><span class="chip">Write your own</span><span class="chip">One PR each</span></div>
           <div class="tier"><span class="tn">5</span><span class="tl">Connect</span><span class="chip">Paste vs connect</span><span class="chip">Remote MCP</span><span class="chip">Your own key</span><span class="chip">GA4 via BigQuery</span></div>
           <div class="tier"><span class="tn">6</span><span class="tl">Share</span><span class="chip">Team skills repo</span><span class="chip goal">Skill by pull request</span></div>
           <div class="tier"><span class="tn">7 · follow-up</span><span class="tl">Team layer</span><span class="chip">Review before merge</span><span class="chip">Skill routing</span></div>
@@ -328,18 +410,18 @@ html[data-density="stage"] .detail{display:none}
       <!-- 3b · Progress board -->
       <section class="slide" data-slide="3b">
         <div class="kicker">Your progress board</div>
-        <h2 class="slide-title">Mark it done. <span class="accent">Say how.</span></h2>
+        <h2 class="slide-title">Mark it done. <span class="accent">Say what surprised you.</span></h2>
         <div class="cols c3" style="flex:0 0 auto">
           <div class="card"><div class="h"><i class="fa-solid fa-diagram-project"></i> My progress</div>
             <div class="s">The tree as boxes and arrows. An arrow means <b>do this first</b>. Orange boxes are unlocked: start there.</div></div>
-          <div class="card hot"><div class="h"><i class="fa-solid fa-pen"></i> One line of proof</div>
-            <div class="s">"Done" needs a line on <b>how you showed it</b>. Everyone can read it, so the room learns from each other's evidence.</div></div>
+          <div class="card hot"><div class="h"><i class="fa-solid fa-pen"></i> One line</div>
+            <div class="s">"Done" means you saw the proof. The line is <b>what you expected, and what actually happened</b>. Everyone can read it, so the room learns from each other's surprises.</div></div>
           <div class="card"><div class="h"><i class="fa-solid fa-people-group"></i> The room</div>
             <div class="s">Who's where, box by box. Right now, mark everything you <b>already</b> can: that's our starting point.</div></div>
         </div>
-        <p class="foot"><a class="board-link" href="https://claude.ai/artifact/5Gc3G9GxCMrT2anwpdmaq1" target="_blank" rel="noopener">Open the progress board</a> · the link is in the session chat</p>
+        <p class="foot"><a class="board-link" href="https://claude.ai/artifact/5Gc3G9GxCMrT2anwpdmaq1" target="_blank" rel="noopener">Open the progress board</a> · open it from your <b>email invitation</b>, signed in to Claude with that address</p>
         <div class="detail fac"><span class="lbl">Facilitator</span>
-          <p>Put the board's room view on the projector during welcome. The distribution replaces the self-assessment readback: which tiers the room already has, which nobody has. Leave it up during hands-on blocks.</p>
+          <p>Saving needs an <b>Editor</b> invitation to the email they use for Claude, and no public link on the board. Anyone whose board says <i>View only</i> isn't invited yet, or is signed in with another address: invite them now from the Share menu. Put the board's room view on the projector during welcome. The distribution replaces the self-assessment readback: which tiers the room already has, which nobody has. Leave it up during hands-on blocks.</p>
         </div>
       </section>
 
@@ -348,7 +430,7 @@ html[data-density="stage"] .detail{display:none}
         <div class="kicker">Today</div>
         <h2 class="slide-title">Six hours, <span class="accent">five tiers</span></h2>
         <div class="agenda">
-          <span class="tm">09:00</span><span class="it">Welcome <span>· the tree as the survey · install table</span></span><span class="tr">tier 0</span>
+          <span class="tm">09:00</span><span class="it">Welcome <span>· set up together · the tree as the survey</span></span><span class="tr">tier 0</span>
           <span class="tm">09:30</span><span class="it">Chat to agent <span>· files, diffs, plan mode, models, trust per action</span></span><span class="tr">tier 1</span>
           <span class="tm">10:45</span><span class="it">Rules <span>· CLAUDE.md, our conventions, then allow · ask · deny</span></span><span class="tr">tier 2</span>
           <span class="tm">11:30</span><span class="it">Git <span>· undo, then clone, branch, push</span></span><span class="tr">tier 3</span>
@@ -420,9 +502,12 @@ html[data-density="stage"] .detail{display:none}
           <div class="card"><div class="h"><i class="fa-solid fa-rotate-left"></i> Undo</div>
             <div class="prompt">Commit this with a message that says why.<br>Show me what changed since the last commit.<br>Put the file back the way it was.</div></div>
           <div class="card"><div class="h"><i class="fa-solid fa-code-branch"></i> Share</div>
-            <div class="prompt">Clone the practice repository.<br>Make a branch for my change, commit, push it.</div></div>
+            <div class="prompt">Make a branch called practice/&lt;my-username&gt;, commit, push it.<br>Now push that commit straight to main.</div></div>
         </div>
-        <p class="foot">You ask in words; Claude runs the git commands. <b>Read each one before you approve it.</b> Sign in to GitHub yourself: never paste a password or token into the chat.</p>
+        <p class="foot">You ask in words; Claude runs the git commands. <b>Read each one before you approve it.</b> The push to main is refused: <b>main only changes through a pull request</b>. Sign in to GitHub yourself, never in the chat.</p>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Everyone needs Write access to this repository (invites accepted) and GitHub sign-in working. On Macs that means GitHub CLI and <b>gh auth login</b> in the terminal pane. Read GitHub's refusal aloud: that is the ruleset doing its job.</p>
+        </div>
       </section>
 
       <!-- 8 · Tier 4 -->
@@ -442,6 +527,26 @@ html[data-density="stage"] .detail{display:none}
         <p class="foot">This deck is built on the same template and its skill.</p>
         <div class="detail fac"><span class="lbl">Facilitator</span>
           <p>Skills in a repo load only when the session is opened on that folder. That limit is why tier 6 exists, and why a plugin is the next step later.</p>
+        </div>
+      </section>
+
+      <!-- 8b · Room PR -->
+      <section class="slide" data-slide="8b">
+        <div class="kicker">Tier 4 · one pull request each</div>
+        <h2 class="slide-title">Your skill, <span class="accent">in everyone's copy</span></h2>
+        <div class="loop" style="grid-template-columns:1fr auto 1fr auto 1fr auto 1fr">
+          <div class="card"><div class="num">1</div><div class="t">Write</div><div class="s">Branch <b>skill/&lt;username&gt;</b>. One small skill in its own folder. Nothing else.</div></div>
+          <i class="fa-solid fa-arrow-right arrow"></i>
+          <div class="card"><div class="num">2</div><div class="t">Propose</div><div class="s">Push, and open a pull request. One line on what it does.</div></div>
+          <i class="fa-solid fa-arrow-right arrow"></i>
+          <div class="card hot"><div class="num">3</div><div class="t">Merge</div><div class="s">On the projector, one by one. Only the facilitator can.</div></div>
+          <i class="fa-solid fa-arrow-right arrow"></i>
+          <div class="card"><div class="num">4</div><div class="t">Pull</div><div class="s">Switch to main, pull, new session, type <b>/</b>. Run someone else's.</div></div>
+        </div>
+        <div class="prompt" style="margin-top:3cqb">.claude/skills/&lt;your-github-username&gt;/SKILL.md</div>
+        <p class="foot"><b>Predict:</b> after you open your pull request, when does your skill reach your neighbour's laptop?</p>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>One folder each means every PR merges cleanly in any order. Merge with the room watching, reading each description aloud. Afterwards, show <b>git log --oneline</b> on the projector: every merge is there with a name on it. The same moves in the follow-up go to the group's own repository, for real.</p>
         </div>
       </section>
 
@@ -599,6 +704,15 @@ html[data-density="stage"] .detail{display:none}
     setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light'));
   let saved = null; try { saved = localStorage.getItem('slides-theme'); } catch(e){} setTheme(saved || 'light');
 })();
+</script>
+<script>
+document.querySelectorAll('.copy-btn').forEach(b => b.addEventListener('click', async e => {
+  e.stopPropagation();
+  const t = b.previousElementSibling.textContent;
+  try { await navigator.clipboard.writeText(t); b.textContent = 'Copied'; }
+  catch { const r = document.createRange(); r.selectNodeContents(b.previousElementSibling); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); b.textContent = 'Selected: press ⌘C'; }
+  setTimeout(() => { b.textContent = 'Copy'; }, 1800);
+}));
 </script>
 </body>
 </html>

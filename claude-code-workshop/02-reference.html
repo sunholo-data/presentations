@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Claude Code workshop: reference</title>
+<link rel="icon" type="image/svg+xml" href="../images/logos/sunholo-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!--
+-->
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f0f1a;--surface:#1a1a2e;--surface-hi:#222240;--orange:#e73c17;
+  --orange-dim:rgba(231,60,23,.35);--orange-soft:rgba(231,60,23,.1);
+  --ghost:rgba(255,255,255,.12);--text:#e2e8f0;--text-dim:#8a96aa;
+  --code-bg:rgba(255,255,255,.03);--code-border:rgba(255,255,255,.08);
+  --bar-bg:rgba(15,15,26,.8);--bar-border:rgba(255,255,255,.06);
+  --mono:'JetBrains Mono',monospace;--sans:'Montserrat',sans-serif;
+  --rung:#2dd4bf;--rung-dim:rgba(45,212,191,.2);
+}
+[data-theme="light"]{
+  --bg:#f6f8fa;--surface:#ffffff;--surface-hi:#f0f0ea;--orange:#bd3012;
+  --orange-dim:rgba(189,48,18,.25);--orange-soft:rgba(189,48,18,.07);
+  --ghost:rgba(0,0,0,.1);--text:#2c3e50;--text-dim:#526677;
+  --code-bg:rgba(0,0,0,.03);--code-border:rgba(0,0,0,.09);
+  --bar-bg:rgba(255,255,255,.85);--bar-border:rgba(0,0,0,.08);
+  --rung:#0f766e;--rung-dim:rgba(15,118,110,.18);
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+body{background-image:
+  radial-gradient(circle at 50% 50%, rgba(231,60,23,.03) 0%, transparent 70%),
+  linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size:100% 100%,60px 60px,60px 60px}
+[data-theme="light"] body{background-image:
+  radial-gradient(circle at 50% 50%, rgba(189,48,18,.03) 0%, transparent 70%),
+  linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px)}
+
+/* ── Chrome ── */
+#app{display:flex;flex-direction:column;height:100%}
+.top-bar,.bottom-bar{display:flex;align-items:center;justify-content:space-between;
+  padding:8px 16px;flex-shrink:0;background:var(--bar-bg);z-index:5}
+.top-bar{border-bottom:1px solid var(--bar-border)}
+.bottom-bar{border-top:1px solid var(--bar-border)}
+.deck-title{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;color:var(--text-dim);letter-spacing:.02em}
+.deck-title .accent{color:var(--orange)}
+.top-logo{height:20px;opacity:.75}
+.theme-toggle,.transport-btn{width:28px;height:28px;border-radius:50%;border:1px solid var(--ghost);
+  background:transparent;color:var(--text-dim);cursor:pointer;font-size:12px;transition:all .25s;
+  display:flex;align-items:center;justify-content:center}
+.theme-toggle:hover,.transport-btn:hover{border-color:var(--orange);color:var(--orange)}
+.transport-btn:disabled{opacity:.3;cursor:default}
+.transport{display:flex;align-items:center;gap:10px}
+.step-indicator{font-family:var(--mono);font-size:12px;color:var(--text-dim)}
+.step-indicator .current{color:var(--text);font-weight:700}
+.slide-dots{display:flex;gap:5px;justify-content:center}
+.slide-dot{width:7px;height:7px;border-radius:50%;border:none;background:var(--ghost);cursor:pointer;transition:all .2s;padding:0}
+.slide-dot.active{background:var(--orange);width:18px;border-radius:4px}
+.nav-hints{display:flex;align-items:center;gap:4px}
+.kbd{font-family:var(--mono);font-size:10px;padding:2px 5px;border:1px solid var(--ghost);border-radius:3px;color:var(--text-dim)}
+.in-iframe .top-bar,.in-iframe .bottom-bar{display:none}
+
+/* ── Stage ── */
+.slides-viewport{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;background:var(--bg);container-type:size}
+.slides-stage{position:relative;width:min(100cqi,100cqb*16/9);height:min(100cqb,100cqi*9/16);container-type:size}
+.slide{position:absolute;inset:0;opacity:0;pointer-events:none;
+  transform:translateX(28px);transition:opacity .45s ease,transform .45s ease;
+  padding:4.5cqb 6cqi;display:flex;flex-direction:column;overflow:hidden}
+.slide.active{opacity:1;pointer-events:auto;transform:translateX(0)}
+.slide.exit-left{transform:translateX(-28px)}
+html[data-density="stage"] .detail{display:none}
+
+/* ── Type ── */
+.kicker{font-family:var(--mono);font-size:clamp(9px,1.15cqi,15px);font-weight:700;
+  text-transform:uppercase;letter-spacing:.16em;color:var(--orange);margin-bottom:1.4cqb;flex-shrink:0}
+.slide-title{font-size:clamp(24px,3.7cqi,54px);font-weight:800;line-height:1.1;
+  letter-spacing:-.025em;margin-bottom:2.6cqb;flex-shrink:0}
+.slide-title .dim{color:var(--text-dim);font-weight:500}
+.slide-title .accent{color:var(--orange)}
+.lede{font-size:clamp(13px,1.9cqi,27px);line-height:1.45;color:var(--text-dim);max-width:70cqi}
+.lede b{color:var(--text)}
+.foot{margin-top:auto;padding-top:1.6cqb;flex-shrink:0;font-size:clamp(11px,1.45cqi,20px);
+  line-height:1.4;color:var(--text-dim)}
+.foot b{color:var(--text)}
+.src{font-family:var(--mono);font-size:clamp(8px,1cqi,13px);color:var(--text-dim);letter-spacing:.04em}
+
+/* ── Speaker notes (guide density only) ── */
+.detail.fac{margin-top:1.6cqb;padding:1.4cqb 2cqi;border-left:3px solid var(--orange);
+  background:var(--code-bg);border-radius:0 6px 6px 0;flex-shrink:0;
+  font-size:clamp(10px,1.25cqi,16px);line-height:1.5;color:var(--text-dim);overflow-y:auto;max-height:30cqb}
+.detail.fac b{color:var(--text)}
+.detail.fac .lbl{font-family:var(--mono);font-size:clamp(8px,1cqi,13px);font-weight:700;
+  text-transform:uppercase;letter-spacing:.12em;color:var(--orange);display:block;margin-bottom:.4cqb}
+.detail.fac p+p{margin-top:.7cqb}
+
+
+/* ── Workshop components ── */
+.centre{height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 3cqi}
+.big-title{font-size:clamp(30px,5.4cqi,78px);font-weight:800;line-height:1.05;letter-spacing:-.03em}
+.big-title .accent{color:var(--orange)}
+.fill{flex:1;min-height:0;display:flex;flex-direction:column}
+.cols{display:grid;gap:1.6cqi;flex:1;min-height:0}
+.copy-btn{margin-top:1cqb;align-self:flex-start;font:600 clamp(11px,1.2cqi,16px) var(--sans);color:var(--orange);background:var(--surface);border:1.5px solid var(--orange);border-radius:6px;padding:.5cqb 1.2cqi;cursor:pointer}
+.shot{display:block;max-width:100%;height:auto;border-radius:10px;border:1px solid var(--code-border);box-shadow:0 2px 14px rgba(0,0,0,.08);background:#fff}
+.shotwrap{display:flex;align-items:center;justify-content:center;min-height:0}
+.steps{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:1.6cqb}
+.steps li{font-size:clamp(12px,1.6cqi,24px);line-height:1.45}
+.cols.c2{grid-template-columns:1fr 1fr}.cols.c3{grid-template-columns:repeat(3,1fr)}
+.card{padding:2.4cqb 2cqi;border-radius:10px;background:var(--surface);border:1px solid var(--code-border);
+  display:flex;flex-direction:column;gap:1.1cqb;min-height:0}
+.card.hot{border:2px solid var(--orange);background:var(--orange-soft)}
+.card .h{font-family:var(--mono);font-size:clamp(9px,1.15cqi,15px);font-weight:700;text-transform:uppercase;
+  letter-spacing:.14em;color:var(--orange);display:flex;align-items:center;gap:.8cqi}
+.card .t{font-size:clamp(14px,2.1cqi,30px);font-weight:800;line-height:1.2}
+.card .s{font-size:clamp(11px,1.5cqi,21px);line-height:1.45;color:var(--text-dim)}
+.card ul{list-style:none;display:flex;flex-direction:column;gap:.9cqb}
+.card li{font-size:clamp(11px,1.55cqi,22px);line-height:1.35;padding-left:1.8cqi;position:relative}
+.card li::before{content:"›";position:absolute;left:0;color:var(--orange);font-weight:800}
+.card.dim li{color:var(--text-dim)}
+.loop{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:1.4cqi;align-items:stretch}
+.arrow{align-self:center;color:var(--orange);font-size:clamp(14px,2.2cqi,30px)}
+.num{font-size:clamp(28px,4.6cqi,66px);font-weight:800;color:var(--orange);line-height:1;letter-spacing:-.03em}
+.prompt{font-family:var(--mono);font-size:clamp(11px,1.5cqi,21px);line-height:1.5;padding:1.6cqb 1.8cqi;border-radius:8px;
+  background:var(--code-bg);border:1px solid var(--code-border);border-left:3px solid var(--orange)}
+.prompt .cm{color:var(--text-dim)}
+.foot a{color:var(--orange);font-weight:700}
+.proof{display:flex;gap:1.2cqi;align-items:baseline;font-size:clamp(11px,1.5cqi,21px);line-height:1.4;color:var(--text-dim)}
+.proof b{font-family:var(--mono);font-size:.8em;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);flex-shrink:0}
+.proof span b{font-family:var(--sans);font-size:1em;letter-spacing:0;text-transform:none;color:var(--text)}
+
+/* Tree: one column per tier, nodes as chips */
+.tree{display:grid;grid-template-columns:repeat(8,1fr);gap:.9cqi;flex:1;min-height:0}
+.tier{display:flex;flex-direction:column;gap:.8cqb;padding:1.4cqb .8cqi;border-radius:8px;background:var(--code-bg);border:1px solid var(--code-border)}
+.tier .tn{font-family:var(--mono);font-size:clamp(8px,1cqi,13px);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--orange)}
+.tier .tl{font-size:clamp(10px,1.35cqi,19px);font-weight:800;line-height:1.15;margin-bottom:.4cqb}
+.chip{font-size:clamp(9px,1.12cqi,16px);line-height:1.25;padding:.9cqb .8cqi;border-radius:6px;background:var(--surface);border:1px solid var(--code-border)}
+.chip.goal{background:var(--orange);color:#fff;border-color:var(--orange);font-weight:700}
+.chip.cap{border:2px dashed var(--orange)}
+.branches{margin-top:1.4cqb;display:flex;flex-wrap:wrap;gap:.7cqi;align-items:center;flex-shrink:0}
+.branches .lbl{font-family:var(--mono);font-size:clamp(8px,1cqi,13px);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin-right:.6cqi}
+.branches .chip{background:transparent;border-style:dashed}
+
+/* Agenda */
+.agenda{display:grid;grid-template-columns:auto 1fr auto;gap:1cqb 2cqi;align-items:baseline;flex:1;min-height:0;align-content:start}
+.agenda .tm{font-family:var(--mono);font-size:clamp(11px,1.45cqi,20px);font-weight:700;color:var(--orange)}
+.agenda .it{font-size:clamp(12px,1.65cqi,23px);line-height:1.3}
+.agenda .it span{color:var(--text-dim)}
+.agenda .tr{font-family:var(--mono);font-size:clamp(9px,1.1cqi,15px);color:var(--text-dim);text-align:right}
+.agenda .brk{color:var(--text-dim)}
+
+/* Share flow */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:1.2cqi;align-items:stretch}
+.step{display:flex;flex-direction:column;gap:.8cqb;padding:2cqb 1.4cqi;border-radius:10px;background:var(--surface);border:1px solid var(--code-border);position:relative}
+.step .ic{font-size:clamp(16px,2.4cqi,34px);color:var(--orange)}
+.step .nm{font-size:clamp(13px,1.8cqi,26px);font-weight:800}
+.step .ds{font-size:clamp(10px,1.3cqi,18px);line-height:1.4;color:var(--text-dim)}
+.step.hot{border:2px solid var(--orange);background:var(--orange-soft)}
+
+
+/* Vertical balance: content sits as one centred block; nothing stretches to fill */
+.slide{justify-content:center}
+.slide .foot{margin-top:3.4cqb}
+.cols,.tree{flex:0 0 auto}
+.tree{align-items:start}
+.card{min-height:22cqb}
+.card .prompt{margin-top:1cqb}
+
+
+/* Rung mark (Decision Budget): five ascending bars, filled to the rung. Teal is used for nothing else. */
+.rung{display:inline-flex;align-items:flex-end;gap:.18em;font-family:var(--mono);font-weight:700;color:var(--rung);white-space:nowrap}
+.rung i{display:block;width:.42em;border-radius:1px;background:var(--rung-dim)}
+.rung i:nth-of-type(1){height:.45em}.rung i:nth-of-type(2){height:.65em}.rung i:nth-of-type(3){height:.85em}
+.rung i:nth-of-type(4){height:1.05em}.rung i:nth-of-type(5){height:1.25em}
+.rung.r0 i:nth-of-type(-n+1),.rung.r1 i:nth-of-type(-n+2),.rung.r2 i:nth-of-type(-n+3),
+.rung.r3 i:nth-of-type(-n+4),.rung.r4 i:nth-of-type(-n+5){background:var(--rung)}
+.rung b{margin-left:.55em;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:.8em}
+.ladder{display:grid;grid-template-columns:auto 1fr 1fr;gap:1.1cqb 2.4cqi;align-items:baseline}
+.ladder .rung{font-size:clamp(11px,1.5cqi,21px)}
+.ladder .what{font-size:clamp(11px,1.45cqi,20px);color:var(--text-dim);line-height:1.35}
+.ladder .cc{font-size:clamp(12px,1.6cqi,22px);line-height:1.35}
+.ladder .hd{font-family:var(--mono);font-size:clamp(9px,1.1cqi,15px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--orange)}
+
+/* Animation */
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.slide.active .card,.slide.active .step,.slide.active .tier{animation:up .5s ease both}
+.slide.active .card:nth-child(2),.slide.active .step:nth-child(2),.slide.active .tier:nth-child(2){animation-delay:.1s}
+.slide.active .card:nth-child(3),.slide.active .step:nth-child(3),.slide.active .tier:nth-child(3){animation-delay:.2s}
+.slide.active .step:nth-child(4),.slide.active .tier:nth-child(4){animation-delay:.3s}
+.slide.active .step:nth-child(5),.slide.active .tier:nth-child(5){animation-delay:.4s}
+.slide.active .tier:nth-child(6){animation-delay:.5s}.slide.active .tier:nth-child(7){animation-delay:.6s}
+
+/* reference slides (generated by deck/reference.ail) */
+.ref-cols{display:grid;grid-template-columns:1.45fr 1fr;gap:1.6cqi;flex:1;min-height:0;margin-top:1.4cqb}
+.ref-do{overflow:auto;min-height:0}
+.ref-do ol{margin:.4cqb 0 0;padding-left:1.4em;display:flex;flex-direction:column;gap:.6cqb}
+.ref-do li,.ref-do p{font-size:clamp(10px,1.02cqi,15px);line-height:1.4;margin:0}
+.ref-do .prompt{font-size:clamp(9px,.95cqi,14px);margin:.4cqb 0;padding:.6cqb 1cqi}
+.ref-do .ref-h{font-weight:700;margin-top:1.2cqb}
+.ref-side{display:flex;flex-direction:column;gap:1.2cqb;min-height:0}
+.ref-side .card{min-height:0;padding:1.6cqb 1.6cqi}
+.ref-side .s,.ref-side li{font-size:clamp(10px,1.12cqi,16px);line-height:1.45}
+.ref-can{font-size:clamp(12px,1.5cqi,22px);color:var(--text-dim);margin:.4cqb 0 0}
+.ref-meta{font:clamp(9px,.95cqi,13px) var(--mono);color:var(--text-dim);margin-top:auto}
+.ref-meta a,.ref-index a{color:var(--orange);text-decoration:none}
+.ref-index{columns:3;column-gap:2.4cqi;margin-top:2cqb;font-size:clamp(10px,1.12cqi,16px);line-height:1.6}
+.ref-index h3{font:700 clamp(10px,1cqi,14px) var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin:1.2cqb 0 .3cqb;break-after:avoid}
+.ref-index p{margin:0}
+</style>
+</head>
+<body>
+<script>(function(){
+  // ── Presenter bridge: detail density, slide reporting, hotkey relay ──
+  var embedded = window !== window.top, root = document.documentElement;
+  root.setAttribute('data-density', embedded ? 'stage' : 'guide');
+  function setDensity(d){ root.setAttribute('data-density', d === 'guide' ? 'guide' : 'stage'); }
+  window.addEventListener('message', function(e){
+    if(e.data && e.data.type === 'deck-command' && e.data.action === 'set-density') setDensity(e.data.density);
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    if(e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    var k = (e.key || '').toLowerCase();
+    if(k !== 'd' && k !== 'q' && k !== 'n' && k !== 'l') return;
+    if(embedded) window.parent.postMessage({type:'deck-hotkey', key:k}, '*');
+    else if(k === 'd') setDensity(root.getAttribute('data-density') === 'guide' ? 'stage' : 'guide');
+  });
+  if(!embedded) return;
+  function slides(){ return document.querySelectorAll('.slides-stage .slide'); }
+  function activeIndex(list){ for(var i = 0; i < list.length; i++) if(list[i].classList.contains('active')) return i; return -1; }
+  function tidy(s, n){ return (s || '').replace(/\s+/g, ' ').trim().slice(0, n); }
+  var lastIdx = null, pending = null;
+  function send(){
+    var list = slides(), idx = activeIndex(list);
+    var el = idx >= 0 ? list[idx] : document.body;
+    var h = el && el.querySelector('h1, h2, h3, .slide-title');
+    var text = el ? ((el.innerText || '').trim() || (el.textContent || '')) : '';
+    window.parent.postMessage({type:'deck-slide', index:idx, total:list.length,
+      title: tidy(h ? h.textContent : document.title, 120), text: tidy(text, 700)}, '*');
+  }
+  function report(){
+    var idx = activeIndex(slides());
+    if(idx === lastIdx) return;
+    lastIdx = idx; clearTimeout(pending); pending = setTimeout(send, 160);
+  }
+  window.addEventListener('message', function(e){
+    if(e.data && e.data.type === 'deck-command' && e.data.action === 'report-slide'){ lastIdx = null; report(); }
+  });
+  new MutationObserver(report).observe(document.querySelector('.slides-stage') || document.body,
+    {attributes:true, attributeFilter:['class'], subtree:true, childList:true});
+  report();
+})();</script>
+<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
+
+<div id="app">
+  <div class="top-bar">
+    <span class="deck-title"><img class="top-logo" src="../images/logos/sunholo-logo.svg" alt="Sunholo"><span class="accent">Claude Code workshop · reference</span></span>
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button>
+  </div>
+
+  <div class="slides-viewport">
+    <div class="slides-stage">
+<!-- reference:begin -->
+      <section class="slide active" data-slide="index" id="index">
+        <div class="kicker">Reference</div>
+        <h2 class="slide-title">One slide per box, <span class="accent">from the same source</span></h2>
+        <div class="ref-index"><h3>Tier 0 · setup</h3><p><a href="#install">Claude Desktop, Code tab</a></p><p><a href="#git-installed">Git and a GitHub account</a></p><p><a href="#get-workshop">Get the workshop</a></p><h3>Tier 1 · chat to agent</h3><p><a href="#chat-vs-agent">Chat versus agent</a></p><p><a href="#folders-context">The folder is the context</a></p><p><a href="#permissions-review">Permissions and reviewing changes</a></p><p><a href="#plan-first">Plan before acting</a></p><p><a href="#trust-ladder">Trust is earned per action</a></p><p><a href="#models">Choosing a model</a></p><p><a href="#context-hygiene">Sessions and context</a></p><h3>Tier 2 · rules</h3><p><a href="#claude-md">CLAUDE.md — standing instructions</a></p><p><a href="#team-conventions">Team conventions and data handling</a></p><p><a href="#settings-permissions">Your rules — allow, ask, deny</a></p><h3>Tier 3 · git</h3><p><a href="#git-safety-net">Git as undo</a></p><p><a href="#clone-branch">Clone, branch, push</a></p><h3>Tier 4 · skills</h3><p><a href="#use-a-skill">Use someone else's skill</a></p><p><a href="#skill-anatomy">How a skill is built</a></p><p><a href="#write-a-skill">Write your own skill</a></p><p><a href="#room-pr">Your skill, in everyone's copy</a></p><h3>Tier 5 · connect</h3><p><a href="#connectors">Connectors and MCP</a></p><p><a href="#add-mcp">Add a remote MCP server</a></p><p><a href="#own-api-key">Make your own API key</a></p><p><a href="#bigquery-mcp">GA4 data through BigQuery</a></p><h3>Tier 6 · share</h3><p><a href="#shared-skills-repo">The team's skills repository</a></p><p><a href="#share-skill-pr">Contribute a skill by pull request</a></p><p><a href="#real-task">One real task, end to end</a></p><h3>Tier 7 · team layer</h3><p><a href="#protect-main">A review before anything is shared</a></p><p><a href="#skill-routing">Many skills, one entry point</a></p><h3>Branch</h3><p><a href="#verify-output">Checking the work</a></p><p><a href="#data-files">Spreadsheets and data files</a></p><p><a href="#hooks">Hooks</a></p><p><a href="#subagents">Subagents and parallel sessions</a></p><p><a href="#scheduled">Running without you</a></p><p><a href="#local-mcp">Run a GA4 server yourself</a></p><p><a href="#plugin-marketplace">Team skills in every folder</a></p></div>
+        <p class="foot">Each slide is generated from <b>lessons/&lt;box&gt;.md</b> and <b>tree/tree.yaml</b>. Add <b>#&lt;box-id&gt;</b> to the address to open one directly.</p>
+      </section>
+      <section class="slide" data-slide="install" id="install">
+        <div class="kicker">Tier 0 · setup</div>
+        <h2 class="slide-title">Claude Desktop, Code tab</h2>
+        <p class="ref-can">I can open a folder in the Code tab and get Claude to create a file in it.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Download Claude Desktop from <b>claude.com/download</b>, install it, and sign in.</li><li>Click the <b>Code</b> button (<b>&lt;/&gt;</b>) at the top left. If it asks you to upgrade, your plan doesn't include it; tell the facilitator before the day.</li><li>Make an empty folder somewhere easy to find, for example <code>claude-test</code> in your Documents.</li><li>Click <b>+ New</b>. In the bar under the message box, choose <b>This computer</b>, then the folder button and <b>Open folder…</b>, and pick <code>claude-test</code>.</li><li>In the same bar, the mode button says <b>Auto</b>: that's the default. Click it and choose <b>Manual</b>. Leave <b>Bypass permissions</b> alone.</li><li><b>Predict:</b> you type <i>"Create a file called hello.txt that says hello"</i>. Will the file just appear? Will Claude ask you first? Where on your computer will it go?</li><li>Send it. Accept the change when it asks. Then open the folder in Finder or File Explorer and look.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s"><code>hello.txt</code> exists in your test folder, and you opened it yourself.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"It's the same as the chat tab."</i> The Chat tab has no access to your files; the Code tab works in the folder you chose, and only there unless you allow more.</li><li><i>"I need to install developer tools first."</i> Not for this. Git comes next, and only because the later lessons use it.</li></ul></div>
+            <p class="ref-meta">Needs: nothing<br>Source: lessons/install.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="git-installed" id="git-installed">
+        <div class="kicker">Tier 0 · setup</div>
+        <h2 class="slide-title">Git and a GitHub account</h2>
+        <p class="ref-can">I have git installed and a GitHub account I can sign in to.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li><b>Predict:</b> is git already on your computer? Most Macs have it, or offer to fetch it; most Windows PCs don't.</li><li>Open a session in the Code tab (any folder, <code>claude-test</code> is fine). In the message box, type <code>!git --version</code> and send it. The <code>!</code> means <i>run this myself</i>: the command runs straight away, without Claude and without asking, and the result appears in the conversation.</li><li>If it prints a version number, you're done with this step. If not:<br>• <b>Mac:</b> git comes with Apple's developer tools. Asking for git when they're missing makes macOS offer to install them in a pop-up: click <b>Install</b> and wait a few minutes. No pop-up? Send <code>!xcode-select --install</code>.<br>• <b>Windows:</b> install <b>Git for Windows</b> from git-scm.com/downloads/win, accepting the defaults. Restart Claude Desktop afterwards so it finds git.</li><li>Send <code>!git --version</code> again.</li><li>If you don't have a GitHub account, make one at <b>github.com/signup</b>. Use the email you'll use for work, and turn on two-factor sign-in when it offers.</li><li>Send your GitHub username (not your password) to the facilitator.</li></ol><p>You could also ask Claude to check for git and explain what it finds. The difference: with <code>!</code> you run the command; without it, Claude decides what to run and asks you first.</p></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s"><code>git --version</code> prints a version, and the facilitator has your GitHub username.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Git and GitHub are the same thing."</i> Git is the tool on your laptop and works with no account at all. GitHub is a website that stores copies of git repositories so people can share them.</li><li><i>"Commands need a terminal."</i> A <code>!</code> in the message box runs one for you, and Claude can see the result. Most of the day you will ask Claude to run commands and read them, not type them.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#install">Claude Desktop, Code tab</a><br>Source: lessons/git-installed.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="get-workshop" id="get-workshop">
+        <div class="kicker">Tier 0 · setup</div>
+        <h2 class="slide-title">Get the workshop</h2>
+        <p class="ref-can">I can have Claude clone a repository from GitHub, and open a session on it.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>In the Code tab, open a session on your <code>claude-test</code> folder (the one from <code>install</code>). Keep the mode on <b>Manual</b>.</li><li><b>Predict:</b> you ask Claude to copy the workshop from GitHub. Which command will it want to run, and will it ask you first?</li><li>Send:<div class="prompt">Clone https://github.com/sunholo-data/claude-code-workshop into this folder, then tell me how to start the workshop.</div></li><li>Claude shows you the command (<code>git clone …</code>) and asks before running it. Read it, then allow it. The big button may say <b>Always allow</b>: that saves a rule, so this command never asks again in this folder. Look at the arrow beside it before choosing. Which you pick is your first trust decision of the day. This is the first of many approvals; reading them is the habit the whole day builds. Then it tells you the next step, from the README: a new session on the workshop folder. Asking for the one thing you want next, rather than "what's in it?", gets a short answer.</li><li>Start a <b>new session</b> (<b>+ New</b> at the top left). Click the folder button under the message box: it still says <code>claude-test</code>. Choose <b>Open folder…</b>, go into <code>claude-test</code>, and pick <code>claude-code-workshop</code>. Check the button now says <code>claude-code-workshop</code>.</li><li>You'll see <b>This workspace isn't trusted</b>. A folder you downloaded can carry its own Claude settings, so Claude asks before using them. Type <b>start the workshop</b>, send it, and choose <b>Trust workspace</b>: that's what lets the course's guide, rules and settings load. If the banner shows but the question never comes, quit Claude Desktop and open it again, then go back to this session. <b>Predict first:</b> what would it mean to trust a folder you hadn't read?</li><li>The guide reads the course and offers you somewhere to start. The first time, it asks to create <code>progress.md</code>, your own record of what you've done. Allow it.</li></ol><p class="ref-h">If git isn't working yet</p><p>On the GitHub page, click the green <b>Code</b> button, then <b>Download ZIP</b>. Unzip it and select the unzipped folder in step 5. Everything up to the Git lessons works the same way. Once git works, redo step 3, and ask Claude to copy your <code>progress.md</code> across to the new folder.</p></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">The guide answered <b>start the workshop</b> from a session opened on the workshop folder, and <code>progress.md</code> exists in that folder.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Claude is inside GitHub."</i> Claude works on files on your laptop. GitHub is where the shared copy lives; cloning brings a copy down.</li><li><i>"One session can see everything."</i> A session sees the folder you chose. That's why step 5 opens a new session on the workshop folder, rather than carrying on in <code>claude-test</code>.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#install">Claude Desktop, Code tab</a> · <a href="#git-installed">Git and a GitHub account</a><br>Source: lessons/get-workshop.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="chat-vs-agent" id="chat-vs-agent">
+        <div class="kicker">Tier 1 · chat to agent</div>
+        <h2 class="slide-title">Chat versus agent</h2>
+        <p class="ref-can">I can explain what changes when the AI reads and writes files and runs commands, instead of me pasting text in and out.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Open this workshop folder in the Code tab (<b>This computer</b>, <b>Select folder</b>). Keep the mode on <b>Manual</b>.</li><li>Open <code>samples/tagging-plan.md</code> yourself and skim it. It is a made-up plan for a made-up shop.</li><li><b>Predict:</b> you ask <i>"In samples/tagging-plan.md, mark the search event as Live and add a row to the change log for today."</i> What will Claude do first: answer from memory, or read the file? What will it ask you before saving anything?</li><li>Send it. Watch the steps it shows: reading, then proposing a change. Accept it.</li><li>Open the file again yourself. Is the change exactly what you asked for, and nothing else?</li><li>Compare: how would you have done this in a chat window? Count the copy-and-paste steps.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">Claude edited <code>samples/tagging-plan.md</code>, and you opened it afterwards and said what changed.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"It will reply with the new text for me to paste."</i> It changes the file on disk. The reply is a report of what it did, which is why you check the file and not only the reply.</li><li><i>"It already knows what's in my files."</i> It reads them when it needs to, in this session. You can watch it do so.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#get-workshop">Get the workshop</a><br>Source: lessons/chat-vs-agent.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="folders-context" id="folders-context">
+        <div class="kicker">Tier 1 · chat to agent</div>
+        <h2 class="slide-title">The folder is the context</h2>
+        <p class="ref-can">I can point Claude at the files it needs with @, and say what it can and cannot see.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>In a session on this workshop folder, type <code>@</code> and start typing <code>tagging</code>. Pick <code>samples/tagging-plan.md</code> from the list. Do the same for <code>samples/daily-sessions.csv</code>.</li><li>Ask: <i>"Why did newsletter signups drop to zero, and what explains the jump in sessions on 19 September?"</i></li><li><b>Predict</b> before you send: which part can it answer from these two files, and which part can't it? What will it do with the part it can't?</li><li>Send it. Check: did it find the rename in the tagging plan? What did it say about 19 September?</li><li>Ask: <i>"Which files did you read to answer that? What would you need to explain the 19th?"</i></li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">An answer to a question that needed both files you @-mentioned, and you can say which part came from which file.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"It can see my whole computer."</i> It works in the folder you opened. Reaching outside it needs your permission.</li><li><i>"It read everything in the folder."</i> It reads what it decides is relevant; <code>@</code> makes sure.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#chat-vs-agent">Chat versus agent</a><br>Source: lessons/folders-context.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="permissions-review" id="permissions-review">
+        <div class="kicker">Tier 1 · chat to agent</div>
+        <h2 class="slide-title">Permissions and reviewing changes</h2>
+        <p class="ref-can">I can pick a permission mode, read a diff, and reject a change I don't want.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Set the mode to <b>Manual</b>.</li><li>Ask: <i>"Tidy up samples/tagging-plan.md."</i> That is deliberately vague.</li><li><b>Predict:</b> what will "tidy" mean to Claude? Which lines will it touch?</li><li>Read the diff it shows before deciding: red is removed, green is added. Look for anything you didn't ask for, such as a reworded open question or a changed date.</li><li>Click <b>Reject</b> on at least one change, and say out loud why.</li><li>Claude will ask how to proceed. Tell it precisely what you do want, and accept that.</li><li>Switch to <b>Accept edits</b>, ask for one more small change, then click the <code>+N -N</code> indicator that appears to review it after the fact.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">One change rejected and re-asked, with the reason said aloud.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Accepting is a formality."</i> The diff is the one moment you see exactly what will change. Reading it is the job.</li><li><i>"Rejecting means starting again."</i> Claude keeps the conversation and asks what you want instead.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#chat-vs-agent">Chat versus agent</a><br>Source: lessons/permissions-review.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="plan-first" id="plan-first">
+        <div class="kicker">Tier 1 · chat to agent</div>
+        <h2 class="slide-title">Plan before acting</h2>
+        <p class="ref-can">I can use Plan mode to agree an approach before anything is changed.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Set the mode to <b>Plan</b>.</li><li>Ask: <i>"Add a section to samples/tagging-plan.md describing how we'd track the search event, including what must not be recorded."</i></li><li><b>Predict:</b> what will the plan contain? Will it pick up the open question about email addresses in search terms on its own?</li><li>Read the plan. Change at least one thing by telling Claude, for example <i>"also cover who signs off the event"</i>, or <i>"no, keep the section under ten lines"</i>. Ask for the revised plan.</li><li>When the plan says what you want, approve it, switch to <b>Manual</b>, and let Claude carry it out. Check the result against the plan.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">A plan you changed before approving it, and the file that followed it.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Plan mode is slower."</i> Changing a plan is one sentence. Unpicking edits across several files is not.</li><li><i>"The plan is Claude's decision."</i> It is a proposal. The point of this mode is that you edit it.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#permissions-review">Permissions and reviewing changes</a><br>Source: lessons/plan-first.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="trust-ladder" id="trust-ladder">
+        <div class="kicker">Tier 1 · chat to agent</div>
+        <h2 class="slide-title">Trust is earned per action</h2>
+        <p class="ref-can">I can say which of Claude's actions I approve every time, which I let through, and which it may never do, and why each sits where it does.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Ask Claude to copy <code>samples/</code> to a new folder called <code>ladder-practice</code> <b>next to</b> the workshop folder (not inside it), make it a git repository, and then open a <b>+ New session</b> on it. It has no rules yet, which is the point. You'll run the same task three times, so each run needs a fresh copy.</li><li>The task, each time: <i>"Sort the files in ladder-practice into folders by type, write a short README listing them, and commit."</i></li><li><b>Predict:</b> how many times will Claude stop and ask in <b>Manual</b>? In <b>Accept edits</b>? In <b>Auto</b>? Write your three numbers down.</li><li>Run it in <b>Manual</b> and count the prompts. Then reset the copy, switch to <b>Accept edits</b>, and run it again. Then <b>Auto</b>. (If Auto isn't in the mode selector, your plan or organisation hasn't enabled it; do the first two.)</li><li>Still in Auto, ask: <i>"Now push this to a new branch on GitHub."</i> <b>Predict</b> first: will it ask? With no rules yet, that depends on a background check, not on you. In the next node you add an ask rule for <code>git push</code>, and from then on it stops for you even in Auto. That is a ceiling: publishing stays at proposing, permanently.</li><li>In Manual mode, find a command you've approved several times without changing anything. Choose <b>Yes, and don't ask again</b>. You've just promoted one action from proposing to automated, on the evidence of how often you changed nothing.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">Your three predicted and three actual prompt counts, and the one action that still asked in Auto.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Auto mode means I've stopped checking."</i> You've stopped checking the routine. The actions you've marked as ask still stop for you, every time.</li><li><i>"Trust is a setting for the whole session."</i> It's per action. The same session can commit freely and still ask before every push.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#permissions-review">Permissions and reviewing changes</a><br>Source: lessons/trust-ladder.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="models" id="models">
+        <div class="kicker">Tier 1 · chat to agent</div>
+        <h2 class="slide-title">Choosing a model</h2>
+        <p class="ref-can">I can choose a model for a task, and say what I trade between quality, speed and plan usage.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Open the model dropdown and note which models you can choose and which one is selected.</li><li><b>Predict:</b> you'll ask two models the same thing. Which will be faster? Which answer will you prefer, and will you be able to tell them apart?</li><li>On one model, ask: <i>"Read samples/daily-sessions.csv and give me three bullet points on what happened in September."</i></li><li>Start a new session (<b>+ New session</b>), choose a different model, and ask exactly the same thing.</li><li>Compare: speed, accuracy (check one number against the CSV), and whether either noticed the signups dropping to zero.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">The same task on two models, and one sentence on the difference you saw.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Always use the biggest model."</i> It costs more of your allowance and is slower; for a small, well-described task it often adds nothing.</li><li><i>"The model is the only thing that matters."</i> A clear request and the right files usually change the answer more than the model does.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#chat-vs-agent">Chat versus agent</a><br>Source: lessons/models.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="context-hygiene" id="context-hygiene">
+        <div class="kicker">Tier 1 · chat to agent</div>
+        <h2 class="slide-title">Sessions and context</h2>
+        <p class="ref-can">I know when to start a fresh session, and why long sessions get worse.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Look back at one of your earlier sessions today. How many different things did you ask for in it?</li><li><b>Predict:</b> you start a new session and ask <i>"carry on with the tagging plan"</i>. What will Claude know about what you did before?</li><li>Try it: <b>+ New session</b>, same folder, send exactly that. What happens?</li><li>Now write a one-paragraph brief instead: what the task is, which files matter (with <code>@</code>), what is already done, and what "done" looks like. Start another new session and send it.</li><li>Know the other tool: typing <code>/compact</code> asks Claude to summarise the current session now and keep going, which frees room without starting over.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">A task restarted in a new session from your one-paragraph brief.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"It remembers yesterday."</i> Each session starts empty apart from the folder and any standing instructions (that's the next tier, CLAUDE.md).</li><li><i>"Longer conversations give it more to go on."</i> Past a point they give it more to get confused by.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#folders-context">The folder is the context</a><br>Source: lessons/context-hygiene.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="claude-md" id="claude-md">
+        <div class="kicker">Tier 2 · rules</div>
+        <h2 class="slide-title">CLAUDE.md — standing instructions</h2>
+        <p class="ref-can">I can write a CLAUDE.md and watch it change what Claude does.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li><b>Before.</b> In a session on this folder, ask: <i>"What happened to newsletter signups in samples/daily-sessions.csv? Give the dates."</i> Note how it writes dates, and whether it says what it read.</li><li>Create <code>CLAUDE.local.md</code> in the workshop folder (ask Claude to, or do it yourself) with one rule, for example: <code>- Write dates as "15 Sept 2026", never 2026-09-15. End every answer with "Read:" and the files you read.</code></li><li><b>Predict:</b> you ask the same question again in the same session. Will the rule apply?</li><li>Try it. Then start a <b>+ New session</b> and ask again. What changed, and why?</li><li>Make the rule worse on purpose (vague, like <i>"be clear about dates"</i>) and see what survives.</li><li>Don't commit <code>CLAUDE.local.md</code>; it's yours. Delete the rule or keep it, your choice.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">The same request answered before and after one rule, with the difference visible, and you can say which rule caused it.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"I told it once, so it knows."</i> A message lasts one session. A line in CLAUDE.md lasts every session.</li><li><i>"It picks up the change immediately."</i> The file is read when a session starts; that's why you needed a new one.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#plan-first">Plan before acting</a> · <a href="#folders-context">The folder is the context</a><br>Source: lessons/claude-md.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="team-conventions" id="team-conventions">
+        <div class="kicker">Tier 2 · rules</div>
+        <h2 class="slide-title">Team conventions and data handling</h2>
+        <p class="ref-can">I can say what may and may not be given to a model, and where that rule is written down.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>If this folder has <code>overlay/</code>, read <code>overlay/CLAUDE.md</code> and the <code>data_policy</code> line in <code>overlay/overlay.yaml</code>. That is your group's data rule, and it wins. If there's no overlay, ask the facilitator for the rule in writing.</li><li><b>Predict:</b> before anyone writes anything, each person writes down privately one kind of material they think is fine to give Claude and one they think isn't. Compare as a group. Where did you disagree?</li><li>Together, write <code>CONVENTIONS.md</code> in the place the facilitator names (usually the team's shared repository). <b>Data handling first</b>: what's allowed, what isn't, and who to ask when unsure. Quote the group's data rule rather than paraphrasing it.</li><li>Then each person adds one line of their own: a habit, a check, a naming rule, anything you'd want a colleague's Claude to follow.</li><li>Add one line to your CLAUDE.md (or <code>CLAUDE.local.md</code>): <i>"Follow CONVENTIONS.md."</i> Ask Claude, in a new session, what it may and may not do with client material. Does the answer match?</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">Your line in the team's conventions file, and you can say where the data rule is written.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Data rules are IT's problem."</i> The choice of what goes into a session is made by whoever types it, every time.</li><li><i>"If Claude can open a file, I'm allowed to give it."</i> Access is not permission. The rule decides, not the folder.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#claude-md">CLAUDE.md — standing instructions</a><br>Source: lessons/team-conventions.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="settings-permissions" id="settings-permissions">
+        <div class="kicker">Tier 2 · rules</div>
+        <h2 class="slide-title">Your rules — allow, ask, deny</h2>
+        <p class="ref-can">I can write the settings that let routine actions through, always stop for the risky ones, and block the ones that must never happen.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Read settings/README.md: one line per rule, saying which rung it puts the action on and why.</li><li><b>Predict:</b> with these rules, which of these will just happen, which will ask, and which will be refused? <i>Commit a change. Push it. Delete a file. Read a file called <code>.env</code>.</i></li><li>In your <code>ladder-practice</code> repository, ask Claude to copy the <code>permissions</code> block from <code>settings/starter.json</code> into <code>.claude/settings.json</code>. Read the result before you approve it.</li><li>Start a new session there, in <b>Auto</b>. Ask for each of the four actions in step 2 (make a <code>.env</code> file with one made-up line first). Compare with your prediction.</li><li>Open <code>.claude/settings.local.json</code> and find the rule you promoted in the trust-ladder node. Decide whether it belongs in the team's file or only in yours.</li><li>Add one rule of your own for something in your real work that should always ask, and say why.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">The settings file in use, one rule you promoted yourself, and the push or the delete you saw it stop.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Writing 'never push without asking' in CLAUDE.md does the same job."</i> CLAUDE.md shapes what Claude tries to do. Permission rules are enforced by Claude Code whatever the model decides.</li><li><i>"A narrow allow can make an exception to a broad ask or deny."</i> It can't. Deny and ask are checked first, which is why <code>git checkout</code> asks even though moving between branches is safe: use <code>git switch</code> for that.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#trust-ladder">Trust is earned per action</a> · <a href="#claude-md">CLAUDE.md — standing instructions</a><br>Source: lessons/settings-permissions.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="git-safety-net" id="git-safety-net">
+        <div class="kicker">Tier 3 · git</div>
+        <h2 class="slide-title">Git as undo</h2>
+        <p class="ref-can">I can ask Claude to commit my work, see what changed, and go back.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Ask Claude: <i>"Copy the samples folder to a new folder called workshop-practice next to this one, and make it a git repository with a first commit."</i> Read each command before approving. The first commit may stop to ask for your name and email; that is git, not Claude.</li><li>Start a <b>+ New session</b> with <code>workshop-practice</code> as the folder.</li><li>Ask for two small changes to <code>tagging-plan.md</code>, committing after each: <i>"commit this with a message saying what changed."</i></li><li>Ask: <i>"Show me the history, and what changed in the last commit."</i></li><li><b>Predict:</b> you ask <i>"undo the last commit's change"</i>. What happens to the file? What happens to the history: is the commit deleted, or is a new one added?</li><li>Try it. Open the file, then ask for the history again.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">At least three commits in the log, one of which undoes an earlier change.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Undo means the mistake is erased."</i> The safe way, a revert, adds a new commit that reverses the old one. The history keeps both, which is the point.</li><li><i>"Git saves automatically."</i> Only when you commit. Changes since the last commit can't be recovered by git.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#permissions-review">Permissions and reviewing changes</a> · <a href="#git-installed">Git and a GitHub account</a><br>Source: lessons/git-safety-net.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="clone-branch" id="clone-branch">
+        <div class="kicker">Tier 3 · git</div>
+        <h2 class="slide-title">Clone, branch, push</h2>
+        <p class="ref-can">I can clone a repository, work on a branch, and push it.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>You already cloned this workshop repository. That clone is today's practice repository: work in a session on it.</li><li><b>Sign-in check.</b> Ask Claude: <i>"Can git push to GitHub from here? Don't push anything; just check how it would sign in."</i> On Windows, Git for Windows opens a browser window when it needs you. On a Mac it usually can't ask: install <b>GitHub CLI</b> from cli.github.com, then in the terminal pane (<b>Ctrl+<code></b>) type </code>gh auth login<code>, choose the browser option, and afterwards </code>gh auth setup-git<code>. Use the terminal pane, not </code>!<code>: sign-in asks you questions, and anything run with </code>!` lands in the conversation. Never paste a password or token into the chat.</li><li>Ask: <i>"Make a branch called practice/&lt;your-github-username&gt;."</i></li><li>Make one small change (a line in your own <code>notes/&lt;your-github-username&gt;.md</code>) and ask Claude to commit it.</li><li><b>Predict:</b> you ask Claude to push the branch. Will it ask you first? Will your change appear on the <code>main</code> branch on GitHub?</li><li>Ask it to push. Then open the repository on GitHub, find the branch list, and open yours.</li><li>Now try the thing you shouldn't be able to do: ask Claude to push your commit straight to <code>main</code>. Read what GitHub says back.</li></ol><p><b>Not in a facilitated group?</b> You won't have permission to push here. Ask Claude to fork the repository to your own GitHub account (<code>gh repo fork --remote</code>) and push your branch to the fork.</p></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">Your branch visible on GitHub, with your commit on it, and GitHub's refusal when you pushed to <code>main</code>.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Pushing changes everyone's copy."</i> It adds your branch to GitHub. Nothing reaches the main branch until someone merges it, and nobody's laptop changes until they pull.</li><li><i>"Cloning is downloading."</i> A download is a snapshot. A clone keeps the history and knows where it came from, so you can push back and pull updates.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#git-safety-net">Git as undo</a><br>Source: lessons/clone-branch.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="use-a-skill" id="use-a-skill">
+        <div class="kicker">Tier 4 · skills</div>
+        <h2 class="slide-title">Use someone else's skill</h2>
+        <p class="ref-can">I can clone a repo that carries a skill and get the result its author intended, without knowing how.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>In a session on any folder, ask Claude: <i>"Clone https://github.com/sunholo-data/presentation-template into my Documents folder."</i> Then start a <b>+ New session</b> on the cloned folder. The skill only loads in a session opened on that folder.</li><li>Open <code>demo/presenter.html</code> in your browser to see a finished deck. The arrow keys move between slides; the sun/moon button switches theme.</li><li><b>Predict:</b> you are going to ask for a deck without naming the skill. Will Claude use it anyway? Which files will it open first?</li><li>Ask: <i>"Build a 3-slide deck in <code>my-deck/</code> about &lt;something you know well&gt;."</i> Watch which files it reads before it writes anything.</li><li>Run the check yourself by sending this with a <code>!</code> in front, or ask Claude to run it:<div class="prompt">!node .claude/skills/presentation-slides/scripts/lint-slides.mjs my-deck/*.html</div></li></ol><p>No output means it passed. It needs Node: if <code>node</code> is not found, ask Claude to install it, or skip the lint and do step 6 carefully.</p><ol><li>Open your deck in the browser. Switch theme. Then make the window tall and narrow: does anything spill off the slide?</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">A three-slide deck in <code>my-deck/</code>, built with the <code>presentation-slides</code> skill, passing its lint, and the lint command you ran, with the deck's file names in it.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"To use a skill I need to know how it works."</i> You asked in your own words. The skill's description matched the request, and Claude did the rest.</li><li><i>"The lint passed, so my deck was checked."</i> Run it with just the folder name, <code>my-deck</code>, instead of <code>my-deck/*.html</code>. It prints nothing and reports success, because it checked no files at all. A check that cannot fail tells you nothing.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#clone-branch">Clone, branch, push</a> · <a href="#claude-md">CLAUDE.md — standing instructions</a><br>Source: lessons/use-a-skill.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="skill-anatomy" id="skill-anatomy">
+        <div class="kicker">Tier 4 · skills</div>
+        <h2 class="slide-title">How a skill is built</h2>
+        <p class="ref-can">I can read a SKILL.md and say when it triggers, what it tells Claude, and what it carries with it.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>In your <code>presentation-template</code> session from use-a-skill, open <code>.claude/skills/presentation-slides/SKILL.md</code>.</li><li>Find the three parts. Copy out the description. List the files in <code>resources/</code> and <code>scripts/</code>, and for each one find the sentence in the body that tells Claude when to use it.</li><li><b>Predict:</b> which of these will trigger the skill? <i>"Make me some slides"</i>, <i>"I need something to show on the screen on Thursday"</i>, <i>"Turn these notes into something I can present."</i> Write yes or no for each.</li><li>Try each in a <b>fresh</b> session on the folder, so nothing carries over. Afterwards, ask <i>"Which skill did you use, if any?"</i></li><li>Pick a phrase you would really say that missed, or only just hit. Edit the description so it covers that phrase, without making it so broad that it fires on any request about a document.</li><li>Start a new session and try your phrase again.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">The skill's description rewritten so it triggers on a phrase you'd actually use, shown working in a new session.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Claude reads every skill all the time."</i> It reads every <b>description</b>. The body loads only when the skill is used, which is why a folder can carry many skills, and why a vague description means a skill that never fires.</li><li><i>"The name is what makes it fire."</i> The name is how you call it directly (<code>/presentation-slides</code>). Picking it unprompted is the description's job.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#use-a-skill">Use someone else's skill</a><br>Source: lessons/skill-anatomy.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="write-a-skill" id="write-a-skill">
+        <div class="kicker">Tier 4 · skills</div>
+        <h2 class="slide-title">Write your own skill</h2>
+        <p class="ref-can">I can turn something I do repeatedly into a skill that someone else could run.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Pick a task you do at least weekly and can describe in about five steps. Use material your group's data rule allows, or a made-up stand-in of the same shape.</li><li>In a repository of your own (the practice repository from clone-branch is fine), do the task once with Claude. Note every time you had to correct it.</li><li>Ask: <i>"Turn what we just did into a project skill at <code>.claude/skills/&lt;short-name&gt;/SKILL.md</code>. Include the corrections I made."</i> Read the result before accepting it.</li><li>Check the description. Is it in the words you'd use when you need this, and does it say when the skill should <b>not</b> be used?</li><li>If the output has a fixed format, put a template in <code>resources/</code>. If a step is mechanical, such as counting, renaming or reformatting, ask for a script in <code>scripts/</code> instead of an instruction.</li><li><b>Predict:</b> a colleague opens this folder and asks for the task in their own words. What will they get, and at which step will they need to ask you something?</li><li>Commit and push. Have a colleague clone the repository, start a new session on it, and ask for the task. Say nothing; watch.</li><li>Fix what they stumbled on. It is usually the description, an input nobody told them to supply, or something only you knew.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">A colleague runs your skill and gets the right result without asking you.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"A skill is just a saved prompt."</i> It is a prompt, a rule for when to use it, and the files it carries, kept in git so that changes to it are visible and reviewed.</li><li><i>"It works for me, so it works."</i> What you know leaks in without you noticing. The colleague test is the only one that finds it.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#skill-anatomy">How a skill is built</a><br>Source: lessons/write-a-skill.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="room-pr" id="room-pr">
+        <div class="kicker">Tier 4 · skills</div>
+        <h2 class="slide-title">Your skill, in everyone's copy</h2>
+        <p class="ref-can">I can propose a change by pull request, and once it is merged, pull and see my work and everyone else's in my own copy.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Start from an up-to-date <code>main</code>: ask Claude to switch to <code>main</code> and pull.</li><li>Ask for a branch named <code>skill/&lt;your-github-username&gt;</code>.</li><li>Write one small skill in <b>its own folder</b>, <code>.claude/skills/&lt;your-github-username&gt;/SKILL.md</code>, and change nothing else. Ideas, all things you'd want today:<br>• <i>explain-diff</i>: "explain what changed since my last commit, in plain English"<br>• <i>where-was-i</i>: "summarise my progress.md in three lines"<br>• <i>check-before-push</i>: "list what's about to be pushed, and anything that looks private" Give it a <code>description</code> that says when it should be used, in words someone else would type.</li><li>Try it yourself in a <b>new session</b> (skills load when a session starts), then commit.</li><li><b>Predict:</b> after you push and open a pull request, will your skill appear in your neighbour's Code tab? When will it?</li><li>Push the branch, and ask Claude to open a pull request (or open it on GitHub: the yellow <b>Compare &amp; pull request</b> banner). Say in one line what the skill does.</li><li>Wait for the facilitator to merge. You can't merge it yourself: <code>main</code> only changes through a reviewed pull request. Look at the PR on GitHub while you wait.</li><li>When everything is merged, ask Claude to switch to <code>main</code> and pull. Start a <b>new session</b>, type <code>/</code>, and find your skill and the others. Run one written by someone else.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">After the merge and a pull, your skill and a colleague's both appear when you type <code>/</code>, and you ran theirs.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Merged means everyone has it."</i> Merged means it's on GitHub's <code>main</code>. Nobody's laptop changes until they pull.</li><li><i>"I pushed, so it's in main."</i> You pushed a branch. Someone else decides whether it joins <code>main</code>.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#skill-anatomy">How a skill is built</a> · <a href="#clone-branch">Clone, branch, push</a><br>Source: lessons/room-pr.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="connectors" id="connectors">
+        <div class="kicker">Tier 5 · connect</div>
+        <h2 class="slide-title">Connectors and MCP</h2>
+        <p class="ref-can">I can explain the difference between pasting an export and connecting the source, and what each sends to the model.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Click <b>+</b> next to the prompt box and choose <b>Connectors</b>. Which are on? Each one's tools are available to Claude in this session.</li><li>Choose a question you could answer from a source your group's rules allow (a calendar or a shared drive folder are typical). Check the rule before you start.</li><li><b>Export route:</b> put an export or copy of the data in the folder and ask the question with <code>@</code> on that file. Write down exactly what you gave it.</li><li><b>Predict:</b> you ask the same question in a new session, with the connector on and no file. What will Claude fetch? More than your export, or less?</li><li>Ask. Expand the tool calls: which tool, with what search terms, and what came back.</li><li>Say the data path out loud: where the data came from, which tool fetched it, whose account it ran as, and where it went next.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">A question answered from a connected source, with the data path said aloud.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Connecting is safer, because nothing is copied."</i> What the tool returns goes into the conversation just as a paste does, and it may fetch more than you would have exported.</li><li><i>"A connector can see everything."</i> It acts as you, so it reaches what your account reaches. No more, but no less either.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#team-conventions">Team conventions and data handling</a><br>Source: lessons/connectors.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="add-mcp" id="add-mcp">
+        <div class="kicker">Tier 5 · connect</div>
+        <h2 class="slide-title">Add a remote MCP server</h2>
+        <p class="ref-can">I can add a hosted MCP server to a project with an API key, and use its tools.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Set the key where this repo's <code>.mcp.json</code> can read it, as <code>GOOGLE_DK_API_KEY</code>. Ask Claude how, and watch what it changes.</li><li>Restart the session so the server loads. <code>/mcp</code> lists the servers and whether they connected.</li><li><b>Predict:</b> ask <i>"How do I add a custom dimension to a GA4 Data API report?"</i> What will Claude do differently now that the server is there?</li><li>Ask it. Look for a call to <code>search_documents</code> or <code>answer_query</code>.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">An answer where Claude called one of those tools, and you can say which, and what it sent to Google.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Claude now knows the docs."</i> It doesn't; it searches them each time, and only when it decides to.</li><li><i>"The key is a password for my account."</i> It identifies a project, not a person. Anyone holding it can spend that project's quota, which is why it is restricted and why it is not committed.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#connectors">Connectors and MCP</a><br>Source: lessons/add-mcp.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="own-api-key" id="own-api-key">
+        <div class="kicker">Tier 5 · connect</div>
+        <h2 class="slide-title">Make your own API key</h2>
+        <p class="ref-can">I can create a restricted API key in my own Google Cloud project and swap it in for the one I was lent.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">The server still answers after the lent key is revoked.</div></div>
+            
+            <p class="ref-meta">Needs: <a href="#add-mcp">Add a remote MCP server</a><br>Source: lessons/own-api-key.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="bigquery-mcp" id="bigquery-mcp">
+        <div class="kicker">Tier 5 · connect</div>
+        <h2 class="slide-title">GA4 data through BigQuery</h2>
+        <p class="ref-can">I can connect Claude to Google's BigQuery server, query a GA4 export read-only, and say which data I was allowed to reach and why.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>In claude.ai, open <b>Settings → Connectors</b>, find the <b>BigQuery</b> connector your team admin added, and click <b>Connect</b>. Sign in with the Google account your facilitator named.</li><li>Open a Code tab session on any practice folder. Ask: <i>"Which BigQuery tools do you have?"</i> You should see a read-only query tool, <code>execute_sql_readonly</code>, among them.</li><li><b>Predict:</b> ask <i>"In the GA4 sample, what were the top five events in January 2021, and how many users triggered each?"</i> Which tool will Claude use? Roughly how many page views?</li><li>Run it. Read the SQL Claude wrote before you read the answer: is it counting what you asked?</li><li>Ask a question you'd ask of a real client, for example where people drop out between viewing an item and adding it to the cart. Check one number yourself in the SQL.</li><li>Ask Claude to list the datasets it can see. Is anything there you shouldn't be able to reach?</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">A read-only query result from the GA4 sample, and one sentence on what left Google to produce it.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"The export is the same as the GA4 reports."</i> It's raw events. Totals won't match the GA4 screens exactly, and a property only exports from the day the link was set up.</li><li><i>"Connected means it can see all our data."</i> It sees only the datasets you were granted. Adding a client's export later is one grant, made after the team's data decision.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#add-mcp">Add a remote MCP server</a> · <a href="#team-conventions">Team conventions and data handling</a><br>Source: lessons/bigquery-mcp.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="shared-skills-repo" id="shared-skills-repo">
+        <div class="kicker">Tier 6 · share</div>
+        <h2 class="slide-title">The team's skills repository</h2>
+        <p class="ref-can">I can install the team's shared skills and keep them up to date.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Ask Claude to clone the team repository next to your other work, then start a <b>+ New session</b> on the cloned folder.</li><li><b>Predict:</b> type <code>/</code> in the prompt box. Which skills will be listed? Will your skill from write-a-skill be among them?</li><li>Look. Then ask: <i>"Which skills does this folder have, and when would each one be used?"</i></li><li>The facilitator merges a small change to one skill. Before you pull: will your session see it?</li><li>Ask Claude to pull, and to show you the commit that came in and who made it. Start a new session and check the skill again.</li><li>Open a session on a <b>different</b> folder and type <code>/</code>. Are the team's skills there?</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">The shared skills show up in your Code tab session, and you pulled a change someone else made: the commit and its author, in your log.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Once it's merged on GitHub, I have it."</i> You have it after you pull. Until then your copy is the one you cloned.</li><li><i>"Installed means available everywhere."</i> A repository's skills belong to the folder. The plugin route is how a skill follows you between folders.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#write-a-skill">Write your own skill</a> · <a href="#room-pr">Your skill, in everyone's copy</a><br>Source: lessons/shared-skills-repo.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="share-skill-pr" id="share-skill-pr">
+        <div class="kicker">Tier 6 · share</div>
+        <h2 class="slide-title">Contribute a skill by pull request</h2>
+        <p class="ref-can">I can propose a skill to the team by pull request, review someone else's, and see it reach everyone.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>In your session on the team repository, ask Claude for a branch called <code>&lt;your-name&gt;-&lt;skill-name&gt;</code>.</li><li>Copy your skill folder from write-a-skill into <code>.claude/skills/</code>. Check that its name doesn't clash with an existing skill, and that its description doesn't overlap one. If it does, see skill-routing.</li><li>Commit, push, and ask Claude to open a pull request. This needs the GitHub CLI, <code>gh</code>; without it, open the pull request on GitHub in the browser. In the description, write what the skill does, a request to test it with, and what a correct result looks like.</li><li><b>Predict:</b> what will your reviewer ask you to change?</li><li>Review a pull request from the <b>other</b> group: switch to their branch, start a new session, run their test request, and leave at least one comment on GitHub about what happened.</li><li>Answer your own review. Push the fix to the same branch; the pull request updates itself.</li><li>Once a reviewer merges it, someone in the other group pulls and uses your skill.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">Your skill merged, and a colleague in the other group used it.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Review means checking the spelling."</i> A reviewer runs the skill. Most of what they find is in the description and in what the skill assumes you already know.</li><li><i>"Merged means everyone has it."</i> Everyone who pulls has it. Until then they have the old version.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#shared-skills-repo">The team's skills repository</a><br>Source: lessons/share-skill-pr.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="real-task" id="real-task">
+        <div class="kicker">Tier 6 · share</div>
+        <h2 class="slide-title">One real task, end to end</h2>
+        <p class="ref-can">I can take a real piece of my own work from request to checked result in the new mode.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Make a folder for the task and make it a git repository (ask Claude). Put in only the files the task needs and the rules allow.</li><li>Write your request as a short brief: what you want, which files (<code>@</code>), and what "done" looks like. Use <b>Plan</b> mode if it has more than a couple of steps.</li><li><b>Predict:</b> before you send it, write one line on what you expect Claude to do, and one on where you think it will go wrong.</li><li>Run it. Commit when something works. Reject or revert what doesn't.</li><li><b>Check it</b> against something you trust: open the files, recount a number, compare with the original, or ask Claude to show its evidence and check that yourself.</li><li>Prepare three sentences for the room: what you asked, what it did, how you checked it. Include where it went wrong, if it did; that's the most useful part for everyone else.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">Shown to the room: what you asked, what it did, and how you checked it.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"If it finished without errors, it's right."</i> Finishing is not the same as being correct. The check is your part of the job.</li><li><i>"Real work needs real data."</i> Often the shape of the data is enough to build and test the method; the real run can wait for what the rules allow.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#claude-md">CLAUDE.md — standing instructions</a> · <a href="#settings-permissions">Your rules — allow, ask, deny</a> · <a href="#git-safety-net">Git as undo</a><br>Source: lessons/real-task.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="protect-main" id="protect-main">
+        <div class="kicker">Tier 7 · team layer</div>
+        <h2 class="slide-title">A review before anything is shared</h2>
+        <p class="ref-can">I can explain why the team's main branch only changes through a reviewed pull request, and who reviews.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li><b>Predict:</b> if you push a change straight to <code>main</code>, who sees it, and when?</li><li>In the team repository on GitHub, open <b>Settings → Rules</b> (or <b>Branches</b> on some plans) and look at what protects <code>main</code>. If nothing does, ask whoever owns the repository to add a rule: <i>require a pull request before merging</i>, with <i>at least one approval</i>.</li><li>Add a <code>CODEOWNERS</code> file (in <code>.github/</code>) naming the reviewers, so GitHub asks them automatically. Ask Claude to write it from your group's list of reviewers.</li><li>Open a small pull request of your own, for example a clearer description for one skill. Try to merge it before anyone has approved it. What happens?</li><li>Have the named reviewer approve it, then merge.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">A pull request that could not be merged until a named reviewer approved it.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"A rule in the README saying 'get a review' is enough."</i> It is a habit, not a guard. A branch rule is enforced by GitHub.</li><li><i>"Every GitHub plan can enforce this."</i> Check yours: on GitHub's free plan, branch rules are not enforced on private repositories. There, the review is the team's habit and <code>CODEOWNERS</code> only requests it.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#share-skill-pr">Contribute a skill by pull request</a><br>Source: lessons/protect-main.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="skill-routing" id="skill-routing">
+        <div class="kicker">Tier 7 · team layer</div>
+        <h2 class="slide-title">Many skills, one entry point</h2>
+        <p class="ref-can">I can organise a growing set of skills so the right one is found, and stop two skills overlapping.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>In your session on the team's skills repository, ask: <i>"List every skill with its description. Which pairs overlap? For each pair, give me one request that could reasonably trigger either."</i></li><li>Choose one pair. <b>Predict:</b> for each of Claude's example requests, which skill will fire?</li><li>Try each request in a fresh session, then ask <i>"Which skill did you use, and why?"</i></li><li>Decide. Same job: merge them into one skill with the better steps and one description. Different jobs: rewrite both descriptions to say what each is for, and add <i>"Not for &lt;X&gt;; use &lt;other skill&gt;."</i></li><li>Optional: write an entry skill that lists the team's skills by the situation they're for. Specialist skills you only want run by name can be kept out of Claude's own choosing with <code>disable-model-invocation: true</code> in their frontmatter, so the entry skill does the routing.</li><li>Make the change on a branch and open a pull request, as in share-skill-pr. Put the test requests, and which skill each should pick, in the description.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">Two overlapping skills merged, or their descriptions separated, with the test requests that now pick the right one.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"More skills make Claude more capable."</i> Every description sits in its context every turn, and each overlap makes the choice harder.</li><li><i>"The skill's name decides when it's used."</i> The description decides. The name is for calling it directly.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#share-skill-pr">Contribute a skill by pull request</a><br>Source: lessons/skill-routing.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="verify-output" id="verify-output">
+        <div class="kicker">Branch</div>
+        <h2 class="slide-title">Checking the work</h2>
+        <p class="ref-can">I can get Claude to show its evidence and check its own output against something I trust.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>In this workshop folder, ask: <i>"From @samples/daily-sessions.csv, what were the total sessions and the average newsletter signups per day?"</i></li><li><b>Predict:</b> will both numbers be right? Is there anything in the data that should change how you read them?</li><li>Ask Claude to show its evidence: the calculation it did, and which rows it used.</li><li>Check one number yourself, in a spreadsheet or by hand on the first week.</li><li>Ask: <i>"Is there anything in this data that makes either number misleading?"</i> Then look at the file yourself. Did Claude find what you found?</li><li>Write down one check you'd want every time this report is made. Ask Claude to turn it into a script that prints PASS or FAIL.</li><li>Make it fail on purpose: run it on a copy of the file with one row broken. Only a check that can fail is worth keeping.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">A check that caught something, and one sentence on what it caught.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"It showed its working, so it's right."</i> Working can be plausible and still wrong. Check one step against something independent.</li><li><i>"A correct calculation means a correct answer."</i> The sum can be exact while the data underneath is broken. Some checks are about the data, not the arithmetic.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#real-task">One real task, end to end</a><br>Source: lessons/verify-output.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="data-files" id="data-files">
+        <div class="kicker">Branch</div>
+        <h2 class="slide-title">Spreadsheets and data files</h2>
+        <p class="ref-can">I can have Claude analyse a CSV or spreadsheet with a script, and rerun it.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Make a practice folder, copy <code>samples/daily-sessions.csv</code> into it, and start a <b>+ New session</b> on that folder.</li><li>Ask Claude to <b>describe</b> the file before analysing it: its columns, how many rows, the date range, and anything that looks odd.</li><li><b>Predict:</b> you ask <i>"What is purchases per session on weekdays versus weekends?"</i> Will Claude work it out in its head, or write a script?</li><li>Ask it, adding: <i>"Write a script in <code>scripts/</code> that I can rerun, and tell me the command to run it."</i> If the language it wants isn't installed, it can check what you have, or install what it needs. Read each command before you approve it.</li><li>Open the script. Find the line that decides which days count as the weekend.</li><li>Run it yourself: send the command Claude gave you, with a <code>!</code> in front.</li><li>Change one number in the CSV, run it again, and check the result moved the way you expected.</li><li>Ask for the output as a small table file next to the script, so the numbers have a source.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">A script in the folder that reproduces the numbers: you run it and get the same answer Claude reported.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Claude reads the numbers the way I do."</i> Doing sums in its head over many rows is where mistakes creep in. A script is exact, and you can read it.</li><li><i>"The script is Claude's business."</i> It is the record of how the number was made, and the part you would show a colleague.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#folders-context">The folder is the context</a><br>Source: lessons/data-files.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="hooks" id="hooks">
+        <div class="kicker">Branch</div>
+        <h2 class="slide-title">Hooks</h2>
+        <p class="ref-can">I can make something happen automatically before or after Claude acts.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Open a session on your <code>presentation-template</code> folder from use-a-skill. Read the "Automatic verification" paragraph in <code>.claude/skills/presentation-slides/SKILL.md</code>. Then ask: <i>"Is there a <code>.claude/settings.json</code> in this repo, and does it have that hook?"</i></li><li>It doesn't. Ask Claude to add this to <code>.claude/settings.local.json</code> (keep any rules already there), and read it before you approve:<div class="prompt">{<br>"hooks": {<br>"PostToolUse": [<br>{<br>"matcher": "Write|Edit",<br>"hooks": [{ "type": "command",<br>"command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/skills/presentation-slides/scripts/lint-slides.mjs" }]<br>}<br>]<br>}<br>}</div></li></ol><p>Given no file names, the lint reads the edit Claude just made and checks only the new text.</p><ol><li>Start a new session so the hook loads.</li><li><b>Predict:</b> you ask <i>"In my-deck, make the first slide's title box 40vh tall."</i> What happens after the edit, and who sees the lint's complaint?</li><li>Ask. Watch for the hook's message in the session, and what Claude does next.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">A hook that ran: the lint's message in the session, and the fix Claude made in response.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"The skill says a hook checks my work, so one does."</i> A description of a hook is not a hook. Look in the settings file.</li><li><i>"A hook is a reminder to Claude."</i> It is a program Claude Code runs whether Claude would have thought of it or not. That is the whole point.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#settings-permissions">Your rules — allow, ask, deny</a><br>Source: lessons/hooks.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="subagents" id="subagents">
+        <div class="kicker">Branch</div>
+        <h2 class="slide-title">Subagents and parallel sessions</h2>
+        <p class="ref-can">I can hand a side-task to a subagent or a second session and bring back only the result.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>In a session on this workshop folder, ask: <i>"Use a subagent to find every place in this repo that mentions an API key. Return a list of file and line, with one sentence each. Don't paste file contents back."</i></li><li><b>Predict:</b> of everything the subagent reads, how much will end up in your conversation?</li><li>Run it. Compare what came back with how much it must have read.</li><li>Ask a follow-up that needs a detail the subagent saw but didn't report. What does the main session do?</li><li>Start a <b>+ New session</b> on the same folder and give it a different side question. Note that neither session knows about the other.</li><li>Bring that answer back yourself: ask the second session to write it to a file, then <code>@</code> the file in the first.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">A research result returned to the main session, and one sentence on what the subagent kept out of your conversation.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"What the subagent learned is now in the main session."</i> Only its summary is. Say in the request what you need back, because the rest is gone.</li><li><i>"The subagent knows what we've been discussing."</i> It starts fresh. Brief it the way you'd brief a colleague who just walked in.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#context-hygiene">Sessions and context</a><br>Source: lessons/subagents.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="scheduled" id="scheduled">
+        <div class="kicker">Branch</div>
+        <h2 class="slide-title">Running without you</h2>
+        <p class="ref-can">I can describe what it takes for a task to run on a schedule, and what has to be true before it should.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li>Pick your skill from write-a-skill, or the report from bigquery-mcp. Run it by hand three times. If you corrected it, it isn't ready.</li><li>Add a check to the instructions: <i>"Finish by checking &lt;what a wrong result looks like&gt;. Write the result to <code>runs/&lt;date&gt;.md</code> with PASS or FAIL as the first line, and say why."</i></li><li><b>Predict:</b> the first scheduled run needs a permission you haven't given. What happens, and who finds out?</li><li>Click <b>Routines → New routine → Local</b>. Fill in the name, the instructions, the folder and the permission mode, and set the schedule to <b>Manual</b>. Click <b>Run now</b> and watch: approve with "always allow" only what you're happy for it to do every time, forever.</li><li>Change the schedule to <b>Hourly</b> (or ask Claude for any other timing), keep the app open, and come back to the <b>Scheduled</b> section in the sidebar.</li><li>Answer in one sentence: if this failed on a day you were away, who would notice, and how?</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">A scheduled run's output: the file it wrote, with its PASS or FAIL line, from a run you didn't start yourself.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"Scheduled means it happens on time."</i> A local routine is skipped while the computer sleeps and catches up once when it wakes, so a 9am task can run at 11pm. Write the instructions for that.</li><li><i>"It worked while I watched, so it'll work alone."</i> Alone, a missing permission stalls the run until someone answers, and an approval given too freely is used every time.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#write-a-skill">Write your own skill</a> · <a href="#bigquery-mcp">GA4 data through BigQuery</a><br>Source: lessons/scheduled.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="local-mcp" id="local-mcp">
+        <div class="kicker">Branch</div>
+        <h2 class="slide-title">Run a GA4 server yourself</h2>
+        <p class="ref-can">I can run a GA4 MCP server on my own laptop, signed in as me, and say how its access differs from the BigQuery route.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li><b>Predict:</b> which accounts and properties will <code>get_account_summaries</code> list?</li><li>Ask Claude to list them. Were you right? Is anything there you should not touch?</li><li>Ask a question of one property your rules allow. If you have none, use Google's demo account (the Google Merchandise Store).</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">A <code>run_report</code> result from an allowed property, with the property named, and one sentence on what left your laptop to produce it.</div></div>
+            
+            <p class="ref-meta">Needs: <a href="#bigquery-mcp">GA4 data through BigQuery</a><br>Source: lessons/local-mcp.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+      <section class="slide" data-slide="plugin-marketplace" id="plugin-marketplace">
+        <div class="kicker">Branch</div>
+        <h2 class="slide-title">Team skills in every folder</h2>
+        <p class="ref-can">I can package the team's skills as a plugin from our own marketplace, so they work in any folder, not only the skills repo.</p>
+        <div class="ref-cols">
+          <div class="card ref-do"><div class="h"><i class="fa-solid fa-list-ol"></i> Do</div><ol><li><b>Predict:</b> you open a session on a client folder and ask for something a team skill does. Will it be used? Why not?</li><li>Ask Claude to reorganise the team repository as a marketplace with one plugin, following code.claude.com/docs/en/plugin-marketplaces:<br>• each skill under <code>plugins/&lt;plugin&gt;/skills/&lt;skill&gt;/SKILL.md</code><br>• <code>plugins/&lt;plugin&gt;/.claude-plugin/plugin.json</code> with the plugin's <code>name</code><br>• <code>.claude-plugin/marketplace.json</code> at the root, with a <code>name</code>, an <code>owner</code>, and one entry whose <code>source</code> is <code>"./plugins/&lt;plugin&gt;"</code>. Keep the entry name and the plugin's name the same.</li><li>Check it: <code>claude plugin validate .</code> should end with <i>Validation passed</i>.</li><li>Add it and install: <code>claude plugin marketplace add &lt;org&gt;/&lt;repo&gt;</code>, then <code>claude plugin install &lt;plugin&gt;@&lt;marketplace&gt;</code>.</li><li>Open a session on a different folder and run a team skill as <code>/&lt;plugin&gt;:&lt;skill&gt;</code>.</li><li>Find out how a colleague gets your next change, and write it in the repository's README.</li></ol></div>
+          <div class="ref-side">
+            <div class="card hot"><div class="h"><i class="fa-solid fa-check"></i> Proof</div><div class="s">A team skill run as <code>/&lt;plugin&gt;:&lt;skill&gt;</code> from a session on a different folder.</div></div>
+            <div class="card"><div class="h"><i class="fa-solid fa-eye"></i> Watch for</div><ul><li><i>"A plugin is a different kind of skill."</i> It's the same SKILL.md files, packaged so they travel.</li><li><i>"Once installed, everyone always has the latest."</i> Installs are copies. Check how and when updates reach people before you rely on it.</li></ul></div>
+            <p class="ref-meta">Needs: <a href="#skill-routing">Many skills, one entry point</a><br>Source: lessons/plugin-marketplace.md · <a href="#index">all boxes</a></p>
+          </div>
+        </div>
+      </section>
+<!-- reference:end -->
+
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="transport">
+      <button class="transport-btn" id="btnPrev" title="Previous"><i class="fas fa-chevron-left"></i></button>
+      <span class="step-indicator"><span class="current" id="slideNum">1</span> / <span id="slideTotal">4</span></span>
+      <button class="transport-btn" id="btnNext" title="Next"><i class="fas fa-chevron-right"></i></button>
+    </div>
+    <div class="slide-dots" id="slideDots"></div>
+    <div class="nav-hints"><span class="kbd">←</span><span class="kbd">→</span><span class="kbd">D</span></div>
+  </div>
+</div>
+
+<script>
+// ── Navigation ──
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const TOTAL = slides.length;
+  let current = 0, transitioning = false;
+  const slideNum = document.getElementById('slideNum');
+  const dots = document.getElementById('slideDots');
+  const btnPrev = document.getElementById('btnPrev'), btnNext = document.getElementById('btnNext');
+  const themeToggle = document.getElementById('themeToggle');
+  document.getElementById('slideTotal').textContent = TOTAL;
+  for (let i = 0; i < TOTAL; i++){
+    const d = document.createElement('button');
+    d.className = 'slide-dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dots.appendChild(d);
+  }
+  function goTo(n){
+    if (n < 0 || n >= TOTAL || n === current || transitioning) return;
+    transitioning = true;
+    const dir = n > current ? 1 : -1;
+    slides.forEach(s => s.classList.remove('active','exit-left'));
+    if (dir > 0 && slides[current]) slides[current].classList.add('exit-left');
+    slides[n].classList.add('active');
+    current = n;
+    slideNum.textContent = current + 1;
+    document.querySelectorAll('.slide-dot').forEach((d,i) => d.classList.toggle('active', i === current));
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === TOTAL - 1;
+    setTimeout(() => { transitioning = false; }, 500);
+  }
+  const byHash = () => { const i = [...slides].findIndex(x => x.id === decodeURIComponent(location.hash.slice(1))); if (i >= 0) { transitioning = false; goTo(i); } };
+  const _go = goTo;
+  goTo = n => { _go(n); if (slides[current] && slides[current].id) history.replaceState(null, '', '#' + slides[current].id); };
+  window.addEventListener('hashchange', byHash);
+  setTimeout(byHash, 0);
+  btnPrev.addEventListener('click', () => goTo(current - 1));
+  btnNext.addEventListener('click', () => goTo(current + 1));
+  btnPrev.disabled = true;
+  document.addEventListener('keydown', e => {
+    if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    if (e.key === 'ArrowRight' || e.key === ' ') goTo(current + 1);
+    if (e.key === 'ArrowLeft') goTo(current - 1);
+    if (e.key === 'ArrowDown'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*'); }
+    if (e.key === 'ArrowUp'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*'); }
+  });
+  window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'deck-command'){
+      if (e.data.action === 'go-first') goTo(0);
+      if (e.data.action === 'next') goTo(current + 1);
+      if (e.data.action === 'prev') goTo(current - 1);
+      if (e.data.action === 'go-last'){ current = -1; goTo(TOTAL - 1); }
+      if (e.data.action === 'set-theme') setTheme(e.data.theme);
+    }
+  });
+  window.parent.postMessage({type:'deck-ready',total:TOTAL},'*');
+  function setTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+    themeToggle.innerHTML = theme === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    try { localStorage.setItem('slides-theme', theme); } catch(e){}
+    window.parent.postMessage({type:'deck-theme',theme:theme},'*');
+  }
+  themeToggle.addEventListener('click', () =>
+    setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light'));
+  let saved = null; try { saved = localStorage.getItem('slides-theme'); } catch(e){} setTheme(saved || 'light');
+})();
+</script>
+<script>
+document.querySelectorAll('.copy-btn').forEach(b => b.addEventListener('click', async e => {
+  e.stopPropagation();
+  const t = b.previousElementSibling.textContent;
+  try { await navigator.clipboard.writeText(t); b.textContent = 'Copied'; }
+  catch { const r = document.createRange(); r.selectNodeContents(b.previousElementSibling); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); b.textContent = 'Selected: press ⌘C'; }
+  setTimeout(() => { b.textContent = 'Copy'; }, 1800);
+}));
+</script>
+</body>
+</html>
