@@ -387,7 +387,7 @@ html[data-density="stage"] .detail{display:none}
           <div class="tier"><span class="tn">1</span><span class="tl">Chat → agent</span><span class="chip">Folder is context</span><span class="chip">Permissions &amp; diffs</span><span class="chip">Plan first</span><span class="chip">Trust per action</span><span class="chip">Models</span><span class="chip">Sessions</span></div>
           <div class="tier"><span class="tn">2</span><span class="tl">Rules</span><span class="chip">CLAUDE.md</span><span class="chip">Team conventions &amp; data</span><span class="chip">Allow · ask · deny</span><span class="chip cap">One real task</span></div>
           <div class="tier"><span class="tn">3</span><span class="tl">Git</span><span class="chip">Git as undo</span><span class="chip">Clone, branch, push</span></div>
-          <div class="tier"><span class="tn">4</span><span class="tl">Skills</span><span class="chip">Use one</span><span class="chip">How it's built</span><span class="chip">Write your own</span></div>
+          <div class="tier"><span class="tn">4</span><span class="tl">Skills</span><span class="chip">Use one</span><span class="chip">How it's built</span><span class="chip">Write your own</span><span class="chip">One PR each</span></div>
           <div class="tier"><span class="tn">5</span><span class="tl">Connect</span><span class="chip">Paste vs connect</span><span class="chip">Remote MCP</span><span class="chip">Your own key</span><span class="chip">GA4 via BigQuery</span></div>
           <div class="tier"><span class="tn">6</span><span class="tl">Share</span><span class="chip">Team skills repo</span><span class="chip goal">Skill by pull request</span></div>
           <div class="tier"><span class="tn">7 · follow-up</span><span class="tl">Team layer</span><span class="chip">Review before merge</span><span class="chip">Skill routing</span></div>
@@ -493,9 +493,12 @@ html[data-density="stage"] .detail{display:none}
           <div class="card"><div class="h"><i class="fa-solid fa-rotate-left"></i> Undo</div>
             <div class="prompt">Commit this with a message that says why.<br>Show me what changed since the last commit.<br>Put the file back the way it was.</div></div>
           <div class="card"><div class="h"><i class="fa-solid fa-code-branch"></i> Share</div>
-            <div class="prompt">Clone the practice repository.<br>Make a branch for my change, commit, push it.</div></div>
+            <div class="prompt">Make a branch called practice/&lt;my-username&gt;, commit, push it.<br>Now push that commit straight to main.</div></div>
         </div>
-        <p class="foot">You ask in words; Claude runs the git commands. <b>Read each one before you approve it.</b> Sign in to GitHub yourself: never paste a password or token into the chat.</p>
+        <p class="foot">You ask in words; Claude runs the git commands. <b>Read each one before you approve it.</b> The push to main is refused: <b>main only changes through a pull request</b>. Sign in to GitHub yourself, never in the chat.</p>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>Everyone needs Write access to this repository (invites accepted) and GitHub sign-in working. On Macs that means GitHub CLI and <b>gh auth login</b> in the terminal pane. Read GitHub's refusal aloud: that is the ruleset doing its job.</p>
+        </div>
       </section>
 
       <!-- 8 · Tier 4 -->
@@ -515,6 +518,26 @@ html[data-density="stage"] .detail{display:none}
         <p class="foot">This deck is built on the same template and its skill.</p>
         <div class="detail fac"><span class="lbl">Facilitator</span>
           <p>Skills in a repo load only when the session is opened on that folder. That limit is why tier 6 exists, and why a plugin is the next step later.</p>
+        </div>
+      </section>
+
+      <!-- 8b · Room PR -->
+      <section class="slide" data-slide="8b">
+        <div class="kicker">Tier 4 · one pull request each</div>
+        <h2 class="slide-title">Your skill, <span class="accent">in everyone's copy</span></h2>
+        <div class="loop" style="grid-template-columns:1fr auto 1fr auto 1fr auto 1fr">
+          <div class="card"><div class="num">1</div><div class="t">Write</div><div class="s">Branch <b>skill/&lt;username&gt;</b>. One small skill in its own folder. Nothing else.</div></div>
+          <i class="fa-solid fa-arrow-right arrow"></i>
+          <div class="card"><div class="num">2</div><div class="t">Propose</div><div class="s">Push, and open a pull request. One line on what it does.</div></div>
+          <i class="fa-solid fa-arrow-right arrow"></i>
+          <div class="card hot"><div class="num">3</div><div class="t">Merge</div><div class="s">On the projector, one by one. Only the facilitator can.</div></div>
+          <i class="fa-solid fa-arrow-right arrow"></i>
+          <div class="card"><div class="num">4</div><div class="t">Pull</div><div class="s">Switch to main, pull, new session, type <b>/</b>. Run someone else's.</div></div>
+        </div>
+        <div class="prompt" style="margin-top:3cqb">.claude/skills/&lt;your-github-username&gt;/SKILL.md</div>
+        <p class="foot"><b>Predict:</b> after you open your pull request, when does your skill reach your neighbour's laptop?</p>
+        <div class="detail fac"><span class="lbl">Facilitator</span>
+          <p>One folder each means every PR merges cleanly in any order. Merge with the room watching, reading each description aloud. Afterwards, show <b>git log --oneline</b> on the projector: every merge is there with a name on it. The same moves in the follow-up go to the group's own repository, for real.</p>
         </div>
       </section>
 
