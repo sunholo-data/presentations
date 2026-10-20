@@ -107,6 +107,10 @@ html[data-density="stage"] .detail{display:none}
 .big-title .accent{color:var(--orange)}
 .fill{flex:1;min-height:0;display:flex;flex-direction:column}
 .cols{display:grid;gap:1.6cqi;flex:1;min-height:0}
+.shot{display:block;max-width:100%;height:auto;border-radius:10px;border:1px solid var(--code-border);box-shadow:0 2px 14px rgba(0,0,0,.08);background:#fff}
+.shotwrap{display:flex;align-items:center;justify-content:center;min-height:0}
+.steps{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:1.6cqb}
+.steps li{font-size:clamp(12px,1.6cqi,24px);line-height:1.45}
 .cols.c2{grid-template-columns:1fr 1fr}.cols.c3{grid-template-columns:repeat(3,1fr)}
 .card{padding:2.4cqb 2cqi;border-radius:10px;background:var(--surface);border:1px solid var(--code-border);
   display:flex;flex-direction:column;gap:1.1cqb;min-height:0}
@@ -292,12 +296,15 @@ html[data-density="stage"] .detail{display:none}
       <section class="slide" data-slide="1a">
         <div class="kicker">Setup, together · 1 of 4</div>
         <h2 class="slide-title">Open the app. <span class="accent">Open a folder.</span></h2>
-        <div class="loop">
-          <div class="card"><div class="num">1</div><div class="t">Claude Desktop</div><div class="s">From <b>claude.com/download</b>. Sign in with your work account, on a paid plan.</div></div>
-          <i class="fa-solid fa-arrow-right arrow"></i>
-          <div class="card"><div class="num">2</div><div class="t">The Code tab</div><div class="s">The <b>&lt;/&gt;</b> button at the top left. The speech bubbles next to it are the Chat you already know.</div></div>
-          <i class="fa-solid fa-arrow-right arrow"></i>
-          <div class="card"><div class="num">3</div><div class="t">A folder</div><div class="s"><b>+ New</b>, then <b>This computer</b>, then <b>Select folder</b>. Make an empty one: <b>claude-test</b> in Documents.</div></div>
+        <div class="cols c2" style="flex:0 0 auto;align-items:center">
+          <div class="shotwrap" style="flex-direction:column;gap:2cqb"><img class="shot" src="images/setup/install-claude-desktop.png" alt="The claude.com/download page with a Download for macOS button" style="max-height:30cqb"><img class="shot" src="images/setup/code-tab.png" alt="The Code button at the top left of Claude Desktop, next to the Chat button" style="max-height:20cqb"></div>
+          <div class="card">
+            <ol class="steps">
+              <li><b>claude.com/download</b>, install, and sign in with your work account, on a paid plan.</li>
+              <li>Click the <b>&lt;/&gt;</b> Code button at the top left (<b>⌥⌘→</b>). The speech bubbles next to it are the Chat you already know.</li>
+              <li><b>+ New</b>. Under the message box: <b>This computer</b>, then the folder button. Make and pick an empty folder: <b>claude-test</b> in Documents.</li>
+            </ol>
+          </div>
         </div>
         <p class="foot">The Code tab works <b>inside the folder you choose</b>, and only there unless you let it out. That is the whole difference from Chat.</p>
         <div class="detail fac"><span class="lbl">Facilitator</span>
@@ -319,7 +326,7 @@ html[data-density="stage"] .detail{display:none}
         </div>
         <div class="cols c2" style="flex:0 0 auto;margin-top:2cqb">
           <div class="card"><div class="h"><i class="fa-solid fa-shield-halved"></i> Under the box, left</div>
-            <div class="s">The <b>mode</b>: how much Claude may do without asking. Next slide.</div></div>
+            <div class="s">The <b>folder</b>, and the <b>mode</b>: how much Claude may do without asking. Next slide.</div></div>
           <div class="card"><div class="h"><i class="fa-solid fa-microchip"></i> Under the box, right</div>
             <div class="s">The <b>model</b>, and how hard it thinks. Next slide too.</div></div>
         </div>
@@ -331,16 +338,16 @@ html[data-density="stage"] .detail{display:none}
       <!-- 1c · Mode and model -->
       <section class="slide" data-slide="1c">
         <div class="kicker">Setup, together · 3 of 4</div>
-        <h2 class="slide-title">Manual, not Auto. <span class="accent">Then a model.</span></h2>
-        <div class="cols c2" style="flex:0 0 auto">
-          <div class="card hot"><div class="h"><i class="fa-solid fa-hand"></i> Mode: Manual</div>
-            <ul><li><b>Manual</b>: asks before every change and every command. <b>Today's start.</b></li><li><b>Accept edits</b>: changes files without asking; still asks to run things</li><li><b>Plan</b>: reads and proposes; changes nothing</li><li><b>Auto</b>: decides for itself. <b>Off until you've earned it</b>, later this morning</li></ul></div>
-          <div class="card"><div class="h"><i class="fa-solid fa-microchip"></i> Model</div>
-            <ul><li><b>Opus</b>: the strongest; slower, uses your plan fastest</li><li><b>Sonnet</b>: the everyday choice. <b>Use it today</b></li><li><b>Haiku</b>: quick and light; fine for small, clear jobs</li><li>Effort (<b>Low</b> to <b>High</b>): how long it thinks before acting</li></ul></div>
+        <h2 class="slide-title">Auto is the default. <span class="accent">Switch to Manual.</span></h2>
+        <div class="shotwrap"><img class="shot" src="images/setup/select-folder-mode-model.png" alt="The bar under the message box: This computer, the folder, the mode menu open with Auto ticked, and the model" style="max-height:35cqb"></div>
+        <div class="cols c2" style="flex:0 0 auto;margin-top:2cqb">
+          <div class="card hot"><div class="h"><i class="fa-solid fa-hand"></i> Mode: the button that says Auto</div>
+            <ul><li><b>Manual</b>: asks before every change. <b>Today's start</b></li><li><b>Accept edits</b> and <b>Plan</b>: later this morning</li><li><b>Auto</b>: off until you've earned it</li><li><b>Bypass permissions</b>: never, today</li></ul></div>
+          <div class="card"><div class="h"><i class="fa-solid fa-microchip"></i> Model: bottom right</div>
+            <ul><li><b>Sonnet</b>: the everyday choice. <b>Use it today</b></li><li><b>Opus</b>: strongest, slower, uses your plan fastest</li><li><b>Haiku</b>: quick, for small, clear jobs</li><li>Effort: how long it thinks first</li></ul></div>
         </div>
-        <p class="foot">If the mode says <b>Auto</b>, click it and choose <b>Manual</b>. The workshop folder also starts in Manual, through its settings file.</p>
         <div class="detail fac"><span class="lbl">Facilitator</span>
-          <p>Check every screen says Manual before moving on. Auto comes back in "trust per action", where they turn it on themselves and count what still asks. Model choice is its own node later; today everyone on the same model keeps comparisons fair.</p>
+          <p>Check every screen says Manual before moving on. The mode is per session: a new session may start in Auto again, until the workshop folder's settings take over (they set Manual). Auto comes back in "trust per action", where they turn it on themselves and count what still asks. Everyone on the same model keeps comparisons fair.</p>
         </div>
       </section>
 
