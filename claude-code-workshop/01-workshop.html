@@ -108,6 +108,10 @@ html[data-density="stage"] .detail{display:none}
 .fill{flex:1;min-height:0;display:flex;flex-direction:column}
 .cols{display:grid;gap:1.6cqi;flex:1;min-height:0}
 .copy-btn{margin-top:1cqb;align-self:flex-start;font:600 clamp(11px,1.2cqi,16px) var(--sans);color:var(--orange);background:var(--surface);border:1.5px solid var(--orange);border-radius:6px;padding:.5cqb 1.2cqi;cursor:pointer}
+.annot{display:grid;grid-template-columns:1.75fr 1fr;gap:2cqi;align-items:center;flex:0 0 auto;margin-top:1cqb}
+.keylist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.75cqb;counter-reset:k}
+.keylist li{counter-increment:k;display:grid;grid-template-columns:2.2em 1fr;align-items:baseline;font-size:clamp(10px,1.12cqi,16px);line-height:1.35}
+.keylist li::before{content:counter(k);display:inline-flex;align-items:center;justify-content:center;width:1.7em;height:1.7em;border-radius:50%;background:#e73c17;color:#fff;font-weight:700;font-size:.85em}
 .shot{display:block;max-width:100%;height:auto;border-radius:10px;border:1px solid var(--code-border);box-shadow:0 2px 14px rgba(0,0,0,.08);background:#fff}
 .shotwrap{display:flex;align-items:center;justify-content:center;min-height:0}
 .steps{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:1.6cqb}
@@ -317,19 +321,21 @@ html[data-density="stage"] .detail{display:none}
       <section class="slide" data-slide="1b">
         <div class="kicker">Setup, together · 2 of 4</div>
         <h2 class="slide-title">Where things are <span class="dim">in the Code tab</span></h2>
-        <div class="cols c3" style="flex:0 0 auto">
-          <div class="card"><div class="h"><i class="fa-solid fa-table-columns"></i> Left</div>
-            <div class="s"><b>+ New</b> starts a session. Past sessions are listed underneath, grouped by folder. A dot means one is waiting for you.</div></div>
-          <div class="card hot"><div class="h"><i class="fa-regular fa-message"></i> Middle</div>
-            <div class="s">The conversation. Claude shows each file it reads and each command it wants to run, with <b>Deny</b> and <b>Allow</b>. Start a message with <b>!</b> to run a command yourself.</div><img class="shot" src="images/setup/git-version.png" alt="!git --version sent, and its output: git version 2.39.3" style="max-height:8cqb;margin-top:1.4cqb"></div>
-          <div class="card"><div class="h"><i class="fa-solid fa-sliders"></i> Right</div>
-            <div class="s"><b>Environment</b>: which folder and branch. <b>Context</b>: how full this session is. <b>Connectors</b>: what it's connected to.</div></div>
-        </div>
-        <div class="cols c2" style="flex:0 0 auto;margin-top:2cqb">
-          <div class="card"><div class="h"><i class="fa-solid fa-shield-halved"></i> Under the box, left</div>
-            <div class="s">The <b>folder</b>, and the <b>mode</b>: how much Claude may do without asking. Next slide.</div></div>
-          <div class="card"><div class="h"><i class="fa-solid fa-microchip"></i> Under the box, right</div>
-            <div class="s">The <b>model</b>, and how hard it thinks. Next slide too.</div></div>
+        <div class="annot">
+          <img class="shot" src="images/setup/claude-code-overview-annotated.png" alt="The Code tab window with numbered parts" style="max-height:56cqb">
+          <ol class="keylist">
+            <li><span><b>Chat or Code.</b> Code works on files in a folder</span></li>
+            <li><span><b>+ New</b> session. Past sessions are listed below</span></li>
+            <li><span><b>The conversation:</b> what it read, ran and changed. Approvals appear here</span></li>
+            <li><span><b>Message box.</b> Start with <b>!</b> to run a command yourself</span></li>
+            <li><span><b>Mode:</b> how much it may do without asking. <b>Manual</b> today</span></li>
+            <li><span><b>Model</b> and effort</span></li>
+            <li><span><b>Environment:</b> which computer, folder and branch</span></li>
+            <li><span><b>Context:</b> how full this session is</span></li>
+            <li><span><b>Connectors:</b> what it can reach</span></li>
+            <li><span><b>Changes:</b> files edited, branches, pull requests</span></li>
+            <li><span><b>More panels:</b> a terminal, a preview, the files</span></li>
+          </ol>
         </div>
         <div class="detail fac"><span class="lbl">Facilitator</span>
           <p>Point at each on the projector. The icons along the top right open a terminal, the changes made, a preview and the files; mention them, don't teach them yet. Demo <b>!git --version</b> here: the setup proof, and the room's first command. Desktop moves fast: check these labels against the current version the day before.</p>
@@ -431,13 +437,16 @@ html[data-density="stage"] .detail{display:none}
       <section class="slide" data-slide="3b">
         <div class="kicker">Your progress board</div>
         <h2 class="slide-title">Mark it done. <span class="accent">Say what surprised you.</span></h2>
-        <div class="cols c3" style="flex:0 0 auto">
-          <div class="card"><div class="h"><i class="fa-solid fa-diagram-project"></i> My progress</div>
-            <div class="s">The tree as boxes and arrows. An arrow means <b>do this first</b>. Orange boxes are unlocked: start there.</div></div>
-          <div class="card hot"><div class="h"><i class="fa-solid fa-pen"></i> One line</div>
-            <div class="s">"Done" means you saw the proof. The line is <b>what you expected, and what actually happened</b>. Everyone can read it, so the room learns from each other's surprises.</div></div>
-          <div class="card"><div class="h"><i class="fa-solid fa-people-group"></i> The room</div>
-            <div class="s">Who's where, box by box. Right now, mark everything you <b>already</b> can: that's our starting point.</div></div>
+        <div class="annot">
+          <img class="shot" src="images/setup/claude-code-artifact-tree-annotated.png" alt="The progress board with numbered parts" style="max-height:50cqb">
+          <ol class="keylist">
+            <li><span><b>Start here:</b> getting the workshop onto your laptop</span></li>
+            <li><span>The <b>slides</b> and the <b>course repo</b></span></li>
+            <li><span><b>My progress</b>, or <b>the room</b>: who's where, never a ranking</span></li>
+            <li><span>Your <b>core</b> count: the minimum for today</span></li>
+            <li><span>Each box says when it's expected: <b>core</b>, stretch, homework, advanced</span></li>
+            <li><span><b>Next up:</b> what's unlocked. Click a box for its proof, and mark it done with <b>one line on what you noticed</b></span></li>
+          </ol>
         </div>
         <p class="foot"><a class="board-link" href="https://claude.ai/artifact/5Gc3G9GxCMrT2anwpdmaq1" target="_blank" rel="noopener">Open the progress board</a> · open it from your <b>email invitation</b>, signed in to Claude with that address</p>
         <div class="detail fac"><span class="lbl">Facilitator</span>
