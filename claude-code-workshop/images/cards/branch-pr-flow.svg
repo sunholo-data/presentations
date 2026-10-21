@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400" font-family="Montserrat, 'Segoe UI', Arial, sans-serif">
+  <title>From your branch to everyone's copy</title>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0f766e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="400" rx="14" fill="#ffffff"/>
+
+  <!-- github lane -->
+  <text x="24" y="36" font-size="14" font-weight="700" letter-spacing="1" fill="#526677">GITHUB</text>
+  <line x1="24" y1="46" x2="936" y2="46" stroke="#dce3e8" stroke-width="2"/>
+  <rect x="24" y="58" width="912" height="46" rx="8" fill="#f6f8fa" stroke="#2c3e50" stroke-width="2"/>
+  <text x="44" y="88" font-size="17" font-weight="700" fill="#2c3e50">main</text>
+  <text x="104" y="88" font-size="15" fill="#526677">changes only when a reviewer merges a pull request</text>
+
+  <rect x="540" y="140" width="240" height="64" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="2.5"/>
+  <text x="556" y="166" font-size="15" font-weight="700" fill="#2c3e50">4  Push your branch</text>
+  <text x="556" y="190" font-size="15" font-weight="700" fill="#2c3e50">5  Open a pull request</text>
+  <line x1="660" y1="138" x2="660" y2="110" stroke="#0f766e" stroke-width="3" marker-end="url(#a)"/>
+  <text x="672" y="130" font-size="14" font-weight="600" fill="#0f766e">6  Reviewer merges</text>
+
+  <!-- laptop lane -->
+  <text x="24" y="236" font-size="14" font-weight="700" letter-spacing="1" fill="#526677">YOUR LAPTOP</text>
+  <line x1="24" y1="246" x2="936" y2="246" stroke="#dce3e8" stroke-width="2"/>
+
+  <g font-size="15">
+    <rect x="24" y="262" width="164" height="96" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="2.5"/>
+    <text x="40" y="292" font-weight="700" fill="#2c3e50">1  Pull main</text>
+    <text x="40" y="318" fill="#526677">start from</text>
+    <text x="40" y="338" fill="#526677">what's on GitHub</text>
+
+    <rect x="212" y="262" width="164" height="96" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="2.5"/>
+    <text x="228" y="292" font-weight="700" fill="#2c3e50">2  Branch</text>
+    <text x="228" y="320" font-family="ui-monospace, Menlo, monospace" font-size="14" fill="#0f766e">skill/&lt;you&gt;</text>
+
+    <rect x="400" y="262" width="180" height="96" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="2.5"/>
+    <text x="416" y="292" font-weight="700" fill="#2c3e50">3  Commit</text>
+    <text x="416" y="318" fill="#526677">your folder only:</text>
+    <text x="416" y="338" fill="#526677">check git status</text>
+
+    <rect x="808" y="262" width="128" height="96" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="2.5"/>
+    <text x="824" y="292" font-weight="700" fill="#2c3e50">7  Pull</text>
+    <text x="824" y="318" fill="#526677">everyone</text>
+    <text x="824" y="338" fill="#526677">gets it</text>
+  </g>
+  <line x1="190" y1="310" x2="208" y2="310" stroke="#0f766e" stroke-width="3" marker-end="url(#a)"/>
+  <line x1="378" y1="310" x2="396" y2="310" stroke="#0f766e" stroke-width="3" marker-end="url(#a)"/>
+  <path d="M582 310 C 640 310, 660 270, 660 212" fill="none" stroke="#0f766e" stroke-width="3" marker-end="url(#a)"/>
+  <line x1="104" y1="106" x2="104" y2="256" stroke="#0f766e" stroke-width="3" marker-end="url(#a)"/>
+  <line x1="872" y1="106" x2="872" y2="256" stroke="#0f766e" stroke-width="3" marker-end="url(#a)"/>
+
+  <text x="24" y="388" font-size="14" font-weight="600" fill="#bd3012">✕  Pushing straight to main is refused. That's the rule working, not a fault.</text>
+</svg>
