@@ -390,8 +390,43 @@ html[data-density="stage"] .detail{display:none}
       </p>
     </section>
 
-    <!-- ═══════════ 7.3 Close ═══════════ -->
-    <section class="slide final-scene" data-slide="1">
+    <!-- ═══════════ 7.3 Starter files — built in the live demo ═══════════ -->
+    <section class="slide" data-slide="1">
+      <span class="slide-tag"><i class="fas fa-copy"></i> Steal this</span>
+      <h1 class="slide-title">Start with <span class="accent">three files</span></h1>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-body">
+            <div class="step-what">The design system</div>
+            <div class="step-how">.claude/skills/presentation-slides/resources/design-system.md</div>
+            <div class="step-how">Your colours, typography and reusable slide patterns.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-body">
+            <div class="step-what">The linter</div>
+            <div class="step-how">.claude/skills/presentation-slides/scripts/lint-slides.mjs</div>
+            <div class="step-how">Checks that slide sizes follow the stage, rather than the browser window.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-body">
+            <div class="step-what">One working deck</div>
+            <div class="step-how">death-by-powerpoint/03-live-build.html</div>
+            <div class="step-how">A working canvas, navigation, themes and animations to build on.</div>
+          </div>
+        </div>
+      </div>
+      <p class="detail">Paths start at the repository root. Keep the deck&rsquo;s relative asset paths intact,
+        and copy any assets it uses. Give your AI agent the skill instructions in SKILL.md too;
+        the linter runs when you or your agent invoke it, or when a configured hook calls it.</p>
+    </section>
+
+    <!-- ═══════════ 7.4 Close ═══════════ -->
+    <section class="slide final-scene" data-slide="2">
       <sunholo-blender
         data-background
         data-src="../assets/blender/sunholo_spacetime_ghosts_starfield.glb"
