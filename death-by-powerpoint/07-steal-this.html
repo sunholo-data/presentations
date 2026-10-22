@@ -251,6 +251,11 @@ html[data-density="stage"] .detail{display:none}
 .final-scene .final{text-align:left;max-width:66%}
 .final-scene .final-links{justify-content:flex-start;max-width:68%}
 .final-scene .detail{text-align:left;margin-left:0;max-width:61%}
+/* ─── IDA live-demo animation ─── */
+.flyby-figure{display:flex;flex-direction:column;align-items:center;gap:1.4cqb;width:100%;max-width:88%}
+.flyby-figure img{display:block;width:auto;height:59cqb;max-width:100%;object-fit:contain;border:1px solid var(--ghost);border-radius:12px;background:#000}
+.flyby-figure figcaption{font-family:var(--mono);font-size:clamp(10px,1.25cqi,17px);line-height:1.4;text-align:center;color:var(--text-dim)}
+.slide.active .flyby-figure{animation:fadeSlideUp .6s ease .2s both}
 /* ─── Trust: five questions from the series ─── */
 .trust{display:grid;grid-template-columns:auto 1fr 1.25fr;column-gap:2.2cqi;row-gap:1.1cqb;
   width:100%;max-width:88%;align-items:baseline;text-align:left}
@@ -425,8 +430,19 @@ html[data-density="stage"] .detail{display:none}
         the linter runs when you or your agent invoke it, or when a configured hook calls it.</p>
     </section>
 
-    <!-- ═══════════ 7.4 Close ═══════════ -->
-    <section class="slide final-scene" data-slide="2">
+    <!-- ═══════════ 7.4 IDA: from slides to simulations ═══════════ -->
+    <section class="slide" data-slide="2">
+      <span class="slide-tag"><i class="fas fa-rocket"></i> Built live</span>
+      <h1 class="slide-title">IDA: from slides to <span class="accent">simulations</span></h1>
+      <figure class="flyby-figure">
+        <img src="../ai-slaves-human-masters-ida/images/demos/stapledon-flyby.gif"
+          width="320" height="240" alt="Animated solar flyby from Stapledon&rsquo;s Voyage">
+        <figcaption>Reused from my IDA Driving AI talk, May 2026.</figcaption>
+      </figure>
+    </section>
+
+    <!-- ═══════════ 7.5 Close ═══════════ -->
+    <section class="slide final-scene" data-slide="3">
       <sunholo-blender
         data-background
         data-src="../assets/blender/sunholo_spacetime_ghosts_starfield.glb"
