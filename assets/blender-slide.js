@@ -4,7 +4,8 @@
   const MODEL_VIEWER_SRC =
     'https://ajax.googleapis.com/ajax/libs/model-viewer/4.3.1/model-viewer.min.js';
   const EXPORT_MODE =
-    navigator.webdriver || new URLSearchParams(window.location.search).has('export');
+    (navigator.webdriver && !document.currentScript?.hasAttribute('data-live-preview')) ||
+    new URLSearchParams(window.location.search).has('export');
   const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   if (EXPORT_MODE) document.documentElement.classList.add('blender-export');
