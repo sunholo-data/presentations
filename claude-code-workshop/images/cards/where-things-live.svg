@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 440" font-family="Montserrat, 'Segoe UI', Arial, sans-serif">
+  <title>Which of your folders can push to GitHub</title>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f766e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="440" rx="14" fill="#ffffff"/>
+
+  <!-- laptop -->
+  <rect x="24" y="24" width="520" height="392" rx="10" fill="#f6f8fa" stroke="#dce3e8" stroke-width="2"/>
+  <text x="44" y="58" font-size="20" font-weight="700" fill="#2c3e50">Your laptop</text>
+
+  <rect x="44" y="80" width="480" height="128" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="2.5"/>
+  <text x="64" y="112" font-size="19" font-weight="700" fill="#2c3e50">claude-code-workshop</text>
+  <text x="64" y="138" font-size="15" fill="#526677">Cloned from GitHub, so git knows where it came from:</text>
+  <text x="64" y="164" font-size="15" font-family="ui-monospace, Menlo, monospace" fill="#0f766e">origin → github.com/…/claude-code-workshop</text>
+  <text x="64" y="192" font-size="15" font-weight="600" fill="#0f766e">Push and pull from here.</text>
+
+  <rect x="44" y="228" width="480" height="168" rx="8" fill="#ffffff" stroke="#dce3e8" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="64" y="260" font-size="19" font-weight="700" fill="#2c3e50">Practice folders</text>
+  <text x="64" y="288" font-size="15" font-family="ui-monospace, Menlo, monospace" fill="#526677">ladder-practice  rules-practice</text>
+  <text x="64" y="310" font-size="15" font-family="ui-monospace, Menlo, monospace" fill="#526677">workshop-practice  real-task</text>
+  <text x="64" y="340" font-size="15" fill="#526677">Made with git init: their own history, no origin.</text>
+  <text x="64" y="370" font-size="15" font-weight="600" fill="#bd3012">Nowhere to push. Open the clone instead.</text>
+
+  <!-- github -->
+  <rect x="640" y="24" width="296" height="392" rx="10" fill="#f6f8fa" stroke="#dce3e8" stroke-width="2"/>
+  <text x="660" y="58" font-size="20" font-weight="700" fill="#2c3e50">GitHub</text>
+  <rect x="660" y="80" width="256" height="128" rx="8" fill="#ffffff" stroke="#2c3e50" stroke-width="2"/>
+  <text x="678" y="110" font-size="16" font-weight="700" fill="#2c3e50">claude-code-workshop</text>
+  <text x="678" y="138" font-size="14" fill="#526677">main: only by pull request</text>
+  <text x="678" y="164" font-size="14" fill="#526677">branches: yours, once you</text>
+  <text x="678" y="184" font-size="14" fill="#526677">have Write access</text>
+
+  <!-- arrows -->
+  <line x1="530" y1="128" x2="652" y2="128" stroke="#0f766e" stroke-width="3" marker-end="url(#a)"/>
+  <text x="548" y="118" font-size="13" font-weight="600" fill="#0f766e">push branch</text>
+  <line x1="652" y1="160" x2="530" y2="160" stroke="#0f766e" stroke-width="3" marker-end="url(#a)"/>
+  <text x="566" y="182" font-size="13" font-weight="600" fill="#0f766e">pull</text>
+
+  <line x1="530" y1="300" x2="652" y2="300" stroke="#bd3012" stroke-width="3" stroke-dasharray="6 6"/>
+  <g stroke="#bd3012" stroke-width="4" stroke-linecap="round"><line x1="580" y1="288" x2="602" y2="312"/><line x1="602" y1="288" x2="580" y2="312"/></g>
+  <text x="660" y="290" font-size="14" font-weight="600" fill="#bd3012">"No configured push</text>
+  <text x="660" y="310" font-size="14" font-weight="600" fill="#bd3012">destination"</text>
+</svg>
