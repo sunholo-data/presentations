@@ -235,11 +235,11 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     { src: '00-death-by-powerpoint.html',                             label: '1 · Death by PPT', minutes: 4,  group: 'Open' },
     { src: '01-generate-the-medium.html',                             label: '2 · The Medium',   minutes: 6,  group: 'Argument' },
     { src: '02-teaching-taste.html',                                  label: '3 · Taste + Lint', minutes: 8,  group: 'Argument' },
-    { src: '03-live-build.html?v=ida-flyby',                                      label: '4 · Live Build',   minutes: 12, group: 'Demo' },
+    { src: '03-live-build.html',                                      label: '4 · Live Build',   minutes: 12, group: 'Demo' },
     { src: '04-beyond-slide-software.html',                           label: '5 · Beyond Slides',minutes: 5,  group: 'Exhibits' },
     { src: '../ai-slaves-human-masters-ida/03-development-loop.html', label: 'B · Animated',     minutes: 1,  group: 'Exhibits' },  // reused
     { src: '05-three-audiences.html',                                 label: '6 · 3 Audiences',  minutes: 6,  group: 'Payoff' },
-    { src: '07-steal-this.html?v=starter-files',                                      label: '7 · Steal This',   minutes: 2,  group: 'Payoff' },
+    { src: '07-steal-this.html',                                      label: '7 · Steal This',   minutes: 2,  group: 'Payoff' },
     { src: '../contact-mark/contact-mark.html',                       label: 'Contact',          minutes: 0,  group: 'Close' },     // reused
   ];
 
@@ -293,7 +293,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   PLAYLIST.forEach((deck, i) => {
     const iframe = document.createElement('iframe');
     iframe.className = 'deck-frame' + (i === 0 ? ' active' : '');
-    iframe.src = deck.src;
+    // Local live demos must pick up edits on a normal presenter reload,
+    // including files cached before the demo server disabled caching.
+    const deckUrl = new URL(deck.src, location.href);
+    if (['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)) {
+      deckUrl.searchParams.set('_preview', String(Date.now()));
+    }
+    iframe.src = deckUrl.href;
     iframe.setAttribute('allowfullscreen', '');
     viewport.appendChild(iframe);
     frames.push(iframe);
