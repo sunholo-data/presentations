@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Make your own presentation · Sunholo</title>
+<meta name="description" content="Download one starter file, attach it to your AI chat, and ask for an HTML presentation. No repository or server setup.">
+<link rel="icon" type="image/svg+xml" href="../images/logos/sunholo-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;--bg:#f6f8fa;--surface:#fff;--text:#2c3e50;--muted:#526677;--accent:#bd3012;--line:#dce2e7;--soft:#f0f3f6}
+@media(prefers-color-scheme:dark){:root{--bg:#0f0f1a;--surface:#1a1a2e;--text:#e2e8f0;--muted:#a1aec1;--accent:#e73c17;--line:#343448;--soft:#222240}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Montserrat,Arial,sans-serif;line-height:1.65}
+main{max-width:1000px;margin:auto;padding:32px 24px 64px}a{color:var(--accent);text-underline-offset:4px}nav{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:64px;font-size:13px}nav img{width:118px;height:auto}.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}h1{font-size:clamp(34px,6vw,64px);line-height:1.08;letter-spacing:-.035em;max-width:800px;margin:18px 0 24px}h1 span{color:var(--accent)}.intro{font-size:19px;max-width:700px;color:var(--muted)}.download{display:inline-block;background:var(--accent);color:white;padding:15px 23px;border-radius:8px;font-weight:700;text-decoration:none;margin:16px 0 6px}.meta{font-size:12px;color:var(--muted)}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:48px 0}article{padding:24px;border:1px solid var(--line);background:var(--surface);border-radius:12px}article .num{color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:25px}h2{font-size:23px;line-height:1.3;margin-top:42px}h3{font-size:17px;margin:10px 0}p{margin:12px 0}article p{font-size:14px;color:var(--muted)}blockquote{margin:18px 0;padding:24px 28px;border-left:4px solid var(--accent);background:var(--surface);border-radius:0 10px 10px 0;font-size:17px;user-select:text}.note{padding:20px 24px;background:var(--soft);border-radius:10px;color:var(--muted);font-size:14px}.note strong{color:var(--text)}footer{margin-top:44px;border-top:1px solid var(--line);padding-top:20px;font-size:12px;color:var(--muted)}:focus-visible{outline:3px solid var(--accent);outline-offset:4px}@media(max-width:650px){.steps{grid-template-columns:1fr}nav{margin-bottom:40px}.intro{font-size:17px}blockquote{padding:20px}}
+</style></head><body><main>
+<nav><a href="index.html"><img src="../images/logos/sunholo-logo.svg" alt="Sunholo"></a><a href="presenter.html">Back to the presentation</a></nav>
+<div class="eyebrow">Death by PowerPoint · Take it with you</div>
+<h1>Your next presentation.<br><span>Start with one file.</span></h1>
+<p class="intro">Give your AI the same kind of written rules, working template and checks used in this talk. Then describe what you want to say.</p>
+<a class="download" href="presentation-starter.txt" download>Download the presentation starter ↓</a>
+<p class="meta">One text file · Instructions + working HTML template + optional checker · No installation</p>
+<div class="steps">
+<article><div class="num">01</div><h3>Attach the file</h3><p>Open ChatGPT, Claude.ai or Microsoft Copilot. Start a new chat and attach the downloaded text file.</p></article>
+<article><div class="num">02</div><h3>Describe your talk</h3><p>Give your topic, audience and key message. Add the facts and sources you want the presentation to use.</p></article>
+<article><div class="num">03</div><h3>Open your slides</h3><p>Ask for a downloadable HTML file. Open it in your browser, try the arrow keys, then ask the AI for any changes.</p></article>
+</div>
+<h2>Copy this prompt</h2>
+<blockquote>Follow the attached presentation guide and template. Create a six-slide HTML presentation about <strong>[topic]</strong> for <strong>[audience]</strong>. The audience should leave knowing <strong>[key message]</strong>. Use these facts and sources: <strong>[paste your material]</strong>. Return one HTML file I can download and open in a browser.</blockquote>
+<p>Continue in the same chat: “Make slide 3 simpler”, “Use our brand colours”, or “Add a comparison using these figures.” Attach your logo or images if you want to include them.</p>
+<div class="note"><strong>Before you present:</strong> check the facts, click through every slide and try both themes. Uploads, downloads and code execution depend on your AI product and account. This starter has been checked as an HTML template; the full workflow has not yet been tested in all three products. The optional checker can run only where code execution is available, and it does not replace a visual review. Fonts and icons use public CDNs; the deck has system-font fallbacks.</div>
+<h2>Use it again</h2><p>Keep the same chat for revisions. For recurring work, save the starter as reference material in a project if your AI tool supports it.</p>
+<footer>Adapted from the <a href="https://github.com/sunholo-data/presentations/tree/main/.claude/skills/presentation-slides">Sunholo presentation skill</a>. No server or connector setup is needed to use the starter. <a href="index.html">Return to the talk</a>.</footer>
+</main></body></html>
