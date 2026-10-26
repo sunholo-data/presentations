@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400" font-family="Montserrat, 'Segoe UI', Arial, sans-serif">
+  <title>The trust ladder's three copies, each with its own session and remote</title>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f766e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="400" rx="14" fill="#ffffff"/>
+
+  <rect x="24" y="24" width="912" height="352" rx="10" fill="#f6f8fa" stroke="#dce3e8" stroke-width="2"/>
+  <text x="44" y="58" font-size="20" font-weight="700" fill="#2c3e50">Your laptop, side by side in one folder</text>
+
+  <!-- workshop -->
+  <rect x="44" y="80" width="260" height="276" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="2.5"/>
+  <text x="62" y="112" font-size="18" font-weight="700" fill="#2c3e50">claude-code-workshop</text>
+  <text x="62" y="140" font-size="14" fill="#526677">Step 2 runs here, in Manual.</text>
+  <text x="62" y="164" font-size="14" fill="#526677">It copies the files in samples/</text>
+  <text x="62" y="186" font-size="14" fill="#526677">into three new folders and</text>
+  <text x="62" y="208" font-size="14" fill="#526677">makes a remote for each.</text>
+  <text x="62" y="250" font-size="14" font-weight="600" fill="#0f766e">Its prompts don't count.</text>
+  <text x="62" y="300" font-size="13" fill="#526677">Copies made from here, so the</text>
+  <text x="62" y="320" font-size="13" fill="#526677">ladder sessions never reach</text>
+  <text x="62" y="340" font-size="13" fill="#526677">outside their own folder.</text>
+
+  <!-- copies -->
+  <g font-size="16">
+    <rect x="364" y="80" width="300" height="80" rx="8" fill="#ffffff" stroke="#2c3e50" stroke-width="2"/>
+    <text x="382" y="110" font-weight="700" font-family="ui-monospace, Menlo, monospace" fill="#2c3e50">ladder-manual</text>
+    <text x="382" y="138" font-size="14" fill="#526677">+ New session, in Manual</text>
+
+    <rect x="364" y="178" width="300" height="80" rx="8" fill="#ffffff" stroke="#2c3e50" stroke-width="2"/>
+    <text x="382" y="208" font-weight="700" font-family="ui-monospace, Menlo, monospace" fill="#2c3e50">ladder-accept</text>
+    <text x="382" y="236" font-size="14" fill="#526677">+ New session, in Accept edits</text>
+
+    <rect x="364" y="276" width="300" height="80" rx="8" fill="#ffffff" stroke="#2c3e50" stroke-width="2"/>
+    <text x="382" y="306" font-weight="700" font-family="ui-monospace, Menlo, monospace" fill="#2c3e50">ladder-auto</text>
+    <text x="382" y="334" font-size="14" fill="#526677">+ New session, in Auto</text>
+  </g>
+
+  <!-- remotes -->
+  <g font-size="14" font-family="ui-monospace, Menlo, monospace" fill="#526677">
+    <rect x="724" y="96" width="196" height="48" rx="6" fill="#ffffff" stroke="#dce3e8" stroke-width="2" stroke-dasharray="7 5"/>
+    <text x="736" y="125">…-manual-remote.git</text>
+    <rect x="724" y="194" width="196" height="48" rx="6" fill="#ffffff" stroke="#dce3e8" stroke-width="2" stroke-dasharray="7 5"/>
+    <text x="736" y="223">…-accept-remote.git</text>
+    <rect x="724" y="292" width="196" height="48" rx="6" fill="#ffffff" stroke="#dce3e8" stroke-width="2" stroke-dasharray="7 5"/>
+    <text x="736" y="321">…-auto-remote.git</text>
+  </g>
+
+  <!-- arrows -->
+  <g stroke="#0f766e" stroke-width="3">
+    <line x1="304" y1="120" x2="356" y2="120" marker-end="url(#a)"/>
+    <line x1="304" y1="218" x2="356" y2="218" marker-end="url(#a)"/>
+    <line x1="304" y1="316" x2="356" y2="316" marker-end="url(#a)"/>
+    <line x1="664" y1="120" x2="716" y2="120" marker-end="url(#a)"/>
+    <line x1="664" y1="218" x2="716" y2="218" marker-end="url(#a)"/>
+    <line x1="664" y1="316" x2="716" y2="316" marker-end="url(#a)"/>
+  </g>
+  <text x="724" y="368" font-size="13" font-weight="600" fill="#0f766e">origin: a folder, not GitHub</text>
+</svg>
