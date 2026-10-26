@@ -17,10 +17,10 @@
 
   <rect x="44" y="228" width="480" height="168" rx="8" fill="#ffffff" stroke="#dce3e8" stroke-width="2" stroke-dasharray="7 5"/>
   <text x="64" y="260" font-size="19" font-weight="700" fill="#2c3e50">Practice folders</text>
-  <text x="64" y="288" font-size="15" font-family="ui-monospace, Menlo, monospace" fill="#526677">ladder-practice  rules-practice</text>
-  <text x="64" y="310" font-size="15" font-family="ui-monospace, Menlo, monospace" fill="#526677">workshop-practice  real-task</text>
-  <text x="64" y="340" font-size="15" fill="#526677">Made with git init: their own history, no origin.</text>
-  <text x="64" y="370" font-size="15" font-weight="600" fill="#bd3012">Nowhere to push. Open the clone instead.</text>
+  <text x="64" y="288" font-size="15" font-family="ui-monospace, Menlo, monospace" fill="#526677">ladder-manual  ladder-auto  rules-practice</text>
+  <text x="64" y="310" font-size="15" font-family="ui-monospace, Menlo, monospace" fill="#526677">workshop-practice  real-task  skill-work</text>
+  <text x="64" y="340" font-size="15" fill="#526677">Made with git init. Any origin is a folder on your laptop.</text>
+  <text x="64" y="370" font-size="15" font-weight="600" fill="#bd3012">Not GitHub. To share work, open the clone.</text>
 
   <!-- github -->
   <rect x="640" y="24" width="296" height="392" rx="10" fill="#f6f8fa" stroke="#dce3e8" stroke-width="2"/>
@@ -39,6 +39,6 @@
 
   <line x1="530" y1="300" x2="652" y2="300" stroke="#bd3012" stroke-width="3" stroke-dasharray="6 6"/>
   <g stroke="#bd3012" stroke-width="4" stroke-linecap="round"><line x1="580" y1="288" x2="602" y2="312"/><line x1="602" y1="288" x2="580" y2="312"/></g>
-  <text x="660" y="290" font-size="14" font-weight="600" fill="#bd3012">"No configured push</text>
-  <text x="660" y="310" font-size="14" font-weight="600" fill="#bd3012">destination"</text>
+  <text x="660" y="290" font-size="14" font-weight="600" fill="#bd3012">Not GitHub: nowhere</text>
+  <text x="660" y="310" font-size="14" font-weight="600" fill="#bd3012">for others to see it</text>
 </svg>
