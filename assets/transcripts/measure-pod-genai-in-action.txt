@@ -1,0 +1,748 @@
+GenAI in Action: Cloud DevOps and TagAssistant.ai
+The Measure Pod — October 2025
+Source: https://www.measurelab.co.uk/insights/podcast/genai-in-cloud-devops-tagassistant-mark-edmondson
+Publisher-provided AI-generated transcript, reproduced without wording changes. Recognition errors may remain.
+
+[00:00:00] Dara: Hello and welcome back to the Measure Pods. I'm Dara. I'm joined by Matthew. Hey Matthew. How are you doing?
+
+[00:00:21] Matthew: Hello. I've got one of those newfangled colds everyone's raving about, so I'm not sounding a bit gruff, but more like a hip than that. A hipster cold, isn't it? Yeah. Got a hipster bug. Yeah. What? Those head colds that are all the rage. How are you?
+
+[00:00:34] Dara: I'm alright. I just have to, I confess on your behalf because be, when we were talking before I hit the record button, you didn't sound that ill, and then I hit record and you're like, hello everybody. I'm not doing so well today.
+
+[00:00:47] Matthew: I'll try to call in sick to the podcast. Yeah. The listeners being the boss.
+
+[00:00:52] Dara: Yeah. Yeah. I don't think they're buying. I don't think they're buying it. No. Alright, I'll carry on then. You are genuinely ill and I do have sympathy for you. Not a lot, but a little bit. Just a reasonable amount. That's fine. I'm okay. I'm, I'm slightly shocked and disappointed 'cause it rained yesterday really?
+
+[00:01:09] Dara: And I'm, I'm in Spain now in case I haven't mentioned that before.
+
+[00:01:12] Matthew: And yeah, people think you're in England to be like, and doesn't it rain every day?
+
+[00:01:16] Dara: Yeah. So it's a bit strange. This kind of moisture was falling out of the sky and I was quite confused. It took me a while to figure out what it might be.
+
+[00:01:23] Matthew: The people running around outside screaming. Yeah. Pointing at the sky. Yeah,
+
+[00:01:27] Dara: yeah, yeah. Somebody has angered the gods and rain. Yeah. But no, I'm good. I am, I am good. And, ready to dive into something exciting. It's so exciting. It just feels like things are changing all the time. What are we going to have to start doing a daily podcast?
+
+[00:01:40] Dara: I think maybe an hourly one.
+
+[00:01:41] Matthew: Yeah, there is a lot. There is a lot this week. You keep, I keep thinking that maybe there'll be a break in the relentlessness of releases, but this one is a bumper this week.
+
+[00:01:51] Dara: We could just do something really random that week. If there's no news, we could just, I dunno. Make it up. Speak. Speak to each other in strange languages or something.
+
+[00:01:59] Matthew: Yeah, we could try that. See our numbers, how it does.
+
+[00:02:01] Dara: Yeah. Or talk about snooker. We've still got to do the snooker episodes.
+
+[00:02:05] Matthew: Yeah, that's a deep cut. Yeah. For anyone who remembers that from, I dunno how many we've been doing now since we took over.
+
+[00:02:12] Matthew: I dunno what episode we're on. Well, we should count them 10.
+
+[00:02:15] Dara: How many episodes since the last mention of snooker? That's how we should, that should be the official way of counting them. So it's got to be a few. At least a few. A few.
+
+[00:02:23] Matthew: We'll keep it in the back there. Yeah.
+
+[00:02:24] Dara: So probably, unsurprisingly, all of our news is AI related. Shocker.
+
+[00:02:29] Matthew: Yeah. Yeah. We have, well, it is all AI related, but we do have some AI stuff that is related to data engineering and market marketing analytics stuff as well. Fear not. Well,
+
+[00:02:41] Dara: it all is in a roundabout way, isn't it? Yeah, it is. Yeah. Everything's it. Everything's connected to everything.
+
+[00:02:46] Matthew: Yeah. Very philosophical. Absolutely.
+
+[00:02:48] Dara: Yeah. Okay. Right. So where do you want to say, 'cause there's a few, yeah, there's some biggies, sonnet 4.5 chat, GBT shopping search. That's just where, where do we, where do we start?
+
+[00:02:58] Matthew: Yeah, maybe 4.5 as the first one, that's the first one you said, and I can't remember anything you said after that.
+
+[00:03:04] Dara: Yeah, and I think it, it's probably the, it's probably the first one. Maybe it isn't actually, I'm thinking, is it in chronological order? But do you know, I'm not even going to try and check that, or let's just go with, no, let's just go,
+
+[00:03:15] Matthew: I don't know. Actually it's, so I know it came out on the 29th, so we're recording this on the 30th. Sorry to break the magic for everyone of September, but the Sonet came out yesterday, our time, and it claims to be, so it's the new, the new sort of frontier model from Claude.
+
+[00:03:31] Matthew: I'm getting a bit confused, tell me about it. The sort of. Sonet or opus or haiku, but they seem to be releasing 4.5 sonet, which is the middle model, which implies that there is an opus to come for 4.5, which will be bigger and better. I don't know. But anyway, it, it, it claims to be the best model.
+
+[00:03:52] Matthew: Now. They, they, they're putting that claim out there. That's not for coding in the world, in the world. They don't, they aren't making any universal claims, which I think is smart.
+
+[00:04:01] Dara: They're thinking, keeping it quite narrow to the, to, to the earth planet. Yeah. Yeah. To the earth. Yeah. I do have to, but yeah, I'm not even going to let you get past that without criticizing the na this, this statement.
+
+[00:04:13] Dara: It's like, you know, you know when you see those, like, and they, they're usually close to service stations for some bizarre reason, but they'll be like a restaurant. It might be an Indian restaurant or, or a kind of cafe, and it'll say something like. The best cafe in the UK or Yeah. And it's like they voted by themselves.
+
+[00:04:31] Dara: And whenever you see that, you always think, ah, so it's not a good cafe or it's not a good Indian restaurant, or it's not a good Italian.
+
+[00:04:36] Matthew: Coffee shops are particularly guilty of this.
+
+[00:04:39] Dara: They are. Every, everywhere does the best coffee in the uk. The world. Yeah, the Milky Way, whatever. And it's always a lie.
+
+[00:04:45] Matthew: True. They have released some charts. Oh, some empirical data. Did they use it? But, it's getting, but did they use Claude to make it up? Well, that's the problem, isn't it? It's getting harder and harder to, I think a lot of the tests that most of these models run through, you do wonder how much they've kind of got the model good at taking those tests and answering those questions.
+
+[00:05:06] Matthew: And I know there's some like, independent companies spinning up that do the testing for them now and critique the models in, in some way. So, I don't know. I mean, I have played with it. It came out everywhere. API that, that was one refreshing thing about it.
+
+[00:05:18] Dara: It was just announced yesterday and it was available everywhere.
+
+[00:05:22] Matthew: Nice. In Claude, in Claude code and the API. Brian the, pinnacle of A one and only API cl LLMs.
+
+[00:05:31] Dara: Yeah. I think I was using it without even realizing it before I saw the ana, I think. Yeah. Something in my brain said, hang on, 4.5. And then I saw the announcement. I was like, ah, okay.
+
+[00:05:40] Matthew: Yeah. It clicked over to be the default everywhere as well. Yeah. but it, yeah, it claims to be, it claims to be best at coding agent modeling. Just, just everything.
+
+[00:05:50] Dara: The best. Just everything. Just everything.
+
+[00:05:51] Matthew: Yeah. Seems to be that. There were some other sort of statements that sound very alarming, but, oh, I love this in a good way, I suppose.
+
+[00:05:59] Dara: Yeah. Let me get the exact word you got, you've got to read out the actual quote word for word love.
+
+[00:06:04] Matthew: I love this. Claude's. Improved capabilities and our extensive safety training have allowed us to substantially improve the model's behavior, reducing concerning behaviors like sycophancy deception, power seeking, and the tendency to encourage delusional thinking.
+
+[00:06:21] Dara: Cool. They have to, they have to release a version where you can turn all of that on. That's, that's the one I, that's the one I want to use. See how far it can go. Yeah. Yeah. Yeah.
+
+[00:06:31] Matthew: But the fact that they, is that the argument of doing, doing the Olympics, but just letting everyone take steroids and see how's the, how can we go to enhance games? Yeah.
+
+[00:06:39] Dara: Yeah. Exactly. Yeah. I, I, I just think this is brilliant and it's like, and I love the way they just, like Inc.
+
+[00:06:44] Dara: Include, that's just like a matter of fact statement. It's like, oh, yeah, yeah. It's also like far less, significantly evil and it doesn't have global domination as part of its Yeah. As part of its mission statements. Success gives, you know, gives us a big hooray.
+
+[00:06:59] Matthew: I know. It feels like it's, I wonder if the test, they've been building this a little bit with that, that autopilot thing we're talking about the other week, because they do, they do call out prompt injection and Yeah.
+
+[00:07:09] Matthew: And other things as well. It's always stuff they're worried about with their Claude Pilot, Claude Cloud pilot or whatever it's going to be.
+
+[00:07:18] Dara: But yeah. Interesting. Yeah, I heard as well, it reminded me of another kind of blase statement. And this was from, I forget his name now. Not Dario or Dario, the other, the other co-founder.
+
+[00:07:29] Dara: Maybe there's more than two. Sean. I, you know, I'm insulting them. I'm now insulting the entire leadership team of Anthropic. But one of the co-founders, I was listening to him on a podcast and he just casually threw out at one point. Oh yeah. 'cause we, you know, we were testing it in a, you know, safe environment and we managed to get it to stop being.
+
+[00:07:49] Dara: So, and I'm not going to get the words quite right, I don't have to quote at hand, but it was basically, they were trying to prevent it from becoming power hungry. So a bit like in the, in the quote you read out and the other one was Yeah. Trying to build in the ability to disable. It is being shut down. So it is, it's literally, yeah, I read about that Termin, like he's literally describing them trying to not make it Terminator.
+
+[00:08:12] Dara: Yeah, Terminator. And he just threw this out as if it was like just, you know, testing that your washing machine was working or something.
+
+[00:08:19] Matthew: Yeah, yeah. It, it, I was, I've read a book, the Coming Wave, one of the only books I've ever read, but it was by the guy who now, ironically, I think he's like CEO of Microsoft's AI or something by Mustafa Soloman.
+
+[00:08:36] Matthew: And he, he, yeah, they talk about all that in there. Like the big worry with them is that they set goals for these, these ais and then it solely focuses on that goal and it does everything in its power to get to that goal. And being turned off or shut down is against that. Is against that goal. And then, the ultimate worry is that you, it goes and goes and goes and it's like, right, well I need to make it.
+
+[00:08:59] Matthew: This app is more efficient. To do that, I need to free up some processing power. So let me just turn off, kill everyone in. I'll just meet everyone in Norwich who used their trees and corpses for fuel for my data centers. Sorry, Norwich. I dunno why I got into my head first.
+
+[00:09:20] Dara: This is a public service announcement so you don't want to go to Norwich, but you've been warned. Well, yeah, it's all, it's all, there's a hint of terror with all of this stuff really, isn't there?
+
+[00:09:31] Matthew: Yeah.
+
+[00:09:31] Dara: Maybe more than that. Yeah, there is. Anyway, let's, we, we did, I was going to say weed. This is, I tend to drag it into the, you know, AI is going to murder us all really. So let's just, let's swerve back outta that. So, before we finish with Sona 4.5, there were a couple of bits 'cause you, you shared with me earlier some of the, some of the updates that were included and one that looked particularly interesting to me.
+
+[00:09:54] Dara: 'cause I keep, it keeps making. I probably keep making it, making mistakes, but there's now a rewind function to include code in cloud code. Yeah. But this is part of, yeah. Am I mixing things up?
+
+[00:10:07] Matthew: That is part of the 4.5. So, 4.5 is now the default model in cloud code. But then Claude code has had, what I shared with you earlier was the release notes for Claude code.
+
+[00:10:16] Matthew: So like Claude Code has added in. Yeah. The ability to like say slash rewind and like step back and it'll just undo the changes that that's been happening. 'cause it can, you know, run away from itself and just destroy things. You're like, oh crap, I need to go back. And it's not good doing that. Don't try. Yeah.
+
+[00:10:31] Matthew: Yeah. And, and, and when you've got like maybe more people who have, are vibe coding who aren't used to say get, and, and always backing up and working in small sort of feature branches and things. It can be really annoying for people. So yeah, there's a few updates in there that look interesting.
+
+[00:10:49] Dara: Yeah. Okay. Yeah. Another one just quickly on that I saw that actually could be quite handy as well as the board slash usage one, which gives you a, I mean, I haven't tried this. I don't know if it tells you. The thing I'm hoping it does is tells you where you are within the five hour window, because that's really annoying when it just tells you you're approaching it and then suddenly you hit it and then you have to just wait and you don't, you didn't know that you were nearly there.
+
+[00:11:12] Dara: And I know there are some, I know there are some, like, plugin probably isn't the right word, but I know there is something you can install to monitor that. But it would be nice if you could do that within cloud code itself just to see where you're at within that five hour window.
+
+[00:11:26] Matthew: Yeah. I know there was use, there was a usage thing ages ago when I was on like the API when I was draining from an API part and you could kind of see, oh no, that, yeah, you could see, see what the cost of that session was so far.
+
+[00:11:37] Matthew: Yeah. But yeah, nothing. I'm also interested because I think it was running on, it was, the default was at 4.10 versus something previously, I think. And, and now the default's sonnet, but it would step down from 4.1 after a certain amount. That said, you've, you've gone over your usage for that and it, so I don't know if 4.5 sonet is cheaper, so it might stay for longer and you might get that more powerful model for longer periods.
+
+[00:11:59] Matthew: I've not, I've not hammered it enough yet. I think I have, I have, I was doing a bit of coding with it this morning and it didn't, I didn't get that yellow warning saying it steps down to Yeah. A different model. So maybe we're keeping an eye on it.
+
+[00:12:11] Dara: Definitely.
+
+[00:12:11] Matthew: Yeah. Okay. What else did we get? I suppose the bit, the, the other big one was AI releasing e, the e-commerce sub sub purchases within, chat pt. And we talked about this ages ago. We knew it was coming, didn't we? Yeah. We knew it was coming. We just weren't sure at the time. I think we were asking questions like, is it going to surface? In the chat and then send you off to a pay window at the, at the retailer or whatever. But no, it seems as though the entire pay journey happens within chat GPT and subsequent, subsequent journeys, like after purchase events all come from the retailer.
+
+[00:12:50] Matthew: But the purchase journey itself happens in chat gPT, Etsy, I think are fully yeah. On onboard and integrated.
+
+[00:12:56] Dara: EBay I think as well.
+
+[00:12:58] Matthew: eBay, Shopify is coming. It is not out yet, but it's pretty much going to be here very, very soon. and they've released this, what is it? What was it called? Maybe not eBay.
+
+[00:13:08] Dara: Actually, that might have been a bit salty. Maybe it was. Maybe it is, well, we hadn't had any salt yet. Yeah. Sea Shopify and possibly eBay, but maybe not.
+
+[00:13:18] Matthew: Right. Yeah. Okay. I thought you were reading that then. But so the, so the whole journey happens there.
+
+[00:13:24] Dara: Mm-hmm.
+
+[00:13:24] Matthew: It's called the, they call it like the agentic commerce. Protocol Protocol, A CP. Everyone needs their own protocol. You know, atropic did MCP, Google's got two, an agent to agent, and then now Open Air's like, oh, we want one. So they've got the Agent E commerce protocol. Yeah. Yeah.
+
+[00:13:45] Dara: Everyone's going to have an acronym.
+
+[00:13:47] Matthew: Yeah. And they've released a lot of technical documentation about how everybody can integrate with this A CP, which to me, I dunno, feels like everyone has to almost.
+
+[00:13:57] Dara: I think so, yeah. You either do this or you're going to be massively left. Whoa. Okay. So I guess it depends 'cause we are in a bubble, aren't we? And there probably are still. Good old fashioned folks who like to go on good old fashioned websites.
+
+[00:14:11] Matthew: Yeah.
+
+[00:14:11] Dara: I mean, it's probably people who don't even want to go online and want to go into an actual physical bricks and mortar store.
+
+[00:14:16] Dara: I mean, there's probably a couple of them left. But yeah, I think for most businesses they're going to have to get on board with this, I think, or they're going to get, they're going to get left behind.
+
+[00:14:24] Matthew: Yeah. And it, and it raises interesting questions about how you, what the format of your, like product data is on, on your sites.
+
+[00:14:32] Matthew: Mm-hmm. I saw some posts on LinkedIn earlier where people were sort of theorizing, having looked at the technical documentation that it wasn't necessarily going to be about keywords and things, it was going to be about data density and, and having the right words that can, that the LLM knows to string together to make the, the connection to your product.
+
+[00:14:50] Matthew: It's a kind of completely different paradigm to how we've been doing it for the past, I don't know, 20 years.
+
+[00:14:57] Dara: Yeah. There was some other stuff as well. I've got about 400,000 tabs open, so I won't be able to find it. But there was something on the announcement page about, How it will, how it'll sort them.
+
+[00:15:08] Dara: And it even included things like whether you're the original manufacturer or a, or a reseller. So it is, it's, it's quite right. Quite different. So it's going to, you know, it's going to look at, I guess price and proximity to the user and whether you're, you know, a reseller or maybe whether you specialize in that product as well, or whether you sell a whole bunch of other stuff.
+
+[00:15:28] Dara: So it's going to be quite contextual, I guess. Mm-hmm. As opposed to maybe the, what now seems like a slightly more old fashioned way with the kind of search index approach. And they did say as well that you don't get a benefit if you are, 'cause the instant E-commerce or instant checkout I think they call it, that's optional.
+
+[00:15:46] Dara: And you can be listed in the results without having the instant commerce instant checkout or get it right eventually. and it says that you don't get a benefit. So if you, if you go for the full instant checkout, that doesn't give you a bump in the. In the ranking order apparently.
+
+[00:16:03] Matthew: Is it like a cost is, are they, I I couldn't see anything scanning it earlier, but it's, are they taking a, a slice of salt sales through the platform?
+
+[00:16:11] Dara: Yeah. I didn't see a percentage, but it, they say, I think the wording is something like, we take a small fee, but if the, what I thought was interesting is if the item is returned, the merchant gets the, that, that fee, that commission back. Right. Interesting. So you, I'm all my brain's already going to like scamming GPT by saying, oh yeah, we've had a thousand returns this month. You, you owe me money.
+
+[00:16:32] Matthew: Yeah. I wonder if it just gets to the Amazon kind of thing where they just, they're like, well, the customer's happier if they can just keep returning things over and over again and Yeah. You know, we balance the books. Doesn't matter. Yeah. Yeah. Interesting. And, and I think they said us, I, I did see a statement somewhere else in the technical documentation where it was like.
+
+[00:16:49] Matthew: You what? They will not allow you to sort of sign them up to marketing, emails and things as part of that journey within chat db t. Like, they'll put a block on that. So it seems like it's just a purchase. Yes. Not like newsletters about that after the fact.
+
+[00:17:01] Dara: I've got to say I'm actually genuinely quite excited as a customer about this. I'm, I'm looking forward to using it because it is, you're probably the same and most people probably are, you know, you're looking for something, you get analysis paralysis, which will probably still happen with this. But you know, you end up with loads of tabs open, you're on various different sites.
+
+[00:17:23] Dara: You're trying to match, you're trying to compare shipping times and all the rest of it, you know, and how do you do that when you've got all these different websites open? So more recently you'd probably do some of that research through Chat GBT or Claude or whatever, but then you'd still have to go back to those individual sites too.
+
+[00:17:40] Dara: To do the purchase. So just to be able to do that whole end to end from, from research through to decision, and then purchase all through. Yeah. Just a shame, it's, can I say this? It's a shame. It's chat GBT and not Claude. Am I? Am I allowed to say that on air? Can we, can we now, can we now just try and take down yet another giant company podcast?
+
+[00:18:00] Matthew: Well, as long as my motto is, is, as long as it's not meta, but I
+
+[00:18:05] Dara: Yeah, that's true. I can imagine that that's definitely true. Coming with something,
+
+[00:18:08] Matthew: yeah.
+
+[00:18:08] Dara: I'll add in it. That's my personal preference. That's what I'll say. But my personal preference would be Juice, Claude.
+
+[00:18:13] Matthew: And this, I think this would be genuinely good. I'm going to say out loud on the podcast too, is it about, I've always had lots of, no, we've said lots of things that we think would be good ideas and never done them, and I've not had any repercussions for it. But still it'd be, it'd be interesting to put together like a bit of a scorecard between them and like .
+
+[00:18:30] Dara: Yeah.
+
+[00:18:30] Matthew: And I have sort of metrics like what, what's good, what's been really good for like marketing analytics, data engineer.
+
+[00:18:36] Matthew: Who's, who's doing well with like, releasing something quickly after they talk about it? Google would be marked down quite a bit for that. But like Sonet, it's here. But then I didn't think about opening, I don't think this e-commerce thing was available when I was trying to see if I could get it to work in, chat GPT today. I didn't see it happening.
+
+[00:18:52] Dara: I think it's us only at the moment.
+
+[00:18:54] Matthew: Mm. Don't see Mark minus points. Yeah, definitely. And then we'll just judge. We'll, our, our favorite, the measure pod favorite will be whatever's sc scoring highest on our ongoing AI scorecard.
+
+[00:19:06] Dara: Yeah. And we'll use each one to mark the others. So we'll use Gemini to, to mark. Yeah. And Claude and Spart. Yeah. Yeah. No, I like it. I think it's a good idea. It's another good idea. We won't, we won't, and there'll be no repercussions. I promise to do it. Oh, okay. No, it would be fun. Maybe it would be, it would be good. And it'll probably change. I think that that's the thing, isn't it?
+
+[00:19:26] Dara: Yeah. Let's keep going. It'll keep, you know, one release, one will be ahead and, and the next release, the other one or another one will be ahead. That's, it's going to chalk and change, isn't it? Yeah. But exciting. I am. Yeah. I've got to say I'm a, as an end user, I'm looking forward to using this one, but I think it is going to be making a lot of e-commerce site owners anxious now.
+
+[00:19:48] Dara: Yes. 'cause it's going to be a frantic push to, right. Well, how do I get my, firstly, just get myself listed in there, but secondly, how do I make sure I'm, I'm well optimized for that. So,
+
+[00:19:58] Matthew: and Google's is on the way, right? They, they, they announced stages ago they would, they would do some sort of shopping, a shopping assistant thing.
+
+[00:20:05] Matthew: Yeah. So you think that's got to be on its way soon.
+
+[00:20:07] Dara: And especially now, this has been announced. Like even if they, even if it's not Yeah. Fully, fully baked, they're going to have to 'cause openly, I have to jump on this now, don't they? So,
+
+[00:20:16] Matthew: yeah. It feels like they're next in the queue, doesn't it? Google? Yeah.
+
+[00:20:19] Matthew: Openly. I went with. GT five and then they've done this, and then Sonic's come out with four points, closed out with 4.5, feels like it's Google's turn to somewhat big speaking of Google. Beautiful. they sound effects.
+
+[00:20:34] Dara: This is where we need sound effects, that there needs to be some kind of clap for a perfect segue.
+
+[00:20:39] Matthew: Yeah, yeah. Like an audience and the crunching of a soul grinder when somebody says something dubious chrome dev tools, MCP came out, or, or was sort of, it started to do the rounds much more than it, I dunno if it came out recently or if it's just started to get some more public attention. But essentially it is an MCP that can interact with the dev tools within Chrome.
+
+[00:21:03] Matthew: So a lot of people are seeing a lot of utility with it in marketing analytics and marketing technology and stuff because it can in theory, go and check data layers, work through journeys, and collect data layer information as it goes through those things. Look at all the network requests and what's happening with various information coming in and out of our sites and things like that.
+
+[00:21:24] Matthew: There's a lot. Yeah, it seems like a lot of power and utility in it, and, and I know that we've got a few people experimenting with it internally. It's similar, but apparently better than to the playwright MCP, so we have our internal Brian chatbot that we've, we've been stuffing a lot of CPS in, so people can make things.
+
+[00:21:44] Matthew: We've got like the Google analytics for MCP in there, the BigQuery, the G-T-M-M-C-P, and then we've added in playwright and that can go off and do help us do consent audits and things like that. But this apparently has more utility, bit nicer, bit quicker. Et cetera, et cetera.
+
+[00:22:00] Dara: Yeah. And playwright, our avid listeners might remember Gunner Greece, used playwright as part of his setup to test the GA four and sta
+
+[00:22:10] Matthew: yeah.
+
+[00:22:10] Dara: Cps. So that's where, at least that's where I heard of it and thought it would be a good thing for this. But Chrome dev tools, I guess, are good. On one hand is, is naturally going to be better because it is using the, the built in kind of Chrome functionality want of a better, better way of putting it.
+
+[00:22:27] Matthew: Yeah. The dev tools themselves. Yeah. Yeah. Yeah. And apparently you can run it in like a head full mode so you can see what it's doing and help guide it a bit more, rather than completely headless and just letting it run itself.
+
+[00:22:37] Dara: Yeah. Is that optional? Do you know? 'cause you, there might be cases we don't, you don't necessarily want that. Do you know if you can kind of turn that on and off?
+
+[00:22:43] Matthew: I think so. I, one of the other interesting things about it is I've been, I've been using it when developing Brian himself to help me debug. So normally when I've, when I'm in, like in include code. I'll be maybe relaying console logs back in there and getting it to sort of be that, that translation layer.
+
+[00:23:00] Matthew: But now it can just go off of the MCP in, include code and just look at the logs, the network requests, the speed of the load times take snapshots of the location and it kind of adds a whole new layer of debugging and self-regulation to cloud code. Which is, which is interesting. But that's all been running headless when I've been doing it. Yeah. So I assume there is an option.
+
+[00:23:19] Dara: Yeah, and I think that's something quite, that's quite appealing as well. But I dunno, maybe you can do that as a playwright as well, I'm not sure. But the low kind of local testing, if you'll build a web, potentially not having to go in and open up the console every time and copy and paste it back into cloud code.
+
+[00:23:32] Dara: I mean, it's not the end of the world, but it is a little, it's a bit tedious when you have to keep doing that, when you're trying to debug something.
+
+[00:23:39] Matthew: Yeah, it came up, we were having a conversation in, You know, like a little innovation meeting that we have at Measure Lab from time to time. And we were talking about the different use cases of these things and it felt like the head full version of these things could be really useful because no sites are really the same.
+
+[00:23:55] Matthew: Nothing's ever straightforward. You not, there's not one same journey on e-commerce sites or whatever other sites that may be out there. So having the human in the loop and almost augmenting them with the tooling is one approach. But then you also may have some very cookie cutter processes that you just know are going to be the same every time.
+
+[00:24:12] Matthew: Mm-hmm. For one example is sort of reviewing the cookie banner, checking. It fits with a lot of GPR guidelines that accept all of the jet tools there, et cetera, et cetera. That could be done in a headless mode. And just be a, a, an agent that's completely automating that process. So it's like playing it by ear of which version is best and that and the best approach.
+
+[00:24:32] Matthew: The final thing I want to talk about was the data engineer agent in BigQuery, which. We talked about it absolutely. A, I think it might have been our first episode together seven or eight years ago, I think, seven or eight years ago. And that this was essentially it. It's like Google Pipelines first, who don't know what Google pipelines are.
+
+[00:24:53] Matthew: They're a, it's a flow of you can connect this data to this data and it builds sort of data form, SQL X type files in the background. So you can build out pipelines of, get data from here with a, with a Python script and then transform it and ultimately get it into reporting tables, et cetera. Anyway, they built an agent on top of that.
+
+[00:25:15] Matthew: Mm-hmm. We saw it ages ago at the next 25 or saw it, we weren't in Vegas, but we saw it online at the next 25. It's kind of been an underpinning. This has been an underpinning for most of our conversations for quite, for pretty much the rest of the time. 'cause what we saw was very impressive, but it is very autonomous.
+
+[00:25:34] Matthew: It just goes off and starts looking at this data, grabbing this data over here, joining that together. Blah, blah, blah. So we were, yeah, a bit like, well, how, what's the guard rails there? What, what happens if it just goes off and does something wild and costs a fortune that has arrived? And we've played a little bit with it, not massively.
+
+[00:25:51] Matthew: It's in, it's in pre general offering preview at the minute. And we've had, yeah, we've had mixed results. Go big with it and, and ask it to do some really massive up straight up the bat. It struggles and maybe just doesn't complete, which I get, if you're more pointed with it and, and specific with it, it's pretty powerful.
+
+[00:26:07] Matthew: It's able to just sort of understand the context of your project. Grab this table from over here, join them, pull 'em through, select the right columns, and ultimately get down to what, what you're trying to do.
+
+[00:26:19] Dara: So you could probably do the big thing if you actually broke it down. Yeah. From the off, rather than just saying go, you know, go do a big thing.
+
+[00:26:27] Matthew: Yeah. Don't be lazy like me. Yeah. Yeah. Yeah. Transform it. Yeah. What? Transform what? Yeah. Just come on, figure it out. Yeah. Yeah. You should know what I want. So yeah, I, I, and obviously this is pre, pre general availability, so it's not the whatever realized version that eventually hits all of the projects, everyone's projects down the line.
+
+[00:26:48] Matthew: And the minute I believe you just pay for the processing costs rather than any Gemini
+
+[00:26:54] Dara: Okay. Yeah.
+
+[00:26:54] Matthew: Usage. But I imagine in any, any pre realized version he would pay, that's going to change for Yeah. Yeah. But it's interesting, it all sits on top of data form by the looks of things creating SQL X files and, and things like that. So it's, yeah. But I suppose pipelines do, but yeah.
+
+[00:27:08] Dara: Oh, that was a sneaky little bit of news that almost didn't make it in five Tran looking to buy DBT.
+
+[00:27:15] Matthew: Oh, yeah. Yeah.
+
+[00:27:16] Dara: I mean that is, that is the news. hasn't happened. They're looking to do it. But that's, that's quite a big, I mean, five Tran have just been making huge moves lately, so this would be a really big one. 'Cause I think they were valued at. 4 billion recently or something. DBT
+
+[00:27:31] Matthew: db. Yeah, I think, I think, I dunno if it was like whatever offering that five trains to put in there is making them valued at maybe at that amount.
+
+[00:27:40] Matthew: But yeah, it's interesting that they are making all these moves. I don't know. Like we, I think we said before that a lot of these that were just in the bucket of ETL tools are making moves to sort of expand things out a bit.
+
+[00:27:51] Matthew: And I don't know if they anticipate they're just, just moving data from point A to point B with the augmentation of people and, and AI is not a big enough piece of the data puzzle. I don't know. Or maybe they just want to go bigger and own everything
+
+[00:28:06] Dara: maybe, maybe. Mm, we shall see.
+
+[00:28:08] Matthew: It's going to be interesting. It will be interesting that the sort of removal of that error is the independence that DBT has. Yeah. 'cause data form obviously got bought by Google and is very much in Google. That DBT is no longer its own independent entity.
+
+[00:28:22] Dara: Well it won't affect the data .
+
+[00:28:24] Matthew: Maybe Allegedly.
+
+[00:28:25] Dara: Allegedly, yeah. But you're right. If they. If the sale goes ahead, then they lose that kind of USP, don't they? Yeah. Yeah. Okay. Well, our, a lot of our news today probably leads quite nicely into our guest discussion. So we have Mark Edmondson, joining us today. Mark's a really, really bright guy and seems to have an amazing work ethic, which I think he's now multiplied using the power of ai, but kind of similar journey to us.
+
+[00:28:53] Dara: Started out in kind of digital marketing and then into analytics, and now he's pretty much gone, kind of headfirst into gen ai, DevOps, and he's building tools including tag assistant ai, which I believe he's building with Gunner, who is a previous guest on the show. But yeah, it was a really interesting conversation.
+
+[00:29:11] Dara: Didn't just cover the technical aspects, but a bit like we have on some of the recent episodes, it also got a little bit kind of broader and we touched on some of the philosophical aspects as well. So yeah, overall I thought it was a really interesting conversation. Yep. Enjoy the conversation. Enjoy.
+
+[00:29:29] Dara: So joining us on the show today from Copenhagen, or at least styling in from Copenhagen, we have Mark Edmondson. So Mark, firstly a big welcome to the Measure pods. Thanks for agreeing to join us. It's great to have you here.
+
+[00:29:41] Mark: Yeah, thank you for asking me. Yeah, very excited to talk about what I've been doing. Yeah. And I am British, in case you didn't know, I've got a sort of Nordic sounding name, so sometimes people don't. now I've moved to Copenhagen, but yeah, I was born in near London and then I moved to for, sort of my growing up period, went back to London for, 2 63, then went back down to Cool Wall to think about what I wanted to do, and I ended up in a SEO agency neutralize with, Ted Cow and Lucy and everyone.
+
+[00:30:15] Mark: And that's what kind of really got me into sort of, the internet. So this is my first real job and all this. And then I basically just sort of, Taking what I feel like is the next logical step after that. So I started off in SEO building links for websites and things like that, which is, you know, one of those jobs now that I think could completely be replaced by AI and all this.
+
+[00:30:39] Mark: And then I ended up in Copenhagen because the agencies got kind of bought by different agencies getting bigger and bigger as they, as that all happens. So I ended up at Guava in Copenhagen. Then, Guava turned into Net Booster, who eventually got acquired by Artifacts. And then basically I'm just feeling Copenhagen Learning.
+
+[00:31:00] Mark: Well, I came initially to learn Google Analytics because I wanted to measure my SEO stuff. And then from Google Analytics, that's my first instruction to BigQuery, as they used to have this sort of free export fraud to BigQuery, which is very nice. And then from BigQuery got into just the general cloud stuff and Google Cloud.
+
+[00:31:22] Mark: And, I started doing some data science and got introduced to R as a way of doing data programming for forecasting and things like that, the data from digital analytics. so I did a lot of r really got into r r's really nice. and then got a few packages out for r for Google Cloud stuff and Google Analytics and things like that.
+
+[00:31:44] Mark: And then I went more into the Google Cloud stuff with the DevEd team. Oh, I, I wrote a book as well, or just up there, the, thing. but basically a book about when GA four came out, a book about, how to use the data in the Google cloud and, and that kind of thing. And then this whole AI stuff started a couple of years ago.
+
+[00:32:08] Mark: And, I just wanted to be involved in that. So I started my own company to be a sort of AI DevOps company. And then I'd just been working with clients implementing AI stuff, gen AI for various sectors. but sort of hearing back. We've going to, for what we did, we're doing sort of digital analytics, AI, crossover, use case, this tag assistant ai.
+
+[00:32:36] Mark: Yeah. But I mean, I would say summing up my journey's, being kind of always kind of looking for the next level above what I'm doing. So I definitely feel like AI and gen AI is kind of the level above Google the cloud stuff that I've been doing because you can use it to help create all the Google Cloud stuff, Terraform and all this coding.
+
+[00:32:55] Mark: And then the Google Cloud stuff was kind of necessary to help with all the data science stuff. And then the data science stuff was necessary to sort of help with the Google Analytics stuff. Google analytics stuff was to help the SEO. So, but all of those things like SEO yeah, we're going all the way back to SEO is about search retrieval and things like that.
+
+[00:33:15] Mark: And that is a really very helpful experience for the AI staff. For instance, 'cause that's all about information retrieval as well and things like this. So I really feel like I've got a really kind of good background to be where I am now and I'm definitely having the most fun I've ever had professionally working on this, you know, ever changing frontier that is AI at the moment.
+
+[00:33:37] Mark: So, yeah. Anyways, that was a very long answer to, hello, how are you, how are you? How, who are you? So,
+
+[00:33:46] Dara: no, it's a, it's a really, it's, it is a really great answer. Really interesting. And it's funny, you make it almost sound like it's just natural. Because this is what you said you said is, oh, well it was a natural progression from one step to the next.
+
+[00:33:57] Dara: I don't disagree with you. And it very much mirrors what we've done at Measure Album, part of our evolution as well. But you do make it sound very easy. Like, oh, it was logical. I just went from SEO into Google Analytics to Google Cloud to ai. Yeah.
+
+[00:34:09] Mark: Yeah. Hindsight though, isn't it? It's like all hindsight, but I mean, I definitely, you know, I like to evolve myself on things and it just seems like I start to get a bit bored maybe of what I'm doing at the time, and then I'm sort of looking around to see what comes up and then serendipity presents a sort a solution I think so.
+
+[00:34:28] Mark: That's how it feels anyway. But yeah, I mean, I would, I would've gone back to the uk but I met my adorable wife, Santa in Denmark, so that's why I'm kind of based in Denmark. We got a kid and all of that. Yeah. So, I love Copenhagen. Copenhagen is. I mean, I lived in London for a while and you know, it's great.
+
+[00:34:46] Mark: You can always do a lot of stuff and it's very hectic and Cornwall's a bit sleepy. So Copenhagen's a kind of nice medium mix in between, I say yes and very, very good quality of life. Yeah,
+
+[00:34:56] Dara: I've only visited once, but I loved it. I, I just thought I, I know you don't really get under the skin of a place.
+
+[00:35:02] Dara: I just visited once, but I just thought it was great. Everything, everything about it really just seemed well organized, well run. Just a nice place. Exactly. Yeah. Nice place to be.
+
+[00:35:10] Mark: Yeah. Yeah. The motorbikes are something. Yeah. Yeah, we're in a quite cool area in Copenhagen as well. We just moved here. so I'm part of the eight bit shoot as well.
+
+[00:35:19] Mark: So I actually work with Sumo at, so one of the agencies I mentioned, net Booster CMO was just sort of starting blogging about Google Tag Manager and stuff like this at the time. And, he was just starting all that. That's, we know each other and we've, yeah, he's definitely supported me a lot and stuff that I've been doing and all this.
+
+[00:35:38] Mark: So now we've kind of worked together in this sort of collective. Which is the sort of, we call it the flock and it's like basically a lot of very senior qualified people, but you don't want to, and they could very easily all kind of freelance on their own if they wanted to, you know, and get con, but just having that kind of backup of having a sort of single brand and yeah, and helping the sort of internal stuff and all that type of thing.
+
+[00:36:03] Mark: It's a very interesting idea, I think for how a consultancy can work and, and all of that as well. Yeah, so we joined that with gunna. As well. He's just recently joined and, and they helped with this office and, and that kind of thing. So it's that, that kind of support we get that we work sort of under that umbrella.
+
+[00:36:21] Mark: Yeah. So it's kind of, we're all freelancers under an umbrella of that.
+
+[00:36:24] Dara: Yeah, no, it makes sense. And we're gradually working our way through the, so we had Gunner on, as you know, now you are, you are joining us, so we'll have to get CMO on next and we'll, we'll gradually work our way through the, the full Abit team through the full slack, I guess.
+
+[00:36:38] Mark: Oh, there's a lot more than that as well. Yeah. But, you know, but yeah, all good, all very talented people. Yeah.
+
+[00:36:43] Dara: So, just a definition straight off the bat. So you said ai, DevOps Yeah. As part of your, your intro, or Gen ai DevOps. What does that mean?
+
+[00:36:54] Mark: So, I think basically when you're looking at AI and stuff, it's just so far reaching and broad.
+
+[00:37:00] Mark: You can, you know, it can do anything. I mean, it can turn, you know, anything with texts, language, vision, video, and all this. So I just pissed the thing that was right in front of my nose of what I was doing. And when I was working at the dev team, I was doing Google Cloud's implementations of DevOps. And DevOps is basically all the kind of plumbing and infrastructure for if you're running an application.
+
+[00:37:26] Mark: And that could be a data application or a website or anything like that. So it's kind of, yeah, and more the data ends because that's kind of where I came from. So you think of BigQuery, obviously using BigQuery is great, but then you've got to get the data in somehow. Yeah. So there's like all of that kind of operations, and different services that you can have for that.
+
+[00:37:47] Mark: And then like you've got to go out someplace as well. Some sort of data pipelines that you start guessing into. And the architecture. I really liked the, you know, getting the architecture and, and all this type of put together. So I was doing that a lot with the digital analytics use cases, you know, so things like using pops up and Google Tag Manager service side, we were one of the first people to do Google tag managers on the service side.
+
+[00:38:10] Mark: We've got our sort of use case up with our hedge doc. Mm-hmm. We got the first sort of use cases for Google Tech Manager service site because we had that cloud component to our analytics stuff. Yeah. So we were doing a lot of stuff where we were pulling in data from GTM server aside into pub sub, into BigQuery and then to proofing that downstream into web applications and things like that.
+
+[00:38:32] Mark: And then I left IH Nordic, because I wanted to broaden it out from digital analytics and just general, like all stuff. And you know, every company has the kind of data pipelines for something just not necessarily digital analytics. Analytics is very sort of messy volume data. Yeah. Compared to some workplaces, which are a lot more kind of, you know, private, confidential and more secure and that kind of thing.
+
+[00:38:57] Mark: So I just wanted to experience that thing as well. So, I was doing that and that was all good. And then the AI stuff all comes out and then it's like the, one of the biggest sort of first use cases everyone uses is rag, you know, retrieval, augmented generation, and that's basically accepting data and then putting it into the prompt and then getting the AI to respond to that.
+
+[00:39:20] Mark: So a lot easier in some cases than having to do a sort of machine learning feature lists and all this type of thing. And, that seemed to dovetail very nicely into what I've been doing right then. So I did a lot of ragg implementations. pulling in data from various data sources and yeah, pushing it to the AI so that it's got more context for when it replies and it reduces hallucinations and makes it more relevant to what you're talking about and that kind of thing.
+
+[00:39:50] Mark: So, like before with data and there's a lot of work. I mean, we've machine learning projects in general. I used to call myself a data scientist, a data scientist, you know, but I changed my name to a data engineer because actually, you know, that's actually what you're doing a lot of the time. It's not a lot of science or modeling going on, and unless you're in a massive organization a lot, you know, 90% of the work is actually the plumbing.
+
+[00:40:16] Mark: Yeah. You know, the actual practical plumber you're getting in there. I, yeah. I started calling myself a data engineer instead. 'cause that's what I was actually doing. And, you know, almost every data scientist I spoke to, you know, as well was like, actually no, I'm sitting here doing a BigQuery sequel, rather than what I thought it would be, which is sort of, you know, training models and that and that kind of thing.
+
+[00:40:38] Mark: So I just sort of embraced the fit the way it was going. But it's been very useful for AI stuff. And then like the DevOps part of it is really, I dunno if you've rent a Phoenix project, that's not the best book to describe, but it's kind of this new, I'm on a tail end of it, so I haven't really done it any other way, but it's sort of, you can use the clouds to pull up computers and tear them back down again and mute them.
+
+[00:41:06] Mark: And that's how this whole kind of serverless stuff is running. In the olden days, they used to just have big, well they still do, big infrastructure sort of running on their own systems and stuff. And you're a bit more sort of tied in, maybe more technical debt too. Sticking to that. Whereas the cloud is all about event driven, zero cost until you need it.
+
+[00:41:27] Mark: pulling up whatever servers when you need it and that kind of thing. So, yeah, and that's a lot of stuff which I learned from Dev team days, Google Cloud. I've kind of been Google Cloud, Google, Google, Google. I've dropped Kool-Aid Yeah. Of Google. I think mainly because I kind of started in SEO, you know, and it was all about Google search and all this and then moved to Google Analytics, BigQuery.
+
+[00:41:49] Mark: I think BigQuery is still amazing compared to a lot of cloud solutions. So yeah, I've just been to Google Cloud and I've just kind of concentrated on Google Clouds. I've kind of down all this year and AWS as well, but I just like Google Cloud in the way. And, I mean, one thing when I started my AI company chat, DT had just come out and everyone was like going, I dunno if everyone remembers.
+
+[00:42:13] Mark: I'm very mental about myself, how it is, how amazing it was. And Google didn't really have a very good model. As well that, you know, it was, it was bad. Bad, exactly. Yeah. Yeah. But I, but I knew, I knew that they would eventually win the race, I think because, because I knew all of the infrastructure stuff, you know, vertex AI platform and all this stuff we're working on that.
+
+[00:42:41] Mark: They just got the complete stack. They've even got the, the, you know, the tpu, the GPUs, they created those, you know, they're on the like seventh generation of those and you know, all the papers that originated from Google and the open AI definitely kind of stole their thunder and all this. But I think they were under a bit of an innovators dilemma in what they were doing because it would drastically change search, which is their sort of main money driver.
+
+[00:43:08] Mark: Right. Still, you know, I dunno, 95% of the revenue or something, 'cause Google Ads. So I think they can. Very easily. And now they've been posty, I think, to do that. But now I definitely think they are going to have the best model by the end of this year. No doubt. I think Gemini three is going to be, you know, amazing.
+
+[00:43:27] Mark: I think Gemini 2.5 is, is really good as well, but I think it's very good for us as consumers to have all these different kinds of things pushing each other along on this. But I was sure that Google would be a big contender. And so I started a Google AI DevOps company from that belief, and I think that's, that's been vindicated.
+
+[00:43:49] Matthew: Yeah. Is that, just to clarify then, so what was the company's name again? Sun. I call it
+
+[00:43:55] Mark: Holy Star. Yeah. After my first band. Yeah.
+
+[00:43:58] Matthew: Right. Is that like a technology company then, or is that more of a consultancy utilizing the Google Vertex technology?
+
+[00:44:07] Mark: Yeah, it is. Yeah. Yeah. No, it is. Well, the way I've also, I mean, I've never done a start before, so.
+
+[00:44:14] Mark: Or anything like that. And I've never run a company before, but I also want to explore, like in this post AI world, what is running a company like? Yeah. Because it is different, I think, and everyone's kind of trying to, you know, think about how to incorporate it into their existing companies for what, if you have a company where you're just basically AI driven from the very start, like what is that like?
+
+[00:44:41] Mark: I mean, certainly you're going to employ less people at the end of the, you know, so I, I definitely need less junior coders or anything like that in what I'm doing, and I just, just wants to try it out basically to see how far you could get and things like strategy and corporate strategy and things like that.
+
+[00:44:58] Mark: You've been very helpful in that. I'm not taking it, I mean, there are people who're just going to keep, let AI make all the decisions on this type of thing, but as a sort of sparring partner, that kind of thing, it's been very, very helpful in that respect. And, yeah, so I just wanted to try that out and I just figured that I was so certain that the AI stuff is going to be so, so important for every company in the next 10 years, whatever, if it all goes wrong, at least I'll have had two years experience of working on this a hundred percent of the time.
+
+[00:45:32] Mark: You know, and I'm just so, you know, I'm, I'm certain I can just walk into a, do a job, you know, with that experience now. But it has gone better than I expected. I
+
+[00:45:41] Matthew: suppose. You've been, you've been almost sitting on the crest of the wave. 'cause I suppose you first started out, like you said, you had like TPT 3.5 or you working with people, but then the models have continuously got better and better as companies progressed.
+
+[00:45:56] Matthew: Absolutely, yeah.
+
+[00:45:57] Mark: Just surfing away. And that's, and that is if, if it is a bit of a difference in that you can build something, but then the models are going to, are improving at such a rate that what you build could be completely redundant. Within six months, you know, so there's a
+
+[00:46:14] Matthew: graveyard of startups out there that Yeah, yeah.
+
+[00:46:17] Matthew: Talk
+
+[00:46:18] Mark: to your p Yeah, talk to your PDF startups, like, you know. Completely. Yeah. Useless now. 'cause it's just a click box in the, in the hyperscalers to do so. So it's really interesting, I think. And so you're kind of, it is, that is a really tough decision to make. Like, do I kind of do this now or do I just wait six months and then it's going to be kind of very, very easy to implement anyway.
+
+[00:46:42] Mark: And that is a constant thing. And I think it really just falls down to your use case. And can you make, you know, money from it now or do you read it, need it right now to do so, but you, it also encourages to be very, very flexible and to swap out things. I mean, I was using OpenAI a lot from the start 'cause it was the best model.
+
+[00:47:00] Mark: Right. And I still do, but I need to have that flexibility of knowing that Okay. Like, yeah, within six months it might be. Anthropic or Google or open air or maybe, you know, a new Chinese startup sort of comes up and, and does that. So you definitely need that flexibility and that's the kind of the DevOps philosophy as well as having that flexibility, creating systems that are kind of useful enough.
+
+[00:47:26] Mark: But you can hot swap out components as you need them, as things evolve. But yeah, it is a and and another thing is when you're making the applications themselves, sometimes you can make an application and you know that it's good, you know it's working, but then all you have to do is wait six months and the model underneath driving it's going to get better.
+
+[00:47:47] Mark: And so your application with no code changes is going to get better just in itself, you know?
+
+[00:47:52] Dara: Yeah.
+
+[00:47:52] Mark: It is kind of, you know, so a good example of that is sort of document extraction. Which is a kind of very bread and butter use case for, for what's going on. And before, you know, I had, when I first started, I had a lot of code, like pulling out the text, making, chunking it up and all this type of thing.
+
+[00:48:10] Mark: But then as the models got better and better, you could just send in the PDF directly to the API call and it would do a good job of passing it out just using vision instead of text. Yeah. So a lot more, you know, easier to work with and things like that. So that's one example. And then, you know, Gemini two was, okay, we caught some, you know, probably about 80% accuracy or something like that, but then you just changed the 2.0 to 2.5 and then suddenly you've got like 90% accuracy on, on the same data set.
+
+[00:48:40] Mark: And you know, in six months time when they change it from 2.5 to three, is that going to be like a hundred percent or something like that? So if you can build systems, which is, can take advantage of that, then I think your answer's a good thing.
+
+[00:48:53] Dara: Were you worried, 'cause you, when you, when you explained it there about, when you started out, you know, just as, as chat GBT came out and you really believed that Google was going to win the race at the end, you must have been a little nervous at times early on when Google was lagging behind.
+
+[00:49:07] Dara: Did you contemplate changing or were you just fully all in on this is going to work, I'm going to stick with Google.
+
+[00:49:14] Mark: Yeah, I think the infrastructure was always superior. So basically a lot of it was like, you know, you've got the Vertex, got the Google, big big query, got pub serve, got, you know, all that type of stuff.
+
+[00:49:25] Mark: That was always a good Cloud run as well. Amazing. So that was all working and then, but using OpenAI and philanthropic basically for the models. So even, but it was like, you know, you just need a model to kind of justify that Google is a thing, but honestly everything else is, is good. So I could very well have carried it.
+
+[00:49:44] Matthew: Anthropic was available in Vertex as well, right? Exactly. Yeah,
+
+[00:49:48] Mark: yeah, yeah. 'cause Google actually owns 10% of Anthropic. Yeah. So they, they've actually made a lot of money on them already and it's actually, they actually probably make more money hosting other people's models too, you are paying than for that and for their own models.
+
+[00:50:04] Mark: But I think it's more, you know, they need to have their own model, you know, so to prove that they, you know, I always had, was confident they would get there, but Sure. I mean, open AI could always be a little bit upfront, but we'll use it, so no problem. Yeah.
+
+[00:50:17] Matthew: How much of Google's model use within its applications, say search workspace or just lost leaders, that they just, they just put out there to keep their name in the, in the air?
+
+[00:50:29] Mark: Absolutely. I think there is a lot of that going on and, you know, that, that was a big worry at the start, actually. We were very worried about token costs at the start. Yeah. I mean, they were a lot more expensive in those days, but still, yeah. Cheap enough to do. We know we're talking to clients, we're sort of calculating, okay, each user might use this many tokens, and so that means we're going to have to price it and all that.
+
+[00:50:49] Mark: But what actually happened was like prices dropped by like a hundred times or even a thousand times and all this, there's a lot of consultancy in deciding where you are on the sort of intelligence cost feed sort of triangle there because a lot of use cases, say for the summary of documents, things like that, you don't need the, the world leading model at all.
+
+[00:51:14] Mark: In fact, it's more expensive and slower to do so, so you're better off sort of, you know, going down the curve a little bit for a much cheaper, much faster solution. So there's a lot of consultancy in there to sort of pick out where you are, and, and that kind of thing.
+
+[00:51:30] Matthew: Everyone's knee jerk reaction is just to go for the most expensive, isn't it?
+
+[00:51:34] Matthew: Like I want the latest. Exactly. Every task, no matter what it is.
+
+[00:51:37] Mark: Absolutely. Yeah. You know, so I think there's a lot of, you know, guidance that can be given in that, in that sense. And the thing, what is happening as well though is, you know, as the bar rises on all these models, the use cases that people have is kind of static.
+
+[00:51:53] Mark: So actually we're getting to a stage where the reading models are too much for most use cases that people have. And you know, we are going to get to a stage where, I mean, I think Google has this sort of Google Ultra model that hasn't even released and like Pro and Flash are basically distillations, which is the, making models smaller and faster, but based on the bigger model, maybe they're using ultra model for their own internal uses instead, you know, maybe they're giving into the governments, maybe they're answering the really, really big questions like.
+
+[00:52:29] Mark: Should we have a trade deal with this country or should I merge with this company? Because those are the kind of questions that are kind of just, you need, you know, a lot of information for most of our day-to-day cases where we're just like, you know, summarizing this document. There's no need for this, this market leading thing.
+
+[00:52:46] Mark: And yeah.
+
+[00:52:47] Dara: Have you heard about this MIT report that has said 95% of gen AI pilots within companies aren't working? It's a bit, you know, Big Bay type headline, but it does seem like it's a, yeah, I haven't dug into it, but you know, if it's MIT, you'd think it's a reasonably well done study.
+
+[00:53:07] Mark: That's it. That was typical for machine learning projects in general.
+
+[00:53:10] Mark: I think, I mean, from before that machine learning projects were like, you know, 90% of them fail or something like this. And yeah, it's a click banking title. It starts a lot of discussion, but I think maybe the projects themselves. Fail in their KPIs that they sort of set themselves for. But I'm pretty sure that still a lot of the employees are either, I think that's a sort of shadow IT thing going on where a lot of people on their phones are using some sort of these AI solutions anyway, even if they're not using the corporate branded AI one, which is, all of that.
+
+[00:53:49] Mark: And there is, there is definitely a huge privacy and security and social consequences of people doing that. I mean we worry about GDPR and E privacy with a cookie banner. I mean people are sending in their deepest life storage.
+
+[00:54:08] Dara: Yeah.
+
+[00:54:08] Mark: Internal thoughts and motivations to an American company who stated that they will give it to the FBI if they ask for, you know, all that type of thing.
+
+[00:54:18] Mark: I mean, so that is a massively more, and you know, I mean in Denmark as well, we've of course got this problem with Greenland at the moment with the US. All this and yeah. So then, and then you're sending all of this information to the US to do that. And we were worried about Ocean and Cambridge Analytica.
+
+[00:54:38] Mark: Yeah. You know, influencing elections and stuff like that. I mean, that is just Charles playing compared to these AIs which are very, very persuasive and very, very good at language and things like that. And that's why hallucinations are a problem. 'cause they always sound so convincing. Yeah. When they, when they're making them, aren't they?
+
+[00:54:58] Mark: It's not, you can't kind of use your user signal to solve it's spelt wrongly or, or this type of thing. There's no sort of human signals to help with that. So that, that is, and a big reason I've got involved in AI and all this is just to be more aware of these situations and more aware of, Do to keep an eye on it, you know, what my daughter is using.
+
+[00:55:20] Dara: Yeah.
+
+[00:55:20] Mark: These stuff and being influenced by AI and things like that. And, I think there's massive change coming that people haven't really contemplated.
+
+[00:55:29] Matthew: Do you think that this might, this kind of links back to a bit at the start of what we were talking about there with that 95% use case and a lot of stuff being left on the table and, and perhaps the, the, the fact that li lighter models can do tasks as well as these more expensive models.
+
+[00:55:44] Matthew: Me and Dara have been talking about it recently. It feels like there's so much intelligence on the table that we can use and that people haven't figured out what to do with yet. But I don't know whether, you know, with Chat GPT five kind of triggered this conversation of like, oh, are we beginning to plateau?
+
+[00:56:01] Matthew: Is it all over? Is the bubble going to burst? And our kind of thought was, even if that was true, and, and this law of scalability wasn't really a law. It feels like there's just so much there. Yeah. And so much we haven't figured out what we already have. I
+
+[00:56:15] Mark: agree. I agree completely. In fact, I mean this isn't the first time they've thought, you know, pre the sort of thinking models, they were sort of worried that it's plateauing and things like that.
+
+[00:56:25] Mark: And it was a blessing and we were like, okay, great. We can actually start building stuff and we know that it's only going to be out of date very, very soon and things like this. And but yeah, I'm convinced that, I mean, yeah, I think if model progress just froze right now and that's it, we still have 10 years of like actually applying the stuff that is possible to all the stuff that's going on.
+
+[00:56:52] Mark: I mean, my wife works for Be in Denmark, which is like a network rail in the uk, sort of takes care of the railways and, and that kind of thing. And they are very, very obviously cautious of using AI at all. I mean, I worry that I'm lagging behind. I mean, when I'm sort of, oh, I haven't done the latest thing that Silicon Valley is doing all that, but I am like, you know, years ahead of probably mainstream Danish businesses.
+
+[00:57:20] Mark: And then there's the sort of laggards after that who I even take it on once it's been approved technology and all this. There are years and years and years. I mean, I've worked, I mean you've worked and you've looked at people's implementations, I'm sure. And it's, they're definitely not the cutting edge in a lot of cases.
+
+[00:57:37] Mark: And from a, you know, just from a data perspective working with databases and stuff, they're still a lot of firms just using Excel for their database and, and that kind of thing. And not using stuff. I think there's just so much work in that. But, you know, it isn't, I don't think it will slow down at all.
+
+[00:57:57] Matthew: Looking at chucking my wife into the mix as well. She's a primary school teacher and sometimes I'm sitting next to her. She's working. God knows how many hours of a day to get planning done and marking done, and Le lesson resources created. And I'm looking at what she's doing thinking there's so much of this could be automated away and done very, so you could just quickly plan a lesson quickly, mark, using stuff like you described before, vision models and multimodality.
+
+[00:58:24] Matthew: The schools are so far behind and they don't have the budgets and it's just so creaking and, and ancient in terms of the way it works. It feels like it's, there's a long runway there.
+
+[00:58:33] Mark: And, and my wife is a, is an ex-teacher as well, and we, we talk about that She's doing a kind of educational thing in, in Bena Denmark, and we talk about this a lot.
+
+[00:58:41] Mark: Yeah. A massive, massive difference. I mean, and you know, we, we actually go to a few seminars and there's a very good talk of that. We could have the perfect education both right now. You know, we, and it's a hundred percent that like if you speak to this spot, you will learn everything and give it to your pupils.
+
+[00:58:59] Mark: We could have that right now. We're probably pretty close. We are still nowhere near having students able to use that to learn and to get better in their lives because there's so much other stuff that happens in someone's life. I mean, remember that was the dream of Coursera and things like that. I mean, everyone in the world has been able to learn everything pretty much for the last 20 years, you know, because of the internet and stuff and course's sort of one of those things.
+
+[00:59:28] Mark: But the sort of dream of it was like, you know, Sub-Saharan in Africa would be able to sort of, skill up and, you know, join the sort of revolution and all this. But the main users of that are still Western American sort of users and things like that. Not the people they're concerned about a lot of other stuff that's going on and they don't have time to sit there and look at a computer and then that kind of thing.
+
+[00:59:51] Mark: There's a lot of other social issues that need to sort of be sorted out first. So, yeah, again, to your point, di because it's just, just going to take so long for the full benefits. And I worry that it's going to be very, very uneven. Yeah. It is the people who are kind of ahead now who are going to get more and more accelerated in what's going on, whereas the people are not sort of able to even access that is going to be, yeah, that's, that's a worry thing I think in, in that respect.
+
+[01:00:19] Dara: That's often, sadly, the way it works, isn't it? There's not a huge amount to this, but I have seen a little bit where it's kind of presented as this, you know, level. So it's going to give everybody a level playing field, but I think you're right. It doesn't work that way. The people who already have the advantage use it to gain a further advantage.
+
+[01:00:35] Dara: So I don't think it's going to be this leveling technology at, at, at least not in the, in the near term.
+
+[01:00:41] Mark: I mean, I'm concerned my career couldn't happen now basically because I, I was a junior and I was learning from other seniors and stuff like that, but now this is one, now I don't need juniors because I've got kind of 200 juniors that I could program set off to do stuff.
+
+[01:00:58] Mark: So I, there isn't that kind of path. For people to kind of learn stuff from senior people. And I think we were already seeing the trends of that. I saw some job statistics the other day that senior job positions are increasing, but junior ones are going down simply because the seniors can now. Yeah.
+
+[01:01:15] Mark: The AI is attributed to some of that. So yeah, that is, I mean, and it is ridiculous. Like I'm, you know, for some of my projects, my problem now is not production. I'm like, I'm overproducing actually, I'm releasing so many new features 'cause I can literally have claws kind of work on a feature while I'm on the bus.
+
+[01:01:36] Mark: You know, it's, yeah. And, and I'm just sort of directing it and they're like, oh yeah, do this, do this, this, and then I'll have one over here. I've got another one at home. And I'm just producing so many features that it's actually too much for the people who are receiving the application to do. And they, they, now, my actual bottleneck is.
+
+[01:01:56] Mark: Onboarding people to the new features and training them how to do it and all that kind of softer skills sort of around it rather than the actual hard sort of, which used to be the bottleneck or coding and creating the, oh, this focus thing. So, that is an interesting thing as well, like where, but I definitely feel a lot more prone to burnout when you've got that high productivity that you are getting from that.
+
+[01:02:24] Mark: Because there's actually, when you're doing kind of donkey work, you know, where you, you've, you've sort of made all the thoughts about what this needs to do and now you just have to implement it. So maybe copy pasting really takes things over, but that is a bit of a rest of the brain as well. Yeah. So you are kind of, okay, I'm still being paid for this and you know, I don't have to make a lot of decisions.
+
+[01:02:43] Mark: You do that. But now if you replace that with ai, so that's all just done, then you have to make these decisions a lot more frequently. A lot more. Okay, this is how I listen to this and there's a lot of breaks in between just doing stuff.
+
+[01:02:58] Matthew: That's interesting. I've not, I've not heard that angle before.
+
+[01:03:00] Matthew: 'cause we've, we, we often talk about the idea of getting rid of the grunt work. Just relieve yourself of creativity and big thinking. But I've never thought about it. It's like, well, if it's exhausting. Yeah.
+
+[01:03:12] Mark: It's exhausting. Yes, definitely. I definitely have experience. And another interesting thing, and this is a culture thing, is like, if we could work twice as more productive, do, does, does that mean that we can now work half the time?
+
+[01:03:25] Mark: Yeah. Yeah. Or does that mean that the expectation is now that we produce twice the amount that we did before? And definitely from my perspective, I have, I have worked more and more and more and more because I'm like, oh my God, I can, I can produce like 10 times the amount of stuff. I mean it's, I think it's literally 10 times the amount of code from two, three years ago, say.
+
+[01:03:48] Mark: I mean, it's ridiculous. And
+
+[01:03:50] Matthew: you got that new expectation. You set new expectations, but now it's new
+
+[01:03:52] Mark: expectation. And then I'm like, okay, and now I'm going to work 12 hours. 'cause that, 'cause the multiplier of that is so great that now I've suddenly got all of this and you're in a flow state a lot more as well because you're not short.
+
+[01:04:05] Mark: It's this idea, idea, idea, idea. So that is an interesting thing that I've, you've, I've had to sort of give myself a bit of boundaries on, on when I'm doing this. 'cause it gets a bit exhausting
+
+[01:04:16] Matthew: because now you can produce tenfold what you could in an hour previously. Then every hour you are not working, your potential will be 10 times the work on the table, the car legs, just do another hour and then just do another hour.
+
+[01:04:30] Mark: Yeah. Yeah. So it's like you're in the old mode still of how you value work, but like work is a lot cheaper in the, in what you are producing. And I think that plays out will play out a lot in how this is going out. I find it interesting. I think.
+
+[01:04:50] Dara: Do you think there's another potential problem?
+
+[01:04:52] Dara: So you said there that you don't know that you would be able to have your career if you were starting out now. So yeah, if this increase in senior job roles and a decrease in junior roles, how does someone of the next generation become? Because you can't just jump to a senior, can you? You, you need that experience.
+
+[01:05:09] Dara: 'cause you're, it's not just about technical skills, it's also you learn those softer skills by working for years and years and years. So how, how's the next generation,
+
+[01:05:18] Matthew: Just the seniors handing over to the air?
+
+[01:05:21] Dara: Well, may maybe,
+
+[01:05:22] Mark: I think it is education, going back to the teachers and stuff, like changing the way of teaching so that it's more kind of, so I, I speak, you know, I do have some juniors around and they, they're just not, they're not lateral thinking enough like you are given a task and then it doesn't happen then, then they just stop.
+
+[01:05:40] Mark: If they couldn't do it the way that they thought and there's not this sort of, okay, well I'll try this other way or try this other way, that kind of thing, or collaborate or something like that. So I think if we, if we're teaching people in school that it, you just need to complete this task, this task, this task, and then you are a good producer for the society and things like that, then that is, maybe not the right way when those tasks can be completely automated and maybe there's a, a kind of a different education that is needed.
+
+[01:06:11] Mark: I'm not sure what, I'm not an educator in that sense, but it's just to stress skills about how to do that direction and how to have the confidence to sort of look around. I mean, one thing I notice when I'm, a lot of debate about AI stopping you thinking, you know, like AI's taking away all your thinking.
+
+[01:06:29] Mark: But I would say I've learned so much from having this teacher. Who is teaching me all this code? I mean I'm, you know, I would say I'm a full stack engineer now. It's definitely taught me terraform. It's definitely taught me react, front end stuff mostly, for example, 'cause it's done it first and then I've kind of done it.
+
+[01:06:50] Mark: The thing is with the seniors is that you know what good looks like and that is very, very necessary at the moment when you're doing this stuff because otherwise the less it's outside of your realm, the more you have no idea of what it's saying is right or wrong. Yeah. And you can't kind of trust it. A hundred percent
+
+[01:07:07] Matthew: saw a post the other day with, it was just loads of LinkedIn profile pictures and profile banners that all said vibe code cleanup specialist.
+
+[01:07:17] Matthew: And there were sort of 20 of these senior coders who would turn their hand to just going in and cleaning up. Yeah. Generated code. I can
+
+[01:07:25] Mark: definitely understand that. Yeah, there is definitely technique at the moment. It's very good for very small projects, but as soon as it kind of gets to a stage where you need to keep the overall picture, it starts to lose it now.
+
+[01:07:38] Mark: So that's what, and you get, just forget your code situations and stuff like that. But then as a senior person, you know that you, you should be using birthing control like GI and you should be having some kind of test DEF Pro. I saw another post where someone asked the AI to change something and it deleted its production database.
+
+[01:07:57] Mark: You know, because if you didn't know that you wouldn't like to keep your development code next to your production and all this type of thing. But that sort of stuff you could learn, you know, would tell you if you asked it. So I think people approach it, like it's just a way of stopping me thinking. I mean that is the danger, but I think if you approach it like, teach me how to do this and do it yourself, but teach me by example.
+
+[01:08:22] Mark: I think that is a more senior data set in that sense. You're always learning, right? And you always. Doing that. So perhaps juniors, they definitely need to be using it for a start. I definitely would say you have to, but use it to sort of teach you ethical experience. Don't kind of make a PowerPoint, make the app itself, you know, a PowerPoint, describing what you want.
+
+[01:08:43] Mark: Actually make it with the aid of AI and, and think that, I mean, at least it's a prototype and then you can sort of take that on, things like that, but use it as a teaching aid. And I think that some of the companies are recognizing that they are actually releasing specialized learning models. Yeah. As well.
+
+[01:08:59] Mark: Ones that won't just give you the answer, but we'll sort of try and walk you through how it got to the answer and things like that, which is very exciting. You know, I think that's could be very good for education in general.
+
+[01:09:11] Dara: So moving things in a slightly different direction. You're working on something with a gunner who's been on the show recently.
+
+[01:09:18] Dara: Are you happy to tell us a little bit about that? 'cause that is using your kind of newer gen AI DevOps skillset, but applying it a little bit back to your old world where we've kind of digital marketing and analytics.
+
+[01:09:30] Mark: Yes. Well, I mean, we are working in the same office, which is really nice, so we can kind of chat about these things anyway.
+
+[01:09:37] Mark: And MCP is a kind of, you know, the latest acronym to hit the AI world. but it sort of eases up integrations between services. And then, you know, I was just going away for summer, so we put up a poll on LinkedIn just to see a kind of description. If we made this, you know, would people be interested in paying for it, right?
+
+[01:09:57] Mark: And, doing this. And we got very good responses. Like over a hundred people said yes they would. So, when I came back I was just out of a contract as well, so I had some spare time. So, yeah, I started thinking we should take an initial MCP plan and deploy it on the multi vac data services as I call it, and sort of, yeah.
+
+[01:10:22] Mark: Put that forward and apply some of the learnings. I've, I've, you know, I did the front end for example, which I wouldn't have been able to do two years ago. So the front end's been done with the AI, but then also it's, the AI is good at tasks where there's quite similar tasks, but then there's slightly different enough that you can't kind of automate it using traditional web methods.
+
+[01:10:45] Mark: And I think an analytics setup is a pretty good example of that because there's slightly different website stuff and you can kind of, you know, add the sort of, the tracking modifications based on that. So, So, yeah. So we are going to launch very soon. We've got it working all internally at the moment, and for that I want to explore a new UX when you are interacting with AI stuff.
+
+[01:11:14] Mark: So, at the moment, a lot of people are familiar with the chat box. You know, you, you put in a question and outcomes and answer, you know, and that's all kind of unstructured text in unstructured text out. But I had a website before where I thought, I don't need a website. I'll just have a chat bot and then I'll have all the information.
+
+[01:11:32] Mark: Yeah. And then people could just ask what they wanted and no one asked anything. Right. Because it's just too, too much. It was too intimidating to have just a blank box where you can ask anything, you can put up little suggestions about what to ask, which is what some people do and things like that. But it's not, it's not something my mom would use.
+
+[01:11:50] Mark: I think it's why it's my sort of, yeah. Acid test. Oh, I'm doing stuff. Websites are good and bad. They do give you limited choices, limited good choices. Like click here, click here, and you get kind of an outcome, all that. So I want to take these two ideas of having an AI creating the website in a sense, but we're sort of inputting structured information from the user, which is kind of them telling what URL they want to do, what goals they want to have on the website and all that kind of thing.
+
+[01:12:19] Mark: And not in free text, but in sort of a website for basically. And then that goes to the air. The AI does its magic and then pout puts structured text outward again. And then that structured object, sorry, is then outlined in a sort of nice, attractive ui. So the web file, when it's launched, well basically it'd be, it's kind of like a conversation.
+
+[01:12:44] Mark: But instead of just writing a text, it's you kind of inputting your information about what you want to scan on your website or what Google analytics or GCM configurations you want to do. And then the reply is not text, but a sort of a UI display on that. Okay. So it's trying to get a sort of Yeah.
+
+[01:13:03] Mark: Structured way of talking to you. I dunno if it'll work, but it's good to try.
+
+[01:13:07] Dara: Interesting. Yeah, because I think, thanks because you're right. It's kind of like baked in the idea that that's how we, you know, that people have this preconceived idea about how you should interact with something.
+
+[01:13:18] Dara: And I think what the AI, the kind of models and the capabilities of those models are probably telling us is that actually we need to rethink because in the future we're not even going to be typing on a box in front of us or on our little. You know, mobile phones in our hands. So it's interesting what you're doing, I think to rethink, you know, it doesn't have to be the standard, either a text box or a ui.
+
+[01:13:40] Dara: It could be some kind of mixture between the two.
+
+[01:13:42] Mark: And it, it's kind of inspired by work I've done for a, a partner, which is, I think we were just there doing there in the green energy and infrastructure business and we're describing contracts, you know, very long contracts in various different languages and stuff.
+
+[01:13:56] Mark: And we just added a phrase of, oh, you can use some images if you want to sort of help describe what you're doing. Like an, and it turns out like SVG images, it's just code actually. So the models are really, really good at output and code. And they can output really, really nice SVG images, which are very nice looking.
+
+[01:14:18] Mark: And so, just adding this sort of instruction. Oh, you can use SVG if you want, sort of help in your answers. It then started answering in text, but also creating this really rich, unique image every time It was kind of replying to help illustrate what I was talking about. And so that kind of got me down the road of Oh wow.
+
+[01:14:38] Mark: Yeah, you don't have to just have texts. You can sort of really sort of look at all these other options of how to interact with it. But don't, I think the sort of chat box stuff is like, we're in the sort of terminal stage of coding. Yeah. You know, and that's going to evolve. And I'm, I'm not a designer, so I dunno how it's going to go.
+
+[01:14:57] Mark: And I'm really looking forward to what that is. One of my, yeah. I really look forward to how everyone sort of evolves. I think it, basically, it's the UI and the data that are the sort of unique things that you need if you're going to create an AI app yourself. Otherwise, if you've, if you're only just a wrapper on top of the model, then you know.
+
+[01:15:17] Mark: You are very, that's the PDF. Yeah. Talk to your PDF people basically. You are very, very, the moon is not, is not very large, but you've got a good UI and I think that's why good startups such as cursor and things like that are doing so well is that they have a really good UI for coders. You know, sort of cracked that.
+
+[01:15:38] Mark: So, but that's just for coders. So what, where's the, and there's a lot of startups being, we want to be the cursor for lawyers, we want to be the cursor for doctors, you know, all this stuff. And that's a UI question really. It will be the same model underneath, but it'll be how it makes it sort of familiar and probably not too flashy.
+
+[01:15:55] Mark: You know, it probably looks a bit boring but easy enough for people to sort of use quickly and that kind of thing. So we're aiming for the tag assist AI thing basically, sort of in-house marketers who are trying to. They are a little bit vaccinated, but not like, you know, everything. And so they want to sort of, but have kind of intelligent recommendations about what they should do and then do sort of scheduled scans, sort of auditing their website, and that kind of thing.
+
+[01:16:26] Dara: So yeah, looking forward to the scenario. And going back to something you said earlier, and this is something we think a lot about as well, is that, you know, these tools, this technology, it can be a bit of a double-edged sword. It is providing people with a way to do something that they don't need the hard skills to do, but that comes with a risk.
+
+[01:16:40] Dara: So with Tag assistant, just as an example, is there a risk that somebody who doesn't really know what they're doing asks it to do a bunch of stuff and then it goes away and it does it, but it's ac it turns out to not be what they really needed.
+
+[01:16:55] Mark: Well, yeah, I mean, I mean, I guess there always is. Yeah, yeah.
+
+[01:16:58] Mark: True. So the, but the way, the way we're doing it is we're adding sort of these sensible templates to it. So if you've got a blog, then you probably want these events tracked if you've got an eCom these events to detract. But then if you kind of pay money, then you're going to have a bit more control about exactly what things can happen.
+
+[01:17:19] Mark: But yeah, that's, we're going to get people to use it and see, you'll find those. We certainly are not going. Yeah, yeah. But we're certainly not going to, we're going to make sure we don't, don't make changes to people's ga and TM accounts and things like that without sort of a safeguard. But yeah. I mean, if people kind of push yes, yes, yes, yes, yes.
+
+[01:17:39] Mark: And don't think, then that is a danger with, with every tool out there, I guess, but. It'd be interesting. We might be able to intercept very, very bad decisions in that. I mean, one thing I've noticed with the AI applications I have now is that once someone knows it can do something, then the confidence in that model gets greater and greater and they start asking you to do more and more unreasonable things.
+
+[01:18:04] Mark: And then when you're looking at the log, and this is good, this is good. And then they're asking it to do something like they upload a gigabyte file and say, please give me the, like, you know, all these different things. It just crashes. You know? They just get more and more confident in the AI that can, you can do stuff and then, ah, this is rubbish.
+
+[01:18:21] Mark: You know? I thought, what? Why? You've done all this stuff, but now it's like not doing this extreme use case on the edge.
+
+[01:18:29] Matthew: The speed with which people become complacent and annoyed with technology. Oh God, they,
+
+[01:18:33] Dara: Oh God.
+
+[01:18:35] Matthew: I've got a bit of an existential crisis question then, based on sort of what you are building and presumably.
+
+[01:18:41] Matthew: A lot of other people are building in a multitude of other domains because it feels like domain expertise and going deep on domain applications of AI is the future. But like, like we've already talked about in this podcast, building tooling on top of AI that is ripe for just being done by open AI or done by Google and just flattened like PDF readers is probably not the way to go.
+
+[01:19:03] Matthew: It strikes me that say with something like tag assistant AI or other tools of that ilk the points which a question would've triggered in some in-house person's mind to go, I need to go and ask advice for this from a consultant. I need to go and get advice here, or I need to go and interact with some other outside party to get expertise.
+
+[01:19:23] Matthew: Those trigger points are going to produce further and further and further, and the point on which expertise is needed is going to get pushed further and further into the complex. Do you agree? I do. I consult?
+
+[01:19:35] Mark: Yeah. Yeah. Definitely consultancy. I'll be the consultant, you know, all my life and well, all my professional life.
+
+[01:19:43] Mark: definitely I think it's a very at risk industry as a whole, and not just digital analytics, but you know, Mackenzie's is in the news about, you know, being worried about being completely replaced. Gartner is being worried because you can produce a Gartner report soon with just, you know, all this practicing.
+
+[01:20:01] Mark: So the business model of you has experience and knowledge that he's kind of specialized and yeah, and then access to that knowledge is monetizable. Maybe that is definitely something you even need to keep ahead of what is in the models. So maybe keep it new. I mean definitely like the newest stuff I'm just thinking about, say the A, the A DK network from Google is definitely not able to be returned reliably when you kind of ask an AI about it.
+
+[01:20:37] Mark: 'cause it's just come out, there's still some best practice. So keeping it, and that is I think part of a consultant's job is to sort of keep up to date with the modern things. I mean, when we were consultants anyway, we always enjoyed having a very knowledgeable client because that meant that you worked on more exciting projects actually.
+
+[01:20:57] Mark: Right. And you could charge, you know, maybe more money on some of that as well. But then there's that sort of bread and butter sort of low hanging fruits type stuff and yeah, I think that is gen, that bar is going to rise. I mean, it has been, it has been rising. I mean, I remember when I started SEO, we used to have to go in and say, yeah, SEO is saying, I mean, you really should do SEO because it's, you know, going to bring in lots of traffic.
+
+[01:21:23] Mark: And then by the end of it, it was like, then you had to just distinguish yourself from all the other SEO agencies out there because everyone kind of took it for granted that SEA was sort of saying, I think that, so you have this sort of upgrading bar anyway, I think that's just increased in speed, on what's going on.
+
+[01:21:41] Mark: And so, yeah, for analytics stuff, I mean, you know, even when GA four came in, there was a lot of stuff that came outta the box that wasn't in universal analytics. You know, like video tracking or something like that. But that means that you can work on sort of the more advanced use case. So I think that what consultants need to do is sort of keep ahead, because everyone's got access to AI as well.
+
+[01:22:01] Mark: Right. So that means that. In an expert's hands, that is a much more powerful than a layman's hand who was just talking about, so you'll be able to ask the sort of more advanced sort of questions to get to kind of the more advanced use cases,
+
+[01:22:19] Matthew: but the experts building the tools.
+
+[01:22:21] Mark: Yeah, well, I mean, I think we, we are not, we're not going for like, I mean, the absolute three end definitely.
+
+[01:22:27] Mark: We're just going for the sort of low hanging fruit, certainly at the start and things like that. And we're actually going to have, if, if it does, if it acknowledges that it doesn't know what to do with it, then we're going to have an email, say you can get in contact with us and, you know, put you in touch with a human.
+
+[01:22:42] Mark: So it's just as a lead generation device, it's going to be pretty cool just for like A, B, C and so we can fit to the network and things like that. I mean, I've got outta consultancy because to do this AI thing, really, I mean, I do support now I guess on, on the projects that.
+
+[01:22:59] Matthew: I ask this question every time, and again, we've, we've had a few of these AI chats recently with various people, so we kind of tackled this question all the way through, but a little bit more pie in the sky, blue sky next three years.
+
+[01:23:11] Matthew: Where do you see things going? When do you see the big changes in the big shifts over the next sort of three years? I
+
+[01:23:16] Mark: I think Google will definitely have Gemini three and be very, very, very strong in their model department, but open AI is opening up all of these huge data centers and things like that.
+
+[01:23:30] Mark: I think we're going to get into a lot of energy discussions because these data centers are taking up so much energy and it's kind of happened at the same time as solar is getting really huge as well, and all that kind of thing. I'm worried that there's going to be a confrontation in Taiwan because Taiwan creates all of the trips.
+
+[01:23:54] Mark: For, for like everyone. And that could become a geopolitical issue even more than what they are already in this US China kind of standoff over AI and everything. So firstly, the kind of restrictions they put on China has kind of helped them innovate in making sort of cheap models that are performing like deep seek.
+
+[01:24:21] Mark: So that's in the show. I am. Yeah. That is a very interesting thing to keep an eye on. I think we underestimate the long term impacts of ai, but maybe overestimate the short term ones. So it will gradually stop bleeding into more and more of the workflows and stuff. But we'll see sort of continued trends of juniors and.
+
+[01:24:46] Mark: You know, it 's harder to work and doing that. We should hopefully start to see productivity gains sort of actually kicking in. I think last year was a lot about people planning to do it this year. Were people doing it using AI and improving stuff? Yes, maybe 95% of them failed, but that does imply 5% did at least.
+
+[01:25:09] Mark: I think it's a lot more than that in a general kind of ambient way of people, you know, making decisions on their phone, chatting a lot and that kind of thing. So I think, we hopefully should start to see some economic data helping, you know, show that all these payoffs start to come. I mean, it does feel like a bubble zone.
+
+[01:25:31] Mark: That's trillions and trillions of dollars that I'm putting into stuff. So, we're going to see some consolidation. I think in that respect. I think it's only going to be three or four main players that are going to have models and the rest of 'em are all going to get bought. Maybe Apple oil, sort of make a purchase and all their stuff.
+
+[01:25:52] Mark: I'm looking forward to just doing more applications. Yeah, creating more applications and yeah. And seeing the impact of them now. I think, you know, if we built them now, I want to see the impact of them and, and definitely, you know, I can never go back. I don't think I could work at all without it. You'll be like having a bath with your boots on.
+
+[01:26:12] Mark: I mean, it would just be worse. It'd be like, it just would be really still like sludge so slow and stuff. So, you're just
+
+[01:26:21] Matthew: wandering through the streets, not knowing where to go. Staring at space.
+
+[01:26:25] Mark: Yeah. Yeah. But I, you know, I hope, I hope all the geopolitical stuff kind of calms down. I think there's a lot of things about zero sum games at the moment in that there's a sort of limited amount of money and so you have to take away from one group to give to another and that kind of thing.
+
+[01:26:43] Mark: But if, you know, if we do see the productivity gains that, you know, I, I don't, I don't believe in yourself a GI stuff that they were going to have little people and data sentences and, and that kind of thing. But yeah, I think we should see good economic gains once all these sort of kicks in. I mean, certainly from my point of view, I feel like I'm 10 times more productive, as I just said, and I can't see how that can not be, you know, even at a minor, you know, if it's not.
+
+[01:27:09] Mark: Extreme as, because what I'm doing, it can't not translate into sort of economic benefits somewhere. But definitely I want to sort of keep on keeping in the game. And, yeah, just interested in what, what happens next.
+
+[01:27:22] Dara: Mark, this has been really interesting. I really enjoyed it. Thank you again for joining us and talking with us today.
+
+[01:27:27] Dara: Well, thank you very much. That's it for this week's episode of The Measure Pods. We hope you enjoyed it and picked up something useful along the way. If you haven't already, make sure to subscribe on whatever platform you're listening on so you don't miss future episodes.
+
+[01:27:41] Matthew: And if you're enjoying the show, we'd really appreciate it if you left us a quick review. It really helps more people discover the pod and keeps us motivated to bring back more. So thanks for listening and we'll catch you next time.
